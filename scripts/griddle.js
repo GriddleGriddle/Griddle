@@ -135,9 +135,20 @@ var Griddle = React.createClass({
             showColumnChooser: false,
         };
     },
-    getPagedData: function(data, cols, pageList){
+    getDataForRender: function(data, cols, pageList){
         var that = this; 
         //get the correct page size
+
+        if(this.state.sortColumn != "" || this.props.initialSort != ""){
+            data = _.sortBy(data, function(item){
+                return item[that.state.sortColumn||that.props.initialSort];
+            });
+
+            if(this.state.sortAscending == false){
+                data.reverse(); 
+            }
+        }
+
         if (pageList && (this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
             //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
             var rest = _.rest(data, this.state.page * this.props.resultsPerPage); 
@@ -154,7 +165,7 @@ var Griddle = React.createClass({
 
             if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
                 //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
-                mappedData["children"] = that.getPagedData(mappedData[that.props.childrenColumnName], cols, false);
+                mappedData["children"] = that.getDataForRender(mappedData[that.props.childrenColumnName], cols, false);
 
                 if(that.props.childrenColumnName !== "children") { delete mappedData[that.props.childrenColumnName]; }
             }
@@ -169,17 +180,7 @@ var Griddle = React.createClass({
         //figure out which columns are displayed and show only those
         var cols = this.getColumns(); 
 
-        data =  this.getPagedData(this.state.filteredResults||this.props.results, cols, true);
-
-        if(this.state.sortColumn != "" || this.props.initialSort != ""){
-            data = _.sortBy(data, function(item){
-                return item[that.state.sortColumn||that.props.initialSort];
-            });
-
-            if(this.state.sortAscending == false){
-                data.reverse(); 
-            }
-        }
+        data =  this.getDataForRender(this.state.filteredResults||this.props.results, cols, true);
 
         var keys = _.keys(this.props.results[0]);
 
@@ -279,17 +280,29 @@ var GridTitle = React.createClass({
 });
 
 var GridBody = React.createClass({
+    toggleShowChildren: function(){
+        this.setState({
+            showChildren: this.state.showChildren == false
+        });
+    },
+    getInitialState: function(){
+        return { showChildren: false };
+    },
     render: function() {
         var that = this; 
         var nodes = this.props.data.map(function(row, index){
             var arr = [];
-            arr.push(<GridRow data={row} metadataColumns={that.props.metadataColumns} />);
+            var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0; 
 
-            var children = (typeof row["children"] !== "undefined") && row["children"].map(function(row, index){
-                return <GridRow data={row} metadataColumns={that.props.metadataColumns} />
-            });
+            arr.push(<GridRow data={row} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleShowChildren}/>);
 
-            return arr.concat(children);
+            if(that.state.showChildren){
+                var children =  hasChildren && row["children"].map(function(row, index){
+                    return <GridRow data={row} metadataColumns={that.props.metadataColumns}  toggleChildren={that.toggleShowChildren}/>
+                });
+            }
+
+            return that.state.showChildren ? arr.concat(children) : arr;
         });
 
         return (
@@ -300,8 +313,10 @@ var GridBody = React.createClass({
 
 var GridRow = React.createClass({
     render: function() {
+        var that = this;
+
         var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            return <td>{col}</td>
+            return <td onClick={that.props.toggleChildren}>{col}</td>
         });
 
         return (<tr>{nodes}</tr>);
