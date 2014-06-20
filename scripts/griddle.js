@@ -182,7 +182,7 @@ var Griddle = React.createClass({
                 <div className="grid-container panel">
                     <div className="grid-body">
                         <table className={this.props.gridClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort}/>
+                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending}/>
                             <GridBody data= {data} columns={cols} />        
                         </table>
                     </div>
@@ -230,8 +230,17 @@ var GridTitle = React.createClass({
     },
     render: function(){
         var that = this;
+
         var nodes = this.props.columns.map(function(col, index){
-            return <th onClick={that.sort} data-title={col}>{col}</th>
+            var columnText = col; 
+
+            if(that.props.sortColumn == col && that.props.sortAscending){
+                columnText += " ▲"
+            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
+                columnText += " ▼"
+            }
+ 
+            return <th onClick={that.sort} data-title={col}>{columnText}</th>
         });
 
         return(
