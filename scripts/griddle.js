@@ -20,7 +20,12 @@ var Griddle = React.createClass({
             "settingsText": "Settings",
             "filterPlaceholder": "Filter Results",
             "nextText": "Next",
-            "previousText": "Previous"
+            "previousText": "Previous",
+            //this column will determine which column holds subgrid data
+            //it will be passed through with the data object but will not be rendered
+            "childrenColumnName": "children",
+            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
+            "metadataColumns": []
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -130,16 +135,41 @@ var Griddle = React.createClass({
             showColumnChooser: false,
         };
     },
+    getPagedData: function(data, cols, pageList){
+        var that = this; 
+        //get the correct page size
+        if (pageList && (this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
+            //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+            var rest = _.rest(data, this.state.page * this.props.resultsPerPage); 
+            data = _.initial(rest, rest.length-this.props.resultsPerPage); 
+        }
+
+        var meta = [].concat(this.props.metadataColumns);
+        meta.push(this.props.childrenColumnName); 
+
+        var transformedData = [];
+
+        for(var i = 0; i<data.length; i++){
+            var mappedData = _.pick(data[i], cols.concat(meta)); 
+
+            if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
+                //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
+                mappedData["children"] = that.getPagedData(mappedData[that.props.childrenColumnName], cols, false);
+
+                if(that.props.childrenColumnName !== "children") { delete mappedData[that.props.childrenColumnName]; }
+            }
+
+            transformedData.push(mappedData); 
+        }
+
+        return transformedData;
+    },
     render: function() {
         var that = this; 
         //figure out which columns are displayed and show only those
         var cols = this.getColumns(); 
 
-        var initialData = this.state.filteredResults||this.props.results; 
-
-        var data = _.map(initialData, function(item){
-            return _.pick(item, cols);
-        });
+        data =  this.getPagedData(this.state.filteredResults||this.props.results, cols, true);
 
         if(this.state.sortColumn != "" || this.props.initialSort != ""){
             data = _.sortBy(data, function(item){
@@ -151,14 +181,10 @@ var Griddle = React.createClass({
             }
         }
 
-        //get the correct page size
-        if ((this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
-            //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-            var rest = _.rest(data, this.state.page * this.props.resultsPerPage); 
-            data = _.initial(rest, rest.length-this.props.resultsPerPage); 
-        }
-        
         var keys = _.keys(this.props.results[0]);
+
+        var meta = this.props.metadataColumns;
+        meta.push(this.props.childrenColumnName); 
 
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
@@ -183,7 +209,7 @@ var Griddle = React.createClass({
                     <div className="grid-body">
                         <table className={this.props.gridClassName}>
                             <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending}/>
-                            <GridBody data= {data} columns={cols} />        
+                            <GridBody data= {data} columns={cols} metadataColumns={meta} />        
                         </table>
                     </div>
                     <div className="grid-footer">
@@ -254,8 +280,16 @@ var GridTitle = React.createClass({
 
 var GridBody = React.createClass({
     render: function() {
+        var that = this; 
         var nodes = this.props.data.map(function(row, index){
-            return <GridRow data={row} />
+            var arr = [];
+            arr.push(<GridRow data={row} metadataColumns={that.props.metadataColumns} />);
+
+            var children = (typeof row["children"] !== "undefined") && row["children"].map(function(row, index){
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} />
+            });
+
+            return arr.concat(children);
         });
 
         return (
@@ -266,13 +300,11 @@ var GridBody = React.createClass({
 
 var GridRow = React.createClass({
     render: function() {
-        var nodes = _.toArray(this.props.data).map(function(col, index) {
+        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
             return <td>{col}</td>
         });
 
         return (<tr>{nodes}</tr>);
-
-
     }
 });
 
