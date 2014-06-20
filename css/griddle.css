@@ -44,6 +44,18 @@
 			margin-top:0px;
 		}
 
+	.griddle .sort-ascending:after{
+		 content: '▲';
+		 font-size:12px;
+		 margin-left: 5px;
+	}
+
+
+	.griddle .sort-descending:after{
+		 content: '▼';
+		 font-size:12px;
+		 margin-left: 5px;
+	}
 	.griddle .settings i {
 		top:3px;
 	}

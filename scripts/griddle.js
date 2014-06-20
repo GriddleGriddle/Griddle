@@ -232,15 +232,14 @@ var GridTitle = React.createClass({
         var that = this;
 
         var nodes = this.props.columns.map(function(col, index){
-            var columnText = col; 
+            var columnSort = ""; 
 
             if(that.props.sortColumn == col && that.props.sortAscending){
-                columnText += " ▲"
+                columnSort = "sort-ascending"
             }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
-                columnText += " ▼"
+                columnSort += "sort-descending"
             }
- 
-            return <th onClick={that.sort} data-title={col}>{columnText}</th>
+            return <th onClick={that.sort} data-title={col} className={columnSort}>{col}</th>
         });
 
         return(
