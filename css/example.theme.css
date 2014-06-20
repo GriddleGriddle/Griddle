@@ -1,0 +1,15 @@
+body{
+	background-color:#CCC;
+}
+
+.grid-body{ 
+	min-height: 315px;
+}
+
+.griddle thead{
+	background-color: #EDEDED;
+}
+.griddle .grid-footer{
+	background-color: #EDEDED;
+	border-top:1px solid #ddd;
+}

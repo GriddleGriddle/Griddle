@@ -16,7 +16,11 @@ var Griddle = React.createClass({
             "resultsPerPage":10,
             "results": [],
             "initialSort": "",
-            "gridClassName":""
+            "gridClassName":"",
+            "settingsText": "Settings",
+            "filterPlaceholder": "Filter Results",
+            "nextText": "Next",
+            "previousText": "Previous"
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -167,18 +171,24 @@ var Griddle = React.createClass({
             <div className="griddle">
                 <div className="row">
                     <div className="col-md-6">
-                        <GridFilter changeFilter={this.setFilter} />
+                        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholder} />
                     </div>
                     <div className="col-md-6 right">
                         <span className="glyphicon glyphicon-cog" onClick={this.toggleColumnChooser}></span>
                     </div>
                 </div>
                 {columnSelector}
-                <table className={this.props.gridClassName}>
-                    <GridTitle columns={this.getColumns()} changeSort={this.changeSort}/>
-                    <GridBody data= {data} columns={cols} />        
-                </table>
-                <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage}/>
+                <div className="grid-container panel">
+                    <div className="grid-body">
+                        <table className={this.props.gridClassName}>
+                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort}/>
+                            <GridBody data= {data} columns={cols} />        
+                        </table>
+                    </div>
+                    <div className="grid-footer">
+                        <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -198,9 +208,9 @@ var GridColumns = React.createClass({
         var that = this; 
         var nodes = this.props.columns.map(function(col, index){
             var checked = _.contains(that.props.selectedColumns, col);
-            return <div className="column"><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</div>
+            return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
-        return (<div className="columnSelector">{nodes}</div>);
+        return (<div className="columnSelector panel">{nodes}</div>);
     }
 });
 
@@ -209,7 +219,7 @@ var GridFilter = React.createClass({
         this.props.changeFilter(event.target.value); 
     },
     render: function(){
-        return <input type="text" name="filter" placeholder="Filter Results" className="formControl" onChange={this.handleChange} />
+        return <div className="row filter-container"><div className="col-md-6"><input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} /></div></div>
     }
 });
 
@@ -267,11 +277,11 @@ var GridPagination = React.createClass({
         var next = ""; 
 
         if(this.props.currentPage > 0){
-            previous = <span onClick={this.props.previous} className="glyphicon glyphicon-chevron-left previous"></span>
+            previous = <span onClick={this.props.previous} className="previous"><i className="glyphicon glyphicon-chevron-left"></i>{this.props.previousText}</span>
         }
 
         if(this.props.currentPage != (this.props.maxPage -1)){
-            next = <span onClick={this.props.next} className="glyphicon glyphicon-chevron-right next"></span>
+            next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="glyphicon glyphicon-chevron-right"></i></span>
         }
 
         var options = [];

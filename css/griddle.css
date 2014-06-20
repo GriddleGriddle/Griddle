@@ -24,12 +24,8 @@
 	}
 
 	.griddle .columnSelector{
-		border: 1px solid #ededed;
-		border-radius: 5px;
-		padding: 10px;
-		margin: 10px;
-		margin-left: 0px;
-		margin-right: 0px;
+		padding: 10px 10px 0px 10px;
+		margin: 0px 0px 10px 0px;
 	}
 
 		/* http://nicolasgallagher.com/micro-clearfix-hack/ */
@@ -44,11 +40,26 @@
 
 		.griddle .columnSelector .column{
 			width: 160px;
-			margin-right: 20px;
-			float: left;
+			float:left;
+			margin-top:0px;
 		}
 
+	.griddle .filter-container{
+		margin-bottom: 10px;
+	}
 
+	.griddle .grid-footer{
+		padding: 10px 20px 10px 20px;
+	}
+
+		.griddle .grid-footer .glyphicon{
+			font-size: 12px; 
+			margin: 0px 5px 0px 5px;
+		}
+
+	.griddle .next, .griddle .previous{
+		cursor: pointer;
+	}
 .griddle .right{
 	text-align: right;
 }
