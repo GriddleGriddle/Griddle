@@ -107,7 +107,7 @@ var Griddle = React.createClass({
         }
 
         this.mergeState({
-            page: 0,
+            page:0,
             sortColumn: sort, 
             sortAscending: sortAscending
         });
