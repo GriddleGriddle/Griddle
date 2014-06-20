@@ -107,6 +107,7 @@ var Griddle = React.createClass({
         }
 
         this.mergeState({
+            page: 0,
             sortColumn: sort, 
             sortAscending: sortAscending
         });
@@ -174,7 +175,7 @@ var Griddle = React.createClass({
                         <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholder} />
                     </div>
                     <div className="col-md-6 right">
-                        <span className="glyphicon glyphicon-cog" onClick={this.toggleColumnChooser}></span>
+                        <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span>
                     </div>
                 </div>
                 {columnSelector}

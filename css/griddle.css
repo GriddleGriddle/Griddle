@@ -44,6 +44,10 @@
 			margin-top:0px;
 		}
 
+	.griddle .settings i {
+		top:3px;
+	}
+	
 	.griddle .filter-container{
 		margin-bottom: 10px;
 	}
@@ -57,7 +61,7 @@
 			margin: 0px 5px 0px 5px;
 		}
 
-	.griddle .next, .griddle .previous{
+	.griddle .next, .griddle .previous, .griddle .settings, .griddle th{
 		cursor: pointer;
 	}
 .griddle .right{
