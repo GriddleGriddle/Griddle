@@ -45,7 +45,36 @@ var fakeData =  [
     "state": "New Jersey",
     "country": "Madagascar",
     "company": "Eventage",
-    "favoriteNumber": 2
+    "favoriteNumber": 2,
+    "children": [
+        {
+          "id": 49,
+          "name": "Morse Navarro",
+          "city": "Balm",
+          "state": "Hawaii",
+          "country": "Malaysia",
+          "company": "Comtours",
+          "favoriteNumber": 7
+        },
+        {
+          "id": 50,
+          "name": "Harding Chambers",
+          "city": "Lupton",
+          "state": "New Jersey",
+          "country": "Oman",
+          "company": "Gadtron",
+          "favoriteNumber": 6
+        },
+        {
+          "id": 51,
+          "name": "Frederick Mcdowell",
+          "city": "Kimmell",
+          "state": "Arizona",
+          "country": "Ireland",
+          "company": "Delphide",
+          "favoriteNumber": 2
+        }
+    ]
   },
   {
     "id": 2,

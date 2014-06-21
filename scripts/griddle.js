@@ -195,6 +195,8 @@ var Griddle = React.createClass({
                                 </div>
                             ) : "";
 
+        var headerTableClassName = this.props.gridClassName + " table-header";
+
         return (
             <div className="griddle">
                 <div className="row">
@@ -208,10 +210,10 @@ var Griddle = React.createClass({
                 {columnSelector}
                 <div className="grid-container panel">
                     <div className="grid-body">
-                        <table className={this.props.gridClassName}>
+                        <table className={headerTableClassName}>
                             <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending}/>
-                            <GridBody data= {data} columns={cols} metadataColumns={meta} />        
                         </table>
+                        <GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>        
                     </div>
                     <div className="grid-footer">
                         <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
@@ -280,34 +282,46 @@ var GridTitle = React.createClass({
 });
 
 var GridBody = React.createClass({
-    toggleShowChildren: function(){
+
+    render: function() {
+        var that = this; 
+        var nodes = this.props.data.map(function(row, index){
+            return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} />
+        });
+
+        return (
+
+                <table className={this.props.className}>
+                    {nodes}
+                </table>
+            );
+    }
+});
+
+var GridRowContainer = React.createClass({
+    toggleChildren: function(){
         this.setState({
             showChildren: this.state.showChildren == false
         });
     },
     getInitialState: function(){
         return { showChildren: false };
-    },
-    render: function() {
+    }, 
+    render: function(){
         var that = this; 
-        var nodes = this.props.data.map(function(row, index){
-            var arr = [];
-            var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0; 
 
-            arr.push(<GridRow data={row} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleShowChildren}/>);
+        var arr = [];
+        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0; 
 
-            if(that.state.showChildren){
-                var children =  hasChildren && row["children"].map(function(row, index){
-                    return <GridRow data={row} metadataColumns={that.props.metadataColumns}  toggleChildren={that.toggleShowChildren}/>
-                });
-            }
+        arr.push(<GridRow data={this.props.data} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren}/>);
 
-            return that.state.showChildren ? arr.concat(children) : arr;
-        });
-
-        return (
-                <tbody>{nodes}</tbody>
-            );
+        if(that.state.showChildren){
+            var children =  hasChildren && this.props.data["children"].map(function(row, index){
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true}/>
+            });
+        }
+        
+        return <tbody>{that.state.showChildren ? arr.concat(children) : arr}</tbody>
     }
 });
 
@@ -319,7 +333,16 @@ var GridRow = React.createClass({
             return <td onClick={that.props.toggleChildren}>{col}</td>
         });
 
-        return (<tr>{nodes}</tr>);
+        //this is kind of hokey - make it better
+        var className = "standard-row"; 
+
+        if(that.props.isChildRow){
+            className = "child-row";
+        } else if (that.props.hasChildren){
+            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
+        }
+        
+        return (<tr className={className}>{nodes}</tr>);
     }
 });
 
