@@ -182,10 +182,11 @@ var Griddle = React.createClass({
 
         data =  this.getDataForRender(this.state.filteredResults||this.props.results, cols, true);
 
-        var keys = _.keys(this.props.results[0]);
-
         var meta = this.props.metadataColumns;
         meta.push(this.props.childrenColumnName); 
+
+        var keys = _.keys(_.omit(this.props.results[0], meta));
+
 
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
@@ -341,7 +342,7 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? "parent-row expanded" : "parent-row";
         }
-        
+
         return (<tr className={className}>{nodes}</tr>);
     }
 });
