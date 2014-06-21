@@ -7,14 +7,14 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 9000,
-          hostname: '*'
+          hostname: '*',
+          keepalive: true
         }
       }
     },
     open: {
       server: {
-        url: 'http://localhost:<%= connect.server.options.port %>/index.html',
-        app: 'chrome'
+        url: 'http://localhost:<%= connect.server.options.port %>/index.html'
       }
     }
   });
@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
-      'connect',
-      'open'
+      'open',
+      'connect'
     ]);
   });
 
