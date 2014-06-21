@@ -2,7 +2,7 @@
   "name": "Griddle",
   "version": "0.0.0",
   "description": "The simple grid component for React.",
-  "main": "app.js",
+  "main": "",
   "dependencies": {
     "grunt": "~0.4.5"
   },
