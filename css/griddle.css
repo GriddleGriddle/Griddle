@@ -53,25 +53,25 @@
 	}
 
 	.griddle .sort-ascending:after{
-		 content: '▲';
+		 content: '\25B2';
 		 font-size:12px;
 		 margin-left: 5px;
 	}
 
 	.griddle .sort-descending:after{
-		 content: '▼';
+		 content: '\25BC';
 		 font-size:12px;
 		 margin-left: 5px;
 	}
 
 	.griddle .parent-row td:first-child:before{
-		content: '►';
+		content: '\25BA';
 		font-size:12px;
 		margin-right:5px;
 	}
 
 	.griddle .parent-row.expanded td:first-child:before{
-		content: '▼';
+		content: '\25BC';
 	}
 
 	.griddle .standard-row td:first-child:before{
