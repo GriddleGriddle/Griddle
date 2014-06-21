@@ -19,6 +19,6 @@ To Use Griddle, include griddle.js / griddle.css below the requirements listed a
 To try it out, run the following commands: 
 
 1. `npm install -g grunt-cli` if you don't have grunt.
-2. 'grunt'
+2. `grunt`
 3. That's it!
 
