@@ -16,10 +16,9 @@ To Use Griddle, include griddle.js / griddle.css below the requirements listed a
 - **initialSort** - The column to sort on initially. By default this is not set.   
 - **gridClassName** - The css class/classes to apply to the grid table element. The default is `table` which  applies some Bootstrap table styling. 
 
-To try it out: 
+To try it out, run the following commands: 
 
-1. `npm install -g http-server` (a grunt option should be available a little later to make this all a bit simpler).
-2. get the Griddle repository and `cd` to the directory where it is located
-3. Run `http-server`
-4. Navigate to http://localhost:8080 in your browser. 
-
+1. `npm install -g grunt-cli` if you don't have grunt.
+2. `npm install`
+3. `grunt`
+4. That's it!

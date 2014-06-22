@@ -1,0 +1,27 @@
+{
+  "name": "Griddle",
+  "version": "0.0.0",
+  "description": "The simple grid component for React.",
+  "main": "",
+  "dependencies": {
+    "grunt": "~0.4.5"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-open": "^0.2.3",
+    "grunt-contrib-connect": "^0.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/DynamicTyped/Griddle.git"
+  },
+  "author": "Ryan Lanciaux",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DynamicTyped/Griddle/issues"
+  },
+  "homepage": "https://github.com/DynamicTyped/Griddle"
+}
