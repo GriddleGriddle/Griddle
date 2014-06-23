@@ -2,6 +2,27 @@ body{
 	background-color:#CCC;
 }
 
+header{
+	display: block;
+	background-color: #D35627;
+	color: #FFF;	
+	padding: 10px 0px 10px 0px; 
+	border-bottom: 5px solid #E76C3C;
+}
+
+h1, h2, h3, h4, h5, small {
+	font-family: 'Oxygen', sans-serif;
+}
+header small{
+	color: #efa588;
+}
+
+.start { 
+	background-color: #FFF;
+	padding: 20px 0px 20px 0px; 
+	color: #777;
+	border-bottom: 5px solid #BBB;
+}
 .grid-body{ 
 	min-height: 315px;
 }
@@ -12,4 +33,9 @@ body{
 .griddle .grid-footer{
 	background-color: #EDEDED;
 	border-top:1px solid #ddd;
+}
+
+/* duplicate to griddle center but this is mostly for the demo page*/
+.center{
+	text-align: center;
 }

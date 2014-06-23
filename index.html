@@ -3,6 +3,7 @@
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/griddle.css" rel="stylesheet" />
 		<link href="css/example.theme.css" rel="stylesheet" />
+		<link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 		<script src="http://fb.me/react-0.10.0.js"></script>
 		<script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
@@ -11,6 +12,41 @@
 		<script type="text/jsx" src="scripts/griddle.js"></script>
 	</head>
 	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2 center">
+						<img src="images/griddle.png" />
+						<small>Your data in short-order</small>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section class="start">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 center">
+						<h2>Griddle is a simple grid component for use with the <a href="http://facebook.github.io/react/">React JavaScript library</a>.</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+					<div class="col-md-4">
+						<h3>Configurable</h3>
+						Beyond using Bootstrap 3, Griddle makes few assumptions about how your grid should be styled. Griddle grids render as simple tables that you can apply your site's styling to. 
+					</div>
+					<div class="col-md-4">
+						<h3>Functional</h3>
+						Out of the box, Griddle has sorting, filtering, paging and some user customization such as column selection and results per page. Additionally, Griddle supports simple sub-grids and even more complex functionality is on the roadmap.
+					</div>
+					<div class="col-md-4">
+						<h3>Fast</h3>
+						Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Whether you have several or thousands of records, Griddle should be pretty fast.
+					</div>
+					</div>
+				</div>
+			</div>
+		</section>
 		<div id="grid" class="container"></div>
 		<script type="text/jsx" src="scripts/testComponent.js"></script>
 	</body>

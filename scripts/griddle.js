@@ -25,7 +25,9 @@ var Griddle = React.createClass({
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
-            "metadataColumns": []
+            "metadataColumns": [], 
+            "showFilter": false,
+            "showSettings": true
         };
     },
     /* if we have a filter display the max page and results accordingly */
