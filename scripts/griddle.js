@@ -200,14 +200,18 @@ var Griddle = React.createClass({
 
         var headerTableClassName = this.props.gridClassName + " table-header";
 
+        //figure out if we want to show the filter section 
+        var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholder} /> : "";
+        var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
+        
         return (
             <div className="griddle">
-                <div className="row">
+                <div className="row top-section">
                     <div className="col-md-6">
-                        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholder} />
+                       {filter} 
                     </div>
                     <div className="col-md-6 right">
-                        <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span>
+                        {settings}
                     </div>
                 </div>
                 {columnSelector}
