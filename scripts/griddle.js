@@ -13,12 +13,12 @@ var Griddle = React.createClass({
     getDefaultProps: function() {
         return{
             "columns": [],
-            "resultsPerPage":10,
+            "resultsPerPage":5,
             "results": [],
             "initialSort": "",
             "gridClassName":"",
             "settingsText": "Settings",
-            "filterPlaceholder": "Filter Results",
+            "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
             "previousText": "Previous",
             //this column will determine which column holds subgrid data
@@ -27,7 +27,7 @@ var Griddle = React.createClass({
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
             "metadataColumns": [], 
             "showFilter": false,
-            "showSettings": true
+            "showSettings": false
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -201,19 +201,25 @@ var Griddle = React.createClass({
         var headerTableClassName = this.props.gridClassName + " table-header";
 
         //figure out if we want to show the filter section 
-        var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholder} /> : "";
+        var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
         var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
         
+        //if we have neither filter or settings don't need to render this stuff 
+        var topSection = ""; 
+        if (this.props.showFilter || this.props.showSettings){
+           topSection = (
+            <div className="row top-section">
+                <div className="col-md-6">
+                   {filter} 
+                </div>
+                <div className="col-md-6 right">
+                    {settings}
+                </div> 
+            </div>);
+        }
         return (
             <div className="griddle">
-                <div className="row top-section">
-                    <div className="col-md-6">
-                       {filter} 
-                    </div>
-                    <div className="col-md-6 right">
-                        {settings}
-                    </div>
-                </div>
+                {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
                     <div className="grid-body">

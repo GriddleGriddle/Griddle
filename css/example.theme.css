@@ -13,19 +13,66 @@ header{
 h1, h2, h3, h4, h5, small {
 	font-family: 'Oxygen', sans-serif;
 }
+
+dd{ 
+	color: #555;
+}
 header small{
 	color: #efa588;
 }
 
-.start { 
+#start { 
 	background-color: #FFF;
 	padding: 20px 0px 20px 0px; 
 	color: #777;
 	border-bottom: 5px solid #BBB;
 }
-.grid-body{ 
-	min-height: 315px;
+
+#example1 {
+	border-bottom: 5px solid #DDD;
 }
+	#example1 .grid-body{ 
+		min-height: 275px;
+		max-height: 275px;
+	}
+
+#example2 {
+	background-color: #FFF;
+	border-bottom: 5px solid #BBB;
+}
+
+	#example2 .grid-container{
+		border: 1px solid #DFDFDF;
+	}
+
+#example3{
+	border-bottom: 5px solid #DDD;
+}
+
+#properties{
+	background-color: #FFF;
+}
+
+	#properties dl{
+		margin-top: 18px;
+	}
+
+	#properties dt{
+		float:left; 
+		width: 160px; 
+	}
+
+	#properties dd{
+		margin-bottom: 18px;
+		margin-left:160px;
+		border-bottom: 1px solid #EDEDED;
+	}
+
+	#properties dd:after{
+		display: table;
+		content: "";
+		clear: both;
+	}
 
 .griddle thead{
 	background-color: #EDEDED;
@@ -38,4 +85,23 @@ header small{
 /* duplicate to griddle center but this is mostly for the demo page*/
 .center{
 	text-align: center;
+}
+
+.highlight{
+	background-color: #EDEDED;
+	padding:3px;
+}
+
+.columnSelector{
+	border: 1px solid #CCC;
+}
+/* prism.js stuff 
+   had to use important here :( */
+pre{
+	padding: 5px !important;
+	background-color: #A9A9A9 !important;
+}
+
+pre.inline{
+	display: inline;
 }

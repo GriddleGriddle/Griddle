@@ -7,36 +7,7 @@ var fakeData =  [
     "state": "Hawaii",
     "country": "United Kingdom",
     "company": "Ovolo",
-    "favoriteNumber": 7,
-    "children": [
-        {
-          "id": 49,
-          "name": "Morse Navarro",
-          "city": "Balm",
-          "state": "Hawaii",
-          "country": "Malaysia",
-          "company": "Comtours",
-          "favoriteNumber": 7
-        },
-        {
-          "id": 50,
-          "name": "Harding Chambers",
-          "city": "Lupton",
-          "state": "New Jersey",
-          "country": "Oman",
-          "company": "Gadtron",
-          "favoriteNumber": 6
-        },
-        {
-          "id": 51,
-          "name": "Frederick Mcdowell",
-          "city": "Kimmell",
-          "state": "Arizona",
-          "country": "Ireland",
-          "company": "Delphide",
-          "favoriteNumber": 2
-        },     
-    ]
+    "favoriteNumber": 7
   },
   {
     "id": 1,
@@ -45,36 +16,7 @@ var fakeData =  [
     "state": "New Jersey",
     "country": "Madagascar",
     "company": "Eventage",
-    "favoriteNumber": 2,
-    "children": [
-        {
-          "id": 49,
-          "name": "Morse Navarro",
-          "city": "Balm",
-          "state": "Hawaii",
-          "country": "Malaysia",
-          "company": "Comtours",
-          "favoriteNumber": 7
-        },
-        {
-          "id": 50,
-          "name": "Harding Chambers",
-          "city": "Lupton",
-          "state": "New Jersey",
-          "country": "Oman",
-          "company": "Gadtron",
-          "favoriteNumber": 6
-        },
-        {
-          "id": 51,
-          "name": "Frederick Mcdowell",
-          "city": "Kimmell",
-          "state": "Arizona",
-          "country": "Ireland",
-          "company": "Delphide",
-          "favoriteNumber": 2
-        }
-    ]
+    "favoriteNumber": 2
   },
   {
     "id": 2,
@@ -2542,4 +2484,120 @@ var fakeData =  [
     "company": "Intrawear",
     "favoriteNumber": 1
   }
-]
+];
+
+  var fakeSubgridData =  [
+  {
+    "id": 0,
+    "name": "Mayer Leonard",
+    "city": "Kapowsin",
+    "state": "Hawaii",
+    "country": "United Kingdom",
+    "company": "Ovolo",
+    "favoriteNumber": 7, 
+    "children": [
+        {
+          "id": 273,
+          "name": "Hull Wade",
+          "city": "Monument",
+          "state": "Nebraska",
+          "country": "Cyprus",
+          "company": "Indexia",
+          "favoriteNumber": 10
+        },
+        {
+          "id": 274,
+          "name": "Blanca Sheppard",
+          "city": "Wadsworth",
+          "state": "West Virginia",
+          "country": "Nicaragua",
+          "company": "Gogol",
+          "favoriteNumber": 7
+        },
+        {
+          "id": 275,
+          "name": "Stella Luna",
+          "city": "Dubois",
+          "state": "Oregon",
+          "country": "Czech Republic",
+          "company": "Intrawear",
+          "favoriteNumber": 1
+        }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Koch Becker",
+    "city": "Johnsonburg",
+    "state": "New Jersey",
+    "country": "Madagascar",
+    "company": "Eventage",
+    "favoriteNumber": 2,
+    "children": [
+        {
+          "id": 273,
+          "name": "Hull Wade",
+          "city": "Monument",
+          "state": "Nebraska",
+          "country": "Cyprus",
+          "company": "Indexia",
+          "favoriteNumber": 10
+        },
+        {
+          "id": 274,
+          "name": "Blanca Sheppard",
+          "city": "Wadsworth",
+          "state": "West Virginia",
+          "country": "Nicaragua",
+          "company": "Gogol",
+          "favoriteNumber": 7
+        },
+        {
+          "id": 275,
+          "name": "Stella Luna",
+          "city": "Dubois",
+          "state": "Oregon",
+          "country": "Czech Republic",
+          "company": "Intrawear",
+          "favoriteNumber": 1
+        }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Lowery Hopkins",
+    "city": "Blanco",
+    "state": "Arizona",
+    "country": "Ukraine",
+    "company": "Comtext",
+    "favoriteNumber": 3,
+     "children": [
+        {
+          "id": 273,
+          "name": "Hull Wade",
+          "city": "Monument",
+          "state": "Nebraska",
+          "country": "Cyprus",
+          "company": "Indexia",
+          "favoriteNumber": 10
+        },
+        {
+          "id": 274,
+          "name": "Blanca Sheppard",
+          "city": "Wadsworth",
+          "state": "West Virginia",
+          "country": "Nicaragua",
+          "company": "Gogol",
+          "favoriteNumber": 7
+        },
+        {
+          "id": 275,
+          "name": "Stella Luna",
+          "city": "Dubois",
+          "state": "Oregon",
+          "country": "Czech Republic",
+          "company": "Intrawear",
+          "favoriteNumber": 1
+        }
+    ]   
+  }]
