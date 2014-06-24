@@ -7,12 +7,8 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 		<script src="http://fb.me/react-0.10.0.js"></script>
 		<script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
 		<script src="scripts/fakeData.js"></script>
 		<script type="text/jsx" src="scripts/griddle.js"></script>
-		<link href="thirdparty/prism.css" rel="stylesheet"/>
-		<script src="thirdparty/prism.min.js"></script>
 	</head>
 	<body>
 		<header>
@@ -51,10 +47,33 @@
 		<section id="example1">
 			<a name="base"></a>
 			<div class="container">
-				<h2>Base Example</h2>
-				At the most basic level, creating a Griddle component is as simple as saying <pre class="inline"><code class="language-markup">&lt;Griddle results= {fakeData} gridClassName="table"/&gt;</code></pre> against an array of JSON objects (fakeData is the array in this example).
+				<h2>Getting Started</h2>
+				<p>At the most basic level, using Griddle is as simple as wiring up an array of JSON objects as a property to the component. First off, include Bootstrap 3, Underscore and React.</p>
+				<pre><code>&lt;link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" /&gt;
+...
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"&gt;&lt;/script&gt;
+&lt;script src="http://fb.me/react-0.10.0.js"&gt;&lt;/script&gt;
+&lt;script src="http://fb.me/JSXTransformer-0.10.0.js"&gt;&lt;/script&gt;</code></pre>
 				<hr />
-				<div id="grid" class="container"></div>
+
+				<p>
+					Let's say we have a JSON object that looks like:
+				</p>
+				<pre><code>
+var fakeData =  [
+  {
+    "id": 0,
+    "name": "Mayer Leonard",
+    "city": "Kapowsin",
+    "state": "Hawaii",
+    "country": "United Kingdom",
+    "company": "Ovolo",
+    "favoriteNumber": 7
+  },
+  ...
+];
+				</code></pre>
+				<div id="grid"></div>
 			</div>
 		</section>
 		<section id="example2">

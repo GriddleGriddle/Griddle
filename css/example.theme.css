@@ -95,13 +95,3 @@ header small{
 .columnSelector{
 	border: 1px solid #CCC;
 }
-/* prism.js stuff 
-   had to use important here :( */
-pre{
-	padding: 5px !important;
-	background-color: #A9A9A9 !important;
-}
-
-pre.inline{
-	display: inline;
-}
