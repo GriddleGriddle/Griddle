@@ -254,7 +254,7 @@ var GridSettings = React.createClass({
             var checked = _.contains(that.props.selectedColumns, col);
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
-        return (<div className="columnSelector panel"><strong>Settings</strong>{nodes}</div>);
+        return (<div className="columnSelector panel"><h5>Settings</h5>{nodes}</div>);
     }
 });
 

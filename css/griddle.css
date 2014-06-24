@@ -27,6 +27,9 @@
 		padding: 10px 10px 0px 10px;
 		margin: 0px 0px 10px 0px;
 	}
+		.griddle .columnSelector h5{
+			margin:0px 0px 10px 0px;
+		}
 
 		/* http://nicolasgallagher.com/micro-clearfix-hack/ */
 		.griddle .columnSelector:before, .griddle .columnSelector:after{
