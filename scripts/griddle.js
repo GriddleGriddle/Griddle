@@ -194,7 +194,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <GridColumns columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns}/>
+                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns}/>
                                     </div>
                                 </div>
                             ) : "";
@@ -238,7 +238,7 @@ var Griddle = React.createClass({
     }
 });
 
-var GridColumns = React.createClass({
+var GridSettings = React.createClass({
     handleChange: function(event){
         if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
             this.props.selectedColumns.push(event.target.dataset.name);
@@ -254,7 +254,7 @@ var GridColumns = React.createClass({
             var checked = _.contains(that.props.selectedColumns, col);
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
-        return (<div className="columnSelector panel">{nodes}</div>);
+        return (<div className="columnSelector panel"><strong>Settings</strong>{nodes}</div>);
     }
 });
 
