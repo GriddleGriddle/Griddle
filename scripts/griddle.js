@@ -88,9 +88,10 @@ var Griddle = React.createClass({
 
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
-            return _.keys(this.props.results[0]); 
+            var meta = [].concat(this.props.metadataColumns);
+            meta.push(this.props.childrenColumnName); 
+            return _.keys(_.omit(this.props.results[0], meta));
         }
-
         return this.state.filteredColumns; 
     },
     setColumns: function(columns){
@@ -160,6 +161,7 @@ var Griddle = React.createClass({
         var meta = [].concat(this.props.metadataColumns);
         meta.push(this.props.childrenColumnName); 
 
+
         var transformedData = [];
 
         for(var i = 0; i<data.length; i++){
@@ -188,7 +190,6 @@ var Griddle = React.createClass({
         meta.push(this.props.childrenColumnName); 
 
         var keys = _.keys(_.omit(this.props.results[0], meta));
-
 
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
