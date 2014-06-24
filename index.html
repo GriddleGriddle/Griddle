@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="css/griddle.css" rel="stylesheet" />
+		<link href="css/example.theme.css" rel="stylesheet" />
+		<link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+		<script src="http://fb.me/react-0.10.0.js"></script>
+		<script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
+		<script src="scripts/fakeData.js"></script>
+		<script type="text/jsx" src="scripts/griddle.js"></script>
+		<link href="thirdparty/prism.css" rel="stylesheet"/>
+		<script src="thirdparty/prism.min.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2 center">
+						<img src="images/griddle.png" />
+						<small>your data in short-order</small>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section id="start">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 center">
+						<h1>Griddle is a simple grid component for use with <a href="http://facebook.github.io/react/">React.js</a>.</h1>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<h3>Configurable</h3>
+						Beyond using Bootstrap 3, Griddle makes few assumptions about how your grid should be styled. Griddle grids render as simple tables that you can apply your site's styling to. 
+					</div>
+					<div class="col-md-4">
+						<h3>Functional</h3>
+						Out of the box, Griddle has sorting, filtering, paging and some user customization such as column selection and results per page. Additionally, Griddle supports simple sub-grids and even more complex functionality is on the roadmap.
+					</div>
+					<div class="col-md-4">
+						<h3>Fast</h3>
+						Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Whether you have several or thousands of records, Griddle should render your data quickly.
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="example1">
+			<a name="base"></a>
+			<div class="container">
+				<h2>Base Example</h2>
+				At the most basic level, creating a Griddle component is as simple as saying <pre class="inline"><code class="language-markup">&lt;Griddle results= {fakeData} gridClassName="table"/&gt;</code></pre> against an array of JSON objects (fakeData is the array in this example).
+				<hr />
+				<div id="grid" class="container"></div>
+			</div>
+		</section>
+		<section id="example2">
+			<div class="container">
+				<h2>More Advanced Example</h2>
+				For many applications, simple paging and sorting is not enough. Griddle comes equipped with filtering, initial columns and additional grid settings out of the box. To use these features, simply define the <span class="highlight">showProperties</span> and <span class="highlight">showFilters</span> properties on the Griddle component definition. <a href="#properties">Check out the full list of properties</a> below. 
+				<hr />
+				<div id="moregrid" class="container"></div>
+			</div>
+		</section>
+
+		<section id="example3">
+			<div class="container">
+				<h2>Subgrids</h2>
+				Griddle also supports subgrids with little configuration. Simply add a property named "children" (or set the child column name property when defining the component) to any object in your list of data. Right now the child rows should have the same columns as the parent but more advanced subgrid functionality is planned. 
+				<hr />
+				<div id="subgrid" class="container"></div>
+			</div>
+		</section>
+
+		<section id="properties">
+			<div class="container">
+				<h2>Property Reference</h2>
+				Griddle has a number of default properties that can be changed to modify the behavior / style of the component. 
+				<dl>
+					<dt>columns</dt>
+					<dd>The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default</dd>
+
+					<dt>results</dt>
+					<dd>The data that should be displayed within the grid. This data needs to be an array of JSON objects.</dd>
+
+					<dt>initialSort</dt>
+					<dd>The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received</dd>
+
+					<dt>gridClassName</dt>
+					<dd>The CSS class name to apply to the table elements. By default this is an empty string -- in the exmaple it is set to "table" so the Bootstrap 3 table class is used.</dd>
+
+					<dt>settingsText</dt>
+					<dd>The text value to use for toggling the settings area. This is "Settings" by default.</dd>
+
+					<dt>filterPlaceholderText</dt>
+					<dd>The text to be displayed as a placeholder in the filter text box. This is "Filter Results" by default.</dd>
+
+					<dt>nextText</dt>
+					<dd>The text on the button that moves to the next page of results. This is "Next" by default.</dd>
+
+					<dt>previousText</dt>
+					<dd>The text on the button that moves to the previous page of results. This is "Previous" by default.</dd>
+
+					<dt>childrenColumnName</dt>
+					<dd>The name of the column that contains a list of child items for a given object. By default this is "children"</dd>
+
+					<dt>metadataColumns</dt>
+					<dd>List of columns that should not be rendered. By default, this is an empty array.</dd>
+
+					<dt>showFilter</dt>
+					<dd>Whether or not to display the "Filter" section of Griddle. By default, this is set to "false".</dd>
+
+					<dt>showSettings</dt>
+					<dd>Whether or not to display the "Settings" section of Griddle. By default, this is set to "false".</dd>
+				</dl>
+			</div>
+		</section>
+		<script type="text/jsx" src="scripts/testComponent.js"></script>
+	</body>
+</html>

@@ -1,0 +1,125 @@
+.griddle {
+	margin: 20px;
+}
+
+	/* Avoid highlighting things when clicking on things like next / previous
+	   but still allow text from table body to be selected. */ 
+	   
+	.griddle, .griddle *{
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+
+	.griddle tbody *{
+		-webkit-touch-callout: text;
+		-webkit-user-select: text;
+		-khtml-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
+	}
+
+	.griddle .columnSelector{
+		padding: 10px 10px 0px 10px;
+		margin: 0px 0px 10px 0px;
+	}
+		.griddle .columnSelector h5{
+			margin:0px 0px 10px 0px;
+		}
+
+		/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+		.griddle .columnSelector:before, .griddle .columnSelector:after{
+			content: " "; 
+			display: table;
+		}
+
+		.griddle .columnSelector:after{
+			clear: both;
+		}
+
+		.griddle .columnSelector .column{
+			width: 160px;
+			float:left;
+			margin-top:0px;
+		}
+
+	.griddle table{
+		table-layout: fixed;
+	}
+
+	.griddle .table-header{
+		margin-bottom: 0px;
+	}
+
+	.griddle .sort-ascending:after{
+		 content: '\25B2';
+		 font-size:12px;
+		 margin-left: 5px;
+	}
+
+	.griddle .sort-descending:after{
+		 content: '\25BC';
+		 font-size:12px;
+		 margin-left: 5px;
+	}
+
+	.griddle .parent-row td:first-child:before{
+		content: '\25BA';
+		font-size:12px;
+		margin-right:5px;
+	}
+
+	.griddle .parent-row.expanded td:first-child:before{
+		content: '\25BC';
+	}
+
+	.griddle .standard-row td:first-child:before{
+		content: ' ';
+		margin-right:15px;
+	}
+
+	.griddle .child-row td{
+		padding-left:20px;
+		border-bottom:0px;
+	}
+
+	.griddle .child-row td:first-child:before{
+		content: ' ';
+		margin-right:15px;
+	}
+
+
+	.griddle .settings i {
+		top:3px;
+	}
+	
+	.griddle .top-section{
+		margin-bottom: 10px;
+	}
+
+	.griddle .grid-footer{
+		padding: 10px 20px 10px 20px;
+	}
+
+		.griddle .grid-footer .glyphicon{
+			font-size: 12px; 
+			margin: 0px 5px 0px 5px;
+		}
+
+	.griddle .next, .griddle .previous, .griddle .settings, .griddle th{
+		cursor: pointer;
+	}
+.griddle .right{
+	text-align: right;
+}
+
+.griddle .center{
+	text-align: center;
+}
+
+
+
