@@ -33,6 +33,10 @@ React.renderComponent(
 );
 
 React.renderComponent(
+	<TestComponent simple={false}/>, document.getElementById('examplegrid')
+);
+
+React.renderComponent(
 	<TestComponent simple={false}/>, document.getElementById('moregrid')
 );
 

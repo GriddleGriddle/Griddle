@@ -32,8 +32,8 @@ header small{
 	border-bottom: 5px solid #DDD;
 }
 	#example1 .grid-body{ 
-		min-height: 275px;
-		max-height: 275px;
+		min-height: 270px;
+		max-height: 270px;
 	}
 
 #example2 {
@@ -41,7 +41,7 @@ header small{
 	border-bottom: 5px solid #BBB;
 }
 
-	#example2 .grid-container{
+	#example2 .grid-container, #start .grid-container{
 		border: 1px solid #DFDFDF;
 	}
 
@@ -94,4 +94,15 @@ header small{
 
 .columnSelector{
 	border: 1px solid #CCC;
+}
+
+footer{ 
+	padding:10px 0px 0px 0px;
+	background-color: #939393;	
+	height:80px;
+}
+
+footer a, footer a:visited{	
+	color: #555;
+	text-decoration: underline;
 }
