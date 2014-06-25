@@ -3,7 +3,9 @@
 /* 
    Griddle - Simple Grid Component for React 
    https://github.com/DynamicTyped/Griddle
-   2014 Ryan Lanciaux
+   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var Griddle = React.createClass({
     /* set just some of the state properties and re-render*/ 

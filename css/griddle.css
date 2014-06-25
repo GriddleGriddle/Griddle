@@ -1,5 +1,5 @@
 .griddle {
-	margin: 20px;
+	margin: 20px 0px 20px 0px;
 }
 
 	/* Avoid highlighting things when clicking on things like next / previous
@@ -92,6 +92,9 @@
 		margin-right:15px;
 	}
 
+	.griddle .grid-body table{
+		margin-bottom:0px;
+	}
 
 	.griddle .settings i {
 		top:3px;
