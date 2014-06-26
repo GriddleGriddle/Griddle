@@ -109,6 +109,10 @@ header .btn-group{
 	font-weight: 400;
 }
 
+.btn.view{
+	width:100%;
+}
+
 footer{ 
 	padding:10px;
 	background-color: #939393;	
