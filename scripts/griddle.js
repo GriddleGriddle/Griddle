@@ -8,9 +8,9 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var Griddle = React.createClass({
-    /* set just some of the state properties and re-render*/ 
+    /* ehh.. this function needs to go. */
     mergeState: function(object) {
-        this.setState(_.extend(this.state, object));
+        this.setState(object);
     },
     getDefaultProps: function() {
         return{
@@ -23,6 +23,7 @@ var Griddle = React.createClass({
             "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
             "previousText": "Previous",
+            "maxRowsText": "Rows per page",
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
@@ -59,6 +60,11 @@ var Griddle = React.createClass({
                 maxPage: this.getMaxPage(null)
             });
         }
+    },
+    setPageSize: function(size){
+        //make this better.
+        this.props.resultsPerPage = size; 
+        this.setMaxPage();
     },
     toggleColumnChooser: function(){
         this.mergeState({
@@ -196,7 +202,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns}/>
+                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
                                     </div>
                                 </div>
                             ) : "";
@@ -227,7 +233,7 @@ var Griddle = React.createClass({
                 <div className="grid-container panel">
                     <div className="grid-body">
                         <table className={headerTableClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending}/>
+                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
                         </table>
                         <GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>        
                     </div>
@@ -241,6 +247,10 @@ var Griddle = React.createClass({
 });
 
 var GridSettings = React.createClass({
+    setPageSize: function(event){
+        var value = parseInt(event.target.value);
+        this.props.setPageSize(value);
+    },
     handleChange: function(event){
         if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
             this.props.selectedColumns.push(event.target.dataset.name);
@@ -256,7 +266,16 @@ var GridSettings = React.createClass({
             var checked = _.contains(that.props.selectedColumns, col);
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
-        return (<div className="columnSelector panel"><h5>Settings</h5>{nodes}</div>);
+        return (<div className="columnSelector panel"><h5>{this.props.settingsText}</h5><div className="container-fluid"><div className="row">{nodes}</div></div><hr />
+            <label for="maxRows">{this.props.maxRowsText}:</label>
+            <select class="form-control" onChange={this.setPageSize} value={this.props.resultsPerPage}>
+                <option value="5">5</option> 
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            </div>);
     }
 });
 

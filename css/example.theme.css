@@ -105,6 +105,10 @@ header .btn-group{
 	border: 1px solid #CCC;
 }
 
+.columnSelector label{
+	font-weight: 400;
+}
+
 footer{ 
 	padding:10px;
 	background-color: #939393;	
