@@ -212,10 +212,10 @@ var Griddle = React.createClass({
         if (this.props.showFilter || this.props.showSettings){
            topSection = (
             <div className="row top-section">
-                <div className="col-md-6">
+                <div className="col-xs-6">
                    {filter} 
                 </div>
-                <div className="col-md-6 right">
+                <div className="col-xs-6 right">
                     {settings}
                 </div> 
             </div>);
@@ -387,13 +387,13 @@ var GridPagination = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-md-4">{previous}</div>
-                <div className="col-md-4 center">
+                <div className="col-xs-4">{previous}</div>
+                <div className="col-xs-4 center">
                     <select value={this.props.currentPage+1} onChange={this.pageChange}> 
                         {options} 
                     </select> / {this.props.maxPage}
                 </div>
-                <div className="col-md-4 right">{next}</div>
+                <div className="col-xs-4 right">{next}</div>
             </div>
         )
     }
