@@ -8,10 +8,6 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var Griddle = React.createClass({
-    /* ehh.. this function needs to go. */
-    mergeState: function(object) {
-        this.setState(object);
-    },
     getDefaultProps: function() {
         return{
             "columns": [],
@@ -47,14 +43,14 @@ var Griddle = React.createClass({
 
                     return false; 
                 });
-            this.mergeState({
+            this.setState({
                 page: 0,
                 filteredResults: filtered,
                 filter: filter,
                 maxPage: this.getMaxPage(filtered)
             });
         } else { 
-            this.mergeState({
+            this.setState({
                 filteredResults: null, 
                 filter: filter,
                 maxPage: this.getMaxPage(null)
@@ -67,7 +63,7 @@ var Griddle = React.createClass({
         this.setMaxPage();
     },
     toggleColumnChooser: function(){
-        this.mergeState({
+        this.setState({
             showColumnChooser: this.state.showColumnChooser == false
         });
     },
@@ -79,13 +75,13 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage();
         //re-render if we have new max page value
         if (this.state.maxPage != maxPage){
-            this.mergeState({ maxPage: maxPage, filteredColumns: this.props.columns });
+            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
         }
     },
     setPage: function(number) {
        //check page size and move the filteredResults to pageSize * pageNumber 
         if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
-            this.mergeState({
+            this.setState({
                 page: number
             });
         }
@@ -104,7 +100,7 @@ var Griddle = React.createClass({
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
-        this.mergeState({
+        this.setState({
             filteredColumns: columns
         });
     },
@@ -122,7 +118,7 @@ var Griddle = React.createClass({
             sortAscending = true; 
         }
 
-        this.mergeState({
+        this.setState({
             page:0,
             sortColumn: sort, 
             sortAscending: sortAscending
