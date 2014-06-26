@@ -263,7 +263,7 @@ var GridSettings = React.createClass({
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
         return (<div className="columnSelector panel"><h5>{this.props.settingsText}</h5><div className="container-fluid"><div className="row">{nodes}</div></div><hr />
-            <label for="maxRows">{this.props.maxRowsText}:</label>
+            <label for="maxRows">{this.props.maxRowsText}:</label> 
             <select class="form-control" onChange={this.setPageSize} value={this.props.resultsPerPage}>
                 <option value="5">5</option> 
                 <option value="10">10</option>
