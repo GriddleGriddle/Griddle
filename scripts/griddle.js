@@ -8,10 +8,6 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var Griddle = React.createClass({
-    /* set just some of the state properties and re-render*/ 
-    mergeState: function(object) {
-        this.setState(_.extend(this.state, object));
-    },
     getDefaultProps: function() {
         return{
             "columns": [],
@@ -23,6 +19,7 @@ var Griddle = React.createClass({
             "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
             "previousText": "Previous",
+            "maxRowsText": "Rows per page",
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
@@ -46,22 +43,27 @@ var Griddle = React.createClass({
 
                     return false; 
                 });
-            this.mergeState({
+            this.setState({
                 page: 0,
                 filteredResults: filtered,
                 filter: filter,
                 maxPage: this.getMaxPage(filtered)
             });
         } else { 
-            this.mergeState({
+            this.setState({
                 filteredResults: null, 
                 filter: filter,
                 maxPage: this.getMaxPage(null)
             });
         }
     },
+    setPageSize: function(size){
+        //make this better.
+        this.props.resultsPerPage = size; 
+        this.setMaxPage();
+    },
     toggleColumnChooser: function(){
-        this.mergeState({
+        this.setState({
             showColumnChooser: this.state.showColumnChooser == false
         });
     },
@@ -73,13 +75,13 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage();
         //re-render if we have new max page value
         if (this.state.maxPage != maxPage){
-            this.mergeState({ maxPage: maxPage, filteredColumns: this.props.columns });
+            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
         }
     },
     setPage: function(number) {
        //check page size and move the filteredResults to pageSize * pageNumber 
         if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
-            this.mergeState({
+            this.setState({
                 page: number
             });
         }
@@ -98,7 +100,7 @@ var Griddle = React.createClass({
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
-        this.mergeState({
+        this.setState({
             filteredColumns: columns
         });
     },
@@ -116,7 +118,7 @@ var Griddle = React.createClass({
             sortAscending = true; 
         }
 
-        this.mergeState({
+        this.setState({
             page:0,
             sortColumn: sort, 
             sortAscending: sortAscending
@@ -196,7 +198,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns}/>
+                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
                                     </div>
                                 </div>
                             ) : "";
@@ -212,10 +214,10 @@ var Griddle = React.createClass({
         if (this.props.showFilter || this.props.showSettings){
            topSection = (
             <div className="row top-section">
-                <div className="col-md-6">
+                <div className="col-xs-6">
                    {filter} 
                 </div>
-                <div className="col-md-6 right">
+                <div className="col-xs-6 right">
                     {settings}
                 </div> 
             </div>);
@@ -227,7 +229,7 @@ var Griddle = React.createClass({
                 <div className="grid-container panel">
                     <div className="grid-body">
                         <table className={headerTableClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending}/>
+                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
                         </table>
                         <GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>        
                     </div>
@@ -241,6 +243,10 @@ var Griddle = React.createClass({
 });
 
 var GridSettings = React.createClass({
+    setPageSize: function(event){
+        var value = parseInt(event.target.value);
+        this.props.setPageSize(value);
+    },
     handleChange: function(event){
         if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
             this.props.selectedColumns.push(event.target.dataset.name);
@@ -256,7 +262,16 @@ var GridSettings = React.createClass({
             var checked = _.contains(that.props.selectedColumns, col);
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
-        return (<div className="columnSelector panel"><h5>Settings</h5>{nodes}</div>);
+        return (<div className="columnSelector panel"><h5>{this.props.settingsText}</h5><div className="container-fluid"><div className="row">{nodes}</div></div><hr />
+            <label for="maxRows">{this.props.maxRowsText}:</label>
+            <select class="form-control" onChange={this.setPageSize} value={this.props.resultsPerPage}>
+                <option value="5">5</option> 
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            </div>);
     }
 });
 
@@ -387,13 +402,13 @@ var GridPagination = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-md-4">{previous}</div>
-                <div className="col-md-4 center">
+                <div className="col-xs-4">{previous}</div>
+                <div className="col-xs-4 center">
                     <select value={this.props.currentPage+1} onChange={this.pageChange}> 
                         {options} 
                     </select> / {this.props.maxPage}
                 </div>
-                <div className="col-md-4 right">{next}</div>
+                <div className="col-xs-4 right">{next}</div>
             </div>
         )
     }

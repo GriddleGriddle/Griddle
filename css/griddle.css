@@ -55,6 +55,10 @@
 		margin-bottom: 0px;
 	}
 
+	.griddle th{
+		overflow:hidden;
+	}
+	
 	.griddle .sort-ascending:after{
 		 content: '\25B2';
 		 font-size:12px;

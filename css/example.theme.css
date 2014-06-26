@@ -21,6 +21,16 @@ header small{
 	color: #efa588;
 }
 
+header .btn-group{
+	float:right; 
+	margin-top:15px;
+}
+
+	header .btn-group a{
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+
 #start { 
 	background-color: #FFF;
 	padding: 20px 0px 20px 0px; 
@@ -33,7 +43,6 @@ header small{
 }
 	#example1 .grid-body{ 
 		min-height: 270px;
-		max-height: 270px;
 	}
 
 #example2 {
@@ -96,13 +105,21 @@ header small{
 	border: 1px solid #CCC;
 }
 
+.columnSelector label{
+	font-weight: 400;
+}
+
 footer{ 
-	padding:10px 0px 0px 0px;
+	padding:10px;
 	background-color: #939393;	
-	height:80px;
 }
 
 footer a, footer a:visited{	
 	color: #555;
 	text-decoration: underline;
+}
+
+@media(max-width: 992px){
+	header .btn-group{display:none;}
+	header small{display:none;}
 }

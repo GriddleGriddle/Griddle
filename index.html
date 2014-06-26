@@ -15,9 +15,16 @@
 		<header>
 			<div class="container">
 				<div class="row">
-					<div class="col-md-2 center">
+					<div class="col-sm-2 center">
 						<img src="images/griddle.png" />
 						<small>your data in short-order</small>
+					</div>
+					<div class="col-sm-6 col-sm-offset-4">
+						<div class="btn-group">
+						  <a href="#base" class="btn btn-default">Getting Started</a>
+						  <a href="#advanced" class="btn btn-default">Advanced Example</a>
+	                      <a href="#properties" class="btn btn-default">Properties</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -47,7 +54,7 @@
 					</div>
 					<div class="col-md-4">
 						<h3>Fast</h3>
-						<p>Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Whether you have several or thousands of records, Griddle should render your data quickly.</p><br />
+						<p>Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Whether you have several or hundreds of records, Griddle should render your data quickly.</p><br />
 						<p><a href="http://www.github.com/dynamictyped/griddle" class="btn btn-default">View project on GitHub</a></p>
 					</div>
 				</div>
@@ -91,6 +98,7 @@
 			</div>
 		</section>
 		<section id="example2">
+			<a name="advanced"></a>
 			<div class="container">
 				<h2>More Advanced Example</h2>
 				<p>For many applications, simple paging and sorting is not enough. Griddle comes equipped with filtering, initial columns and additional grid settings out of the box. To use these features, simply define the <span class="highlight">showProperties</span> and <span class="highlight">showFilters</span> properties on the Griddle component definition. <a href="#properties">Check out the full list of properties</a> below.</p>
@@ -141,6 +149,9 @@
 					<dt>previousText</dt>
 					<dd>The text on the button that moves to the previous page of results. This is "Previous" by default.</dd>
 
+					<dt>maxRowsText</dt>
+					<dd>The text that appears in the Settings / Column chooser next to the select box for page size</dd>
+
 					<dt>childrenColumnName</dt>
 					<dd>The name of the column that contains a list of child items for a given object. By default this is "children"</dd>
 
@@ -160,6 +171,7 @@
 				<div class="row">
 					<div class="col-md-3">
 						<p>&copy; 2014 <a href="http://www.ryanlanciaux.com">Ryan Lanciaux</a> | <a href="http://www.github.com/dynamictyped">DynamicTyped</a></p>
+						<p>Logo by <a href="http://www.behance.net/ryanstraube">Ryan Straube</a></p>
 						<p><a href="https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE">License / Disclaimer</a></p>	
 					</div>
 					<div class="col-md-4 col-md-offset-5">
