@@ -5,7 +5,8 @@ var TestComponent = React.createClass({
     getDefaultProps: function() {
         return{
             "simple": true,
-            "subgrid": false
+            "subgrid": false,
+            "external": false
 		};
 	},	
 	render: function(){
@@ -15,7 +16,9 @@ var TestComponent = React.createClass({
 			example = <Griddle results={fakeData} gridClassName="table"/>
 		} else if(this.props.subgrid == true){
 			example = <Griddle results={fakeSubgridData} gridClassName="table" />
-		}else { 
+		} else if (this.props.external == true) {
+			example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} gridClassName="table" />
+		} else { 
 			example = <Griddle results={fakeData} gridClassName="table" 
 						showFilter={true} showSettings={true} 
 						columns={["name", "city", "state", "country"]}/>
@@ -43,4 +46,9 @@ React.renderComponent(
 React.renderComponent(
 		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
 );
+
+React.renderComponent(
+		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
+);
+
 
