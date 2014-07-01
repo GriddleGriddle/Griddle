@@ -2602,8 +2602,8 @@ var fakeData =  [
     ]   
   }];
 
-  var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize) {
-    return {
+  var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+    callback({
       results : [{
         "id": 64,
         "name": "Murphy Santos",
@@ -2659,5 +2659,5 @@ var fakeData =  [
         "favoriteNumber": 4
       }],
       totalResults: 123
-    };
+    });
   }

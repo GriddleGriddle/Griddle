@@ -30,7 +30,6 @@ var TestComponent = React.createClass({
 	}
 });
 
-
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );
