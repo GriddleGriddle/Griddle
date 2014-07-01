@@ -33,12 +33,18 @@ var Griddle = React.createClass({
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
         if(filter){
-            var filtered;
+            var state = {
+                    page: 0,
+                    filter: filter
+                };
 
+            // Obtain the state results.
             if (this.props.getExternalResults !== null) {
-               filtered = this.getExternalResults(filter);
+                var externalResults = this.getExternalResults(this.state, filter).results;
+                state.filteredResults = externalResults.results;
+                state.totalResults = externalResults.totalResults;
             } else {
-               filtered = _.filter(this.props.results, 
+               state.filteredResults = _.filter(this.state.results, 
                 function(item) { 
                     var arr = _.values(item); 
                     for(var i = 0; i < arr.length; i++){
@@ -50,13 +56,12 @@ var Griddle = React.createClass({
                     return false; 
                 }); 
             }
-             
-            this.setState({
-                page: 0,
-                filteredResults: filtered,
-                filter: filter,
-                maxPage: this.getMaxPage(filtered)
-            });
+            
+            // Update the max page.
+            state.maxPage = this.getMaxPage(state.filteredResults);
+
+            // Set the state.
+            this.setState(state);
         } else { 
             this.setState({
                 filteredResults: null, 
@@ -65,17 +70,22 @@ var Griddle = React.createClass({
             });
         }
     },
-    getExternalResults: function(filter) {
-        var externalResults = this.props.getExternalResults(filter, this.state.sortColumn, this.state.sortAscending, 0, this.props.resultsPerPage);
+    getExternalResults: function(state, filter) {
+        if (state === undefined) {
+            state = this.state;
+        }
 
-        // Set the results to the current result page
-        this.props.results = externalResults.results;
+        var externalResults = this.props.getExternalResults(filter, state.sortColumn, state.sortAscending, 0, this.props.resultsPerPage);
 
-        // Update the total number of results 
-        this.setState({ totalResults: externalResults.totalResults });
-
-        return this.props.results;
+        return externalResults;
     },
+//    updateStateWithExternalResults: function(state) {
+//        if(state === undefined) {
+//            state = this.state;
+//        }
+//
+//        
+//    },
     setPageSize: function(size){
         //make this better.
         this.props.resultsPerPage = size; 
@@ -89,14 +99,21 @@ var Griddle = React.createClass({
     getMaxPage: function(results){
         var totalResults;
         if (this.props.getExternalResults !== null) {
+            // If we don't know the number of total results just yet, no external data has been loaded.
+            if (this.state.totalResults === undefined) {
+                debugger;
+                this.getExternalResults();
+            }
+
             totalResults = this.state.totalResults;
         } else {
-            totalResults = (results||this.props.results).length;
+            totalResults = (results||this.state.results).length;
         }
         var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
         return maxPage;
     },
     setMaxPage: function(results){
+        debugger;
         var maxPage = this.getMaxPage();
         //re-render if we have new max page value
         if (this.state.maxPage != maxPage){
@@ -106,20 +123,28 @@ var Griddle = React.createClass({
     setPage: function(number) {
        //check page size and move the filteredResults to pageSize * pageNumber 
         if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
-            this.setState({
+            var state = {
                 page: number
-            });
+            };
+
+            if (this.props.getExternalResults !== null) {
+                var externalResults = this.getExternalResults();
+                state.results = externalResults.results;
+                state.totalResults = externalResults.totalResults;
+            }
+
+            this.setState(state);
         }
     },
     getColumns: function(){
         //if we don't have any data don't mess with this
-        if (this.props.results.length == 0){ return [];}
+        if (this.state.results.length == 0){ return [];}
 
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
             var meta = [].concat(this.props.metadataColumns);
             meta.push(this.props.childrenColumnName); 
-            return _.keys(_.omit(this.props.results[0], meta));
+            return _.keys(_.omit(this.state.results[0], meta));
         }
         return this.state.filteredColumns; 
     },
@@ -130,9 +155,11 @@ var Griddle = React.createClass({
         });
     },
     nextPage: function() {
+        debugger;
         if (this.state.page < this.state.maxPage) { this.setPage(this.state.page + 1); }
     },
     previousPage: function() {
+        debugger;
         if (this.state.page > 0) { this.setPage(this.state.page - 1); }
     },
     changeSort: function(sort){
@@ -150,15 +177,18 @@ var Griddle = React.createClass({
         });
     },
     componentWillMount: function() {
+        debugger;
         this.setMaxPage();
     },
     componentWillReceiveProps: function(nextProps) {
-
+        debugger;
         // TODO: How to handle with external results?
         this.setMaxPage(nextProps.results);
     },
     getInitialState: function() {
-        return {
+        debugger;
+
+        var state =  {
             maxPage: 0,
             page: 0,
             filteredResults: null,
@@ -168,6 +198,17 @@ var Griddle = React.createClass({
             sortAscending: true,
             showColumnChooser: false,
         };
+
+        // If we need to get external results, grab the results.
+        if (this.props.getExternalResults !== null) {
+            var externalResults = this.getExternalResults(state);
+            state.results = externalResults.results;
+            state.totalResults = externalResults.totalResults;
+        } else {
+            state.results = results;
+        }
+
+        return state;
     },
     getDataForRender: function(data, cols, pageList){
         var that = this; 
@@ -218,21 +259,7 @@ var Griddle = React.createClass({
         var that = this; 
         
         // Attempt to assign to the filtered results, if we have any.
-        var results = this.state.filteredResults;
-        if (this.props.getExternalResults !== null) {
-            debugger;
-
-            // Load the initial results if we don't have any filtered results to load.
-            if (results === null) {
-                if (this.props.results.length > 0) {
-                    results = this.props.results;
-                } else {
-                    results = this.getExternalResults();
-                }
-            }
-        } else {
-            results = results || this.props.results;
-        }
+        var results = this.state.filteredResults || this.state.results;
 
         //figure out which columns are displayed and show only those
         var cols = this.getColumns(); 
