@@ -174,9 +174,17 @@ var Griddle = React.createClass({
         this.setMaxPage();
     },
     componentWillReceiveProps: function(nextProps) {
-        debugger;
-        // TODO: How to handle with external results?
-        this.setMaxPage(nextProps.results);
+        if (this.props.getExternalResults !== null) {
+            // TODO: Confirm
+            var state = this.state;
+
+            // Update the state with external results.
+            state = this.updateStateWithExternalResults(state);
+
+            this.setState(state);
+        } else {
+            this.setMaxPage(nextProps.results);    
+        }
     },
     getInitialState: function() {
         var state =  {
@@ -187,7 +195,7 @@ var Griddle = React.createClass({
             filter: "",
             sortColumn: "",
             sortAscending: true,
-            showColumnChooser: false,
+            showColumnChooser: false
         };
 
         // If we need to get external results, grab the results.
