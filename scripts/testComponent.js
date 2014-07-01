@@ -30,7 +30,7 @@ var TestComponent = React.createClass({
 	}
 });
 
-/*
+
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );
@@ -45,7 +45,7 @@ React.renderComponent(
 
 React.renderComponent(
 		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
-);*/
+);
 
 React.renderComponent(
 		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
