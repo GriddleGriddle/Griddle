@@ -233,6 +233,11 @@ var Griddle = React.createClass({
         return state;
     },
     componentWillMount: function() {
+        if (this.props.getExternalResults === null) {
+            this.setMaxPage();
+        }
+    },
+    componentDidMount: function() {
         var state = this.state;
         var that = this;
 
@@ -242,8 +247,6 @@ var Griddle = React.createClass({
                 that.setState(updatedState);
                 that.setMaxPage();
             });
-        } else {
-            that.setMaxPage();
         }
     },
     getDataForRender: function(data, cols, pageList){
@@ -293,9 +296,15 @@ var Griddle = React.createClass({
     },
     render: function() {
         var that = this; 
-        
+
         // Attempt to assign to the filtered results, if we have any.
         var results = this.state.filteredResults || this.state.results;
+
+        // If we don't have results just yet, return.
+        if (results === undefined) {
+            // TODO: Make this a little more meaningful. 
+            return (<div className="griddle">Loading</div>);
+        }
 
         //figure out which columns are displayed and show only those
         var cols = this.getColumns(); 
