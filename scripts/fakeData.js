@@ -2661,5 +2661,5 @@ var fakeData =  [
         }],
         totalResults: 123
       });
-    }, 1500);
+    }, 500);
   }

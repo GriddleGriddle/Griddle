@@ -284,7 +284,6 @@ var Griddle = React.createClass({
         var meta = [].concat(this.props.metadataColumns);
         meta.push(this.props.childrenColumnName); 
 
-
         var transformedData = [];
 
         for(var i = 0; i<data.length; i++){
@@ -306,25 +305,6 @@ var Griddle = React.createClass({
         var that = this,
             results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
 
-        //figure out which columns are displayed and show only those
-        var cols = this.getColumns(); 
-
-        var meta = this.props.metadataColumns;
-        meta.push(this.props.childrenColumnName); 
-
-        var keys = [];
-        if (!this.state.isLoading) {
-            keys = _.keys(_.omit(results[0], meta));
-        }
-
-        var columnSelector = this.state.showColumnChooser ? (
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
-                                    </div>
-                                </div>
-                            ) : "";
-
         var headerTableClassName = this.props.gridClassName + " table-header";
 
         //figure out if we want to show the filter section 
@@ -345,17 +325,37 @@ var Griddle = React.createClass({
             </div>);
         }
 
-        // If we're currently loading results, display the loading content rather than the result content.
         var resultContent = "";
         var pagingContent = "";
-        if (this.state.isLoading) {
-            resultContent = (<div className="loading img-responsive center-block"></div>);
-        } else {
+        var keys = [];
+
+        // If we're not loading results, fill the table with legitimate data.
+        if (!this.state.isLoading) {
+            //figure out which columns are displayed and show only those
+            var cols = this.getColumns();
+
             var data = this.getDataForRender(results, cols, true);
+            
+            var meta = this.props.metadataColumns;
+            meta.push(this.props.childrenColumnName); 
+
+            // Grab the column keys from the first results
+            keys = _.keys(_.omit(results[0], meta));
 
             resultContent = (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
             pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
+        } else {
+            // Otherwise, display the loading content.
+            resultContent = (<div className="loading img-responsive center-block"></div>);
         }
+
+        var columnSelector = this.state.showColumnChooser ? (
+            <div className="row">
+                <div className="col-md-12">
+                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
+                </div>
+            </div>
+        ) : "";
 
         return (
             <div className="griddle">
