@@ -62,6 +62,10 @@ header .btn-group{
 	border-bottom: 5px solid #DDD;
 }
 
+#example4 .grid-body{ 
+		min-height: 270px;
+	}
+
 #properties{
 	background-color: #FFF;
 }

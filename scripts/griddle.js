@@ -109,10 +109,15 @@ var Griddle = React.createClass({
         this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
     },
     updateStateWithExternalResults: function(state, callback) {
-        var externalResults = this.getExternalResults(state, function(externalResults) {
+        // Update the table to indicate that it's loading.
+        this.setState({ isLoading: true });
+        
+        // Grab the results.
+        this.getExternalResults(state, function(externalResults) {
             // Fill the state result properties
             state.results = externalResults.results;
             state.totalResults = externalResults.totalResults;
+            state.isLoading = false;
 
             callback(state);
         });
@@ -163,7 +168,7 @@ var Griddle = React.createClass({
     },
     getColumns: function(){
         //if we don't have any data don't mess with this
-        if (this.state.results.length == 0){ return [];}
+        if (this.state.results === undefined || this.state.results.length == 0){ return [];}
 
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
@@ -222,12 +227,15 @@ var Griddle = React.createClass({
             filter: "",
             sortColumn: "",
             sortAscending: true,
-            showColumnChooser: false
+            showColumnChooser: false,
+            isLoading: false
         };
 
         // If we need to get external results, grab the results.
         if (this.props.getExternalResults === null) {
             state.results = this.props.results;
+        } else {
+            state.isLoading = true; // Initialize to 'loading'
         }
 
         return state;
@@ -295,26 +303,19 @@ var Griddle = React.createClass({
         return transformedData;
     },
     render: function() {
-        var that = this; 
-
-        // Attempt to assign to the filtered results, if we have any.
-        var results = this.state.filteredResults || this.state.results;
-
-        // If we don't have results just yet, return.
-        if (results === undefined) {
-            // TODO: Make this a little more meaningful. 
-            return (<div className="griddle">Loading</div>);
-        }
+        var that = this,
+            results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
 
         //figure out which columns are displayed and show only those
         var cols = this.getColumns(); 
 
-        data = this.getDataForRender(results, cols, true);
-
         var meta = this.props.metadataColumns;
         meta.push(this.props.childrenColumnName); 
 
-        var keys = _.keys(_.omit(results[0], meta));
+        var keys = [];
+        if (!this.state.isLoading) {
+            keys = _.keys(_.omit(results[0], meta));
+        }
 
         var columnSelector = this.state.showColumnChooser ? (
                                 <div className="row">
@@ -343,6 +344,19 @@ var Griddle = React.createClass({
                 </div> 
             </div>);
         }
+
+        // If we're currently loading results, display the loading content rather than the result content.
+        var resultContent = "";
+        var pagingContent = "";
+        if (this.state.isLoading) {
+            resultContent = (<div className="loading"></div>);
+        } else {
+            var data = this.getDataForRender(results, cols, true);
+
+            resultContent = (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
+            pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
+        }
+
         return (
             <div className="griddle">
                 {topSection}
@@ -352,10 +366,10 @@ var Griddle = React.createClass({
                         <table className={headerTableClassName}>
                             <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
                         </table>
-                        <GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>        
+                        {resultContent}
                     </div>
                     <div className="grid-footer">
-                        <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                        {pagingContent}
                     </div>
                 </div>
             </div>
