@@ -349,7 +349,7 @@ var Griddle = React.createClass({
         var resultContent = "";
         var pagingContent = "";
         if (this.state.isLoading) {
-            resultContent = (<div className="loading"></div>);
+            resultContent = (<div className="loading img-responsive center-block"></div>);
         } else {
             var data = this.getDataForRender(results, cols, true);
 
