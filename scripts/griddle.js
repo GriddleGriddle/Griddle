@@ -47,7 +47,7 @@ var Griddle = React.createClass({
                 };
 
             // Obtain the state results.
-            if (this.props.getExternalResults !== null) {
+            if (this.hasExternalResults()) {
                 // Update the state with external results.
                 this.updateStateWithExternalResults(state, updateAfterResultsObtained);
             } else {
@@ -122,6 +122,9 @@ var Griddle = React.createClass({
             callback(state);
         });
     },
+    hasExternalResults: function() {
+        return typeof(this.props.getExternalResults) === 'function';
+    },
     setPageSize: function(size){
         //make this better.
         this.props.resultsPerPage = size; 
@@ -134,7 +137,7 @@ var Griddle = React.createClass({
     },
     getMaxPage: function(results){
         var totalResults;
-        if (this.props.getExternalResults !== null) {
+        if (this.hasExternalResults()) {
             totalResults = this.state.totalResults;
         } else {
             totalResults = (results||this.state.results).length;
@@ -157,7 +160,7 @@ var Griddle = React.createClass({
                     page: number
                 };
 
-            if (this.props.getExternalResults !== null) {
+            if (this.hasExternalResults()) {
                 this.updateStateWithExternalResults(state, function(updatedState) {
                     that.setState(updatedState);
                 });
@@ -205,7 +208,7 @@ var Griddle = React.createClass({
         });
     },
     componentWillReceiveProps: function(nextProps) {
-        if (this.props.getExternalResults !== null) {
+        if (this.hasExternalResults()) {
             // TODO: Confirm
             var state = this.state,
                 that = this;
@@ -232,7 +235,7 @@ var Griddle = React.createClass({
         };
 
         // If we need to get external results, grab the results.
-        if (this.props.getExternalResults === null) {
+        if (!this.hasExternalResults()) {
             state.results = this.props.results;
         } else {
             state.isLoading = true; // Initialize to 'loading'
@@ -241,7 +244,7 @@ var Griddle = React.createClass({
         return state;
     },
     componentWillMount: function() {
-        if (this.props.getExternalResults === null) {
+        if (!this.hasExternalResults()) {
             this.setMaxPage();
         }
     },
@@ -249,7 +252,7 @@ var Griddle = React.createClass({
         var state = this.state;
         var that = this;
 
-        if (this.props.getExternalResults !== null) {
+        if (this.hasExternalResults()) {
             // Update the state with external results when mounting
             state = this.updateStateWithExternalResults(state, function(updatedState) {
                 that.setState(updatedState);
@@ -260,7 +263,7 @@ var Griddle = React.createClass({
     getDataForRender: function(data, cols, pageList){
         var that = this; 
 
-        if (this.props.getExternalResults === null) {
+        if (!this.hasExternalResults()) {
             //get the correct page size
             if(this.state.sortColumn != "" || this.props.initialSort != ""){
                 data = _.sortBy(data, function(item){
