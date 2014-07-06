@@ -150,6 +150,39 @@
 					<dt>results</dt>
 					<dd>The data that should be displayed within the grid. This data needs to be an array of JSON objects.</dd>
 
+					<dt>getExternalResults</dt>
+					<dd>
+						<p>A function that obtains data to display in the grid and returns the results, along with the max total number of results.</p> 
+						<p>The method's requires the following parameters :</p>
+						<dl>
+							<dt>filterString</dt>
+							<dd>The string that the user is filtering by.</dd>
+
+							<dt>sortColumn</dt>
+							<dd>The column that is currently being sorted.</dd>
+
+							<dt>sortAscending</dt>
+							<dd>Whether or not results should be sorted in ascending order.</dd>
+
+							<dt>page</dt>
+							<dd>What page is being displayed.</dd>
+
+							<dt>pageSize</dt>
+							<dd>How many results should be included per page.</dd>
+
+							<dt>callback</dt>
+							<dd>The function that the results will be passed into.</dd>
+						</dl>
+						<p>An object passed into the callback must have the following properties :</p>
+						<dl>
+							<dt>results</dt>
+							<dd>The results to display.</dd>
+
+							<dt>totalResults</dt>
+							<dd>The total number of items.</dd>
+						</dl>
+					</dd>
+
 					<dt>initialSort</dt>
 					<dd>The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received</dd>
 
