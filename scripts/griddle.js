@@ -194,18 +194,25 @@ var Griddle = React.createClass({
         if (this.state.page > 0) { this.setPage(this.state.page - 1); }
     },
     changeSort: function(sort){
-        var sortAscending = true; 
+        var that = this,
+            state = {
+                page:0,
+                sortColumn: sort, 
+                sortAscending: true
+            };
+
+        // If this is the same column, reverse the sort.
         if(this.state.sortColumn == sort){
-            sortAscending = this.state.sortAscending == false; 
-        } else { 
-            sortAscending = true; 
+            state.sortAscending = this.state.sortAscending == false; 
         }
 
-        this.setState({
-            page:0,
-            sortColumn: sort, 
-            sortAscending: sortAscending
-        });
+        if (this.hasExternalResults()) {
+            this.updateStateWithExternalResults(state, function(updatedState) {
+                that.setState(updatedState);
+            });
+        } else {
+            this.setState(state);
+        }
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.hasExternalResults()) {
