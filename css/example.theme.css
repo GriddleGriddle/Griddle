@@ -50,7 +50,7 @@ header .btn-group{
 	border-bottom: 5px solid #BBB;
 }
 
-	#example2 .grid-container, #start .grid-container{
+	#example2 .grid-container, #start .grid-container, #example4 .grid-container{
 		border: 1px solid #DFDFDF;
 	}
 
@@ -58,8 +58,25 @@ header .btn-group{
 	border-bottom: 5px solid #DDD;
 }
 
-#properties{
+#example4{
 	background-color: #FFF;
+	border-bottom: 5px solid #BBB;
+}
+
+#example4 .grid-body{ 
+		min-height: 270px;
+	}
+
+.grid-body .loading{
+	background-image: url('/images/loading.gif'); /* Thanks 'http://preloaders.net'! */
+	background-repeat: no-repeat;
+	min-height: 32px;
+	width: 32px;
+	margin-top: 83px;
+}
+
+#properties{
+	border-bottom: 5px solid #DDD;
 }
 
 	#properties dl{

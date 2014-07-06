@@ -121,6 +121,24 @@
 			</div>
 		</section>
 
+		<section id="example4">
+			<div class="container">
+				<h2>External Data</h2>
+				<p>Don't want to load all of your data at once? Set the 'getExternalData' property to point to a method that accepts the filters and a callback as parameters and returns a list of results, along with the total number of results.:</p>
+				<pre><code>var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+	// Load results from your API here.
+	callback(function() {
+		results: [],
+		totalResults: 300
+	});
+}</code></pre>
+				<p>Then initialize your component with the following:</p>
+				<pre><code>&lt;Griddle getExternalResults={fakeDataMethod} gridClassName="table"/&gt;</code></pre>
+				<hr />
+				<div id="externaldata"></div>
+			</div>
+		</section>
+
 		<section id="properties">
 			<div class="container">
 				<h2>Property Reference</h2>
