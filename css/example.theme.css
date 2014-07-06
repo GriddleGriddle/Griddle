@@ -50,7 +50,7 @@ header .btn-group{
 	border-bottom: 5px solid #BBB;
 }
 
-	#example2 .grid-container, #start .grid-container{
+	#example2 .grid-container, #start .grid-container, #example4 .grid-container{
 		border: 1px solid #DFDFDF;
 	}
 
@@ -59,7 +59,8 @@ header .btn-group{
 }
 
 #example4{
-	border-bottom: 5px solid #DDD;
+	background-color: #FFF;
+	border-bottom: 5px solid #BBB;
 }
 
 #example4 .grid-body{ 
@@ -75,7 +76,7 @@ header .btn-group{
 }
 
 #properties{
-	background-color: #FFF;
+	border-bottom: 5px solid #DDD;
 }
 
 	#properties dl{
