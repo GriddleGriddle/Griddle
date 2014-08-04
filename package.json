@@ -4,15 +4,22 @@
   "description": "The simple grid component for React.",
   "main": "",
   "dependencies": {
-    "grunt": "~0.4.5"
+    "grunt": "~0.4.5",
+    "react": "~0.11.1",
+    "browserify": "*",
+    "react-tools": "~0.11.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-open": "^0.2.3",
-    "grunt-contrib-connect": "^0.8.0"
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-react": "~0.9.0",
+    "grunt-browserify": "~2.1.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "something": "echo \"hi\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildjs": "browserify scripts/*.js > build/griddle.js"
   },
   "repository": {
     "type": "git",
