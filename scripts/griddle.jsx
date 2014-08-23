@@ -1,7 +1,7 @@
 ﻿/** @jsx React.DOM */
 
-/*
-   Griddle - Simple Grid Component for React
+/* 
+   Griddle - Simple Grid Component for React 
    https://github.com/DynamicTyped/Griddle
    Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
 
@@ -19,7 +19,7 @@ var Griddle = React.createClass({
         return{
             "columns": [],
             "resultsPerPage":5,
-            "results": [], // Used if all results are already loaded.
+            "results": [], // Used if all results are already loaded. 
             "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
             "gridClassName":"",
@@ -32,7 +32,7 @@ var Griddle = React.createClass({
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
-            "metadataColumns": [],
+            "metadataColumns": [], 
             "showFilter": false,
             "showSettings": false
         };
@@ -58,24 +58,24 @@ var Griddle = React.createClass({
                 // Update the state with external results.
                 this.updateStateWithExternalResults(state, updateAfterResultsObtained);
             } else {
-               state.filteredResults = _.filter(this.state.results,
-                function(item) {
-                    var arr = _.values(item);
+               state.filteredResults = _.filter(this.state.results, 
+                function(item) { 
+                    var arr = _.values(item); 
                     for(var i = 0; i < arr.length; i++){
                        if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                        return true;
+                        return true; 
                        }
                     }
 
-                    return false;
+                    return false; 
                 });
 
                 // Update the state after obtaining the results.
                 updateAfterResultsObtained(state);
             }
-        } else {
+        } else { 
             this.setState({
-                filteredResults: null,
+                filteredResults: null, 
                 filter: filter,
                 maxPage: this.getMaxPage(null)
             });
@@ -111,14 +111,14 @@ var Griddle = React.createClass({
         } else {
             page = this.state.page;
         }
-
+        
         // Obtain the results
         this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
     },
     updateStateWithExternalResults: function(state, callback) {
         // Update the table to indicate that it's loading.
         this.setState({ isLoading: true });
-
+        
         // Grab the results.
         this.getExternalResults(state, function(externalResults) {
             // Fill the state result properties
@@ -134,7 +134,7 @@ var Griddle = React.createClass({
     },
     setPageSize: function(size){
         //make this better.
-        this.props.resultsPerPage = size;
+        this.props.resultsPerPage = size; 
         this.setMaxPage();
     },
     toggleColumnChooser: function(){
@@ -160,7 +160,7 @@ var Griddle = React.createClass({
         }
     },
     setPage: function(number) {
-       //check page size and move the filteredResults to pageSize * pageNumber
+       //check page size and move the filteredResults to pageSize * pageNumber 
         if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
             var that = this,
                 state = {
@@ -183,10 +183,10 @@ var Griddle = React.createClass({
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
             var meta = [].concat(this.props.metadataColumns);
-            meta.push(this.props.childrenColumnName);
+            meta.push(this.props.childrenColumnName); 
             return _.keys(_.omit(this.state.results[0], meta));
         }
-        return this.state.filteredColumns;
+        return this.state.filteredColumns; 
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
@@ -204,19 +204,19 @@ var Griddle = React.createClass({
         var that = this,
             state = {
                 page:0,
-                sortColumn: sort,
+                sortColumn: sort, 
                 sortAscending: true
             };
 
         // If this is the same column, reverse the sort.
         if(this.state.sortColumn == sort){
-            state.sortAscending = this.state.sortAscending == false;
+            state.sortAscending = this.state.sortAscending == false; 
         }
 
         if (this.hasExternalResults()) {
             this.updateStateWithExternalResults(state, function(updatedState) {
                 that.setState(updatedState);
-            });
+        });
         } else {
             this.setState(state);
         }
@@ -232,7 +232,7 @@ var Griddle = React.createClass({
                 that.setState(updatedState);
             });
         } else {
-            that.setMaxPage(nextProps.results);
+            that.setMaxPage(nextProps.results);    
         }
     },
     getInitialState: function() {
@@ -275,7 +275,7 @@ var Griddle = React.createClass({
         }
     },
     getDataForRender: function(data, cols, pageList){
-        var that = this;
+        var that = this; 
 
         if (!this.hasExternalResults()) {
             //get the correct page size
@@ -285,26 +285,26 @@ var Griddle = React.createClass({
                 });
 
                 if(this.state.sortAscending == false){
-                    data.reverse();
+                    data.reverse(); 
                 }
             }
 
             if (pageList && (this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
                 //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-                var rest = _.rest(data, this.state.page * this.props.resultsPerPage);
-                data = _.initial(rest, rest.length-this.props.resultsPerPage);
+                var rest = _.rest(data, this.state.page * this.props.resultsPerPage); 
+                data = _.initial(rest, rest.length-this.props.resultsPerPage); 
             }
         } else {
             // Don't sort or page data if loaded externally.
         }
 
         var meta = [].concat(this.props.metadataColumns);
-        meta.push(this.props.childrenColumnName);
+        meta.push(this.props.childrenColumnName); 
 
         var transformedData = [];
 
         for(var i = 0; i<data.length; i++){
-            var mappedData = _.pick(data[i], cols.concat(meta));
+            var mappedData = _.pick(data[i], cols.concat(meta)); 
 
             if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
                 //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
@@ -313,7 +313,7 @@ var Griddle = React.createClass({
                 if(that.props.childrenColumnName !== "children") { delete mappedData[that.props.childrenColumnName]; }
             }
 
-            transformedData.push(mappedData);
+            transformedData.push(mappedData); 
         }
 
         return transformedData;
@@ -324,21 +324,21 @@ var Griddle = React.createClass({
 
         var headerTableClassName = this.props.gridClassName + " table-header";
 
-        //figure out if we want to show the filter section
+        //figure out if we want to show the filter section 
         var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
         var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
-
-        //if we have neither filter or settings don't need to render this stuff
-        var topSection = "";
+        
+        //if we have neither filter or settings don't need to render this stuff 
+        var topSection = ""; 
         if (this.props.showFilter || this.props.showSettings){
            topSection = (
             <div className="row top-section">
                 <div className="col-xs-6">
-                   {filter}
+                   {filter} 
                 </div>
                 <div className="col-xs-6 right">
                     {settings}
-                </div>
+                </div> 
             </div>);
         }
 
@@ -352,9 +352,9 @@ var Griddle = React.createClass({
             var cols = this.getColumns();
 
             var data = this.getDataForRender(results, cols, true);
-
+            
             var meta = this.props.metadataColumns;
-            meta.push(this.props.childrenColumnName);
+            meta.push(this.props.childrenColumnName); 
 
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
