@@ -2,7 +2,7 @@ module.exports = {
   entry: './scripts/griddle.jsx',
   output: {
     path: __dirname,
-    filename: 'build/bundle.js',
+    filename: 'build/griddle.js',
     publicPath: '/',
     library: "Griddle",
     libraryTarget: "var"
