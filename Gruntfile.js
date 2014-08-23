@@ -12,15 +12,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    browserify: {
-      options:{
-        transform: [ require('grunt-react').browserify]
-      },
-      client: {
-        src: ['scripts/**/*.jsx'],
-        dest: 'build/griddle.js'
-      }
-    },
     open: {
       server: {
         url: 'http://localhost:<%= connect.server.options.port %>/index.html'
@@ -30,7 +21,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-open');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('serve', function (target) {
@@ -39,8 +29,6 @@ module.exports = function(grunt) {
       'connect'
     ]);
   });
-
-  grunt.registerTask('build', ['browserify']);
 
   // Default task(s).
   grunt.registerTask('default', ['serve']);

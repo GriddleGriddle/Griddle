@@ -8,6 +8,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var GridRow = require('./gridRow.jsx');
 
 var GridRowContainer = React.createClass({
     toggleChildren: function(){

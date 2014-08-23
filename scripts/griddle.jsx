@@ -11,8 +11,6 @@ var React = require('react/addons');
 var GridBody = require('./gridBody.jsx');
 var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
-var GridRow = require('./gridRow.jsx');
-var GridRowContainer = require('./gridRowContainer.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
 
