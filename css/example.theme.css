@@ -68,7 +68,7 @@ header .btn-group{
 	}
 
 .grid-body .loading{
-	background-image: url('/images/loading.gif'); /* Thanks 'http://preloaders.net'! */
+	background-image: url('../images/loading.gif'); /* Thanks 'http://preloaders.net'! */
 	background-repeat: no-repeat;
 	min-height: 32px;
 	width: 32px;

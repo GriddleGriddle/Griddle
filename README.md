@@ -17,5 +17,6 @@ To try it out, run the following commands:
 
 1. `npm install -g grunt-cli` if you don't have grunt.
 2. `npm install`
-3. `grunt`
-4. That's it!
+3. `webpack`
+4. `grunt`
+5. That's it!

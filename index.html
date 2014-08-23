@@ -9,7 +9,7 @@
 		<script src="http://fb.me/react-0.10.0.js"></script>
 		<script src="http://fb.me/JSXTransformer-0.10.0.js"></script>
 		<script src="scripts/fakeData.js"></script>
-		<script type="text/jsx" src="scripts/griddle.js"></script>
+		<script type="text/javascript" src="build/griddle.js"></script>
 	</head>
 	<body>
 		<header>
@@ -72,7 +72,7 @@
 &lt;script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"&gt;&lt;/script&gt;
 &lt;script src="http://fb.me/react-0.10.0.js"&gt;&lt;/script&gt;
 &lt;script src="http://fb.me/JSXTransformer-0.10.0.js"&gt;&lt;/script&gt;
-&lt;script type="text/jsx" src="scripts/griddle.js"&gt;&lt;/script&gt;</code></pre>
+&lt;script type="text/javascript" src="scripts/griddle.js"&gt;&lt;/script&gt;</code></pre>
 				<hr />
 
 				<p>
@@ -92,7 +92,7 @@
 ];</code></pre>
 				<hr />
 				<p>
-					From there, render a Griddle component through React.renderComponent or in the Render method of another component. 
+					From there, render a Griddle component through React.renderComponent or in the Render method of another component.
 				</p>
 <pre><code>&lt;Griddle results={fakeData} gridClassName="table"/&gt;</code></pre>
 				<div id="grid"></div>
@@ -142,13 +142,46 @@
 		<section id="properties">
 			<div class="container">
 				<h2>Property Reference</h2>
-				Griddle has a number of default properties that can be changed to modify the behavior / style of the component. 
+				Griddle has a number of default properties that can be changed to modify the behavior / style of the component.
 				<dl>
 					<dt>columns</dt>
 					<dd>The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default</dd>
 
 					<dt>results</dt>
 					<dd>The data that should be displayed within the grid. This data needs to be an array of JSON objects.</dd>
+
+					<dt>getExternalResults</dt>
+					<dd>
+						<p>A function that obtains data to display in the grid and returns the results, along with the max total number of results.</p>
+						<p>The method's requires the following parameters :</p>
+						<dl>
+							<dt>filterString</dt>
+							<dd>The string that the user is filtering by.</dd>
+
+							<dt>sortColumn</dt>
+							<dd>The column that is currently being sorted.</dd>
+
+							<dt>sortAscending</dt>
+							<dd>Whether or not results should be sorted in ascending order.</dd>
+
+							<dt>page</dt>
+							<dd>What page is being displayed.</dd>
+
+							<dt>pageSize</dt>
+							<dd>How many results should be included per page.</dd>
+
+							<dt>callback</dt>
+							<dd>The function that the results will be passed into.</dd>
+						</dl>
+						<p>An object passed into the callback must have the following properties :</p>
+						<dl>
+							<dt>results</dt>
+							<dd>The results to display.</dd>
+
+							<dt>totalResults</dt>
+							<dd>The total number of items.</dd>
+						</dl>
+					</dd>
 
 					<dt>initialSort</dt>
 					<dd>The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received</dd>
@@ -191,7 +224,7 @@
 					<div class="col-md-3">
 						<p>&copy; 2014 <a href="http://www.ryanlanciaux.com">Ryan Lanciaux</a> | <a href="http://www.github.com/dynamictyped">DynamicTyped</a></p>
 						<p>Logo by <a href="http://www.behance.net/ryanstraube">Ryan Straube</a></p>
-						<p><a href="https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE">License / Disclaimer</a></p>	
+						<p><a href="https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE">License / Disclaimer</a></p>
 					</div>
 					<div class="col-md-4 col-md-offset-5">
 						<p>Example data has been generated with <a href="http://www.json-generator.com/">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence. </p>

@@ -4,14 +4,20 @@
   "description": "The simple grid component for React.",
   "main": "",
   "dependencies": {
-    "grunt": "~0.4.5"
+    "grunt": "~0.4.5",
+    "react": "~0.11.1",
+    "react-tools": "~0.11.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-open": "^0.2.3",
-    "grunt-contrib-connect": "^0.8.0"
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-react": "~0.9.0",
+    "webpack": "~1.3.3-beta1",
+    "jsx-loader": "~0.11.0"
   },
   "scripts": {
+    "something": "echo \"hi\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
