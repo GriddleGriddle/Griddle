@@ -6,7 +6,8 @@
   "dependencies": {
     "grunt": "~0.4.5",
     "react": "~0.11.1",
-    "react-tools": "~0.11.1"
+    "react-tools": "~0.11.1",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -15,7 +16,7 @@
     "grunt-react": "~0.9.0",
     "webpack": "~1.3.3-beta1",
     "jsx-loader": "~0.11.0",
-    "jest-cli":"*"
+    "jest-cli": "*"
   },
   "scripts": {
     "something": "echo \"hi\"",
@@ -31,8 +32,11 @@
     "url": "https://github.com/DynamicTyped/Griddle/issues"
   },
   "jest": {
-    "scriptPreprocessor": "./preprocessor.js",
-    "unmockedModulePathPatterns": ["react"]
-  }, 
+    "rootDir": "scripts",
+    "scriptPreprocessor": "../jest/preprocessor.js",
+    "unmockedModulePathPatterns": [
+      "react"
+    ]
+  },
   "homepage": "https://github.com/DynamicTyped/Griddle"
 }

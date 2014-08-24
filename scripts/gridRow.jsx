@@ -8,8 +8,18 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var _ = require('underscore');
 
 var GridRow = React.createClass({
+    getDefaultProps: function(){
+      return {
+        "isChildRow": false,
+        "showChildren": false,
+        "data": {},
+        "metadataColumns": [],
+        "hasChildren": false
+      }
+    },
     render: function() {
         var that = this;
 

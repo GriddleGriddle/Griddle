@@ -10,6 +10,15 @@
 var React = require('react/addons');
 
 var GridSettings = React.createClass({
+    getDefaultProps: function(){
+        return {
+            "columns": [],
+            "selectedColumns": [],
+            "settingsText": "",
+            "maxRowsText": "",
+            "resultsPerPage": 0
+        };
+    },
     setPageSize: function(event){
         var value = parseInt(event.target.value);
         this.props.setPageSize(value);

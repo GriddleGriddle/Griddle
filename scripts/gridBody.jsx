@@ -11,19 +11,26 @@ var React = require('react/addons');
 var GridRowContainer = require('./gridRowContainer.jsx');
 
 var GridBody = React.createClass({
+  getDefaultProps: function(){
+    return{
+      "data": [],
+      "metadataColumns": [],
+      "className": ""
+    }
+  },
+  render: function() {
+    var that = this;
 
-    render: function() {
-        var that = this;
-        var nodes = this.props.data.map(function(row, index){
-            return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} />
-        });
+    var nodes = this.props.data.map(function(row, index){
+        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} />
+    });
 
-        return (
+    return (
 
-                <table className={this.props.className}>
-                    {nodes}
-                </table>
-            );
+            <table className={this.props.className}>
+                {nodes}
+            </table>
+        );
     }
 });
 

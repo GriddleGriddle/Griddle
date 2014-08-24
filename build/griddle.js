@@ -467,19 +467,25 @@ var Griddle =
 	var GridRowContainer = __webpack_require__(7);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
+	  getDefaultProps: function(){
+	    return{
+	      "data": {},
+	      "metadataColumns": [],
+	      "className": ""
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+	    var nodes = this.props.data.map(function(row, index){
+	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns})
+	    });
 
-	    render: function() {
-	        var that = this;
-	        var nodes = this.props.data.map(function(row, index){
-	            return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns})
-	        });
+	    return (
 
-	        return (
-
-	                React.DOM.table({className: this.props.className}, 
-	                    nodes
-	                )
-	            );
+	            React.DOM.table({className: this.props.className}, 
+	                nodes
+	            )
+	        );
 	    }
 	});
 
@@ -502,6 +508,11 @@ var Griddle =
 	var React = __webpack_require__(1);
 
 	var GridFilter = React.createClass({displayName: 'GridFilter',
+	    getDefaultProps: function(){
+	      return {
+	        "placeholderText": ""
+	      }
+	    },
 	    handleChange: function(event){
 	        this.props.changeFilter(event.target.value);
 	    },
@@ -530,6 +541,14 @@ var Griddle =
 
 	//needs props maxPage, currentPage, nextFunction, prevFunction
 	var GridPagination = React.createClass({displayName: 'GridPagination',
+	    getDefaultProps: function(){
+	        return{
+	            "maxPage": 0,
+	            "nextText": "",
+	            "previousText": "",
+	            "currentPage": 0,
+	        }
+	    },
 	    pageChange: function(event){
 	        this.props.setPage(parseInt(event.target.value)-1);
 	    },
@@ -563,7 +582,10 @@ var Griddle =
 	            )
 	        )
 	    }
-	})module.exports = GridPagination;
+	})
+
+	module.exports = GridPagination;
+
 
 /***/ },
 /* 5 */
@@ -581,6 +603,15 @@ var Griddle =
 	var React = __webpack_require__(1);
 
 	var GridSettings = React.createClass({displayName: 'GridSettings',
+	    getDefaultProps: function(){
+	        return {
+	            "columns": [],
+	            "selectedColumns": [],
+	            "settingsText": "",
+	            "maxRowsText": "",
+	            "resultsPerPage": 0
+	        };
+	    },
 	    setPageSize: function(event){
 	        var value = parseInt(event.target.value);
 	        this.props.setPageSize(value);
@@ -632,6 +663,13 @@ var Griddle =
 	var React = __webpack_require__(1);
 
 	var GridTitle = React.createClass({displayName: 'GridTitle',
+	    getDefaultProps: function(){
+	        return {
+	           "columns":[], 
+	           "sortColumn": "",
+	           "sortAscending": true
+	        }
+	    },
 	    sort: function(event){
 	        this.props.changeSort(event.target.dataset.title);
 	    },
@@ -679,6 +717,13 @@ var Griddle =
 	var GridRow = __webpack_require__(8);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
+	    getInitialState: function(){
+	        return {
+	           "data": {
+	           },
+	           "metadataColumns": []
+	        }
+	    },
 	    toggleChildren: function(){
 	        this.setState({
 	            showChildren: this.state.showChildren == false
@@ -690,6 +735,7 @@ var Griddle =
 	    render: function(){
 	        var that = this;
 
+	        if(typeof this.props.data === "undefined"){return (React.DOM.tbody(null));}
 	        var arr = [];
 	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
@@ -722,8 +768,18 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
+	var _ = __webpack_require__(9);
 
 	var GridRow = React.createClass({displayName: 'GridRow',
+	    getDefaultProps: function(){
+	      return {
+	        "isChildRow": false,
+	        "showChildren": false,
+	        "data": {},
+	        "metadataColumns": [],
+	        "hasChildren": false
+	      }
+	    },
 	    render: function() {
 	        var that = this;
 
@@ -746,6 +802,12 @@ var Griddle =
 
 	module.exports = GridRow;
 
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = _;
 
 /***/ }
 /******/ ])

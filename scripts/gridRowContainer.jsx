@@ -11,6 +11,13 @@ var React = require('react/addons');
 var GridRow = require('./gridRow.jsx');
 
 var GridRowContainer = React.createClass({
+    getInitialState: function(){
+        return {
+           "data": {
+           },
+           "metadataColumns": []
+        }
+    },
     toggleChildren: function(){
         this.setState({
             showChildren: this.state.showChildren == false
@@ -22,6 +29,7 @@ var GridRowContainer = React.createClass({
     render: function(){
         var that = this;
 
+        if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
         var arr = [];
         var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
