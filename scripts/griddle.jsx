@@ -13,6 +13,7 @@ var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
+var _ = require('underscore');
 
 var Griddle = React.createClass({
     getDefaultProps: function() {
@@ -318,10 +319,6 @@ var Griddle = React.createClass({
 
         return transformedData;
     },
-    render: function(){
-        return <h1>Hi</h1>
-    }
-    /*
     render: function() {
         var that = this,
             results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
@@ -395,7 +392,8 @@ var Griddle = React.createClass({
                 </div>
             </div>
         );
-    }*/
+
+    }
 });
 
 module.exports = Griddle;
