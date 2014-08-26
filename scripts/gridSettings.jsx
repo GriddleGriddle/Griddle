@@ -8,6 +8,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var _ = require('underscore');
 
 var GridSettings = React.createClass({
     getDefaultProps: function(){
