@@ -73,5 +73,15 @@ describe('Griddle', function() {
     expect(grid.state.showColumnChooser).toBe(false);
   });
 
-  
+  it('shows the correct number of pages', function(){
+    //we know fake data is two items so it should be one page
+    var initial = grid.getMaxPage();
+    expect(initial).toEqual(1); 
+
+    //this is kind of testing two things at this point :( 
+    grid.setPageSize(1); 
+    other = grid.getMaxPage(); 
+    expect(other).toEqual(2);
+  });
+
 });
