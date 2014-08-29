@@ -84,4 +84,87 @@ describe('Griddle', function() {
     expect(other).toEqual(2);
   });
 
+  it('starts on page 1', function(){
+    expect(0).toEqual(grid.state.page);
+  });
+
+  it('gets the right page when change', function(){
+    grid.setPageSize(1);
+    expect(0).toEqual(grid.state.page);
+    grid.setPage(1);
+    expect(1).toEqual(grid.state.page);
+    grid.setPage(0);
+    expect(0).toEqual(grid.state.page);
+  });
+
+  it('displays all columns by default', function(){
+    var cols = grid.getColumns(); 
+    expect(7).toEqual(cols.length);
+    expect(cols[0]).toEqual('id');
+    expect(cols[1]).toEqual('name');
+    expect(cols[2]).toEqual('city');
+    expect(cols[3]).toEqual('state');
+    expect(cols[4]).toEqual('country');
+    expect(cols[5]).toEqual('company');
+    expect(cols[6]).toEqual('favoriteNumber');
+  });
+
+  it('shows only the specified columns', function(){
+    var cols = ["id", "name", "city"];
+    grid.setColumns(cols);
+    var cols2 = grid.getColumns(); 
+    expect(cols2.length).toEqual(cols.length);
+    expect(cols2[0]).toEqual('id');
+    expect(cols2[1]).toEqual('name');
+    expect(cols2[2]).toEqual('city');
+  });
+
+  it('sets next page correctly', function(){
+    grid.setPageSize(1); 
+    expect(grid.state.page).toEqual(0);
+    grid.nextPage(); 
+    expect(grid.state.page).toEqual(1); 
+  });
+
+  it('wont go past max pages with next', function(){
+    grid.setPageSize(1); 
+    expect(grid.state.maxPage).toEqual(2); 
+    expect(grid.state.page).toEqual(0);
+    grid.nextPage(); 
+    grid.nextPage();
+    expect(grid.state.page).toEqual(1); 
+  });
+
+
+  it('sets previous page correctly', function(){
+    grid.setPageSize(1); 
+    expect(grid.state.page).toEqual(0);
+    grid.nextPage();
+    expect(grid.state.page).toEqual(1);
+    grid.previousPage()
+    expect(grid.state.page).toEqual(0);
+  });
+
+  it('wont go past 0 with previous', function(){
+    grid.setPageSize(1); 
+    expect(grid.state.page).toEqual(0);
+    grid.previousPage(); 
+    expect(grid.state.page).toEqual(0); 
+  });
+
+  it('sets sort filter correctly', function(){
+    expect(grid.state.sortColumn).toEqual("");
+    grid.changeSort("name");
+    expect(grid.state.sortColumn).toEqual("name");
+  });
+
+  it('sets sort direction correctly', function(){
+    expect(grid.state.sortColumn).toEqual("");
+    grid.changeSort("name");
+    expect(grid.state.sortColumn).toEqual("name");
+    expect(grid.state.sortAscending).toEqual(true);
+    grid.changeSort("name");
+    expect(grid.state.sortAscending).toEqual(false);
+  });
+
 });

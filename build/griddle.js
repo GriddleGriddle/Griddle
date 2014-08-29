@@ -55,11 +55,12 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridBody = __webpack_require__(2);
-	var GridFilter = __webpack_require__(3);
-	var GridPagination = __webpack_require__(4);
-	var GridSettings = __webpack_require__(5);
-	var GridTitle = __webpack_require__(6);
+	var GridBody = __webpack_require__(3);
+	var GridFilter = __webpack_require__(4);
+	var GridPagination = __webpack_require__(5);
+	var GridSettings = __webpack_require__(6);
+	var GridTitle = __webpack_require__(7);
+	var _ = __webpack_require__(2);
 
 	var Griddle = React.createClass({displayName: 'Griddle',
 	    getDefaultProps: function() {
@@ -242,7 +243,7 @@ var Griddle =
 	        });
 	    },
 	    nextPage: function() {
-	        if (this.state.page < this.state.maxPage) { this.setPage(this.state.page + 1); }
+	        if (this.state.page < this.state.maxPage - 1) { this.setPage(this.state.page + 1); }
 	    },
 	    previousPage: function() {
 	        if (this.state.page > 0) { this.setPage(this.state.page - 1); }
@@ -438,6 +439,7 @@ var Griddle =
 	                )
 	            )
 	        );
+
 	    }
 	});
 
@@ -454,6 +456,12 @@ var Griddle =
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = _;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/** @jsx React.DOM */
 
 	/*
@@ -464,18 +472,19 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRowContainer = __webpack_require__(7);
+	var GridRowContainer = __webpack_require__(8);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){
 	    return{
-	      "data": {},
+	      "data": [],
 	      "metadataColumns": [],
 	      "className": ""
 	    }
 	  },
 	  render: function() {
 	    var that = this;
+
 	    var nodes = this.props.data.map(function(row, index){
 	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns})
 	    });
@@ -493,7 +502,7 @@ var Griddle =
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -525,7 +534,7 @@ var Griddle =
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -588,7 +597,7 @@ var Griddle =
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -601,6 +610,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridSettings = React.createClass({displayName: 'GridSettings',
 	    getDefaultProps: function(){
@@ -648,7 +658,7 @@ var Griddle =
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -701,7 +711,7 @@ var Griddle =
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -714,7 +724,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRow = __webpack_require__(8);
+	var GridRow = __webpack_require__(9);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -755,7 +765,7 @@ var Griddle =
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -768,7 +778,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var _ = __webpack_require__(9);
+	var _ = __webpack_require__(2);
 
 	var GridRow = React.createClass({displayName: 'GridRow',
 	    getDefaultProps: function(){
@@ -802,12 +812,6 @@ var Griddle =
 
 	module.exports = GridRow;
 
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = _;
 
 /***/ }
 /******/ ])

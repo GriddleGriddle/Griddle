@@ -196,7 +196,7 @@ var Griddle = React.createClass({
         });
     },
     nextPage: function() {
-        if (this.state.page < this.state.maxPage) { this.setPage(this.state.page + 1); }
+        if (this.state.page < this.state.maxPage - 1) { this.setPage(this.state.page + 1); }
     },
     previousPage: function() {
         if (this.state.page > 0) { this.setPage(this.state.page - 1); }
