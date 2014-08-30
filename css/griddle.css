@@ -4,23 +4,13 @@
 
 	/* Avoid highlighting things when clicking on things like next / previous
 	   but still allow text from table body to be selected. */ 
-	   
-	.griddle, .griddle *{
-		-webkit-touch-callout: none;
+
+	.griddle, .griddle *:not(input.field) {    
 		-webkit-user-select: none;
 		-khtml-user-select: none;
 		-moz-user-select: none;
 		-ms-user-select: none;
 		user-select: none;
-	}
-
-	.griddle tbody *{
-		-webkit-touch-callout: text;
-		-webkit-user-select: text;
-		-khtml-user-select: text;
-		-moz-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
 	}
 
 	.griddle .columnSelector{
