@@ -10,7 +10,7 @@ describe('GridTitle', function() {
 	var columns; 
 	beforeEach(function(){
 		columns = ["one", "two", "three"];
-	    title = TestUtils.renderIntoDocument(<GridTitle columns columns={columns} />);
+	    title = TestUtils.renderIntoDocument(<GridTitle columns={columns} />);
 	});
 
 	it('calls method when clicked', function(){
@@ -27,14 +27,14 @@ describe('GridTitle', function() {
 		expect(title.props.sortColumn).toEqual("");
 
 		//todo: can we just get this from jsdom?
-		eventstuffs = {
+		var someEvent = {
 			"target":{
 				"dataset":{
 					"title": "one"
 				}
 			}
 		};
-		React.addons.TestUtils.Simulate.click(first, eventstuffs);
+		React.addons.TestUtils.Simulate.click(first, someEvent);
 
 		expect(mock.mock.calls).toEqual([["one"]]);
 
