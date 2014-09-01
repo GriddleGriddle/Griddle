@@ -681,6 +681,7 @@ var Griddle =
 	        }
 	    },
 	    sort: function(event){
+	      debugger;
 	        this.props.changeSort(event.target.dataset.title);
 	    },
 	    render: function(){
