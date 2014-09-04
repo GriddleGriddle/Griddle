@@ -23,7 +23,7 @@ describe('GridTitle', function() {
 		expect(headings.length).toEqual(3);
 
 		var first = headings[0];
-		expect(TestUtils.isDOMComponent(first)).toBe(true)
+		expect(TestUtils.isDOMComponent(first)).toBe(true);
 		expect(title.props.sortColumn).toEqual("");
 
 		//todo: can we just get this from jsdom?

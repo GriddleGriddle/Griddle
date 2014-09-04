@@ -20,11 +20,14 @@ var GridRow = React.createClass({
         "hasChildren": false
       }
     },
+    handleClick: function(){
+      this.props.toggleChildren(); 
+    },
     render: function() {
         var that = this;
 
         var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            return <td onClick={that.props.toggleChildren}>{col}</td>
+            return <td onClick={that.handleClick}>{col}</td>
         });
 
         //this is kind of hokey - make it better

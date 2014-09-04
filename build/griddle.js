@@ -791,11 +791,14 @@ var Griddle =
 	        "hasChildren": false
 	      }
 	    },
+	    handleClick: function(){
+	      this.props.toggleChildren(); 
+	    },
 	    render: function() {
 	        var that = this;
 
 	        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            return React.DOM.td({onClick: that.props.toggleChildren}, col)
+	            return React.DOM.td({onClick: that.handleClick}, col)
 	        });
 
 	        //this is kind of hokey - make it better
