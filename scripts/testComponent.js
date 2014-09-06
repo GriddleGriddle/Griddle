@@ -30,6 +30,15 @@ var TestComponent = React.createClass({
 	}
 });
 
+var OtherComponent = React.createClass({
+    getDefaultProps: function(){
+      return { "data": {} };
+    },
+    render: function(){
+        return (<div>{this.props.data.name}</div>);
+    }
+});
+
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );
@@ -50,4 +59,7 @@ React.renderComponent(
 		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
 );
 
+React.renderComponent(
+	<Griddle results={fakeData} gridClassName="table" useCustomFormat="true" customFormat={OtherComponent} />, document.getElementById('customdata')
+);
 

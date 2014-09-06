@@ -60,6 +60,7 @@ var Griddle =
 	var GridPagination = __webpack_require__(5);
 	var GridSettings = __webpack_require__(6);
 	var GridTitle = __webpack_require__(7);
+	var CustomFormatContainer = __webpack_require__(8);
 	var _ = __webpack_require__(2);
 
 	var Griddle = React.createClass({displayName: 'Griddle',
@@ -82,7 +83,9 @@ var Griddle =
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
 	            "metadataColumns": [],
 	            "showFilter": false,
-	            "showSettings": false
+	            "showSettings": false,
+	            "useCustomFormat": false,
+	            "customFormat": {}
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -322,6 +325,7 @@ var Griddle =
 	            });
 	        }
 	    },
+
 	    getDataForRender: function(data, cols, pageList){
 	        var that = this;
 
@@ -407,7 +411,11 @@ var Griddle =
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
-	            resultContent = (GridBody({data: data, columns: cols, metadataColumns: meta, className: this.props.gridClassName}));
+	            //clean this stuff up so it's not if else all over the place.
+	            resultContent = this.props.useCustomFormat 
+	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.gridClassName, customFormat: this.props.customFormat}))
+	                : (GridBody({data: data, columns: cols, metadataColumns: meta, className: this.props.gridClassName}));
+
 	            pagingContent = (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
@@ -422,17 +430,21 @@ var Griddle =
 	            )
 	        ) : "";
 
+	        var gridBody = this.props.useCustomFormat 
+	            ?       React.DOM.div(null, resultContent)
+	            :       (React.DOM.div({className: "grid-body"}, 
+	                        React.DOM.table({className: headerTableClassName}, 
+	                            GridTitle({columns: this.getColumns(), changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
+	                        ), 
+	                        resultContent
+	                    ));
+
 	        return (
 	            React.DOM.div({className: "griddle"}, 
 	                topSection, 
 	                columnSelector, 
 	                React.DOM.div({className: "grid-container panel"}, 
-	                    React.DOM.div({className: "grid-body"}, 
-	                        React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: this.getColumns(), changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
-	                        ), 
-	                        resultContent
-	                    ), 
+	                    gridBody, 
 	                    React.DOM.div({className: "grid-footer"}, 
 	                        pagingContent
 	                    )
@@ -472,7 +484,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRowContainer = __webpack_require__(8);
+	var GridRowContainer = __webpack_require__(9);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){
@@ -724,7 +736,54 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRow = __webpack_require__(9);
+
+	var CustomFormatContainer = React.createClass({displayName: 'CustomFormatContainer',
+	  getDefaultProps: function(){
+	    return{
+	      "data": [],
+	      "metadataColumns": [],
+	      "className": "",
+	      "customFormat": {}
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+
+	    if (typeof that.props.customFormat !== 'function'){
+	      console.log("Couldn't find valid template.");
+	      return (React.DOM.div({className: this.props.className}));
+	    }
+
+	    var nodes = this.props.data.map(function(row, index){
+	        return that.props.customFormat({data: row, metadataColumns: that.props.metadataColumns})
+	    });
+
+	    return (
+	      React.DOM.div({className: this.props.className}, 
+	          nodes
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CustomFormatContainer;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Griddle - Simple Grid Component for React
+	   https://github.com/DynamicTyped/Griddle
+	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(1);
+	var GridRow = __webpack_require__(10);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -765,7 +824,7 @@ var Griddle =
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */

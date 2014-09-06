@@ -13,6 +13,7 @@ var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
+var CustomFormatContainer = require('./customFormatContainer.jsx');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
@@ -35,7 +36,9 @@ var Griddle = React.createClass({
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
             "metadataColumns": [],
             "showFilter": false,
-            "showSettings": false
+            "showSettings": false,
+            "useCustomFormat": false,
+            "customFormat": {}
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -275,6 +278,7 @@ var Griddle = React.createClass({
             });
         }
     },
+
     getDataForRender: function(data, cols, pageList){
         var that = this;
 
@@ -360,7 +364,11 @@ var Griddle = React.createClass({
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
 
-            resultContent = (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
+            //clean this stuff up so it's not if else all over the place.
+            resultContent = this.props.useCustomFormat 
+                ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName} customFormat={this.props.customFormat}/>)
+                : (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
+
             pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
         } else {
             // Otherwise, display the loading content.
@@ -375,17 +383,21 @@ var Griddle = React.createClass({
             </div>
         ) : "";
 
+        var gridBody = this.props.useCustomFormat 
+            ?       <div>{resultContent}</div>
+            :       (<div className="grid-body">
+                        <table className={headerTableClassName}>
+                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
+                        </table>
+                        {resultContent}
+                    </div>);
+
         return (
             <div className="griddle">
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
-                    <div className="grid-body">
-                        <table className={headerTableClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
-                        </table>
-                        {resultContent}
-                    </div>
+                    {gridBody}
                     <div className="grid-footer">
                         {pagingContent}
                     </div>

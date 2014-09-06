@@ -138,7 +138,27 @@
 				<div id="externaldata"></div>
 			</div>
 		</section>
+		<section id="example5">
+			<div class="container">
+				<h2>Custom Format</h2>
+				<p>Decide you don't want your grid to look like a grid? We've got you covered. Just set the property 'useCustomFormat' to true and pass in another component as property named 'customFormat'.</p>
 
+				<pre><code>var OtherComponent = React.createClass({
+    getDefaultProps: function(){
+      return { "data": {} };
+    },
+    render: function(){
+        return (<div>{this.props.data.name}</div>);
+    }
+});
+}</code></pre>
+<small>Please note: the data property is what Griddle will pass the row data in as so be sure to use that on your component.</small>
+				<p>Then initialize your component as follows:</p>
+				<pre><code>&lt;Griddle results={fakeData} gridClassName="table" useCustomFormat="true" customFormat={OtherComponent} /&gt;</code></pre>
+				<hr />
+				<div id="customdata"></div>
+			</div>
+		</section>
 		<section id="properties">
 			<div class="container">
 				<h2>Property Reference</h2>
