@@ -86,6 +86,7 @@ var Griddle =
 	            "showSettings": false,
 	            "useCustomFormat": false,
 	            "customFormat": {},
+	            "allowToggleCustom":false
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -193,6 +194,11 @@ var Griddle =
 	            showColumnChooser: this.state.showColumnChooser == false
 	        });
 	    },
+	    toggleCustomFormat: function(){
+	        this.setProps({
+	            useCustomFormat: this.props.useCustomFormat == false
+	        });
+	    },
 	    getMaxPage: function(results){
 	        var totalResults;
 	        if (this.hasExternalResults()) {
@@ -282,8 +288,6 @@ var Griddle =
 	            state = this.updateStateWithExternalResults(state, function(updatedState) {
 	                that.setState(updatedState);
 	            });
-	        } else {
-	            that.setMaxPage(nextProps.results);
 	        }
 	    },
 	    getInitialState: function() {
@@ -425,7 +429,7 @@ var Griddle =
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.DOM.div({className: "row"}, 
 	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage})
+	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat})
 	                )
 	            )
 	        ) : "";
@@ -631,7 +635,10 @@ var Griddle =
 	            "selectedColumns": [],
 	            "settingsText": "",
 	            "maxRowsText": "",
-	            "resultsPerPage": 0
+	            "resultsPerPage": 0,
+	            "allowToggleCustom": false,
+	            "useCustomFormat": false,
+	            "toggleCustomFormat": function(){}
 	        };
 	    },
 	    setPageSize: function(event){
@@ -653,6 +660,11 @@ var Griddle =
 	            var checked = _.contains(that.props.selectedColumns, col);
 	            return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
 	        });
+
+	        var toggleCustom = that.props.allowToggleCustom 
+	            ? React.DOM.div({className: "custom-format-settings"}, React.DOM.input({type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat}))
+	            : "";
+
 	        return (React.DOM.div({className: "columnSelector panel"}, React.DOM.h5(null, this.props.settingsText), React.DOM.div({className: "container-fluid"}, React.DOM.div({className: "row"}, nodes)), React.DOM.hr(null), 
 	            React.DOM.label({for: "maxRows"}, this.props.maxRowsText, ":"), 
 	            React.DOM.select({class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
@@ -661,7 +673,8 @@ var Griddle =
 	                React.DOM.option({value: "25"}, "25"), 
 	                React.DOM.option({value: "50"}, "50"), 
 	                React.DOM.option({value: "100"}, "100")
-	            )
+	            ), 
+	            toggleCustom
 	            ));
 	    }
 	});

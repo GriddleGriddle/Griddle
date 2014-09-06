@@ -69,6 +69,6 @@ React.renderComponent(
 );
 
 React.renderComponent(
-	<Griddle results={fakeData} gridClassName="row" useCustomFormat="true" customFormat={OtherComponent} />, document.getElementById('customdata')
+	<Griddle results={fakeData} gridClassName="row" useCustomFormat="true" showFilter="true" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
 

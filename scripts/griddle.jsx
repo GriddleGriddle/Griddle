@@ -39,6 +39,7 @@ var Griddle = React.createClass({
             "showSettings": false,
             "useCustomFormat": false,
             "customFormat": {},
+            "allowToggleCustom":false
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -146,6 +147,11 @@ var Griddle = React.createClass({
             showColumnChooser: this.state.showColumnChooser == false
         });
     },
+    toggleCustomFormat: function(){
+        this.setProps({
+            useCustomFormat: this.props.useCustomFormat == false
+        });
+    },
     getMaxPage: function(results){
         var totalResults;
         if (this.hasExternalResults()) {
@@ -235,8 +241,6 @@ var Griddle = React.createClass({
             state = this.updateStateWithExternalResults(state, function(updatedState) {
                 that.setState(updatedState);
             });
-        } else {
-            that.setMaxPage(nextProps.results);
         }
     },
     getInitialState: function() {
@@ -378,7 +382,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
+                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} />
                 </div>
             </div>
         ) : "";

@@ -17,7 +17,10 @@ var GridSettings = React.createClass({
             "selectedColumns": [],
             "settingsText": "",
             "maxRowsText": "",
-            "resultsPerPage": 0
+            "resultsPerPage": 0,
+            "allowToggleCustom": false,
+            "useCustomFormat": false,
+            "toggleCustomFormat": function(){}
         };
     },
     setPageSize: function(event){
@@ -39,6 +42,11 @@ var GridSettings = React.createClass({
             var checked = _.contains(that.props.selectedColumns, col);
             return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
         });
+
+        var toggleCustom = that.props.allowToggleCustom 
+            ? <div className="custom-format-settings"><input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} /></div>
+            : "";
+
         return (<div className="columnSelector panel"><h5>{this.props.settingsText}</h5><div className="container-fluid"><div className="row">{nodes}</div></div><hr />
             <label for="maxRows">{this.props.maxRowsText}:</label>
             <select class="form-control" onChange={this.setPageSize} value={this.props.resultsPerPage}>
@@ -48,6 +56,7 @@ var GridSettings = React.createClass({
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
+            {toggleCustom}
             </div>);
     }
 });
