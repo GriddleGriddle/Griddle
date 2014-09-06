@@ -35,7 +35,16 @@ var OtherComponent = React.createClass({
       return { "data": {} };
     },
     render: function(){
-        return (<div>{this.props.data.name}</div>);
+        return (<div className="col-md-4">
+        	<div className="panel panel-default">
+		        	<div className="row">
+			        	<div className="col-md-6"><h4>{this.props.data.name}</h4></div>
+			        	<div className="col-md-6"><small>{this.props.data.company}</small></div>
+		        	</div>
+		        	<div>{this.props.data.city}</div>
+		        	<div>{this.props.data.state}, {this.props.data.country}</div>
+	        	</div>
+        	</div>);
     }
 });
 
@@ -60,6 +69,6 @@ React.renderComponent(
 );
 
 React.renderComponent(
-	<Griddle results={fakeData} gridClassName="table" useCustomFormat="true" customFormat={OtherComponent} />, document.getElementById('customdata')
+	<Griddle results={fakeData} gridClassName="row" useCustomFormat="true" customFormat={OtherComponent} />, document.getElementById('customdata')
 );
 

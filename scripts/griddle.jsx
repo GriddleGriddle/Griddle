@@ -38,7 +38,7 @@ var Griddle = React.createClass({
             "showFilter": false,
             "showSettings": false,
             "useCustomFormat": false,
-            "customFormat": {}
+            "customFormat": {},
         };
     },
     /* if we have a filter display the max page and results accordingly */
