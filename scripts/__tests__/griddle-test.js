@@ -62,6 +62,14 @@ describe('Griddle', function() {
     expect(grid.props.resultsPerPage).toEqual(25);      
   });
 
+  it('sets the max page when the results property is updated', function(){
+    grid.setPageSize(1);
+    expect(grid.state.maxPage).toEqual(2);
+    var shortFakeData = [fakeData[0]];
+    grid.setProps({results: shortFakeData});
+    expect(grid.state.maxPage).toEqual(1);
+  });
+
   it('sets column chooser to true property when calling toggle column chooser for first time', function(){
     grid.toggleColumnChooser();
     expect(grid.state.showColumnChooser).toBe(true);

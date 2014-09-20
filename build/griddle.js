@@ -280,7 +280,7 @@ var Griddle =
 	                that.setState(updatedState);
 	            });
 	        } else {
-	            that.setMaxPage(nextProps.results);
+	            this.setMaxPage(nextProps.results);
 	        }
 	    },
 	    getInitialState: function() {
