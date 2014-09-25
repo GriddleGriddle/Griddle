@@ -134,11 +134,11 @@ header .btn-group{
 	padding:3px;
 }
 
-.columnSelector{
+.griddle-settings{
 	border: 1px solid #CCC;
 }
 
-.columnSelector label{
+.griddle-settings label{
 	font-weight: 400;
 }
 

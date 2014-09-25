@@ -79,6 +79,7 @@ var Griddle =
 	            "nextText": "Next",
 	            "previousText": "Previous",
 	            "maxRowsText": "Rows per page",
+	            "enableCustomFormatText": "Enable Custom Formatting",
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            "childrenColumnName": "children",
@@ -431,7 +432,7 @@ var Griddle =
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.DOM.div({className: "row"}, 
 	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat})
+	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText})
 	                )
 	            )
 	        ) : "";
@@ -662,25 +663,39 @@ var Griddle =
 	    },
 	    render: function(){
 	        var that = this;
-	        var nodes = this.props.columns.map(function(col, index){
-	            var checked = _.contains(that.props.selectedColumns, col);
-	            return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
-	        });
 
-	        var toggleCustom = that.props.allowToggleCustom 
-	            ? React.DOM.div({className: "custom-format-settings"}, React.DOM.input({type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat}))
-	            : "";
+	        var nodes = [];
+	        //don't show column selector if we're on a custom format
+	        if (that.props.useCustomFormat === false){
+	            nodes = this.props.columns.map(function(col, index){
+	                var checked = _.contains(that.props.selectedColumns, col);
+	                return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
+	            });
+	        }
 
-	        return (React.DOM.div({className: "columnSelector panel"}, React.DOM.h5(null, this.props.settingsText), React.DOM.div({className: "container-fluid"}, React.DOM.div({className: "row"}, nodes)), React.DOM.hr(null), 
-	            React.DOM.label({for: "maxRows"}, this.props.maxRowsText, ":"), 
-	            React.DOM.select({class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
-	                React.DOM.option({value: "5"}, "5"), 
-	                React.DOM.option({value: "10"}, "10"), 
-	                React.DOM.option({value: "25"}, "25"), 
-	                React.DOM.option({value: "50"}, "50"), 
-	                React.DOM.option({value: "100"}, "100")
-	            ), 
-	            toggleCustom
+	        var toggleCustom = that.props.allowToggleCustom
+	                ?   React.DOM.div({className: "form-group"}, 
+	                        React.DOM.label({for: "maxRows"}, this.props.enableCustomFormatText, ":"), 
+	                        React.DOM.input({type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
+	                    )
+	                : "";
+
+	        return (React.DOM.div({className: "griddle-settings panel"}, 
+	                React.DOM.h5(null, this.props.settingsText), 
+	                React.DOM.div({className: "container-fluid griddle-columns"}, 
+	                    React.DOM.div({className: "row"}, nodes)
+	                ), 
+	                React.DOM.div({class: "form-group"}, 
+	                    React.DOM.label({for: "maxRows"}, this.props.maxRowsText, ":"), 
+	                    React.DOM.select({class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
+	                        React.DOM.option({value: "5"}, "5"), 
+	                        React.DOM.option({value: "10"}, "10"), 
+	                        React.DOM.option({value: "25"}, "25"), 
+	                        React.DOM.option({value: "50"}, "50"), 
+	                        React.DOM.option({value: "100"}, "100")
+	                    )
+	                ), 
+	                toggleCustom
 	            ));
 	    }
 	});

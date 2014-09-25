@@ -32,6 +32,7 @@ var Griddle = React.createClass({
             "nextText": "Next",
             "previousText": "Previous",
             "maxRowsText": "Rows per page",
+            "enableCustomFormatText": "Enable Custom Formatting",
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
@@ -384,7 +385,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} />
+                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} enableCustomFormatText={this.props.enableCustomFormatText} />
                 </div>
             </div>
         ) : "";
