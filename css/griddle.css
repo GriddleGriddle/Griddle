@@ -4,9 +4,8 @@
 
 	/* Avoid highlighting things when clicking on things like next / previous
 	   but still allow text from table body to be selected. */ 
-	   
-	.griddle, .griddle *{
-		-webkit-touch-callout: none;
+
+	.griddle, .griddle *:not(input.field) {    
 		-webkit-user-select: none;
 		-khtml-user-select: none;
 		-moz-user-select: none;
@@ -14,37 +13,33 @@
 		user-select: none;
 	}
 
-	.griddle tbody *{
-		-webkit-touch-callout: text;
-		-webkit-user-select: text;
-		-khtml-user-select: text;
-		-moz-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
-	}
-
-	.griddle .columnSelector{
+	.griddle .griddle-settings{
 		padding: 10px 10px 0px 10px;
 		margin: 0px 0px 10px 0px;
 	}
-		.griddle .columnSelector h5{
+		.griddle .griddle-settings h5{
 			margin:0px 0px 10px 0px;
 		}
 
 		/* http://nicolasgallagher.com/micro-clearfix-hack/ */
-		.griddle .columnSelector:before, .griddle .columnSelector:after{
+		.griddle .griddle-settings:before, .griddle .griddle-settings:after{
 			content: " "; 
 			display: table;
 		}
 
-		.griddle .columnSelector:after{
+		.griddle .griddle-settings:after{
 			clear: both;
 		}
 
-		.griddle .columnSelector .column{
+		.griddle .griddle-settings .column{
 			width: 160px;
 			float:left;
 			margin-top:0px;
+		}
+
+		.griddle-settings .griddle-columns{
+			border-bottom: 1px solid #EDEDED;
+			margin-bottom: 10px;
 		}
 
 	.griddle table{

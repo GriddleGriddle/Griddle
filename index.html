@@ -94,7 +94,7 @@
 				<p>
 					From there, render a Griddle component through React.renderComponent or in the Render method of another component. 
 				</p>
-<pre><code>&lt;Griddle results={fakeData} gridClassName="table"/&gt;</code></pre>
+<pre><code>&lt;Griddle results={fakeData} tableClassName="table"/&gt;</code></pre>
 				<div id="grid"></div>
 			</div>
 		</section>
@@ -106,7 +106,7 @@
 				<p>
 					Using the same data as in the previous example, we can add filtering, grid settings and default columns by defining our component as follows:
 				</p>
-<pre><code>&lt;Griddle results={fakeData} gridClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/&gt;</code></pre>
+<pre><code>&lt;Griddle results={fakeData} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/&gt;</code></pre>
 				<hr />
 				<div id="moregrid"></div>
 			</div>
@@ -133,12 +133,32 @@
 	});
 }</code></pre>
 				<p>Then initialize your component with the following:</p>
-				<pre><code>&lt;Griddle getExternalResults={fakeDataMethod} gridClassName="table"/&gt;</code></pre>
+				<pre><code>&lt;Griddle getExternalResults={fakeDataMethod} tableClassName="table"/&gt;</code></pre>
 				<hr />
 				<div id="externaldata"></div>
 			</div>
 		</section>
+		<section id="example5">
+			<div class="container">
+				<h2>Custom Format</h2>
+				<p>Decide you don't want your grid to look like a grid? We've got you covered. Just set the property 'useCustomFormat' to true and pass in another component as property named 'customFormat'. The component should look a little like this: </p>
 
+				<pre><code>var OtherComponent = React.createClass({
+    getDefaultProps: function(){
+      return { "data": {} };
+    },
+    render: function(){
+        return (<div>{this.props.data.name}</div>);
+    }
+});
+}</code></pre>
+				<p><small>Please note: the data property is what Griddle will pass the row data in as so be sure to use that on your component.</small></p>
+				<p>Then initialize your component as follows:</p>
+				<pre><code>&lt;Griddle results={fakeData} tableClassName="table" useCustomFormat="true" customFormat={OtherComponent} /&gt;</code></pre>
+				<hr />
+				<div id="customdata"></div>
+			</div>
+		</section>
 		<section id="properties">
 			<div class="container">
 				<h2>Property Reference</h2>
@@ -149,6 +169,9 @@
 
 					<dt>results</dt>
 					<dd>The data that should be displayed within the grid. This data needs to be an array of JSON objects.</dd>
+
+					<dt>resultsPerPage</dt>
+					<dd>The number of results that should be displayed on each page. If 'getExternalResults' is defined, this value will be what's used as the 'pageSize' argument.</dd>
 
 					<dt>getExternalResults</dt>
 					<dd>
@@ -187,7 +210,13 @@
 					<dd>The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received</dd>
 
 					<dt>gridClassName</dt>
+					<dd>The CSS class name to apply to the griddle elements. By default this is an empty string.</dd>
+
+					<dt>tableClassName</dt>
 					<dd>The CSS class name to apply to the table elements. By default this is an empty string -- in the exmaple it is set to "table" so the Bootstrap 3 table class is used.</dd>
+
+					<dt>customFormatClassName</dt>
+					<dd>The CSS class name to apply to the custom format wrapper. By default this is an empty string.</dd>
 
 					<dt>settingsText</dt>
 					<dd>The text value to use for toggling the settings area. This is "Settings" by default.</dd>

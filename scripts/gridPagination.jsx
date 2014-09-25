@@ -11,6 +11,14 @@ var React = require('react/addons');
 
 //needs props maxPage, currentPage, nextFunction, prevFunction
 var GridPagination = React.createClass({
+    getDefaultProps: function(){
+        return{
+            "maxPage": 0,
+            "nextText": "",
+            "previousText": "",
+            "currentPage": 0,
+        }
+    },
     pageChange: function(event){
         this.props.setPage(parseInt(event.target.value)-1);
     },
@@ -44,4 +52,6 @@ var GridPagination = React.createClass({
             </div>
         )
     }
-})module.exports = GridPagination;
+})
+
+module.exports = GridPagination;

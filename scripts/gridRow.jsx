@@ -8,13 +8,26 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var _ = require('underscore');
 
 var GridRow = React.createClass({
+    getDefaultProps: function(){
+      return {
+        "isChildRow": false,
+        "showChildren": false,
+        "data": {},
+        "metadataColumns": [],
+        "hasChildren": false
+      }
+    },
+    handleClick: function(){
+      this.props.toggleChildren(); 
+    },
     render: function() {
         var that = this;
 
         var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            return <td onClick={that.props.toggleChildren}>{col}</td>
+            return <td onClick={that.handleClick}>{col}</td>
         });
 
         //this is kind of hokey - make it better

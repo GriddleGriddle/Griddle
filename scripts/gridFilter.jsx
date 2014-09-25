@@ -10,6 +10,11 @@
 var React = require('react/addons');
 
 var GridFilter = React.createClass({
+    getDefaultProps: function(){
+      return {
+        "placeholderText": ""
+      }
+    },
     handleChange: function(event){
         this.props.changeFilter(event.target.value);
     },

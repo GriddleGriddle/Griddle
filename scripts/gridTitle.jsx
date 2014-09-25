@@ -10,6 +10,13 @@
 var React = require('react/addons');
 
 var GridTitle = React.createClass({
+    getDefaultProps: function(){
+        return {
+           "columns":[], 
+           "sortColumn": "",
+           "sortAscending": true
+        }
+    },
     sort: function(event){
         this.props.changeSort(event.target.dataset.title);
     },
