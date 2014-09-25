@@ -102,6 +102,20 @@ header .btn-group{
 		clear: both;
 	}
 
+.griddle-custom{ 
+	background-color: #FFF;
+	padding: 5px 5px 0px 5px;
+	border-radius: 5px;
+}
+
+#customdata .griddle.griddle-custom{
+	margin-top: 0px;
+}
+
+#customdata .griddle-custom .grid-footer{
+	background:none; 
+}
+
 .griddle thead{
 	background-color: #EDEDED;
 }
@@ -130,6 +144,15 @@ header .btn-group{
 
 .btn.view{
 	width:100%;
+}
+
+.custom-component{
+	padding:5px 10px 5px 10px;
+	height:100px;
+}
+
+.custom-component h4{
+	margin-top:0px;
 }
 
 footer{ 

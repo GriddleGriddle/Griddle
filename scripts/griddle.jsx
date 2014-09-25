@@ -25,6 +25,8 @@ var Griddle = React.createClass({
             "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
             "gridClassName":"",
+            "tableClassName":"",
+            "customFormatClassName":"",
             "settingsText": "Settings",
             "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
@@ -331,7 +333,7 @@ var Griddle = React.createClass({
         var that = this,
             results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
 
-        var headerTableClassName = this.props.gridClassName + " table-header";
+        var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
         var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
@@ -370,8 +372,8 @@ var Griddle = React.createClass({
 
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat 
-                ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
+                ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
+                : (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
 
             pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
         } else {
@@ -396,13 +398,17 @@ var Griddle = React.createClass({
                         {resultContent}
                     </div>);
 
+        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
+        //add custom to the class name so we can style it differently
+        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+
         return (
-            <div className="griddle">
+            <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
                     {gridBody}
-                    <div className="grid-footer">
+                    <div className="grid-footer clearfix">
                         {pagingContent}
                     </div>
                 </div>
