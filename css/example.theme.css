@@ -54,6 +54,8 @@ header .btn-group{
 		border: 1px solid #DFDFDF;
 	}
 
+
+
 #example3{
 	border-bottom: 5px solid #DDD;
 }
@@ -100,6 +102,20 @@ header .btn-group{
 		clear: both;
 	}
 
+.griddle-custom{ 
+	background-color: #FFF;
+	padding: 5px 5px 0px 5px;
+	border-radius: 5px;
+}
+
+#customdata .griddle.griddle-custom{
+	margin-top: 0px;
+}
+
+#customdata .griddle-custom .grid-footer{
+	background:none; 
+}
+
 .griddle thead{
 	background-color: #EDEDED;
 }
@@ -118,16 +134,25 @@ header .btn-group{
 	padding:3px;
 }
 
-.columnSelector{
+.griddle-settings{
 	border: 1px solid #CCC;
 }
 
-.columnSelector label{
+.griddle-settings label{
 	font-weight: 400;
 }
 
 .btn.view{
 	width:100%;
+}
+
+.custom-component{
+	padding:5px 10px 5px 10px;
+	height:100px;
+}
+
+.custom-component h4{
+	margin-top:0px;
 }
 
 footer{ 
