@@ -1,13 +1,25 @@
 /** @jsx React.DOM */
 
+var CustomNoDataComponent = React.createClass({
+    getDefaultProps: function() {
+        return { "message":"" };
+    },
+    render: function() {
+        debugger;
+        return (
+        <div>we aint got no data!</div>);
+    }
+});
+
 //This whole file is pretty junky... just an example
 var TestComponent = React.createClass({
     getDefaultProps: function() {
         return{
             "simple": true,
             "subgrid": false,
-            "external": false
-		};
+            "external": false,
+            "customNoData": {}
+        };
 	},	
 	render: function(){
 		var example = ""
@@ -15,14 +27,20 @@ var TestComponent = React.createClass({
 		if (this.props.simple){
 			example = <Griddle results={fakeData} tableClassName="table"/>
 		} else if(this.props.subgrid == true){
-			example = <Griddle results={fakeSubgridData} tableClassName="table" />
+			
 		} else if (this.props.external == true) {
-			example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} tableClassName="table" />
+			
 		} else { 
 			example = <Griddle results={fakeData} tableClassName="table" 
 						showFilter={true} showSettings={true} 
 						columns={["name", "city", "state", "country"]}/>
-		}
+						}
+        debugger;
+		if (this.props.customNoData != null)
+		{
+		    
+		    example = <Griddle results={fakeData} customNoData={this.props.customNoData} tableClassName="table"/>
+        }
 
 		return (
 			<div>{example}</div>
@@ -48,27 +66,29 @@ var OtherComponent = React.createClass({
     }
 });
 
+
+//<TestComponent customNoData={CustomNoDataComponent} />, document.getElementById('grid')
 React.renderComponent(
-	<TestComponent />, document.getElementById('grid')
+	<Griddle results={fakeData} customNoData={CustomNoDataComponent} />, document.getElementById('grid')
 );
 
-React.renderComponent(
-	<TestComponent simple={false}/>, document.getElementById('examplegrid')
-);
+//React.renderComponent(
+//	<TestComponent simple={false}/>, document.getElementById('examplegrid')
+//);
 
-React.renderComponent(
-	<TestComponent simple={false}/>, document.getElementById('moregrid')
-);
+//React.renderComponent(
+//	<TestComponent simple={false}/>, document.getElementById('moregrid')
+//);
 
-React.renderComponent(
-		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
-);
+//React.renderComponent(
+//		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
+//);
 
-React.renderComponent(
-		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
-);
+//React.renderComponent(
+//		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
+//);
 
-React.renderComponent(
-	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
-);
+//React.renderComponent(
+//	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
+//);
 

@@ -13,6 +13,7 @@ var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
+var GridNoData = require('./gridNoData.jsx');
 var CustomFormatContainer = require('./customFormatContainer.jsx');
 var _ = require('underscore');
 
@@ -42,7 +43,9 @@ var Griddle = React.createClass({
             "showSettings": false,
             "useCustomFormat": false,
             "customFormat": {},
-            "allowToggleCustom":false
+            "allowToggleCustom":false,
+            "noDataMessage":"There is no data to display.",
+            "customNoData": {}
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -266,8 +269,7 @@ var Griddle = React.createClass({
             state.results = this.props.results;
         } else {
             state.isLoading = true; // Initialize to 'loading'
-        }
-
+        }        
         return state;
     },
     componentWillMount: function() {
@@ -278,7 +280,7 @@ var Griddle = React.createClass({
     componentDidMount: function() {
         var state = this.state;
         var that = this;
-
+        
         if (this.hasExternalResults()) {
             // Update the state with external results when mounting
             state = this.updateStateWithExternalResults(state, function(updatedState) {
@@ -290,7 +292,7 @@ var Griddle = React.createClass({
 
     getDataForRender: function(data, cols, pageList){
         var that = this;
-
+        
         if (!this.hasExternalResults()) {
             //get the correct page size
             if(this.state.sortColumn != "" || this.props.initialSort != ""){
@@ -392,6 +394,11 @@ var Griddle = React.createClass({
             </div>
         ) : "";
 
+        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
+        //add custom to the class name so we can style it differently
+        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+
+
         var gridBody = this.props.useCustomFormat 
             ?       <div>{resultContent}</div>
             :       (<div className="grid-body">
@@ -399,11 +406,21 @@ var Griddle = React.createClass({
                             <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
                         </table>
                         {resultContent}
-                    </div>);
+                        </div>);
 
-        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
-        //add custom to the class name so we can style it differently
-        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+                        if (this.state.results.length == 0) {        
+            
+                            if (this.props.customNoData != null) {
+                                var myReturn = (<div className={gridClassName}>{this.props.customNoData}</div>);
+                debugger;
+                return myReturn
+                //return (<div className={gridClassName}>{this.props.customNoData}</div>)
+            }
+            return(<div className={gridClassName}>
+                        <GridNoData noDataMessage={this.props.noDataMessage} />
+                    </div>);                            
+        }
+
 
         return (
             <div className={gridClassName}>
