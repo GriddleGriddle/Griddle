@@ -138,12 +138,12 @@
 				<div id="externaldata"></div>
 			</div>
 		</section>
-		<section id="example5">
-			<div class="container">
-				<h2>Custom Format</h2>
-				<p>Decide you don't want your grid to look like a grid? We've got you covered. Just set the property 'useCustomFormat' to true and pass in another component as property named 'customFormat'. The component should look a little like this: </p>
+	    <section id="example5">
+	        <div class="container">
+	            <h2>Custom Format</h2>
+	            <p>Decide you don't want your grid to look like a grid? We've got you covered. Just set the property 'useCustomFormat' to true and pass in another component as property named 'customFormat'. The component should look a little like this: </p>
 
-				<pre><code>var OtherComponent = React.createClass({
+	            <pre><code>var OtherComponent = React.createClass({
     getDefaultProps: function(){
       return { "data": {} };
     },
@@ -152,13 +152,40 @@
     }
 });
 }</code></pre>
-				<p><small>Please note: the data property is what Griddle will pass the row data in as so be sure to use that on your component.</small></p>
-				<p>Then initialize your component as follows:</p>
-				<pre><code>&lt;Griddle results={fakeData} tableClassName="table" useCustomFormat="true" customFormat={OtherComponent} /&gt;</code></pre>
-				<hr />
-				<div id="customdata"></div>
-			</div>
-		</section>
+	            <p><small>Please note: the data property is what Griddle will pass the row data in as so be sure to use that on your component.</small></p>
+	            <p>Then initialize your component as follows:</p>
+	            <pre><code>&lt;Griddle results={fakeData} tableClassName="table" useCustomFormat="true" customFormat={OtherComponent} /&gt;</code></pre>
+	            <hr />
+	            <div id="customdata"></div>
+	        </div>
+	    </section>
+	    <section id="example6">
+            <div class="container">
+                <h2>No Data</h2>
+                <p>Griddle will, by default, show a message if there is no data in the result set. There are two ways that it can be customized though. You can pass in your own custom message, called noDataMessage.</p>
+                <pre><code>&lt;Griddle results={fakeData} noDataMessage={"No data could be found."} tableClassName="table"/&gt;</code></pre>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="noDataMessage"></div>
+                    </div>
+                </div>
+                <hr/>
+                <p>You can also create your own custom component to be rendered when there are no results. Pass it into the customNoData property. The component should look something like this:</p>
+                <pre><code>var CustomNoDataComponent = React.createClass({
+    render: function(){
+       return (This is a custom component showing that there is no data to be displayed.);
+    }
+});
+                }</code></pre>
+                <p>Then modify your Griddle statement to pass in the new component.</p>
+                <pre><code>&lt;Griddle results={fakeData} customNoData={CustomNoDataComponent} tableClassName="table"/&gt;</code></pre>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="customNoDataComponent"></div>
+                    </div>
+                </div>
+            </div>
+	    </section>
 		<section id="properties">
 			<div class="container">
 				<h2>Property Reference</h2>

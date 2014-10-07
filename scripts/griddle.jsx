@@ -45,7 +45,7 @@ var Griddle = React.createClass({
             "customFormat": {},
             "allowToggleCustom":false,
             "noDataMessage":"There is no data to display.",
-            "customNoData": {}
+            "customNoData": null
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -408,17 +408,18 @@ var Griddle = React.createClass({
                         {resultContent}
                         </div>);
 
-                        if (this.state.results.length == 0) {        
-            
-                            if (this.props.customNoData != null) {
-                                var myReturn = (<div className={gridClassName}>{this.props.customNoData}</div>);
-                debugger;
-                return myReturn
-                //return (<div className={gridClassName}>{this.props.customNoData}</div>)
+        if (this.state.results.length == 0) {        
+            if (this.props.customNoData != null) {
+                var myReturn = (<div className={gridClassName}><this.props.customNoData /></div>);
+
+                return myReturn                
             }
-            return(<div className={gridClassName}>
-                        <GridNoData noDataMessage={this.props.noDataMessage} />
-                    </div>);                            
+
+            var myReturn = (<div className={gridClassName}>
+                    <GridNoData noDataMessage={this.props.noDataMessage} />
+                </div>);
+            return myReturn;
+                                  
         }
 
 
