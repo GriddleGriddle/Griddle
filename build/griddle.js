@@ -89,7 +89,9 @@ var Griddle =
 	            "showSettings": false,
 	            "useCustomFormat": false,
 	            "customFormat": {},
-	            "allowToggleCustom":false
+	            "allowToggleCustom":false,
+	            "showTableHeading":true,
+	            "showPager":true 
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -442,9 +444,9 @@ var Griddle =
 	        var gridBody = this.props.useCustomFormat 
 	            ?       React.DOM.div(null, resultContent)
 	            :       (React.DOM.div({className: "grid-body"}, 
-	                        React.DOM.table({className: headerTableClassName}, 
+	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
 	                            GridTitle({columns: this.getColumns(), changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
-	                        ), 
+	                        ) : "", 
 	                        resultContent
 	                    ));
 
@@ -458,9 +460,9 @@ var Griddle =
 	                columnSelector, 
 	                React.DOM.div({className: "grid-container panel"}, 
 	                    gridBody, 
-	                    React.DOM.div({className: "grid-footer clearfix"}, 
+	                    that.props.showPager ? React.DOM.div({className: "grid-footer clearfix"}, 
 	                        pagingContent
-	                    )
+	                    ) : ""
 	                )
 	            )
 	        );
@@ -848,8 +850,16 @@ var Griddle =
 
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
+	                if(typeof row["children"] !== "undefined"){
+	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false})
+	                    )));
+	                }
+
 	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true})
 	            });
+
+	            
 	        }
 
 	        return React.DOM.tbody(null, that.state.showChildren ? arr.concat(children) : arr)

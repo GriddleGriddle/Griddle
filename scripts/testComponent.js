@@ -48,6 +48,7 @@ var OtherComponent = React.createClass({
     }
 });
 
+
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );

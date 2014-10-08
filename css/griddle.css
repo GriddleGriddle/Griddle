@@ -2,6 +2,24 @@
 	margin: 20px 0px 20px 0px;
 }
 
+/*for subgrids*/
+.griddle .griddle{
+	margin:0px;
+}
+.griddle .griddle table{
+	border: 0px;
+}
+.griddle .griddle tr:first-child>td{
+	border-top: none;
+}
+
+.griddle-parent{
+	padding: 0px;
+}
+.griddle .griddle .grid-container{
+	box-shadow: none;
+	margin-bottom: 0px;
+}
 	/* Avoid highlighting things when clicking on things like next / previous
 	   but still allow text from table body to be selected. */ 
 
