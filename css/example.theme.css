@@ -69,6 +69,11 @@ header .btn-group{
 		min-height: 270px;
 	}
 
+#example6{
+	background-color: #FFF;
+	border-bottom: 5px solid #BBB;
+}
+
 .grid-body .loading{
 	background-image: url('../images/loading.gif'); /* Thanks 'http://preloaders.net'! */
 	background-repeat: no-repeat;

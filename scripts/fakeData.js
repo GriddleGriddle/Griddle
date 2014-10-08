@@ -1,4 +1,8 @@
-//mock data generated at http://www.json-generator.com/
+////mock data generated at http://www.json-generator.com/
+//var fakeData = []
+
+var emptyData = [];
+
 var fakeData =  [
   {
     "id": 0,
