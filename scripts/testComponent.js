@@ -7,32 +7,39 @@ var TestComponent = React.createClass({
             "simple": true,
             "subgrid": false,
             "external": false
-		};
-	},	
-	render: function(){
-		var example = ""
+        };
+    },	
+    render: function(){
+        var example = ""
 
-		if (this.props.simple){
-			example = <Griddle results={fakeData} tableClassName="table"/>
-		} else if(this.props.subgrid == true){
-			example = <Griddle results={fakeSubgridData} tableClassName="table" />
-		} else if (this.props.external == true) {
-			example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} tableClassName="table" />
-		} else { 
-			example = <Griddle results={fakeData} tableClassName="table" 
-						showFilter={true} showSettings={true} 
-						columns={["name", "city", "state", "country"]}/>
-		}
+        if (this.props.simple){
+            example = <Griddle results={fakeData} tableClassName="table"/>
+            } else if(this.props.subgrid == true){
+                example = <Griddle results={fakeSubgridData} tableClassName="table" />
+                } else if (this.props.external == true) {
+                    example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} tableClassName="table" />
+                    } else { 
+                    example = <Griddle results={fakeData} tableClassName="table" 
+                    showFilter={true} showSettings={true} 
+                    columns={["name", "city", "state", "country"]}/>
+                    }
 
-		return (
+        return (
 			<div>{example}</div>
 		);
-	}
+    }
+});
+
+var CustomNoDataComponent = React.createClass({
+    render: function() {
+        return (
+        <div>This is a custom component showing that there is no data to be displayed.</div>);
+    }
 });
 
 var OtherComponent = React.createClass({
     getDefaultProps: function(){
-      return { "data": {} };
+        return { "data": {} };
     },
     render: function(){
         return (<div className="col-md-4">
@@ -54,7 +61,16 @@ React.renderComponent(
 );
 
 React.renderComponent(
-	<TestComponent simple={false}/>, document.getElementById('examplegrid')
+	<Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
+);
+
+
+React.renderComponent(
+	<Griddle results={emptyData} customNoData={CustomNoDataComponent} />, document.getElementById('customNoDataComponent')
+);
+
+React.renderComponent(
+	<TestComponent simple={false} results={emptyData}/>, document.getElementById('examplegrid')
 );
 
 React.renderComponent(
@@ -72,4 +88,3 @@ React.renderComponent(
 React.renderComponent(
 	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
-
