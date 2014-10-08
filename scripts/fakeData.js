@@ -2503,7 +2503,36 @@ var fakeData =  [
           "state": "Nebraska",
           "country": "Cyprus",
           "company": "Indexia",
-          "favoriteNumber": 10
+          "favoriteNumber": 10,
+          "children":[
+            {
+              "id": 5,
+              "name": "Ola Fernandez",
+              "city": "Deltaville",
+              "state": "Delaware",
+              "country": "Virgin Islands (US)",
+              "company": "Pawnagra",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 6,
+              "name": "Park Carr",
+              "city": "Welda",
+              "state": "Kentucky",
+              "country": "Sri Lanka",
+              "company": "Cosmetex",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 7,
+              "name": "Laverne Johnson",
+              "city": "Rosburg",
+              "state": "New Mexico",
+              "country": "Croatia",
+              "company": "Housedown",
+              "favoriteNumber": 9
+            }
+          ]
         },
         {
           "id": 274,

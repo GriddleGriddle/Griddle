@@ -48,6 +48,7 @@ var OtherComponent = React.createClass({
     }
 });
 
+/*
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );
@@ -59,11 +60,11 @@ React.renderComponent(
 React.renderComponent(
 	<TestComponent simple={false}/>, document.getElementById('moregrid')
 );
-
+*/
 React.renderComponent(
 		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
 );
-
+/*
 React.renderComponent(
 		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
 );
@@ -72,3 +73,4 @@ React.renderComponent(
 	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
 
+*/

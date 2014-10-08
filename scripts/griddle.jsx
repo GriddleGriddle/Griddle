@@ -42,7 +42,9 @@ var Griddle = React.createClass({
             "showSettings": false,
             "useCustomFormat": false,
             "customFormat": {},
-            "allowToggleCustom":false
+            "allowToggleCustom":false,
+            "showTableHeading":true,
+            "showPager":true 
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -395,9 +397,9 @@ var Griddle = React.createClass({
         var gridBody = this.props.useCustomFormat 
             ?       <div>{resultContent}</div>
             :       (<div className="grid-body">
-                        <table className={headerTableClassName}>
+                        {this.props.showTableHeading ? <table className={headerTableClassName}>
                             <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
-                        </table>
+                        </table> : ""}
                         {resultContent}
                     </div>);
 
