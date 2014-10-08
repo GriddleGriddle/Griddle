@@ -413,9 +413,9 @@ var Griddle = React.createClass({
                 {columnSelector}
                 <div className="grid-container panel">
                     {gridBody}
-                    <div className="grid-footer clearfix">
+                    {that.props.showPager ? <div className="grid-footer clearfix">
                         {pagingContent}
-                    </div>
+                    </div> : ""}
                 </div>
             </div>
         );

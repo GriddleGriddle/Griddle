@@ -460,9 +460,9 @@ var Griddle =
 	                columnSelector, 
 	                React.DOM.div({className: "grid-container panel"}, 
 	                    gridBody, 
-	                    React.DOM.div({className: "grid-footer clearfix"}, 
+	                    that.props.showPager ? React.DOM.div({className: "grid-footer clearfix"}, 
 	                        pagingContent
-	                    )
+	                    ) : ""
 	                )
 	            )
 	        );
@@ -851,8 +851,8 @@ var Griddle =
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
-	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false})
+	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false})
 	                    )));
 	                }
 
