@@ -455,7 +455,8 @@ var Griddle =
 	                        resultContent
 	                        ));
 
-	        if (this.state.results.length == 0) {        
+	            debugger;
+	        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {        
 	            if (this.props.customNoData != null) {
 	                var myReturn = (React.DOM.div({className: gridClassName}, this.props.customNoData(null)));
 

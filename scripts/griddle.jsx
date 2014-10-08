@@ -408,7 +408,8 @@ var Griddle = React.createClass({
                         {resultContent}
                         </div>);
 
-        if (this.state.results.length == 0) {        
+            debugger;
+        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {        
             if (this.props.customNoData != null) {
                 var myReturn = (<div className={gridClassName}><this.props.customNoData /></div>);
 
