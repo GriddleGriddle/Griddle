@@ -376,12 +376,12 @@ var Griddle = React.createClass({
         var resultContent = "";
         var pagingContent = "";
         var keys = [];
+        var cols = this.getColumns();
+        debugger;
 
         // If we're not loading results, fill the table with legitimate data.
         if (!this.state.isLoading) {
             //figure out which columns are displayed and show only those
-            var cols = this.getColumns();
-
             var data = this.getDataForRender(results, cols, true);
 
             var meta = this.props.metadataColumns;
@@ -404,7 +404,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} enableCustomFormatText={this.props.enableCustomFormatText} />
+                    <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} enableCustomFormatText={this.props.enableCustomFormatText} />
                 </div>
             </div>
         ) : "";
@@ -418,7 +418,7 @@ var Griddle = React.createClass({
             ?       <div>{resultContent}</div>
             :       (<div className="grid-body">
                         {this.props.showTableHeading ? <table className={headerTableClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
+                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
                         </table> : ""}
                         {resultContent}
                         </div>);
