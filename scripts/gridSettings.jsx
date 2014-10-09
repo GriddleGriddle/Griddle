@@ -47,7 +47,6 @@ var GridSettings = React.createClass({
                 var checked = _.contains(that.props.selectedColumns, col);
                 //check column metadata -- if this one is locked make it disabled and don't put an onChange event
                 var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
-                debugger;
                 if(typeof meta !== "undefined" && meta != null && meta.locked){
                     return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{col}</label></div>
                 }

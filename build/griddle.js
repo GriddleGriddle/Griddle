@@ -708,7 +708,6 @@ var Griddle =
 	                var checked = _.contains(that.props.selectedColumns, col);
 	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
 	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
-	                debugger;
 	                if(typeof meta !== "undefined" && meta != null && meta.locked){
 	                    return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
 	                }
