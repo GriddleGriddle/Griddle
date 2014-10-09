@@ -452,7 +452,7 @@ var Griddle =
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.DOM.div({className: "row"}, 
 	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText})
+	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -675,6 +675,7 @@ var Griddle =
 	    getDefaultProps: function(){
 	        return {
 	            "columns": [],
+	            "columnMetadata": [],
 	            "selectedColumns": [],
 	            "settingsText": "",
 	            "maxRowsText": "",
@@ -705,6 +706,12 @@ var Griddle =
 	        if (that.props.useCustomFormat === false){
 	            nodes = this.props.columns.map(function(col, index){
 	                var checked = _.contains(that.props.selectedColumns, col);
+	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
+	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
+	                debugger;
+	                if(typeof meta !== "undefined" && meta != null && meta.locked){
+	                    return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
+	                }
 	                return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
 	            });
 	        }
