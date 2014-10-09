@@ -21,6 +21,7 @@ var Griddle = React.createClass({
     getDefaultProps: function() {
         return{
             "columns": [],
+            "columnMetadata": [],
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
             "getExternalResults": null, // Used if obtaining results from an API, etc.
@@ -195,6 +196,8 @@ var Griddle = React.createClass({
         }
     },
     getColumns: function(){
+        var that = this; 
+
         //if we don't have any data don't mess with this
         if (this.state.results === undefined || this.state.results.length == 0){ return [];}
 
@@ -202,7 +205,19 @@ var Griddle = React.createClass({
         if (this.state.filteredColumns.length == 0){
             var meta = [].concat(this.props.metadataColumns);
             meta.push(this.props.childrenColumnName);
-            return _.keys(_.omit(this.state.results[0], meta));
+            var result =  _.keys(_.omit(this.state.results[0], meta));
+            result = _.sortBy(result, function(item){
+                var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
+
+                if (typeof metaItem === 'undefined' || metaItem === null){
+                    return 100;
+                }
+
+                return metaItem.order;
+            });
+
+            debugger;
+            return result;
         }
         return this.state.filteredColumns;
     },

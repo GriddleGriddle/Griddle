@@ -15,11 +15,11 @@ var TestComponent = React.createClass({
         if (this.props.simple){
             example = <Griddle results={fakeData} tableClassName="table"/>
             } else if(this.props.subgrid == true){
-                example = <Griddle results={fakeSubgridData} tableClassName="table" />
+                example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
                 } else if (this.props.external == true) {
-                    example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} tableClassName="table" />
+                    example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
                     } else { 
-                    example = <Griddle results={fakeData} tableClassName="table" 
+                    example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" 
                     showFilter={true} showSettings={true} 
                     columns={["name", "city", "state", "country"]}/>
                     }
@@ -86,5 +86,5 @@ React.renderComponent(
 );
 
 React.renderComponent(
-	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
+	<Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
