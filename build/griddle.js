@@ -248,25 +248,27 @@ var Griddle =
 	        //if we don't have any data don't mess with this
 	        if (this.state.results === undefined || this.state.results.length == 0){ return [];}
 
+	        var result = this.state.filteredColumns;
+
 	        //if we didn't set default or filter
 	        if (this.state.filteredColumns.length == 0){
 	            var meta = [].concat(this.props.metadataColumns);
 	            meta.push(this.props.childrenColumnName);
-	            var result =  _.keys(_.omit(this.state.results[0], meta));
-	            result = _.sortBy(result, function(item){
-	                var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
-
-	                if (typeof metaItem === 'undefined' || metaItem === null){
-	                    return 100;
-	                }
-
-	                return metaItem.order;
-	            });
-
-	            debugger;
-	            return result;
+	            result =  _.keys(_.omit(this.state.results[0], meta));
 	        }
-	        return this.state.filteredColumns;
+
+
+	        result = _.sortBy(result, function(item){
+	            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
+
+	            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
+	                return 100;
+	            }
+
+	            return metaItem.order;
+	        });
+
+	        return result;
 	    },
 	    setColumns: function(columns){
 	        columns = _.isArray(columns) ? columns : [columns];
@@ -423,12 +425,11 @@ var Griddle =
 	        var resultContent = "";
 	        var pagingContent = "";
 	        var keys = [];
+	        var cols = this.getColumns();
 
 	        // If we're not loading results, fill the table with legitimate data.
 	        if (!this.state.isLoading) {
 	            //figure out which columns are displayed and show only those
-	            var cols = this.getColumns();
-
 	            var data = this.getDataForRender(results, cols, true);
 
 	            var meta = this.props.metadataColumns;
@@ -451,7 +452,7 @@ var Griddle =
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.DOM.div({className: "row"}, 
 	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText})
+	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText})
 	                )
 	            )
 	        ) : "";
@@ -465,7 +466,7 @@ var Griddle =
 	            ?       React.DOM.div(null, resultContent)
 	            :       (React.DOM.div({className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: this.getColumns(), changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
+	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
 	                        ) : "", 
 	                        resultContent
 	                        ));

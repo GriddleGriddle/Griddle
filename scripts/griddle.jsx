@@ -201,25 +201,27 @@ var Griddle = React.createClass({
         //if we don't have any data don't mess with this
         if (this.state.results === undefined || this.state.results.length == 0){ return [];}
 
+        var result = this.state.filteredColumns;
+
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
             var meta = [].concat(this.props.metadataColumns);
             meta.push(this.props.childrenColumnName);
-            var result =  _.keys(_.omit(this.state.results[0], meta));
-            result = _.sortBy(result, function(item){
-                var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
-
-                if (typeof metaItem === 'undefined' || metaItem === null){
-                    return 100;
-                }
-
-                return metaItem.order;
-            });
-
-            debugger;
-            return result;
+            result =  _.keys(_.omit(this.state.results[0], meta));
         }
-        return this.state.filteredColumns;
+
+
+        result = _.sortBy(result, function(item){
+            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
+
+            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
+                return 100;
+            }
+
+            return metaItem.order;
+        });
+
+        return result;
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
@@ -377,7 +379,6 @@ var Griddle = React.createClass({
         var pagingContent = "";
         var keys = [];
         var cols = this.getColumns();
-        debugger;
 
         // If we're not loading results, fill the table with legitimate data.
         if (!this.state.isLoading) {

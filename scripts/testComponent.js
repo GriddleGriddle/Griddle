@@ -13,16 +13,16 @@ var TestComponent = React.createClass({
         var example = ""
 
         if (this.props.simple){
-            example = <Griddle results={fakeData} tableClassName="table"/>
-            } else if(this.props.subgrid == true){
-                example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
-                } else if (this.props.external == true) {
-                    example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
-                    } else { 
-                    example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" 
-                    showFilter={true} showSettings={true} 
-                    columns={["name", "city", "state", "country"]}/>
-                    }
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>
+        } else if(this.props.subgrid == true){
+            example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
+        } else if (this.props.external == true) {
+            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
+        } else { 
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" 
+            showFilter={true} showSettings={true} 
+            columns={["name", "city", "state", "country"]}/>
+        }
 
         return (
 			<div>{example}</div>
