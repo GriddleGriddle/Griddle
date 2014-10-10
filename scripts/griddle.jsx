@@ -15,6 +15,7 @@ var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
 var GridNoData = require('./gridNoData.jsx');
 var CustomFormatContainer = require('./customFormatContainer.jsx');
+var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
@@ -43,7 +44,9 @@ var Griddle = React.createClass({
             "showFilter": false,
             "showSettings": false,
             "useCustomFormat": false,
+            "useCustomPager": false,
             "customFormat": {},
+            "customPager": {},
             "allowToggleCustom":false,
             "noDataMessage":"There is no data to display.",
             "customNoData": null,
@@ -395,8 +398,10 @@ var Griddle = React.createClass({
             resultContent = this.props.useCustomFormat 
                 ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
                 : (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
-
-            pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
+                
+            pagingContent = this.props.useCustomPager
+                ? (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
+                : (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
         } else {
             // Otherwise, display the loading content.
             resultContent = (<div className="loading img-responsive center-block"></div>);
