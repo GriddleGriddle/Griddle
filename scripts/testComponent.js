@@ -7,35 +7,70 @@ var TestComponent = React.createClass({
             "simple": true,
             "subgrid": false,
             "external": false
-		};
-	},	
-	render: function(){
-		var example = ""
+        };
+    },	
+    render: function(){
+        var example = ""
 
-		if (this.props.simple){
-			example = <Griddle results={fakeData} gridClassName="table"/>
-		} else if(this.props.subgrid == true){
-			example = <Griddle results={fakeSubgridData} gridClassName="table" />
-		} else if (this.props.external == true) {
-			example = <Griddle getExternalResults={fakeDataMethod} showFilter={true} gridClassName="table" />
-		} else { 
-			example = <Griddle results={fakeData} gridClassName="table" 
-						showFilter={true} showSettings={true} 
-						columns={["name", "city", "state", "country"]}/>
-		}
+        if (this.props.simple){
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>
+        } else if(this.props.subgrid == true){
+            example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
+        } else if (this.props.external == true) {
+            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
+        } else { 
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" 
+            showFilter={true} showSettings={true} 
+            columns={["name", "city", "state", "country"]}/>
+        }
 
-		return (
+        return (
 			<div>{example}</div>
 		);
-	}
+    }
 });
+
+var CustomNoDataComponent = React.createClass({
+    render: function() {
+        return (
+        <div>This is a custom component showing that there is no data to be displayed.</div>);
+    }
+});
+
+var OtherComponent = React.createClass({
+    getDefaultProps: function(){
+        return { "data": {} };
+    },
+    render: function(){
+        return (<div className="col-md-4">
+        	<div className="panel panel-default custom-component">
+		        	<div className="row">
+			        	<div className="col-md-6"><h4>{this.props.data.name}</h4></div>
+			        	<div className="col-md-6"><small>{this.props.data.company}</small></div>
+		        	</div>
+		        	<div>{this.props.data.city}</div>
+		        	<div>{this.props.data.state}, {this.props.data.country}</div>
+	        	</div>
+        	</div>);
+    }
+});
+
 
 React.renderComponent(
 	<TestComponent />, document.getElementById('grid')
 );
 
 React.renderComponent(
-	<TestComponent simple={false}/>, document.getElementById('examplegrid')
+	<Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
+);
+
+
+React.renderComponent(
+	<Griddle results={emptyData} customNoData={CustomNoDataComponent} />, document.getElementById('customNoDataComponent')
+);
+
+React.renderComponent(
+	<TestComponent simple={false} results={emptyData}/>, document.getElementById('examplegrid')
 );
 
 React.renderComponent(
@@ -50,4 +85,6 @@ React.renderComponent(
 		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
 );
 
-
+React.renderComponent(
+	<Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
+);

@@ -2,6 +2,24 @@
 	margin: 20px 0px 20px 0px;
 }
 
+/*for subgrids*/
+.griddle .griddle{
+	margin:0px;
+}
+.griddle .griddle table{
+	border: 0px;
+}
+.griddle .griddle tr:first-child>td{
+	border-top: none;
+}
+
+.griddle-parent{
+	padding: 0px;
+}
+.griddle .griddle .grid-container{
+	box-shadow: none;
+	margin-bottom: 0px;
+}
 	/* Avoid highlighting things when clicking on things like next / previous
 	   but still allow text from table body to be selected. */ 
 
@@ -13,28 +31,33 @@
 		user-select: none;
 	}
 
-	.griddle .columnSelector{
+	.griddle .griddle-settings{
 		padding: 10px 10px 0px 10px;
 		margin: 0px 0px 10px 0px;
 	}
-		.griddle .columnSelector h5{
+		.griddle .griddle-settings h5{
 			margin:0px 0px 10px 0px;
 		}
 
 		/* http://nicolasgallagher.com/micro-clearfix-hack/ */
-		.griddle .columnSelector:before, .griddle .columnSelector:after{
+		.griddle .griddle-settings:before, .griddle .griddle-settings:after{
 			content: " "; 
 			display: table;
 		}
 
-		.griddle .columnSelector:after{
+		.griddle .griddle-settings:after{
 			clear: both;
 		}
 
-		.griddle .columnSelector .column{
+		.griddle .griddle-settings .column{
 			width: 160px;
 			float:left;
 			margin-top:0px;
+		}
+
+		.griddle-settings .griddle-columns{
+			border-bottom: 1px solid #EDEDED;
+			margin-bottom: 10px;
 		}
 
 	.griddle table{

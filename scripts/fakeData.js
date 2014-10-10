@@ -1,4 +1,53 @@
-//mock data generated at http://www.json-generator.com/
+////mock data generated at http://www.json-generator.com/
+//var fakeData = []
+
+var emptyData = [];
+
+var columnMeta = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "name",
+    "order": 2,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "city",
+    "order": 3,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "state",
+    "order": 4,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "country",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "company",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  7,
+    "locked": false,
+    "visible": true
+  }
+];
+
 var fakeData =  [
   {
     "id": 0,
@@ -2503,7 +2552,36 @@ var fakeData =  [
           "state": "Nebraska",
           "country": "Cyprus",
           "company": "Indexia",
-          "favoriteNumber": 10
+          "favoriteNumber": 10,
+          "children":[
+            {
+              "id": 5,
+              "name": "Ola Fernandez",
+              "city": "Deltaville",
+              "state": "Delaware",
+              "country": "Virgin Islands (US)",
+              "company": "Pawnagra",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 6,
+              "name": "Park Carr",
+              "city": "Welda",
+              "state": "Kentucky",
+              "country": "Sri Lanka",
+              "company": "Cosmetex",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 7,
+              "name": "Laverne Johnson",
+              "city": "Rosburg",
+              "state": "New Mexico",
+              "country": "Croatia",
+              "company": "Housedown",
+              "favoriteNumber": 9
+            }
+          ]
         },
         {
           "id": 274,

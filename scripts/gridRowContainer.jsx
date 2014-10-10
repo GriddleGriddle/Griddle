@@ -37,8 +37,16 @@ var GridRowContainer = React.createClass({
 
         if(that.state.showChildren){
             var children =  hasChildren && this.props.data["children"].map(function(row, index){
+                if(typeof row["children"] !== "undefined"){
+                  return (<tr><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent">
+                      <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false}/>
+                    </td></tr>);
+                }
+
                 return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true}/>
             });
+
+            
         }
 
         return <tbody>{that.state.showChildren ? arr.concat(children) : arr}</tbody>

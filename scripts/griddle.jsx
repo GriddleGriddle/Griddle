@@ -13,29 +13,42 @@ var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
+var GridNoData = require('./gridNoData.jsx');
+var CustomFormatContainer = require('./customFormatContainer.jsx');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
     getDefaultProps: function() {
         return{
             "columns": [],
+            "columnMetadata": [],
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
             "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
             "gridClassName":"",
+            "tableClassName":"",
+            "customFormatClassName":"",
             "settingsText": "Settings",
             "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
             "previousText": "Previous",
             "maxRowsText": "Rows per page",
+            "enableCustomFormatText": "Enable Custom Formatting",
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
             "metadataColumns": [],
             "showFilter": false,
-            "showSettings": false
+            "showSettings": false,
+            "useCustomFormat": false,
+            "customFormat": {},
+            "allowToggleCustom":false,
+            "noDataMessage":"There is no data to display.",
+            "customNoData": null,
+            "showTableHeading":true,
+            "showPager":true 
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -143,6 +156,11 @@ var Griddle = React.createClass({
             showColumnChooser: this.state.showColumnChooser == false
         });
     },
+    toggleCustomFormat: function(){
+        this.setProps({
+            useCustomFormat: this.props.useCustomFormat == false
+        });
+    },
     getMaxPage: function(results){
         var totalResults;
         if (this.hasExternalResults()) {
@@ -178,16 +196,32 @@ var Griddle = React.createClass({
         }
     },
     getColumns: function(){
+        var that = this; 
+
         //if we don't have any data don't mess with this
         if (this.state.results === undefined || this.state.results.length == 0){ return [];}
+
+        var result = this.state.filteredColumns;
 
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
             var meta = [].concat(this.props.metadataColumns);
             meta.push(this.props.childrenColumnName);
-            return _.keys(_.omit(this.state.results[0], meta));
+            result =  _.keys(_.omit(this.state.results[0], meta));
         }
-        return this.state.filteredColumns;
+
+
+        result = _.sortBy(result, function(item){
+            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
+
+            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
+                return 100;
+            }
+
+            return metaItem.order;
+        });
+
+        return result;
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
@@ -255,7 +289,6 @@ var Griddle = React.createClass({
         } else {
             state.isLoading = true; // Initialize to 'loading'
         }
-
         return state;
     },
     componentWillMount: function() {
@@ -266,7 +299,6 @@ var Griddle = React.createClass({
     componentDidMount: function() {
         var state = this.state;
         var that = this;
-
         if (this.hasExternalResults()) {
             // Update the state with external results when mounting
             state = this.updateStateWithExternalResults(state, function(updatedState) {
@@ -275,9 +307,9 @@ var Griddle = React.createClass({
             });
         }
     },
+
     getDataForRender: function(data, cols, pageList){
         var that = this;
-
         if (!this.hasExternalResults()) {
             //get the correct page size
             if(this.state.sortColumn != "" || this.props.initialSort != ""){
@@ -323,7 +355,7 @@ var Griddle = React.createClass({
         var that = this,
             results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
 
-        var headerTableClassName = this.props.gridClassName + " table-header";
+        var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
         var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
@@ -346,12 +378,11 @@ var Griddle = React.createClass({
         var resultContent = "";
         var pagingContent = "";
         var keys = [];
+        var cols = this.getColumns();
 
         // If we're not loading results, fill the table with legitimate data.
         if (!this.state.isLoading) {
             //figure out which columns are displayed and show only those
-            var cols = this.getColumns();
-
             var data = this.getDataForRender(results, cols, true);
 
             var meta = this.props.metadataColumns;
@@ -360,7 +391,11 @@ var Griddle = React.createClass({
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
 
-            resultContent = (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.gridClassName}/>);
+            //clean this stuff up so it's not if else all over the place.
+            resultContent = this.props.useCustomFormat 
+                ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
+                : (<GridBody data= {data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
+
             pagingContent = (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
         } else {
             // Otherwise, display the loading content.
@@ -370,25 +405,49 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={this.getColumns()} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} />
+                    <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
                 </div>
             </div>
         ) : "";
 
+        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
+        //add custom to the class name so we can style it differently
+        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+
+
+        var gridBody = this.props.useCustomFormat 
+            ?       <div>{resultContent}</div>
+            :       (<div className="grid-body">
+                        {this.props.showTableHeading ? <table className={headerTableClassName}>
+                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
+                        </table> : ""}
+                        {resultContent}
+                        </div>);
+
+        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {        
+            if (this.props.customNoData != null) {
+                var myReturn = (<div className={gridClassName}><this.props.customNoData /></div>);
+
+                return myReturn                
+            }
+
+            var myReturn = (<div className={gridClassName}>
+                    <GridNoData noDataMessage={this.props.noDataMessage} />
+                </div>);
+            return myReturn;
+                                  
+        }
+
+
         return (
-            <div className="griddle">
+            <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
-                    <div className="grid-body">
-                        <table className={headerTableClassName}>
-                            <GridTitle columns={this.getColumns()} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
-                        </table>
-                        {resultContent}
-                    </div>
-                    <div className="grid-footer">
+                    {gridBody}
+                    {that.props.showPager ? <div className="grid-footer clearfix">
                         {pagingContent}
-                    </div>
+                    </div> : ""}
                 </div>
             </div>
         );
