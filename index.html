@@ -157,6 +157,61 @@
 	            <pre><code>&lt;Griddle results={fakeData} tableClassName="table" useCustomFormat="true" customFormat={OtherComponent} /&gt;</code></pre>
 	            <hr />
 	            <div id="customdata"></div>
+				<p>If you want to customize the paging component, just set the property 'useCustomPager' to true and pass in another component as property named 'customPager'.
+				The example component below shows 11 buttons (5 previous, current, 5 next): </p>
+				<pre><code>var OtherPager = React.createClass({
+    getDefaultProps: function(){
+        return{
+            "maxPage": 0,
+            "nextText": "",
+            "previousText": "",
+            "currentPage": 0,
+        }
+    },
+    pageChange: function(event){
+        this.props.setPage(parseInt(event.target.getAttribute("data-value")));
+    },
+    render: function(){
+        var previous = "";
+        var next = "";
+
+        if(this.props.currentPage > 0){
+            previous = &lt;span onClick={this.props.previous} className="previous"&gt;&lt;i className="glyphicon glyphicon-arrow-left"&gt;&lt;/i&gt;{this.props.previousText}&lt;/span&gt;
+        }
+
+        if(this.props.currentPage != (this.props.maxPage -1)){
+            next = &lt;span onClick={this.props.next} className="next"&gt;{this.props.nextText}&lt;i className="glyphicon glyphicon-arrow-right"&gt;&lt;/i&gt;&lt;/span&gt;
+        }
+
+        var options = [];
+
+    	var startIndex = Math.max(this.props.currentPage - 5, 0);
+    	var endIndex = Math.min(startIndex + 11, this.props.maxPage);
+
+    	if (this.props.maxPage >= 11 &amp;&amp; (endIndex - startIndex) &lt;= 10) {
+    		startIndex = endIndex - 11;
+    	}
+
+        for(var i = startIndex; i &lt; endIndex ; i++){
+        	var selected = this.props.currentPage == i ? "current-page-selected" : "";
+            options.push(&lt;button className={selected} data-value={i} onClick={this.pageChange}&gt;{i + 1}&lt;/button&gt;);
+        }
+
+        return (
+            &lt;div className="row custom-pager"&gt;
+                &lt;div className="col-xs-4"&gt;{previous}&lt;/div&gt;
+                &lt;div className="col-xs-4 center pages"&gt;
+                    {options}
+                &lt;/div&gt;
+                &lt;div className="col-xs-4 right"&gt;{next}&lt;/div&gt;
+            &lt;/div&gt;
+        )
+    }
+});</code></pre>
+				<p>Then initialize your component as follows:</p>
+				<pre><code>&lt;Griddle results={fakeData} tableClassName="table" useCustomFormat="true" customFormat={OtherComponent} useCustomPager="true" customPager={OtherPager} /&gt;</code></pre>
+				<hr />
+				<div id="customdatacustompager"></div>
 	        </div>
 	    </section>
 	    <section id="example6">
@@ -172,9 +227,40 @@
                 <hr/>
                 <p>You can also create your own custom component to be rendered when there are no results. Pass it into the customNoData property. The component should look something like this:</p>
                 <pre><code>var CustomNoDataComponent = React.createClass({
-    render: function(){
-       return (This is a custom component showing that there is no data to be displayed.);
-    }
+        var previous = "";
+        var next = "";
+
+        if(this.props.currentPage > 0){
+            previous = &lt;span onClick={this.props.previous} className="previous"&gt;&lt;i className="glyphicon glyphicon-arrow-left"&gt;&lt;/i&gt;{this.props.previousText}&lt;/span&gt;
+        }
+
+        if(this.props.currentPage != (this.props.maxPage -1)){
+            next = &lt;span onClick={this.props.next} className="next"&gt;{this.props.nextText}&lt;i className="glyphicon glyphicon-arrow-right"&gt;&lt;/i&gt;&lt;/span&gt;
+        }
+
+        var options = [];
+
+    	var startIndex = Math.max(this.props.currentPage - 5, 0);
+    	var endIndex = Math.min(startIndex + 11, this.props.maxPage);
+
+    	if (this.props.maxPage >= 11 &amp;&amp; (endIndex - startIndex) &lt;= 10) {
+    		startIndex = endIndex - 11;
+    	}
+
+        for(var i = startIndex; i &lt; endIndex ; i++){
+        	var selected = this.props.currentPage == i ? "current-page-selected" : "";
+            options.push(&lt;button className={selected} data-value={i} onClick={this.pageChange}&gt;{i + 1}&lt;/button&gt;);
+        }
+
+        return (
+            &lt;div className="row custom-pager"&gt;
+                &lt;div className="col-xs-4"&gt;{previous}&lt;/div&gt;
+                &lt;div className="col-xs-4 center pages"&gt;
+                    {options}
+                &lt;/div&gt;
+                &lt;div className="col-xs-4 right"&gt;{next}&lt;/div&gt;
+            &lt;/div&gt;
+        )
 });
                 }</code></pre>
                 <p>Then modify your Griddle statement to pass in the new component.</p>

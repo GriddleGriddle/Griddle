@@ -174,3 +174,24 @@ footer a, footer a:visited{
 	header .btn-group{display:none;}
 	header small{display:none;}
 }
+
+.custom-pager {
+	line-height: 32px;
+	vertical-align: middle;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.custom-pager .pages button {
+	width: 30px;
+	height: 32px;
+}
+
+.custom-pager .current-page-selected {
+	font-weight: bold;
+}

@@ -62,6 +62,7 @@ var Griddle =
 	var GridTitle = __webpack_require__(7);
 	var GridNoData = __webpack_require__(8);
 	var CustomFormatContainer = __webpack_require__(9);
+	var CustomPaginationContainer = __webpack_require__(10);
 	var _ = __webpack_require__(2);
 
 	var Griddle = React.createClass({displayName: 'Griddle',
@@ -90,7 +91,9 @@ var Griddle =
 	            "showFilter": false,
 	            "showSettings": false,
 	            "useCustomFormat": false,
+	            "useCustomPager": false,
 	            "customFormat": {},
+	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
 	            "customNoData": null,
@@ -442,8 +445,10 @@ var Griddle =
 	            resultContent = this.props.useCustomFormat 
 	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
 	                : (GridBody({data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
-
-	            pagingContent = (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	                
+	            pagingContent = this.props.useCustomPager
+	                ? (CustomPaginationContainer({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
 	            resultContent = (React.DOM.div({className: "loading img-responsive center-block"}));
@@ -531,7 +536,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRowContainer = __webpack_require__(10);
+	var GridRowContainer = __webpack_require__(11);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){
@@ -892,7 +897,47 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRow = __webpack_require__(11);
+
+	var CustomPaginationContainer = React.createClass({displayName: 'CustomPaginationContainer',
+	  getDefaultProps: function(){
+	    return{
+	      "maxPage": 0,
+	      "nextText": "",
+	      "previousText": "",
+	      "currentPage": 0,
+	      "customPager": {}
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+
+	    if (typeof that.props.customPager !== 'function'){
+	      console.log("Couldn't find valid template.");
+	      return (React.DOM.div(null));
+	    }
+
+	    return (that.props.customPager({maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	  }
+	});
+
+	module.exports = CustomPaginationContainer;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Griddle - Simple Grid Component for React
+	   https://github.com/DynamicTyped/Griddle
+	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(1);
+	var GridRow = __webpack_require__(12);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -941,7 +986,7 @@ var Griddle =
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
