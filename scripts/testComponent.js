@@ -141,3 +141,7 @@ React.renderComponent(
 React.renderComponent(
 	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" useCustomPager="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} customPager={OtherPager} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdatacustompager')
 );
+
+React.renderComponent(
+    <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} />, document.getElementById('properties-grid')
+);

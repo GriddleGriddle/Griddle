@@ -273,92 +273,15 @@
             </div>
 	    </section>
 		<section id="properties">
-			<div class="container">
-				<h2>Property Reference</h2>
-				Griddle has a number of default properties that can be changed to modify the behavior / style of the component. 
-				<dl>
-					<dt>columns</dt>
-					<dd>The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default</dd>
-
-					<dt>results</dt>
-					<dd>The data that should be displayed within the grid. This data needs to be an array of JSON objects.</dd>
-
-					<dt>resultsPerPage</dt>
-					<dd>The number of results that should be displayed on each page. If 'getExternalResults' is defined, this value will be what's used as the 'pageSize' argument.</dd>
-
-					<dt>getExternalResults</dt>
-					<dd>
-						<p>A function that obtains data to display in the grid and returns the results, along with the max total number of results.</p> 
-						<p>The method's requires the following parameters :</p>
-						<dl>
-							<dt>filterString</dt>
-							<dd>The string that the user is filtering by.</dd>
-
-							<dt>sortColumn</dt>
-							<dd>The column that is currently being sorted.</dd>
-
-							<dt>sortAscending</dt>
-							<dd>Whether or not results should be sorted in ascending order.</dd>
-
-							<dt>page</dt>
-							<dd>What page is being displayed.</dd>
-
-							<dt>pageSize</dt>
-							<dd>How many results should be included per page.</dd>
-
-							<dt>callback</dt>
-							<dd>The function that the results will be passed into.</dd>
-						</dl>
-						<p>An object passed into the callback must have the following properties :</p>
-						<dl>
-							<dt>results</dt>
-							<dd>The results to display.</dd>
-
-							<dt>totalResults</dt>
-							<dd>The total number of items.</dd>
-						</dl>
-					</dd>
-
-					<dt>initialSort</dt>
-					<dd>The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received</dd>
-
-					<dt>gridClassName</dt>
-					<dd>The CSS class name to apply to the griddle elements. By default this is an empty string.</dd>
-
-					<dt>tableClassName</dt>
-					<dd>The CSS class name to apply to the table elements. By default this is an empty string -- in the exmaple it is set to "table" so the Bootstrap 3 table class is used.</dd>
-
-					<dt>customFormatClassName</dt>
-					<dd>The CSS class name to apply to the custom format wrapper. By default this is an empty string.</dd>
-
-					<dt>settingsText</dt>
-					<dd>The text value to use for toggling the settings area. This is "Settings" by default.</dd>
-
-					<dt>filterPlaceholderText</dt>
-					<dd>The text to be displayed as a placeholder in the filter text box. This is "Filter Results" by default.</dd>
-
-					<dt>nextText</dt>
-					<dd>The text on the button that moves to the next page of results. This is "Next" by default.</dd>
-
-					<dt>previousText</dt>
-					<dd>The text on the button that moves to the previous page of results. This is "Previous" by default.</dd>
-
-					<dt>maxRowsText</dt>
-					<dd>The text that appears in the Settings / Column chooser next to the select box for page size</dd>
-
-					<dt>childrenColumnName</dt>
-					<dd>The name of the column that contains a list of child items for a given object. By default this is "children"</dd>
-
-					<dt>metadataColumns</dt>
-					<dd>List of columns that should not be rendered. By default, this is an empty array.</dd>
-
-					<dt>showFilter</dt>
-					<dd>Whether or not to display the "Filter" section of Griddle. By default, this is set to "false".</dd>
-
-					<dt>showSettings</dt>
-					<dd>Whether or not to display the "Settings" section of Griddle. By default, this is set to "false".</dd>
-				</dl>
-			</div>
+					<div class="container">
+						<h2>Property Reference</h2>
+						Griddle has a number of default properties that can be changed to modify the behavior / style of the component. 
+						<div class="row">
+							<div class="col-md-12">
+								<div id="properties-grid"></div>
+							</div>
+						</div>
+					</div>
 		</section>
 		<footer>
 			<div class="container">
