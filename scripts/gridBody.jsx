@@ -22,7 +22,7 @@ var GridBody = React.createClass({
     var that = this;
 
     var nodes = this.props.data.map(function(row, index){
-        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} />
+        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} />
     });
 
     return (

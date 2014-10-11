@@ -47,8 +47,8 @@ var Griddle =
 
 	/** @jsx React.DOM */
 
-	/* 
-	   Griddle - Simple Grid Component for React 
+	/*
+	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
 	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
 
@@ -62,14 +62,16 @@ var Griddle =
 	var GridTitle = __webpack_require__(7);
 	var GridNoData = __webpack_require__(8);
 	var CustomFormatContainer = __webpack_require__(9);
+	var CustomPaginationContainer = __webpack_require__(10);
 	var _ = __webpack_require__(2);
 
 	var Griddle = React.createClass({displayName: 'Griddle',
 	    getDefaultProps: function() {
 	        return{
 	            "columns": [],
+	            "columnMetadata": [],
 	            "resultsPerPage":5,
-	            "results": [], // Used if all results are already loaded. 
+	            "results": [], // Used if all results are already loaded.
 	            "getExternalResults": null, // Used if obtaining results from an API, etc.
 	            "initialSort": "",
 	            "gridClassName":"",
@@ -85,11 +87,13 @@ var Griddle =
 	            //it will be passed through with the data object but will not be rendered
 	            "childrenColumnName": "children",
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
-	            "metadataColumns": [], 
+	            "metadataColumns": [],
 	            "showFilter": false,
 	            "showSettings": false,
 	            "useCustomFormat": false,
+	            "useCustomPager": false,
 	            "customFormat": {},
+	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
 	            "customNoData": null,
@@ -118,24 +122,24 @@ var Griddle =
 	                // Update the state with external results.
 	                this.updateStateWithExternalResults(state, updateAfterResultsObtained);
 	            } else {
-	               state.filteredResults = _.filter(this.state.results, 
-	                function(item) { 
-	                    var arr = _.values(item); 
+	               state.filteredResults = _.filter(this.state.results,
+	                function(item) {
+	                    var arr = _.values(item);
 	                    for(var i = 0; i < arr.length; i++){
 	                       if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-	                        return true; 
+	                        return true;
 	                       }
 	                    }
 
-	                    return false; 
+	                    return false;
 	                });
 
 	                // Update the state after obtaining the results.
 	                updateAfterResultsObtained(state);
 	            }
-	        } else { 
+	        } else {
 	            this.setState({
-	                filteredResults: null, 
+	                filteredResults: null,
 	                filter: filter,
 	                maxPage: this.getMaxPage(null)
 	            });
@@ -171,14 +175,14 @@ var Griddle =
 	        } else {
 	            page = this.state.page;
 	        }
-	        
+
 	        // Obtain the results
 	        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
 	    },
 	    updateStateWithExternalResults: function(state, callback) {
 	        // Update the table to indicate that it's loading.
 	        this.setState({ isLoading: true });
-	        
+
 	        // Grab the results.
 	        this.getExternalResults(state, function(externalResults) {
 	            // Fill the state result properties
@@ -194,7 +198,7 @@ var Griddle =
 	    },
 	    setPageSize: function(size){
 	        //make this better.
-	        this.props.resultsPerPage = size; 
+	        this.props.resultsPerPage = size;
 	        this.setMaxPage();
 	    },
 	    toggleColumnChooser: function(){
@@ -225,7 +229,7 @@ var Griddle =
 	        }
 	    },
 	    setPage: function(number) {
-	       //check page size and move the filteredResults to pageSize * pageNumber 
+	       //check page size and move the filteredResults to pageSize * pageNumber
 	        if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
 	            var that = this,
 	                state = {
@@ -242,16 +246,32 @@ var Griddle =
 	        }
 	    },
 	    getColumns: function(){
+	        var that = this; 
+
 	        //if we don't have any data don't mess with this
 	        if (this.state.results === undefined || this.state.results.length == 0){ return [];}
+
+	        var result = this.state.filteredColumns;
 
 	        //if we didn't set default or filter
 	        if (this.state.filteredColumns.length == 0){
 	            var meta = [].concat(this.props.metadataColumns);
-	            meta.push(this.props.childrenColumnName); 
-	            return _.keys(_.omit(this.state.results[0], meta));
+	            meta.push(this.props.childrenColumnName);
+	            result =  _.keys(_.omit(this.state.results[0], meta));
 	        }
-	        return this.state.filteredColumns; 
+
+
+	        result = _.sortBy(result, function(item){
+	            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
+
+	            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
+	                return 100;
+	            }
+
+	            return metaItem.order;
+	        });
+
+	        return result;
 	    },
 	    setColumns: function(columns){
 	        columns = _.isArray(columns) ? columns : [columns];
@@ -269,19 +289,19 @@ var Griddle =
 	        var that = this,
 	            state = {
 	                page:0,
-	                sortColumn: sort, 
+	                sortColumn: sort,
 	                sortAscending: true
 	            };
 
 	        // If this is the same column, reverse the sort.
 	        if(this.state.sortColumn == sort){
-	            state.sortAscending = this.state.sortAscending == false; 
+	            state.sortAscending = this.state.sortAscending == false;
 	        }
 
 	        if (this.hasExternalResults()) {
 	            this.updateStateWithExternalResults(state, function(updatedState) {
 	                that.setState(updatedState);
-	        });
+	            });
 	        } else {
 	            this.setState(state);
 	        }
@@ -348,26 +368,26 @@ var Griddle =
 	                });
 
 	                if(this.state.sortAscending == false){
-	                    data.reverse(); 
+	                    data.reverse();
 	                }
 	            }
 
 	            if (pageList && (this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
 	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-	                var rest = _.rest(data, this.state.page * this.props.resultsPerPage); 
-	                data = _.initial(rest, rest.length-this.props.resultsPerPage); 
+	                var rest = _.rest(data, this.state.page * this.props.resultsPerPage);
+	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
 	            }
 	        } else {
 	            // Don't sort or page data if loaded externally.
 	        }
 
 	        var meta = [].concat(this.props.metadataColumns);
-	        meta.push(this.props.childrenColumnName); 
+	        meta.push(this.props.childrenColumnName);
 
 	        var transformedData = [];
 
 	        for(var i = 0; i<data.length; i++){
-	            var mappedData = _.pick(data[i], cols.concat(meta)); 
+	            var mappedData = _.pick(data[i], cols.concat(meta));
 
 	            if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
 	                //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
@@ -376,7 +396,7 @@ var Griddle =
 	                if(that.props.childrenColumnName !== "children") { delete mappedData[that.props.childrenColumnName]; }
 	            }
 
-	            transformedData.push(mappedData); 
+	            transformedData.push(mappedData);
 	        }
 
 	        return transformedData;
@@ -387,12 +407,12 @@ var Griddle =
 
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
-	        //figure out if we want to show the filter section 
+	        //figure out if we want to show the filter section
 	        var filter = this.props.showFilter ? GridFilter({changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
 	        var settings = this.props.showSettings ? React.DOM.span({className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.DOM.i({className: "glyphicon glyphicon-cog"})) : "";
-	        
-	        //if we have neither filter or settings don't need to render this stuff 
-	        var topSection = ""; 
+
+	        //if we have neither filter or settings don't need to render this stuff
+	        var topSection = "";
 	        if (this.props.showFilter || this.props.showSettings){
 	           topSection = (
 	            React.DOM.div({className: "row top-section"}, 
@@ -408,16 +428,15 @@ var Griddle =
 	        var resultContent = "";
 	        var pagingContent = "";
 	        var keys = [];
+	        var cols = this.getColumns();
 
 	        // If we're not loading results, fill the table with legitimate data.
 	        if (!this.state.isLoading) {
 	            //figure out which columns are displayed and show only those
-	            var cols = this.getColumns();
-
 	            var data = this.getDataForRender(results, cols, true);
-	            
+
 	            var meta = this.props.metadataColumns;
-	            meta.push(this.props.childrenColumnName); 
+	            meta.push(this.props.childrenColumnName);
 
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
@@ -425,9 +444,11 @@ var Griddle =
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat 
 	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (GridBody({data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
-
-	            pagingContent = (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	                : (GridBody({columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	                
+	            pagingContent = this.props.useCustomPager
+	                ? (CustomPaginationContainer({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
 	            resultContent = (React.DOM.div({className: "loading img-responsive center-block"}));
@@ -436,7 +457,7 @@ var Griddle =
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.DOM.div({className: "row"}, 
 	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: this.getColumns(), setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText})
+	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -450,7 +471,7 @@ var Griddle =
 	            ?       React.DOM.div(null, resultContent)
 	            :       (React.DOM.div({className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: this.getColumns(), changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
+	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
 	                        ) : "", 
 	                        resultContent
 	                        ));
@@ -515,7 +536,7 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRowContainer = __webpack_require__(10);
+	var GridRowContainer = __webpack_require__(11);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){
@@ -529,7 +550,7 @@ var Griddle =
 	    var that = this;
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns})
+	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata})
 	    });
 
 	    return (
@@ -659,6 +680,7 @@ var Griddle =
 	    getDefaultProps: function(){
 	        return {
 	            "columns": [],
+	            "columnMetadata": [],
 	            "selectedColumns": [],
 	            "settingsText": "",
 	            "maxRowsText": "",
@@ -689,6 +711,11 @@ var Griddle =
 	        if (that.props.useCustomFormat === false){
 	            nodes = this.props.columns.map(function(col, index){
 	                var checked = _.contains(that.props.selectedColumns, col);
+	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
+	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
+	                if(typeof meta !== "undefined" && meta != null && meta.locked){
+	                    return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
+	                }
 	                return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
 	            });
 	        }
@@ -760,7 +787,14 @@ var Griddle =
 	            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
 	                columnSort += "sort-descending"
 	            }
-	            return React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, col)
+
+	            if (that.props.columnMetadata != null){
+	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
+	              //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
+	              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+	            }
+
+	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, col)); 
 	        });
 
 	        return(
@@ -870,7 +904,47 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridRow = __webpack_require__(11);
+
+	var CustomPaginationContainer = React.createClass({displayName: 'CustomPaginationContainer',
+	  getDefaultProps: function(){
+	    return{
+	      "maxPage": 0,
+	      "nextText": "",
+	      "previousText": "",
+	      "currentPage": 0,
+	      "customPager": {}
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+
+	    if (typeof that.props.customPager !== 'function'){
+	      console.log("Couldn't find valid template.");
+	      return (React.DOM.div(null));
+	    }
+
+	    return (that.props.customPager({maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	  }
+	});
+
+	module.exports = CustomPaginationContainer;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Griddle - Simple Grid Component for React
+	   https://github.com/DynamicTyped/Griddle
+	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(1);
+	var GridRow = __webpack_require__(12);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -895,17 +969,17 @@ var Griddle =
 	        var arr = [];
 	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-	        arr.push(GridRow({data: this.props.data, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
+	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
 
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false})
+	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
 
-	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true})
+	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata})
 	            });
 
 	            
@@ -919,7 +993,7 @@ var Griddle =
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -941,7 +1015,8 @@ var Griddle =
 	        "showChildren": false,
 	        "data": {},
 	        "metadataColumns": [],
-	        "hasChildren": false
+	        "hasChildren": false,
+	        "columnMetadata": null
 	      }
 	    },
 	    handleClick: function(){
@@ -950,8 +1025,15 @@ var Griddle =
 	    render: function() {
 	        var that = this;
 
-	        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            return React.DOM.td({onClick: that.handleClick}, col)
+	        var returnValue = null; 
+
+	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+	            if (that.props.columnMetadata != null){
+	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]})
+	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, col[1]));
+	            }
+
+	            return returnValue || (React.DOM.td({onClick: that.handleClick}, col));
 	        });
 
 	        //this is kind of hokey - make it better

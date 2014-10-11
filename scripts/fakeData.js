@@ -3,6 +3,196 @@
 
 var emptyData = [];
 
+var propertyGridMeta = [
+  {
+    "columnName": "property",
+    "order": 1,
+    "locked": false,
+    "visible": true,
+    "cssClassName": "properties-name"
+  },
+  {
+    "columnName": "description",
+    "order": 2,
+    "locked": false,
+    "visible": true,
+    "cssClassName": "properties-description"
+  }
+]
+var propertiesItem = [
+  {
+    "property": "columns",
+    "description": "The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default"
+  },
+  {
+    "property": "columnMetadata",
+    "description": "Behavior and properties for the columns within the grid",
+    "children":[
+      {
+        "property": "columnName",
+        "description": "The name of the column that this metadata applies to."
+      },
+      {
+        "property": "order",
+        "description": "The order that this column should appear regardless of how the columns object is defined."
+      },
+      {
+        "property": "locked",
+        "description": "Determines whether or not the user can disable this column from the settings."
+      },
+      {
+        "property": "cssClassName",
+        "description" : "The css className that should be applied to this column."
+      }
+    ]
+  },
+  {
+    "property": "results",
+    "description": "The data that should be displayed within the grid. This data needs to be an array of JSON objects."
+  },
+  {
+    "property": "resultsPerPage",
+    "description": "The number of results that should be displayed on each page. If 'getExternalResults' is defined, this value will be what's used as the 'pageSize' argument."
+  },
+  {
+    "property": "getExternalReports",
+    "description": "A function that obtains data to display in the grid and returns the results, along with the max total number of results. <br /> The methods requires the following parameters",
+    "children": [{
+        "property": "filterString",
+        "description": "The string that the user is filtering by."
+      },
+      {
+        "property": "sortColumn",
+        "description": "The column that is currently being sorted."
+      },
+      {
+        "property": "sortAscending",
+        "description": "Whether or not results should be sorted in ascending order."
+      },
+      {
+        "property": "page",
+        "description": "What page is being displayed."
+      },
+      {
+        "property": "pageSize",
+        "description": "How many results should be included per page."
+      },
+      {
+        "property": "callback",
+        "description": "The function that the results will be passed into. <br /> The callback needs the following properties",
+        "children":[
+          {
+            "property": "results",
+            "description": "The results to display."
+          },
+          {
+            "property": "totalResults",
+            "description": "The total number of items"
+          } 
+        ]
+      }],
+
+  },
+  {
+    "property": "initialSort",
+    "description": "The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received"
+  },
+  {
+    "property": "gridClassName",
+    "description": "The CSS class name to apply to the griddle elements. By default this is an empty string."
+  },
+  {
+    "property": "tableClassName",
+    "description" : "The CSS class name to apply to the table elements. By default this is an empty string -- in the exmaple it is set to \"table\" so the Bootstrap 3 table class is used."
+  },
+  {
+    "property": "customFormatClassName",
+    "description": "The CSS class name to apply to the custom format wrapper. By default this is an empty string."
+  },
+  {
+    "property": "settingsText",
+    "description": "The text value to use for toggling the settings area. This is \"Settings\" by default."
+  },
+  {
+    "property": "filterPlaceholderText",
+    "description": "The text to be displayed as a placeholder in the filter text box. This is \"Filter Results\" by default."
+  },
+  {
+    "property": "nextText",
+    "description": "The text on the button that moves to the next page of results. This is \"Next\" by default."
+  },
+  {
+    "property": "previousText",
+    "description": "The text on the button that moves to the previous page of results. This is \"Previous\" by default."
+  },
+  {
+    "property": "maxRowsText",
+    "description": "The text that appears in the Settings / Column chooser next to the select box for page size"
+  },
+  {
+    "property": "childrenColumnName",
+    "description": "The name of the column that contains a list of child items for a given object. By default this is \"children\""
+  },
+  {
+    "property": "metadataColumns",
+    "description": "List of columns that should not be rendered. By default, this is an empty array."
+  },
+  {
+    "property": "showFilter",
+    "description": "Whether or not to display the \"Filter\" section of Griddle. By default, this is set to \"false\"."
+  },
+  {
+    "property": "showSettings",
+    "description": "Whether or not to display the \"Settings\" section of Griddle. By default, this is set to \"false\"."
+  }
+];
+
+
+var columnMeta = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "name",
+    "order": 2,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "city",
+    "order": 3,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "state",
+    "order": 4,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "country",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },  
+  {
+    "columnName": "company",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  7,
+    "locked": false,
+    "visible": true
+  }
+];
+
 var fakeData =  [
   {
     "id": 0,

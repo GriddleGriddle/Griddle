@@ -17,7 +17,8 @@ var GridRow = React.createClass({
         "showChildren": false,
         "data": {},
         "metadataColumns": [],
-        "hasChildren": false
+        "hasChildren": false,
+        "columnMetadata": null
       }
     },
     handleClick: function(){
@@ -26,8 +27,15 @@ var GridRow = React.createClass({
     render: function() {
         var that = this;
 
-        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            return <td onClick={that.handleClick}>{col}</td>
+        var returnValue = null; 
+
+        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+            if (that.props.columnMetadata != null){
+              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]})
+              returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName}>{col[1]}</td>);
+            }
+
+            return returnValue || (<td onClick={that.handleClick}>{col}</td>);
         });
 
         //this is kind of hokey - make it better

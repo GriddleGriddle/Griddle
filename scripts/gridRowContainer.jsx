@@ -33,17 +33,17 @@ var GridRowContainer = React.createClass({
         var arr = [];
         var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-        arr.push(<GridRow data={this.props.data} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren}/>);
+        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren}/>);
 
         if(that.state.showChildren){
             var children =  hasChildren && this.props.data["children"].map(function(row, index){
                 if(typeof row["children"] !== "undefined"){
                   return (<tr><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent">
-                      <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false}/>
+                      <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}/>
                     </td></tr>);
                 }
 
-                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true}/>
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata}/>
             });
 
             

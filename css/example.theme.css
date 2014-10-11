@@ -160,6 +160,11 @@ header .btn-group{
 	margin-top:0px;
 }
 
+.properties-name{
+	width: 300px; 
+	font-weight: bold;
+}
+
 footer{ 
 	padding:10px;
 	background-color: #939393;	
@@ -168,6 +173,27 @@ footer{
 footer a, footer a:visited{	
 	color: #555;
 	text-decoration: underline;
+}
+
+.custom-pager {
+	line-height: 32px;
+	vertical-align: middle;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.custom-pager .pages button {
+	width: 30px;
+	height: 32px;
+}
+
+.custom-pager .current-page-selected {
+	font-weight: bold;
 }
 
 @media(max-width: 992px){
