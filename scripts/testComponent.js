@@ -106,41 +106,6 @@ var OtherPager = React.createClass({
 });
 
 
-React.renderComponent(
-	<TestComponent />, document.getElementById('grid')
-);
-
-React.renderComponent(
-	<Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
-);
-
-
-React.renderComponent(
-	<Griddle results={emptyData} customNoData={CustomNoDataComponent} />, document.getElementById('customNoDataComponent')
-);
-
-React.renderComponent(
-	<TestComponent simple={false} results={emptyData}/>, document.getElementById('examplegrid')
-);
-
-React.renderComponent(
-	<TestComponent simple={false}/>, document.getElementById('moregrid')
-);
-
-React.renderComponent(
-		<TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
-);
-
-React.renderComponent(
-		<TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
-);
-
-React.renderComponent(
-	<Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
-);
-React.renderComponent(
-	<Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" useCustomPager="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} customPager={OtherPager} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdatacustompager')
-);
 
 React.renderComponent(
     <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} />, document.getElementById('properties-grid')

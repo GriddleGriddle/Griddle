@@ -3,6 +3,22 @@
 
 var emptyData = [];
 
+var propertyGridMeta = [
+  {
+    "columnName": "property",
+    "order": 1,
+    "locked": false,
+    "visible": true,
+    "cssClassName": "properties-name"
+  },
+  {
+    "columnName": "description",
+    "order": 2,
+    "locked": false,
+    "visible": true,
+    "cssClassName": "properties-description"
+  }
+]
 var propertiesItem = [
   {
     "property": "columns",
@@ -108,6 +124,8 @@ var propertiesItem = [
     "description": "Whether or not to display the \"Settings\" section of Griddle. By default, this is set to \"false\"."
   }
 ];
+
+
 var columnMeta = [
   {
     "columnName": "id",

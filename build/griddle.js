@@ -444,7 +444,7 @@ var Griddle =
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat 
 	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (GridBody({data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	                : (GridBody({columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 	                
 	            pagingContent = this.props.useCustomPager
 	                ? (CustomPaginationContainer({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
@@ -550,7 +550,7 @@ var Griddle =
 	    var that = this;
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns})
+	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata})
 	    });
 
 	    return (
@@ -962,17 +962,17 @@ var Griddle =
 	        var arr = [];
 	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-	        arr.push(GridRow({data: this.props.data, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
+	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
 
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false})
+	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: this.props.columnMetadata})
 	                    )));
 	                }
 
-	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true})
+	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: this.props.columnMetadata})
 	            });
 
 	            
@@ -1008,7 +1008,8 @@ var Griddle =
 	        "showChildren": false,
 	        "data": {},
 	        "metadataColumns": [],
-	        "hasChildren": false
+	        "hasChildren": false,
+	        "columnMetadata": null
 	      }
 	    },
 	    handleClick: function(){
@@ -1017,8 +1018,16 @@ var Griddle =
 	    render: function() {
 	        var that = this;
 
+	        var returnValue = null; 
+
 	        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            return React.DOM.td({onClick: that.handleClick}, col)
+	            if (that.props.columnMetadata != null){
+	              debugger;
+	              var meta = _.findWhere(that.props.columnMetadata, {id: col.id})
+	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, col));
+	            }
+
+	            return returnValue || (React.DOM.td({onClick: that.handleClick}, col));
 	        });
 
 	        //this is kind of hokey - make it better
