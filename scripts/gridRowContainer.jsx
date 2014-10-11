@@ -39,11 +39,11 @@ var GridRowContainer = React.createClass({
             var children =  hasChildren && this.props.data["children"].map(function(row, index){
                 if(typeof row["children"] !== "undefined"){
                   return (<tr><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent">
-                      <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false} columnMetadata={this.props.columnMetadata}/>
+                      <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}/>
                     </td></tr>);
                 }
 
-                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={this.props.columnMetadata}/>
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata}/>
             });
 
             

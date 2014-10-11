@@ -968,11 +968,11 @@ var Griddle =
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: this.props.columnMetadata})
+	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
 
-	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: this.props.columnMetadata})
+	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata})
 	            });
 
 	            
@@ -1020,11 +1020,10 @@ var Griddle =
 
 	        var returnValue = null; 
 
-	        var nodes = _.toArray(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
 	            if (that.props.columnMetadata != null){
-	              debugger;
-	              var meta = _.findWhere(that.props.columnMetadata, {id: col.id})
-	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, col));
+	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]})
+	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, col[1]));
 	            }
 
 	            return returnValue || (React.DOM.td({onClick: that.handleClick}, col));
