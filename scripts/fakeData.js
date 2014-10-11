@@ -25,6 +25,28 @@ var propertiesItem = [
     "description": "The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default"
   },
   {
+    "property": "columnMetadata",
+    "description": "Behavior and properties for the columns within the grid",
+    "children":[
+      {
+        "property": "columnName",
+        "description": "The name of the column that this metadata applies to."
+      },
+      {
+        "property": "order",
+        "description": "The order that this column should appear regardless of how the columns object is defined."
+      },
+      {
+        "property": "locked",
+        "description": "Determines whether or not the user can disable this column from the settings."
+      },
+      {
+        "property": "cssClassName",
+        "description" : "The css className that should be applied to this column."
+      }
+    ]
+  },
+  {
     "property": "results",
     "description": "The data that should be displayed within the grid. This data needs to be an array of JSON objects."
   },

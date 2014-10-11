@@ -424,7 +424,7 @@ var Griddle = React.createClass({
             ?       <div>{resultContent}</div>
             :       (<div className="grid-body">
                         {this.props.showTableHeading ? <table className={headerTableClassName}>
-                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} />
+                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} columnMetadata={this.props.columnMetadata}/>
                         </table> : ""}
                         {resultContent}
                         </div>);

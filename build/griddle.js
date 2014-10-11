@@ -471,7 +471,7 @@ var Griddle =
 	            ?       React.DOM.div(null, resultContent)
 	            :       (React.DOM.div({className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending})
+	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
 	                        ) : "", 
 	                        resultContent
 	                        ));
@@ -787,7 +787,13 @@ var Griddle =
 	            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
 	                columnSort += "sort-descending"
 	            }
-	            return React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, col)
+
+	            if (that.props.columnMetadata != null){
+	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
+	              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+	            }
+
+	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, col)); 
 	        });
 
 	        return(

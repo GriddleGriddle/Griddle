@@ -31,7 +31,14 @@ var GridTitle = React.createClass({
             }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
                 columnSort += "sort-descending"
             }
-            return <th onClick={that.sort} data-title={col} className={columnSort}>{col}</th>
+
+            if (that.props.columnMetadata != null){
+              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
+              //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
+              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+            }
+
+            return (<th onClick={that.sort} data-title={col} className={columnSort}>{col}</th>); 
         });
 
         return(
