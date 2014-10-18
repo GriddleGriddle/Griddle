@@ -5,7 +5,7 @@ module.exports = {
     filename: 'build/griddle.js',
     publicPath: '/',
     library: "Griddle",
-    libraryTarget: "var"
+    libraryTarget: "umd"
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
