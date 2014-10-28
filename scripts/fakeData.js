@@ -55,7 +55,7 @@ var propertiesItem = [
     "description": "The number of results that should be displayed on each page. If 'getExternalResults' is defined, this value will be what's used as the 'pageSize' argument."
   },
   {
-    "property": "getExternalReports",
+    "property": "getExternalResults",
     "description": "A function that obtains data to display in the grid and returns the results, along with the max total number of results. <br /> The methods requires the following parameters",
     "children": [{
         "property": "filterString",
@@ -88,7 +88,7 @@ var propertiesItem = [
           {
             "property": "totalResults",
             "description": "The total number of items"
-          } 
+          }
         ]
       }],
 
@@ -166,19 +166,19 @@ var columnMeta = [
     "order": 3,
     "locked": false,
     "visible": true
-  },  
+  },
   {
     "columnName": "state",
     "order": 4,
     "locked": false,
     "visible": true
-  },  
+  },
   {
     "columnName": "country",
     "order": 5,
     "locked": false,
     "visible": true
-  },  
+  },
   {
     "columnName": "company",
     "order": 6,
@@ -2688,7 +2688,7 @@ var fakeData =  [
     "state": "Hawaii",
     "country": "United Kingdom",
     "company": "Ovolo",
-    "favoriteNumber": 7, 
+    "favoriteNumber": 7,
     "children": [
         {
           "id": 273,
@@ -2822,7 +2822,7 @@ var fakeData =  [
           "company": "Intrawear",
           "favoriteNumber": 1
         }
-    ]   
+    ]
   }];
 
   var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
