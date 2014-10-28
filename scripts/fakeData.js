@@ -56,7 +56,7 @@ var propertiesItem = [
   },
   {
     "property": "getExternalResults",
-    "description": "A function that obtains data to display in the grid and returns the results, along with the max total number of results. <br /> The methods requires the following parameters",
+    "description": "A function that obtains data to display in the grid and returns the results, along with the max total number of results. The methods requires the following parameters",
     "children": [{
         "property": "filterString",
         "description": "The string that the user is filtering by."
