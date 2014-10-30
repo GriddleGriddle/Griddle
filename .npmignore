@@ -1,0 +1,7 @@
+images
+scripts
+.gitignore
+.npmignore
+index.html
+webpack.config.js
+*.tgz
