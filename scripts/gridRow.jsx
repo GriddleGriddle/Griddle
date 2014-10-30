@@ -30,12 +30,12 @@ var GridRow = React.createClass({
         var returnValue = null; 
 
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            if (that.props.columnMetadata != null){
+            if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]})
               returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName}>{col[1]}</td>);
             }
 
-            return returnValue || (<td onClick={that.handleClick}>{col}</td>);
+            return returnValue || (<td onClick={that.handleClick}>{col[1]}</td>);
         });
 
         //this is kind of hokey - make it better
