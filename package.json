@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Griddle - A fast and flexible grid component for React.",
   "main": "modules/griddle.jsx.js",
   "dependencies": {
