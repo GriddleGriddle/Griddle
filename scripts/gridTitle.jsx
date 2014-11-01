@@ -12,7 +12,7 @@ var React = require('react/addons');
 var GridTitle = React.createClass({
     getDefaultProps: function(){
         return {
-           "columns":[], 
+           "columns":[],
            "sortColumn": "",
            "sortAscending": true
         }
@@ -36,12 +36,12 @@ var GridTitle = React.createClass({
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
               //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
               columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
-              if (meta.displayName != null) {
+              if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
                   displayName = meta.displayName;
               }
             }
 
-            return (<th onClick={that.sort} data-title={col} className={columnSort}>{displayName}</th>); 
+            return (<th onClick={that.sort} data-title={col} className={columnSort}>{displayName}</th>);
         });
 
         return(
