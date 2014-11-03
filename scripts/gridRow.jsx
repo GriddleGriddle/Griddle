@@ -32,7 +32,7 @@ var GridRow = React.createClass({
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
             if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
-              var colData = typeof meta.customComponent === 'undefined' ? col[1] : <meta.customComponent data={col[1]} />;
+              var colData = (typeof meta.customComponent === 'undefined' && meta.customComponent !== null) ? col[1] : <meta.customComponent data={col[1]} />;
               returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName}>{colData}</td>);
             }
 
