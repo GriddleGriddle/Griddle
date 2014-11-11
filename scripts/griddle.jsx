@@ -133,6 +133,8 @@ var Griddle = React.createClass({
         this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
     },
     updateStateWithExternalResults: function(state, callback) {
+        var that = this;
+
         // Update the table to indicate that it's loading.
         this.setState({ isLoading: true });
 
@@ -141,7 +143,13 @@ var Griddle = React.createClass({
             // Fill the state result properties
             state.results = externalResults.results;
             state.totalResults = externalResults.totalResults;
+            state.maxPage = that.getMaxPage(externalResults.results, state.totalResults);
             state.isLoading = false;
+
+            // If the current page is larger than the max page, reset the page.
+            if (state.page >= state.maxPage) {
+                state.page = state.maxPage - 1;
+            }
 
             callback(state);
         });
@@ -164,12 +172,14 @@ var Griddle = React.createClass({
             useCustomFormat: this.props.useCustomFormat == false
         });
     },
-    getMaxPage: function(results){
+    getMaxPage: function(results, totalResults){
         var totalResults;
-        if (this.hasExternalResults()) {
-            totalResults = this.state.totalResults;
-        } else {
-            totalResults = (results||this.state.results).length;
+        if (!totalResults) {
+            if (this.hasExternalResults()) {
+                totalResults = this.state.totalResults;
+            } else {
+                totalResults = (results||this.state.results).length;
+            }
         }
         var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
         return maxPage;
