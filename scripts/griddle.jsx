@@ -173,7 +173,6 @@ var Griddle = React.createClass({
         });
     },
     getMaxPage: function(results, totalResults){
-        var totalResults;
         if (!totalResults) {
             if (this.hasExternalResults()) {
                 totalResults = this.state.totalResults;
@@ -185,7 +184,7 @@ var Griddle = React.createClass({
         return maxPage;
     },
     setMaxPage: function(results){
-        var maxPage = this.getMaxPage();
+        var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage != maxPage){
             this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
