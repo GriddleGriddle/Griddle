@@ -51,7 +51,7 @@ var Griddle = React.createClass({
             "noDataMessage":"There is no data to display.",
             "customNoData": null,
             "showTableHeading":true,
-            "showPager":true 
+            "showPager":true
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -177,7 +177,7 @@ var Griddle = React.createClass({
             if (this.hasExternalResults()) {
                 totalResults = this.state.totalResults;
             } else {
-                totalResults = (results||this.state.results).length;
+                totalResults = (results||this.state.filteredResults||this.state.results).length;
             }
         }
         var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
@@ -208,7 +208,7 @@ var Griddle = React.createClass({
         }
     },
     getColumns: function(){
-        var that = this; 
+        var that = this;
 
         //if we don't have any data don't mess with this
         if (this.state.results === undefined || this.state.results.length == 0){ return [];}
@@ -404,10 +404,10 @@ var Griddle = React.createClass({
             keys = _.keys(_.omit(results[0], meta));
 
             //clean this stuff up so it's not if else all over the place.
-            resultContent = this.props.useCustomFormat 
+            resultContent = this.props.useCustomFormat
                 ? (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
                 : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
-                
+
             pagingContent = this.props.useCustomPager
                 ? (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
                 : (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.state.page} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
@@ -429,7 +429,7 @@ var Griddle = React.createClass({
         gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
 
-        var gridBody = this.props.useCustomFormat 
+        var gridBody = this.props.useCustomFormat
             ?       <div>{resultContent}</div>
             :       (<div className="grid-body">
                         {this.props.showTableHeading ? <table className={headerTableClassName}>
@@ -438,18 +438,18 @@ var Griddle = React.createClass({
                         {resultContent}
                         </div>);
 
-        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {        
+        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {
             if (this.props.customNoData != null) {
                 var myReturn = (<div className={gridClassName}><this.props.customNoData /></div>);
 
-                return myReturn                
+                return myReturn
             }
 
             var myReturn = (<div className={gridClassName}>
                     <GridNoData noDataMessage={this.props.noDataMessage} />
                 </div>);
             return myReturn;
-                                  
+
         }
 
 
