@@ -56,7 +56,7 @@ var propertiesItem = [
   },
   {
     "property": "getExternalResults",
-    "description": "A function that obtains data to display in the grid and returns the results, along with the max total number of results. The methods requires the following parameters",
+    "description": "A function that obtains data to display in the grid and passes the results into a callback parameter, along with the max total number of results. The methods requires the following parameters",
     "children": [{
         "property": "filterString",
         "description": "The string that the user is filtering by."
@@ -79,7 +79,7 @@ var propertiesItem = [
       },
       {
         "property": "callback",
-        "description": "The function that the results will be passed into. <br /> The callback needs the following properties",
+        "description": "The function that the results will be passed into.  The callback needs the following properties",
         "children":[
           {
             "property": "results",
