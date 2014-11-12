@@ -8,11 +8,12 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var _ = require('underscore');
 
 var GridTitle = React.createClass({
     getDefaultProps: function(){
         return {
-           "columns":[], 
+           "columns":[],
            "sortColumn": "",
            "sortAscending": true
         }
@@ -31,14 +32,17 @@ var GridTitle = React.createClass({
             }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
                 columnSort += "sort-descending"
             }
-
+            var displayName = col;
             if (that.props.columnMetadata != null){
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
               //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
               columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+              if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+                  displayName = meta.displayName;
+              }
             }
 
-            return (<th onClick={that.sort} data-title={col} className={columnSort}>{col}</th>); 
+            return (<th onClick={that.sort} data-title={col} className={columnSort}>{displayName}</th>);
         });
 
         return(

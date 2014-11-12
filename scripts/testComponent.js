@@ -1,6 +1,58 @@
 /** @jsx React.DOM */
 
 //This whole file is pretty junky... just an example
+
+var BoldFormatter = React.createClass({
+    render: function(){
+        return <strong>{this.props.data}</strong>
+    }
+})
+
+var columnMeta = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "name",
+    "order": 2,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "city",
+    "order": 3,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "state",
+    "order": 4,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "country",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "company",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  7,
+    "locked": false,
+    "visible": true
+  }
+];
+
 var TestComponent = React.createClass({
     getDefaultProps: function() {
         return{
@@ -8,7 +60,7 @@ var TestComponent = React.createClass({
             "subgrid": false,
             "external": false
         };
-    },	
+    },
     render: function(){
         var example = ""
 
@@ -18,9 +70,9 @@ var TestComponent = React.createClass({
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external == true) {
             example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
-        } else { 
-            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" 
-            showFilter={true} showSettings={true} 
+        } else {
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"
+            showFilter={true} showSettings={true}
             columns={["name", "city", "state", "country"]}/>
         }
 
@@ -106,41 +158,41 @@ var OtherPager = React.createClass({
 });
 
 
-React.renderComponent(
+React.render(
     <TestComponent />, document.getElementById('grid')
 );
 
-React.renderComponent(
+React.render(
     <Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
 );
 
-React.renderComponent(
+React.render(
     <Griddle results={emptyData} customNoData={CustomNoDataComponent} />, document.getElementById('customNoDataComponent')
 );
 
-React.renderComponent(
+React.render(
     <TestComponent simple={false} results={emptyData}/>, document.getElementById('examplegrid')
 );
 
-React.renderComponent(
+React.render(
     <TestComponent simple={false}/>, document.getElementById('moregrid')
 );
 
-React.renderComponent(
+React.render(
         <TestComponent simple={false} subgrid={true}/>, document.getElementById('subgrid')
 );
 
-React.renderComponent(
+React.render(
         <TestComponent simple={false} external={true}/>, document.getElementById('externaldata')
 );
 
-React.renderComponent(
+React.render(
     <Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomFormat="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
-React.renderComponent(
+React.render(
     <Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" useCustomPager="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} customPager={OtherPager} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdatacustompager')
 );
 
-React.renderComponent(
+React.render(
     <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} />, document.getElementById('properties-grid')
 );

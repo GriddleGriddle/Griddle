@@ -1,5 +1,14 @@
-var Griddle =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("React"), require("_"));
+	else if(typeof define === 'function' && define.amd)
+		define(["React", "_"], factory);
+	else if(typeof exports === 'object')
+		exports["Griddle"] = factory(require("React"), require("_"));
+	else
+		root["Griddle"] = factory(root["React"], root["_"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -180,6 +189,8 @@ var Griddle =
 	        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
 	    },
 	    updateStateWithExternalResults: function(state, callback) {
+	        var that = this;
+
 	        // Update the table to indicate that it's loading.
 	        this.setState({ isLoading: true });
 
@@ -188,7 +199,13 @@ var Griddle =
 	            // Fill the state result properties
 	            state.results = externalResults.results;
 	            state.totalResults = externalResults.totalResults;
+	            state.maxPage = that.getMaxPage(externalResults.results, state.totalResults);
 	            state.isLoading = false;
+
+	            // If the current page is larger than the max page, reset the page.
+	            if (state.page >= state.maxPage) {
+	                state.page = state.maxPage - 1;
+	            }
 
 	            callback(state);
 	        });
@@ -211,18 +228,19 @@ var Griddle =
 	            useCustomFormat: this.props.useCustomFormat == false
 	        });
 	    },
-	    getMaxPage: function(results){
-	        var totalResults;
-	        if (this.hasExternalResults()) {
-	            totalResults = this.state.totalResults;
-	        } else {
-	            totalResults = (results||this.state.results).length;
+	    getMaxPage: function(results, totalResults){
+	        if (!totalResults) {
+	            if (this.hasExternalResults()) {
+	                totalResults = this.state.totalResults;
+	            } else {
+	                totalResults = (results||this.state.results).length;
+	            }
 	        }
 	        var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
 	        return maxPage;
 	    },
 	    setMaxPage: function(results){
-	        var maxPage = this.getMaxPage();
+	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
 	        if (this.state.maxPage != maxPage){
 	            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
@@ -408,18 +426,18 @@ var Griddle =
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
 	        //figure out if we want to show the filter section
-	        var filter = this.props.showFilter ? GridFilter({changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
-	        var settings = this.props.showSettings ? React.DOM.span({className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.DOM.i({className: "glyphicon glyphicon-cog"})) : "";
+	        var filter = this.props.showFilter ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
+	        var settings = this.props.showSettings ? React.createElement("span", {className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.createElement("i", {className: "glyphicon glyphicon-cog"})) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
 	        var topSection = "";
 	        if (this.props.showFilter || this.props.showSettings){
 	           topSection = (
-	            React.DOM.div({className: "row top-section"}, 
-	                React.DOM.div({className: "col-xs-6"}, 
+	            React.createElement("div", {className: "row top-section"}, 
+	                React.createElement("div", {className: "col-xs-6"}, 
 	                   filter
 	                ), 
-	                React.DOM.div({className: "col-xs-6 right"}, 
+	                React.createElement("div", {className: "col-xs-6 right"}, 
 	                    settings
 	                )
 	            ));
@@ -443,21 +461,21 @@ var Griddle =
 
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat 
-	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (GridBody({columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	                ? (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
+	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 	                
 	            pagingContent = this.props.useCustomPager
-	                ? (CustomPaginationContainer({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
-	                : (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	                ? (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
-	            resultContent = (React.DOM.div({className: "loading img-responsive center-block"}));
+	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
 	        }
 
 	        var columnSelector = this.state.showColumnChooser ? (
-	            React.DOM.div({className: "row"}, 
-	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	            React.createElement("div", {className: "row"}, 
+	                React.createElement("div", {className: "col-md-12"}, 
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -468,23 +486,23 @@ var Griddle =
 
 
 	        var gridBody = this.props.useCustomFormat 
-	            ?       React.DOM.div(null, resultContent)
-	            :       (React.DOM.div({className: "grid-body"}, 
-	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
+	            ?       React.createElement("div", null, resultContent)
+	            :       (React.createElement("div", {className: "grid-body"}, 
+	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
+	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
 	                        ) : "", 
 	                        resultContent
 	                        ));
 
 	        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {        
 	            if (this.props.customNoData != null) {
-	                var myReturn = (React.DOM.div({className: gridClassName}, this.props.customNoData(null)));
+	                var myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoData, null)));
 
 	                return myReturn                
 	            }
 
-	            var myReturn = (React.DOM.div({className: gridClassName}, 
-	                    GridNoData({noDataMessage: this.props.noDataMessage})
+	            var myReturn = (React.createElement("div", {className: gridClassName}, 
+	                    React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
 	                ));
 	            return myReturn;
 	                                  
@@ -492,12 +510,12 @@ var Griddle =
 
 
 	        return (
-	            React.DOM.div({className: gridClassName}, 
+	            React.createElement("div", {className: gridClassName}, 
 	                topSection, 
 	                columnSelector, 
-	                React.DOM.div({className: "grid-container panel"}, 
+	                React.createElement("div", {className: "grid-container panel"}, 
 	                    gridBody, 
-	                    that.props.showPager ? React.DOM.div({className: "grid-footer clearfix"}, 
+	                    that.props.showPager ? React.createElement("div", {className: "grid-footer clearfix"}, 
 	                        pagingContent
 	                    ) : ""
 	                )
@@ -514,13 +532,13 @@ var Griddle =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = React;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = _;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ },
 /* 3 */
@@ -550,12 +568,12 @@ var Griddle =
 	    var that = this;
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata})
+	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata})
 	    });
 
 	    return (
 
-	            React.DOM.table({className: this.props.className}, 
+	            React.createElement("table", {className: this.props.className}, 
 	                nodes
 	            )
 	        );
@@ -590,7 +608,7 @@ var Griddle =
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function(){
-	        return React.DOM.div({className: "row filter-container"}, React.DOM.div({className: "col-md-6"}, React.DOM.input({type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange})))
+	        return React.createElement("div", {className: "row filter-container"}, React.createElement("div", {className: "col-md-6"}, React.createElement("input", {type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange})))
 	    }
 	});
 
@@ -630,28 +648,28 @@ var Griddle =
 	        var next = "";
 
 	        if(this.props.currentPage > 0){
-	            previous = React.DOM.span({onClick: this.props.previous, className: "previous"}, React.DOM.i({className: "glyphicon glyphicon-chevron-left"}), this.props.previousText)
+	            previous = React.createElement("span", {onClick: this.props.previous, className: "previous"}, React.createElement("i", {className: "glyphicon glyphicon-chevron-left"}), this.props.previousText)
 	        }
 
 	        if(this.props.currentPage != (this.props.maxPage -1)){
-	            next = React.DOM.span({onClick: this.props.next, className: "next"}, this.props.nextText, React.DOM.i({className: "glyphicon glyphicon-chevron-right"}))
+	            next = React.createElement("span", {onClick: this.props.next, className: "next"}, this.props.nextText, React.createElement("i", {className: "glyphicon glyphicon-chevron-right"}))
 	        }
 
 	        var options = [];
 
 	        for(var i = 1; i<= this.props.maxPage; i++){
-	            options.push(React.DOM.option({value: i}, i));
+	            options.push(React.createElement("option", {value: i}, i));
 	        }
 
 	        return (
-	            React.DOM.div({className: "row"}, 
-	                React.DOM.div({className: "col-xs-4"}, previous), 
-	                React.DOM.div({className: "col-xs-4 center"}, 
-	                    React.DOM.select({value: this.props.currentPage+1, onChange: this.pageChange}, 
+	            React.createElement("div", {className: "row"}, 
+	                React.createElement("div", {className: "col-xs-4"}, previous), 
+	                React.createElement("div", {className: "col-xs-4 center"}, 
+	                    React.createElement("select", {value: this.props.currentPage+1, onChange: this.pageChange}, 
 	                        options
 	                    ), " / ", this.props.maxPage
 	                ), 
-	                React.DOM.div({className: "col-xs-4 right"}, next)
+	                React.createElement("div", {className: "col-xs-4 right"}, next)
 	            )
 	        )
 	    }
@@ -714,32 +732,32 @@ var Griddle =
 	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
 	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
 	                if(typeof meta !== "undefined" && meta != null && meta.locked){
-	                    return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
+	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
 	                }
-	                return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
+	                return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
 	            });
 	        }
 
 	        var toggleCustom = that.props.allowToggleCustom
-	                ?   React.DOM.div({className: "form-group"}, 
-	                        React.DOM.label({for: "maxRows"}, this.props.enableCustomFormatText, ":"), 
-	                        React.DOM.input({type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
+	                ?   React.createElement("div", {className: "form-group"}, 
+	                        React.createElement("label", {for: "maxRows"}, this.props.enableCustomFormatText, ":"), 
+	                        React.createElement("input", {type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
 	                    )
 	                : "";
 
-	        return (React.DOM.div({className: "griddle-settings panel"}, 
-	                React.DOM.h5(null, this.props.settingsText), 
-	                React.DOM.div({className: "container-fluid griddle-columns"}, 
-	                    React.DOM.div({className: "row"}, nodes)
+	        return (React.createElement("div", {className: "griddle-settings panel"}, 
+	                React.createElement("h5", null, this.props.settingsText), 
+	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
+	                    React.createElement("div", {className: "row"}, nodes)
 	                ), 
-	                React.DOM.div({class: "form-group"}, 
-	                    React.DOM.label({for: "maxRows"}, this.props.maxRowsText, ":"), 
-	                    React.DOM.select({class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
-	                        React.DOM.option({value: "5"}, "5"), 
-	                        React.DOM.option({value: "10"}, "10"), 
-	                        React.DOM.option({value: "25"}, "25"), 
-	                        React.DOM.option({value: "50"}, "50"), 
-	                        React.DOM.option({value: "100"}, "100")
+	                React.createElement("div", {class: "form-group"}, 
+	                    React.createElement("label", {for: "maxRows"}, this.props.maxRowsText, ":"), 
+	                    React.createElement("select", {class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
+	                        React.createElement("option", {value: "5"}, "5"), 
+	                        React.createElement("option", {value: "10"}, "10"), 
+	                        React.createElement("option", {value: "25"}, "25"), 
+	                        React.createElement("option", {value: "50"}, "50"), 
+	                        React.createElement("option", {value: "100"}, "100")
 	                    )
 	                ), 
 	                toggleCustom
@@ -764,11 +782,12 @@ var Griddle =
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridTitle = React.createClass({displayName: 'GridTitle',
 	    getDefaultProps: function(){
 	        return {
-	           "columns":[], 
+	           "columns":[],
 	           "sortColumn": "",
 	           "sortAscending": true
 	        }
@@ -787,19 +806,22 @@ var Griddle =
 	            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
 	                columnSort += "sort-descending"
 	            }
-
+	            var displayName = col;
 	            if (that.props.columnMetadata != null){
 	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
 	              //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
 	              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+	              if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+	                  displayName = meta.displayName;
+	              }
 	            }
 
-	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, col)); 
+	            return (React.createElement("th", {onClick: that.sort, 'data-title': col, className: columnSort}, displayName));
 	        });
 
 	        return(
-	            React.DOM.thead(null, 
-	                React.DOM.tr(null, 
+	            React.createElement("thead", null, 
+	                React.createElement("tr", null, 
 	                    nodes
 	                )
 	            )
@@ -835,7 +857,7 @@ var Griddle =
 	        var that = this;
 
 	        return(
-	            React.DOM.div(null, this.props.noDataMessage)
+	            React.createElement("div", null, this.props.noDataMessage)
 	        );
 	    }
 	});
@@ -872,15 +894,15 @@ var Griddle =
 
 	    if (typeof that.props.customFormat !== 'function'){
 	      console.log("Couldn't find valid template.");
-	      return (React.DOM.div({className: this.props.className}));
+	      return (React.createElement("div", {className: this.props.className}));
 	    }
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return that.props.customFormat({data: row, metadataColumns: that.props.metadataColumns})
+	        return React.createElement(that.props.customFormat, {data: row, metadataColumns: that.props.metadataColumns})
 	    });
 
 	    return (
-	      React.DOM.div({className: this.props.className}, 
+	      React.createElement("div", {className: this.props.className}, 
 	          nodes
 	      )
 	    );
@@ -920,10 +942,10 @@ var Griddle =
 
 	    if (typeof that.props.customPager !== 'function'){
 	      console.log("Couldn't find valid template.");
-	      return (React.DOM.div(null));
+	      return (React.createElement("div", null));
 	    }
 
-	    return (that.props.customPager({maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	    return (React.createElement(that.props.customPager, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
 	  }
 	});
 
@@ -965,27 +987,27 @@ var Griddle =
 	    render: function(){
 	        var that = this;
 
-	        if(typeof this.props.data === "undefined"){return (React.DOM.tbody(null));}
+	        if(typeof this.props.data === "undefined"){return (React.createElement("tbody", null));}
 	        var arr = [];
 	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
+	        arr.push(React.createElement(GridRow, {data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
 
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
-	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
+	                  return (React.createElement("tr", null, React.createElement("td", {colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                      React.createElement(Griddle, {results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
 
-	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata})
+	                return React.createElement(GridRow, {data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata})
 	            });
 
 	            
 	        }
 
-	        return React.DOM.tbody(null, that.state.showChildren ? arr.concat(children) : arr)
+	        return React.createElement("tbody", null, that.state.showChildren ? arr.concat(children) : arr)
 	    }
 	});
 
@@ -1028,12 +1050,13 @@ var Griddle =
 	        var returnValue = null; 
 
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            if (that.props.columnMetadata != null){
-	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]})
-	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, col[1]));
+	            if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
+	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1]});
+	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.handleClick, className: meta.cssClassName}, colData));
 	            }
 
-	            return returnValue || (React.DOM.td({onClick: that.handleClick}, col));
+	            return returnValue || (React.createElement("td", {onClick: that.handleClick}, col[1]));
 	        });
 
 	        //this is kind of hokey - make it better
@@ -1045,7 +1068,7 @@ var Griddle =
 	            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
 	        }
 
-	        return (React.DOM.tr({className: className}, nodes));
+	        return (React.createElement("tr", {className: className}, nodes));
 	    }
 	});
 
@@ -1054,3 +1077,4 @@ var Griddle =
 
 /***/ }
 /******/ ])
+});
