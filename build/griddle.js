@@ -783,6 +783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridTitle = React.createClass({displayName: 'GridTitle',
 	    getDefaultProps: function(){
