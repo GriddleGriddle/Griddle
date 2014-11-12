@@ -1,14 +1,5 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("_"));
-	else if(typeof define === 'function' && define.amd)
-		define(["React", "_"], factory);
-	else if(typeof exports === 'object')
-		exports["Griddle"] = factory(require("React"), require("_"));
-	else
-		root["Griddle"] = factory(root["React"], root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
-return /******/ (function(modules) { // webpackBootstrap
+var Griddle =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -532,13 +523,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+	module.exports = React;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+	module.exports = _;
 
 /***/ },
 /* 3 */
@@ -1077,4 +1068,3 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }
 /******/ ])
-});
