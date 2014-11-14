@@ -124,7 +124,7 @@
 		<section id="example4">
 			<div class="container">
 				<h2>External Data</h2>
-				<p>Don't want to load all of your data at once? Set the 'getExternalData' property to point to a method that accepts the filters and a callback as parameters and returns a list of results, along with the total number of results.:</p>
+				<p>Don't want to load all of your data at once? Set the 'getExternalData' property to point to a method that accepts the filters and a callback function as parameters and passes the results (along with the total number of results) into the callback.:</p>
 				<pre><code>var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
 	// Load results from your API here.
 	callback(function() {
