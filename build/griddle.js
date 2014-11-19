@@ -147,10 +147,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                updateAfterResultsObtained(state);
 	            }
 	        } else {
+	            debugger;
 	            this.setState({
 	                filteredResults: null,
 	                filter: filter,
-	                maxPage: this.getMaxPage(null)
+	                maxPage: this.getMaxPage(this.state.results)
 	            });
 	        }
 	    },
