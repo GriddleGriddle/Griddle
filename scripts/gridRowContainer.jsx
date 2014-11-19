@@ -33,7 +33,8 @@ var GridRowContainer = React.createClass({
         var arr = [];
         var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns} hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren}/>);
+        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns} 
+          hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={0}/>);
 
         if(that.state.showChildren){
             var children =  hasChildren && this.props.data["children"].map(function(row, index){

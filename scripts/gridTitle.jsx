@@ -42,7 +42,7 @@ var GridTitle = React.createClass({
               }
             }
 
-            return (<th onClick={that.sort} data-title={col} className={columnSort}>{displayName}</th>);
+            return (<th onClick={that.sort} data-title={col} className={columnSort} key={displayName}>{displayName}</th>);
         });
 
         return(

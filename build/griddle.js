@@ -577,7 +577,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var that = this;
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata})
+	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index})
 	    });
 
 	    return (
@@ -825,7 +825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort}, displayName));
+	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort, key: displayName}, displayName));
 	        });
 
 	        return(
@@ -1000,13 +1000,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var arr = [];
 	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren}));
+	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
+	          hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: 0}));
 
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
-	                  debugger;
-	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                  return (React.DOM.tr({key: index}, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
 	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
