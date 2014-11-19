@@ -37,7 +37,7 @@ var GridPagination = React.createClass({
         var options = [];
 
         for(var i = 1; i<= this.props.maxPage; i++){
-            options.push(<option value={i}>{i}</option>);
+            options.push(<option value={i} key={i}>{i}</option>);
         }
 
         return (
