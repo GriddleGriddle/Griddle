@@ -217,8 +217,12 @@ var Griddle = React.createClass({
 
         //if we didn't set default or filter
         if (this.state.filteredColumns.length == 0){
+
             var meta = [].concat(this.props.metadataColumns);
-            meta.push(this.props.childrenColumnName);
+
+            if(meta.indexOf(this.props.childrenColumnName) < 0){
+                meta.push(this.props.childrenColumnName);
+            }
             result =  _.keys(_.omit(this.state.results[0], meta));
         }
 
@@ -344,7 +348,9 @@ var Griddle = React.createClass({
         }
 
         var meta = [].concat(this.props.metadataColumns);
-        meta.push(this.props.childrenColumnName);
+        if (meta.indexOf(this.props.childrenColumnName) < 0){
+            meta.push(this.props.childrenColumnName);
+        }
 
         var transformedData = [];
 
@@ -397,8 +403,11 @@ var Griddle = React.createClass({
             //figure out which columns are displayed and show only those
             var data = this.getDataForRender(results, cols, true);
 
+            //don't repeat this -- it's happening in getColumns and getDataForRender too...
             var meta = this.props.metadataColumns;
-            meta.push(this.props.childrenColumnName);
+            if(meta.indexOf(this.props.childrenColumnName) < 0){
+                meta.push(this.props.childrenColumnName);
+            }
 
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
