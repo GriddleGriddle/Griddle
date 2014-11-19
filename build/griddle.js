@@ -150,7 +150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.setState({
 	                filteredResults: null,
 	                filter: filter,
-	                maxPage: this.getMaxPage(null)
+	                maxPage: this.getMaxPage(this.state.results)
 	            });
 	        }
 	    },
@@ -1006,7 +1006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(that.state.showChildren){
 	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
-	                  return (React.DOM.tr({key: index}, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
 	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }

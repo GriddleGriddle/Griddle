@@ -94,7 +94,7 @@ var Griddle = React.createClass({
             this.setState({
                 filteredResults: null,
                 filter: filter,
-                maxPage: this.getMaxPage(null)
+                maxPage: this.getMaxPage(this.state.results)
             });
         }
     },

@@ -37,7 +37,7 @@ describe('Griddle', function() {
 
   it('gets added to the dom', function(){
     expect(TestUtils.isDOMComponent(grid));
-    expect(TestUtils.isElementOfType(grid), Griddle);
+    expect(TestUtils.isDescriptorOfType(grid), Griddle);
   });
 
   it('gets the right data on load', function() {
