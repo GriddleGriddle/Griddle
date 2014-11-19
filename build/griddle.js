@@ -147,7 +147,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                updateAfterResultsObtained(state);
 	            }
 	        } else {
-	            debugger;
 	            this.setState({
 	                filteredResults: null,
 	                filter: filter,

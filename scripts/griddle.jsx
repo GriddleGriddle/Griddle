@@ -91,7 +91,6 @@ var Griddle = React.createClass({
                 updateAfterResultsObtained(state);
             }
         } else {
-            debugger;
             this.setState({
                 filteredResults: null,
                 filter: filter,
