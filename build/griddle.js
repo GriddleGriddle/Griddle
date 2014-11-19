@@ -667,7 +667,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var options = [];
 
 	        for(var i = 1; i<= this.props.maxPage; i++){
-	            options.push(React.DOM.option({value: i}, i));
+	            options.push(React.DOM.option({value: i, key: i}, i));
 	        }
 
 	        return (
@@ -907,7 +907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return that.props.customFormat({data: row, metadataColumns: that.props.metadataColumns})
+	        return that.props.customFormat({data: row, metadataColumns: that.props.metadataColumns, key: index})
 	    });
 
 	    return (
@@ -1063,10 +1063,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
 	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : meta.customComponent({data: col[1]});
-	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName}, colData));
+	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName, key: index}, colData));
 	            }
 
-	            return returnValue || (React.DOM.td({onClick: that.handleClick}, col[1]));
+	            return returnValue || (React.DOM.td({onClick: that.handleClick, key: index}, col[1]));
 	        });
 
 	        //this is kind of hokey - make it better

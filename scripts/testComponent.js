@@ -142,7 +142,7 @@ var OtherPager = React.createClass({
 
         for(var i = startIndex; i < endIndex ; i++){
         	var selected = this.props.currentPage == i ? "current-page-selected" : "";
-            options.push(<button className={selected} data-value={i} onClick={this.pageChange}>{i + 1}</button>);
+            options.push(<button className={selected} data-value={i} onClick={this.pageChange} key={i}>{i + 1}</button>);
         }
 
         return (
