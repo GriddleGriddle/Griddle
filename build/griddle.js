@@ -1016,8 +1016,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            
 	        }
-
-	        return React.DOM.tbody(null, that.state.showChildren ? arr.concat(children) : arr)
+	        
+	        return hasChildren === false ? arr[0] : React.DOM.tbody(null, that.state.showChildren ? arr.concat(children) : arr)
 	    }
 	});
 
