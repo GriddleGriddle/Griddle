@@ -117,7 +117,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          that.setState({
 	            filteredResults: null,
 	            filter: filter,
-	            maxPage: that.getMaxPage(that.state.results)
+	            maxPage: that.getMaxPage(that.state.results),
+	            isLoading: false
 	          });
 	        },
 

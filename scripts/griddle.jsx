@@ -61,7 +61,8 @@ var Griddle = React.createClass({
           that.setState({
             filteredResults: null,
             filter: filter,
-            maxPage: that.getMaxPage(that.state.results)
+            maxPage: that.getMaxPage(that.state.results),
+            isLoading: false
           });
         },
 
