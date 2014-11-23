@@ -570,6 +570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(1);
 	var GridRowContainer = __webpack_require__(11);
+	var _ = __webpack_require__(2);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){

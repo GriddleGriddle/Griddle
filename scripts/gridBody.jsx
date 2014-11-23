@@ -9,6 +9,7 @@
 */
 var React = require('react/addons');
 var GridRowContainer = require('./gridRowContainer.jsx');
+var _ = require('underscore');
 
 var GridBody = React.createClass({
   getDefaultProps: function(){
