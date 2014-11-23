@@ -56,46 +56,52 @@ var Griddle = React.createClass({
     },
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
-        if(filter){
-            var that = this,
-                state = {
-                    page: 0,
-                    filter: filter
-                },
-                updateAfterResultsObtained = function(updatedState) {
-                    // Update the max page.
-                    updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
+        var that = this,
+        resetFilter = function(){
+          that.setState({
+            filteredResults: null,
+            filter: filter,
+            maxPage: that.getMaxPage(that.state.results)
+          });
+        },
 
-                    // Set the state.
-                    that.setState(updatedState);
-                };
+            state = {
+                page: 0,
+                filter: filter
+            },
+            updateAfterResultsObtained = function(updatedState) {
+                //if filter is null or undefined reset the filter..
+                if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+                  resetFilter();
+                } else {
+                  // Update the max page.
+                  updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
 
-            // Obtain the state results.
-            if (this.hasExternalResults()) {
-                // Update the state with external results.
-                this.updateStateWithExternalResults(state, updateAfterResultsObtained);
-            } else {
-               state.filteredResults = _.filter(this.state.results,
-                function(item) {
-                    var arr = _.values(item);
-                    for(var i = 0; i < arr.length; i++){
-                       if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                        return true;
-                       }
-                    }
+                  // Set the state.
+                  that.setState(updatedState);
+                }
 
-                    return false;
-                });
+            };
 
-                // Update the state after obtaining the results.
-                updateAfterResultsObtained(state);
-            }
+        // Obtain the state results.
+        if (this.hasExternalResults()) {
+            // Update the state with external results.
+            this.updateStateWithExternalResults(state, updateAfterResultsObtained);
         } else {
-            this.setState({
-                filteredResults: null,
-                filter: filter,
-                maxPage: this.getMaxPage(this.state.results)
+           state.filteredResults = _.filter(this.state.results,
+            function(item) {
+                var arr = _.values(item);
+                for(var i = 0; i < arr.length; i++){
+                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+                    return true;
+                   }
+                }
+
+                return false;
             });
+
+            // Update the state after obtaining the results.
+            updateAfterResultsObtained(state);
         }
     },
     getExternalResults: function(state, callback) {
