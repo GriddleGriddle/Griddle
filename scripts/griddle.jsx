@@ -124,6 +124,8 @@ var Griddle = React.createClass({
             sortColumn = this.state.sortColumn;
         }
 
+        sortColumn = _.isEmpty(sortColumn) ? this.props.initialSort : sortColumn;
+
         if (state !== undefined && state.sortAscending !== undefined) {
             sortAscending = state.sortAscending;
         } else {
