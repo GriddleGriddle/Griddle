@@ -31,26 +31,25 @@ var GridRowContainer = React.createClass({
 
         if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
         var arr = [];
-        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns} 
-          hasChildren={hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={0}/>);
+        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
+          hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId}/>);
 
         if(that.state.showChildren){
-            var children =  hasChildren && this.props.data["children"].map(function(row, index){
+            var children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
                 if(typeof row["children"] !== "undefined"){
                   return (<tr><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent">
                       <Griddle results={[row]} tableClassName="table" showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}/>
                     </td></tr>);
                 }
 
-                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata}/>
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
             });
 
-            
+
         }
-        
-        return hasChildren === false ? arr[0] : <tbody>{that.state.showChildren ? arr.concat(children) : arr}</tbody>
+
+        return that.props.hasChildren === false ? arr[0] : <tbody>{that.state.showChildren ? arr.concat(children) : arr}</tbody>
     }
 });
 
