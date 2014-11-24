@@ -1,0 +1,7 @@
+{
+  "es3": true,
+  "asi": true,
+  "eqeqeq": "cantbeturnedoff",
+  "eqnull": true,
+  "sub":true
+}
