@@ -28,7 +28,7 @@ module.exports = function(grunt) {
           ext: '.jsx.js'
         }
       ]
-    },
+    }
   },
   jshint: {
     all: {
