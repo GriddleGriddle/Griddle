@@ -1050,8 +1050,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
 	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
@@ -1079,11 +1077,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function() {
 	        var that = this;
 
-	        var returnValue = null; 
-
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
-	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+	            var returnValue = null; 
+	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+
+	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
 	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1]});
 	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.handleClick, className: meta.cssClassName, key: index}, colData));
 	            }
