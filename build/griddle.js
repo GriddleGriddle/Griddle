@@ -740,11 +740,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    setPageSize: function(event){
-	        var value = parseInt(event.target.value);
+	        var value = parseInt(event.target.value, 10);
 	        this.props.setPageSize(value);
 	    },
 	    handleChange: function(event){
-	        if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
+	        if(event.target.checked === true && _.contains(this.props.selectedColumns, event.target.dataset.name) === false){
 	            this.props.selectedColumns.push(event.target.dataset.name);
 	            this.props.setColumns(this.props.selectedColumns);
 	        } else {
@@ -769,11 +769,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 
-	        var toggleCustom = that.props.allowToggleCustom
-	                ?   React.createElement("div", {className: "form-group"}, 
-	                        React.createElement("label", {for: "maxRows"}, this.props.enableCustomFormatText, ":"), 
-	                        React.createElement("input", {type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
-	                    )
+	        var toggleCustom = that.props.allowToggleCustom ?   
+	                (React.createElement("div", {className: "form-group"}, 
+	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.enableCustomFormatText, ":"), 
+	                    React.createElement("input", {type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
+	                ))
 	                : "";
 
 	        return (React.createElement("div", {className: "griddle-settings panel"}, 
@@ -781,9 +781,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
 	                    React.createElement("div", {className: "row"}, nodes)
 	                ), 
-	                React.createElement("div", {class: "form-group"}, 
-	                    React.createElement("label", {for: "maxRows"}, this.props.maxRowsText, ":"), 
-	                    React.createElement("select", {class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
+	                React.createElement("div", {className: "form-group"}, 
+	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.maxRowsText, ":"), 
+	                    React.createElement("select", {onChange: this.setPageSize, value: this.props.resultsPerPage}, 
 	                        React.createElement("option", {value: "5"}, "5"), 
 	                        React.createElement("option", {value: "10"}, "10"), 
 	                        React.createElement("option", {value: "25"}, "25"), 

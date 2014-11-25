@@ -29,7 +29,7 @@ var GridTitle = React.createClass({
 
             if(that.props.sortColumn == col && that.props.sortAscending){
                 columnSort = "sort-ascending"
-            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
+            }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
                 columnSort += "sort-descending"
             }
             var displayName = col;
