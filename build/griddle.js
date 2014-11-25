@@ -229,12 +229,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
-	            showColumnChooser: this.state.showColumnChooser == false
+	            showColumnChooser: this.state.showColumnChooser === false
 	        });
 	    },
 	    toggleCustomFormat: function(){
 	        this.setProps({
-	            useCustomFormat: this.props.useCustomFormat == false
+	            useCustomFormat: this.props.useCustomFormat === false
 	        });
 	    },
 	    getMaxPage: function(results, totalResults){
@@ -251,7 +251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    setMaxPage: function(results){
 	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
-	        if (this.state.maxPage != maxPage){
+	        if (this.state.maxPage !== maxPage){
 	            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
 	        }
 	    },
@@ -276,12 +276,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 
 	        //if we don't have any data don't mess with this
-	        if (this.state.results === undefined || this.state.results.length == 0){ return [];}
+	        if (this.state.results === undefined || this.state.results.length === 0){ return [];}
 
 	        var result = this.state.filteredColumns;
 
 	        //if we didn't set default or filter
-	        if (this.state.filteredColumns.length == 0){
+	        if (this.state.filteredColumns.length === 0){
 
 	            var meta = [].concat(this.props.metadataColumns);
 
@@ -326,7 +326,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // If this is the same column, reverse the sort.
 	        if(this.state.sortColumn == sort){
-	            state.sortAscending = this.state.sortAscending == false;
+	            state.sortAscending = !this.state.sortAscending;
 	        }
 
 	        if (this.hasExternalResults()) {
@@ -393,12 +393,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 	        if (!this.hasExternalResults()) {
 	            //get the correct page size
-	            if(this.state.sortColumn != "" || this.props.initialSort != ""){
+	            if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
 	                data = _.sortBy(data, function(item){
 	                    return item[that.state.sortColumn||that.props.initialSort];
 	                });
 
-	                if(this.state.sortAscending == false){
+	                if(this.state.sortAscending === false){
 	                    data.reverse();
 	                }
 	            }
@@ -478,12 +478,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keys = _.keys(_.omit(results[0], meta));
 
 	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomFormat
-	                ? (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
+	            resultContent = this.props.useCustomFormat ? 
+	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
 	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
-	            pagingContent = this.props.useCustomPager
-	                ? (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	            pagingContent = this.props.useCustomPager ? 
+	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
 	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
@@ -503,8 +503,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomFormat
-	            ?       React.createElement("div", null, resultContent)
+	        var gridBody = this.props.useCustomFormat ?       
+	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
 	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
@@ -512,14 +512,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        resultContent
 	                        ));
 
-	        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {
+	        if (typeof this.state.results === 'undefined' || this.state.results.length === 0) {
+	            var myReturn = null; 
 	            if (this.props.customNoData != null) {
-	                var myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoData, null)));
+	                myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoData, null)));
 
 	                return myReturn
 	            }
 
-	            var myReturn = (React.createElement("div", {className: gridClassName}, 
+	            myReturn = (React.createElement("div", {className: gridClassName}, 
 	                    React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
 	                ));
 	            return myReturn;
@@ -834,7 +835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = "sort-ascending"
-	            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
+	            }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
 	                columnSort += "sort-descending"
 	            }
 	            var displayName = col;
