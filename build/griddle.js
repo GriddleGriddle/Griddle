@@ -668,11 +668,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "maxPage": 0,
 	            "nextText": "",
 	            "previousText": "",
-	            "currentPage": 0,
+	            "currentPage": 0
 	        }
 	    },
 	    pageChange: function(event){
-	        this.props.setPage(parseInt(event.target.value)-1);
+	        this.props.setPage(parseInt(event.target.value, 10)-1);
 	    },
 	    render: function(){
 	        var previous = "";
@@ -682,7 +682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            previous = React.createElement("span", {onClick: this.props.previous, className: "previous"}, React.createElement("i", {className: "glyphicon glyphicon-chevron-left"}), this.props.previousText)
 	        }
 
-	        if(this.props.currentPage != (this.props.maxPage -1)){
+	        if(this.props.currentPage !== (this.props.maxPage -1)){
 	            next = React.createElement("span", {onClick: this.props.next, className: "next"}, this.props.nextText, React.createElement("i", {className: "glyphicon glyphicon-chevron-right"}))
 	        }
 
@@ -1004,16 +1004,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	           "data": {
 	           },
-	           "metadataColumns": []
+	           "metadataColumns": [],
+	           "showChildren":false
 	        }
 	    },
 	    toggleChildren: function(){
 	        this.setState({
-	            showChildren: this.state.showChildren == false
+	            showChildren: this.state.showChildren === false
 	        });
-	    },
-	    getInitialState: function(){
-	        return { showChildren: false };
 	    },
 	    render: function(){
 	        var that = this;
@@ -1023,9 +1021,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        arr.push(React.createElement(GridRow, {data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
 	          hasChildren: that.props.hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: that.props.uniqueId}));
-
+	          var children = null;
 	        if(that.state.showChildren){
-	            var children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
+	            children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.createElement("tr", null, React.createElement("td", {colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
 	                      React.createElement(Griddle, {results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
