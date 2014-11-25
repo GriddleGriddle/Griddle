@@ -90,7 +90,7 @@ var propertiesItem = [
             "description": "The total number of items"
           }
         ]
-      }],
+      }]
 
   },
   {
