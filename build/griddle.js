@@ -358,7 +358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filteredResults: null,
 	            filteredColumns: [],
 	            filter: "",
-	            sortColumn: "",
+	            sortColumn: this.props.initialSort,
 	            sortAscending: true,
 	            showColumnChooser: false,
 	            isLoading: false
@@ -370,6 +370,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            state.isLoading = true; // Initialize to 'loading'
 	        }
+
+
 	        return state;
 	    },
 	    componentWillMount: function() {

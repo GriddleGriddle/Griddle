@@ -302,7 +302,7 @@ var Griddle = React.createClass({
             filteredResults: null,
             filteredColumns: [],
             filter: "",
-            sortColumn: "",
+            sortColumn: this.props.initialSort,
             sortAscending: true,
             showColumnChooser: false,
             isLoading: false
@@ -314,6 +314,8 @@ var Griddle = React.createClass({
         } else {
             state.isLoading = true; // Initialize to 'loading'
         }
+
+
         return state;
     },
     componentWillMount: function() {
