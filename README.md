@@ -11,12 +11,20 @@ Please submit issues / pull requests for anything you run into.
 
 Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [Bootstrap 3](http://getbootstrap.com/) (as well as [React](http://facebook.github.io/react/)). Please check out the [documentation and examples](http://dynamictyped.github.io/Griddle).
 
+To use Griddle:
 
+`npm install griddle-react`
 
-To try it out, run the following commands: 
+***Or***
+
+download and reference griddle.js from the build directory (npm is preferred).
+
+----------
+
+To run from source, type the following commands into a terminal: 
 
 1. `npm install -g grunt-cli` if you don't have grunt.
 2. `npm install`
-3. `webpack`
+3. `webpack` (Learn more about [webpack](http://webpack.github.io))
 4. `grunt`
 5. That's it!
