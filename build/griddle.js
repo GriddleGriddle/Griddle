@@ -145,6 +145,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return false;
 	            });
 
+	            // Update the max page.
+	            state.maxPage = that.getMaxPage(state.filteredResults);
+
 	            // Update the state after obtaining the results.
 	            updateAfterResultsObtained(state);
 	        }
