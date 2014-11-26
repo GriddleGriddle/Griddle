@@ -113,32 +113,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function(filter) {
 	        var that = this,
-	        resetFilter = function(){
-	          that.setState({
-	            filteredResults: null,
-	            filter: filter,
-	            maxPage: that.getMaxPage(that.state.results),
-	            isLoading: false
-	          });
+	        state = {
+	            page: 0,
+	            filter: filter
 	        },
+	        updateAfterResultsObtained = function(updatedState) {
+	            //if filter is null or undefined reset the filter.
+	            if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+	                updatedState.filter = filter;
+	                updatedState.filteredResults = null;
+	            }
 
-	            state = {
-	                page: 0,
-	                filter: filter
-	            },
-	            updateAfterResultsObtained = function(updatedState) {
-	                //if filter is null or undefined reset the filter..
-	                if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-	                  resetFilter();
-	                } else {
-	                  // Update the max page.
-	                  updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
-
-	                  // Set the state.
-	                  that.setState(updatedState);
-	                }
-
-	            };
+	            // Set the state.
+	            that.setState(updatedState);
+	        };
 
 	        // Obtain the state results.
 	        if (this.hasExternalResults()) {
@@ -529,6 +517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            myReturn = (React.createElement("div", {className: gridClassName}, 
+	                    topSection, 
 	                    React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
 	                ));
 	            return myReturn;

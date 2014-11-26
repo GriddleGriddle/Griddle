@@ -163,7 +163,7 @@ React.render(
 );
 
 React.render(
-    <Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
+    <Griddle results={emptyData} showFilter={true} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
 );
 
 React.render(

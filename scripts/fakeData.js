@@ -2784,9 +2784,17 @@ var fakeData =  [
     var endIndex = initialIndex + pageSize;
 
     setTimeout(function() {
+      var results = [], 
+          totalResults = 0;
+
+      if (filterString !== 'nothing') {
+        results = fakeData.slice(initialIndex, endIndex);
+        totalResults = fakeData.length;
+      }
+
       callback({
-        results: fakeData.slice(initialIndex, endIndex),
-        totalResults: fakeData.length
+        results: results,
+        totalResults: totalResults
       });
-    }, fakeData.length);
+    }, 1000);
   }
