@@ -190,9 +190,7 @@ var Griddle = React.createClass({
     getMaxPage: function(results, totalResults){
         if (!totalResults) {
             if (this.hasExternalResults()) {
-                this.updateStateWithExternalResults(state, function(updatedState) {
-                    that.setState(updatedState);
-                });
+                totalResults = this.state.totalResults;
             } else {
                 totalResults = (results||this.state.filteredResults||this.state.results).length;
             }
