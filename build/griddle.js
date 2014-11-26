@@ -112,46 +112,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function(filter) {
-	        if(filter){
-	            var that = this,
-	                state = {
-	                    page: 0,
-	                    filter: filter
-	                },
-	                updateAfterResultsObtained = function(updatedState) {
-	                    // Update the max page.
-	                    updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
-
-	                    // Set the state.
-	                    that.setState(updatedState);
-	                };
-
-	            // Obtain the state results.
-	            if (this.hasExternalResults()) {
-	                // Update the state with external results.
-	                this.updateStateWithExternalResults(state, updateAfterResultsObtained);
-	            } else {
-	               state.filteredResults = _.filter(this.state.results,
-	                function(item) {
-	                    var arr = _.values(item);
-	                    for(var i = 0; i < arr.length; i++){
-	                       if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-	                        return true;
-	                       }
-	                    }
-
-	                    return false;
-	                });
-
-	                // Update the state after obtaining the results.
-	                updateAfterResultsObtained(state);
+	        var that = this,
+	        state = {
+	            page: 0,
+	            filter: filter
+	        },
+	        updateAfterResultsObtained = function(updatedState) {
+	            //if filter is null or undefined reset the filter.
+	            if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+	                updatedState.filter = filter;
+	                updatedState.filteredResults = null;
 	            }
+
+	            // Set the state.
+	            that.setState(updatedState);
+	        };
+
+	        // Obtain the state results.
+	        if (this.hasExternalResults()) {
+	            // Update the state with external results.
+	            this.updateStateWithExternalResults(state, updateAfterResultsObtained);
 	        } else {
-	            this.setState({
-	                filteredResults: null,
-	                filter: filter,
-	                maxPage: this.getMaxPage(this.state.results)
+	           state.filteredResults = _.filter(this.state.results,
+	            function(item) {
+	                var arr = _.values(item);
+	                for(var i = 0; i < arr.length; i++){
+	                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+	                    return true;
+	                   }
+	                }
+
+	                return false;
 	            });
+
+	            // Update the max page.
+	            state.maxPage = that.getMaxPage(state.filteredResults);
+
+	            // Update the state after obtaining the results.
+	            updateAfterResultsObtained(state);
 	        }
 	    },
 	    getExternalResults: function(state, callback) {
@@ -172,6 +170,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            sortColumn = this.state.sortColumn;
 	        }
+
+	        sortColumn = _.isEmpty(sortColumn) ? this.props.initialSort : sortColumn;
 
 	        if (state !== undefined && state.sortAscending !== undefined) {
 	            sortAscending = state.sortAscending;
@@ -216,16 +216,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    setPageSize: function(size){
 	        //make this better.
 	        this.props.resultsPerPage = size;
-	        this.setMaxPage();
+
+	        if (this.hasExternalResults()) {
+	            // Reload the results by setting the page.
+	            this.setPage(0);
+	        } else {
+	            this.setMaxPage();
+	        }
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
-	            showColumnChooser: this.state.showColumnChooser == false
+	            showColumnChooser: this.state.showColumnChooser === false
 	        });
 	    },
 	    toggleCustomFormat: function(){
 	        this.setProps({
-	            useCustomFormat: this.props.useCustomFormat == false
+	            useCustomFormat: this.props.useCustomFormat === false
 	        });
 	    },
 	    getMaxPage: function(results, totalResults){
@@ -242,7 +248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    setMaxPage: function(results){
 	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
-	        if (this.state.maxPage != maxPage){
+	        if (this.state.maxPage !== maxPage){
 	            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
 	        }
 	    },
@@ -267,12 +273,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 
 	        //if we don't have any data don't mess with this
-	        if (this.state.results === undefined || this.state.results.length == 0){ return [];}
+	        if (this.state.results === undefined || this.state.results.length === 0){ return [];}
 
 	        var result = this.state.filteredColumns;
 
 	        //if we didn't set default or filter
-	        if (this.state.filteredColumns.length == 0){
+	        if (this.state.filteredColumns.length === 0){
 
 	            var meta = [].concat(this.props.metadataColumns);
 
@@ -317,7 +323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // If this is the same column, reverse the sort.
 	        if(this.state.sortColumn == sort){
-	            state.sortAscending = this.state.sortAscending == false;
+	            state.sortAscending = !this.state.sortAscending;
 	        }
 
 	        if (this.hasExternalResults()) {
@@ -349,7 +355,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filteredResults: null,
 	            filteredColumns: [],
 	            filter: "",
-	            sortColumn: "",
+	            sortColumn: this.props.initialSort,
 	            sortAscending: true,
 	            showColumnChooser: false,
 	            isLoading: false
@@ -361,6 +367,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            state.isLoading = true; // Initialize to 'loading'
 	        }
+
+
 	        return state;
 	    },
 	    componentWillMount: function() {
@@ -384,12 +392,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 	        if (!this.hasExternalResults()) {
 	            //get the correct page size
-	            if(this.state.sortColumn != "" || this.props.initialSort != ""){
+	            if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
 	                data = _.sortBy(data, function(item){
 	                    return item[that.state.sortColumn||that.props.initialSort];
 	                });
 
-	                if(this.state.sortAscending == false){
+	                if(this.state.sortAscending === false){
 	                    data.reverse();
 	                }
 	            }
@@ -432,18 +440,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
 	        //figure out if we want to show the filter section
-	        var filter = this.props.showFilter ? GridFilter({changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
-	        var settings = this.props.showSettings ? React.DOM.span({className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.DOM.i({className: "glyphicon glyphicon-cog"})) : "";
+	        var filter = this.props.showFilter ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
+	        var settings = this.props.showSettings ? React.createElement("span", {className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.createElement("i", {className: "glyphicon glyphicon-cog"})) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
 	        var topSection = "";
 	        if (this.props.showFilter || this.props.showSettings){
 	           topSection = (
-	            React.DOM.div({className: "row top-section"}, 
-	                React.DOM.div({className: "col-xs-6"}, 
+	            React.createElement("div", {className: "row top-section"}, 
+	                React.createElement("div", {className: "col-xs-6"}, 
 	                   filter
 	                ), 
-	                React.DOM.div({className: "col-xs-6 right"}, 
+	                React.createElement("div", {className: "col-xs-6 right"}, 
 	                    settings
 	                )
 	            ));
@@ -469,22 +477,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keys = _.keys(_.omit(results[0], meta));
 
 	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomFormat
-	                ? (CustomFormatContainer({data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (GridBody({columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	            resultContent = this.props.useCustomFormat ? 
+	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
+	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
-	            pagingContent = this.props.useCustomPager
-	                ? (CustomPaginationContainer({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
-	                : (GridPagination({next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	            pagingContent = this.props.useCustomPager ? 
+	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
-	            resultContent = (React.DOM.div({className: "loading img-responsive center-block"}));
+	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
 	        }
 
 	        var columnSelector = this.state.showColumnChooser ? (
-	            React.DOM.div({className: "row"}, 
-	                React.DOM.div({className: "col-md-12"}, 
-	                    GridSettings({columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	            React.createElement("div", {className: "row"}, 
+	                React.createElement("div", {className: "col-md-12"}, 
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -494,24 +502,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomFormat
-	            ?       React.DOM.div(null, resultContent)
-	            :       (React.DOM.div({className: "grid-body"}, 
-	                        this.props.showTableHeading ? React.DOM.table({className: headerTableClassName}, 
-	                            GridTitle({columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
+	        var gridBody = this.props.useCustomFormat ?       
+	            React.createElement("div", null, resultContent)
+	            :       (React.createElement("div", {className: "grid-body"}, 
+	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
+	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.state.sortColumn, sortAscending: this.state.sortAscending, columnMetadata: this.props.columnMetadata})
 	                        ) : "", 
 	                        resultContent
 	                        ));
 
-	        if (typeof this.state.results === 'undefined' || this.state.results.length == 0) {
+	        if (typeof this.state.results === 'undefined' || this.state.results.length === 0) {
+	            var myReturn = null; 
 	            if (this.props.customNoData != null) {
-	                var myReturn = (React.DOM.div({className: gridClassName}, this.props.customNoData(null)));
+	                myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoData, null)));
 
 	                return myReturn
 	            }
 
-	            var myReturn = (React.DOM.div({className: gridClassName}, 
-	                    GridNoData({noDataMessage: this.props.noDataMessage})
+	            myReturn = (React.createElement("div", {className: gridClassName}, 
+	                    topSection, 
+	                    React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
 	                ));
 	            return myReturn;
 
@@ -519,12 +529,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	        return (
-	            React.DOM.div({className: gridClassName}, 
+	            React.createElement("div", {className: gridClassName}, 
 	                topSection, 
 	                columnSelector, 
-	                React.DOM.div({className: "grid-container panel"}, 
+	                React.createElement("div", {className: "grid-container panel"}, 
 	                    gridBody, 
-	                    that.props.showPager ? React.DOM.div({className: "grid-footer clearfix"}, 
+	                    that.props.showPager ? React.createElement("div", {className: "grid-footer clearfix"}, 
 	                        pagingContent
 	                    ) : ""
 	                )
@@ -564,6 +574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(1);
 	var GridRowContainer = __webpack_require__(11);
+	var _ = __webpack_require__(2);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
 	  getDefaultProps: function(){
@@ -575,14 +586,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  render: function() {
 	    var that = this;
+	    //figure out if we need to wrap the group in one tbody or many
+	    var anyHasChildren = false;
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return GridRowContainer({data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index})
+	        var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
+
+	        //at least one item in the group has children.
+	        if (hasChildren) { anyHasChildren = hasChildren; }
+
+	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren})
 	    });
+
+	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
+	    if (!anyHasChildren){
+	      nodes = React.createElement("tbody", null, nodes)
+	    }
 
 	    return (
 
-	            React.DOM.table({className: this.props.className}, 
+	            React.createElement("table", {className: this.props.className}, 
 	                nodes
 	            )
 	        );
@@ -617,7 +640,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function(){
-	        return React.DOM.div({className: "row filter-container"}, React.DOM.div({className: "col-md-6"}, React.DOM.input({type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange})))
+	        return React.createElement("div", {className: "row filter-container"}, React.createElement("div", {className: "col-md-6"}, React.createElement("input", {type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange})))
 	    }
 	});
 
@@ -646,39 +669,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "maxPage": 0,
 	            "nextText": "",
 	            "previousText": "",
-	            "currentPage": 0,
+	            "currentPage": 0
 	        }
 	    },
 	    pageChange: function(event){
-	        this.props.setPage(parseInt(event.target.value)-1);
+	        this.props.setPage(parseInt(event.target.value, 10)-1);
 	    },
 	    render: function(){
 	        var previous = "";
 	        var next = "";
 
 	        if(this.props.currentPage > 0){
-	            previous = React.DOM.span({onClick: this.props.previous, className: "previous"}, React.DOM.i({className: "glyphicon glyphicon-chevron-left"}), this.props.previousText)
+	            previous = React.createElement("span", {onClick: this.props.previous, className: "previous"}, React.createElement("i", {className: "glyphicon glyphicon-chevron-left"}), this.props.previousText)
 	        }
 
-	        if(this.props.currentPage != (this.props.maxPage -1)){
-	            next = React.DOM.span({onClick: this.props.next, className: "next"}, this.props.nextText, React.DOM.i({className: "glyphicon glyphicon-chevron-right"}))
+	        if(this.props.currentPage !== (this.props.maxPage -1)){
+	            next = React.createElement("span", {onClick: this.props.next, className: "next"}, this.props.nextText, React.createElement("i", {className: "glyphicon glyphicon-chevron-right"}))
 	        }
 
 	        var options = [];
 
 	        for(var i = 1; i<= this.props.maxPage; i++){
-	            options.push(React.DOM.option({value: i, key: i}, i));
+	            options.push(React.createElement("option", {value: i, key: i}, i));
 	        }
 
 	        return (
-	            React.DOM.div({className: "row"}, 
-	                React.DOM.div({className: "col-xs-4"}, previous), 
-	                React.DOM.div({className: "col-xs-4 center"}, 
-	                    React.DOM.select({value: this.props.currentPage+1, onChange: this.pageChange}, 
+	            React.createElement("div", {className: "row"}, 
+	                React.createElement("div", {className: "col-xs-4"}, previous), 
+	                React.createElement("div", {className: "col-xs-4 center"}, 
+	                    React.createElement("select", {value: this.props.currentPage+1, onChange: this.pageChange}, 
 	                        options
 	                    ), " / ", this.props.maxPage
 	                ), 
-	                React.DOM.div({className: "col-xs-4 right"}, next)
+	                React.createElement("div", {className: "col-xs-4 right"}, next)
 	            )
 	        )
 	    }
@@ -718,11 +741,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    setPageSize: function(event){
-	        var value = parseInt(event.target.value);
+	        var value = parseInt(event.target.value, 10);
 	        this.props.setPageSize(value);
 	    },
 	    handleChange: function(event){
-	        if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
+	        if(event.target.checked === true && _.contains(this.props.selectedColumns, event.target.dataset.name) === false){
 	            this.props.selectedColumns.push(event.target.dataset.name);
 	            this.props.setColumns(this.props.selectedColumns);
 	        } else {
@@ -741,32 +764,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
 	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
 	                if(typeof meta !== "undefined" && meta != null && meta.locked){
-	                    return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
+	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
 	                }
-	                return React.DOM.div({className: "column checkbox"}, React.DOM.label(null, React.DOM.input({type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
+	                return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
 	            });
 	        }
 
-	        var toggleCustom = that.props.allowToggleCustom
-	                ?   React.DOM.div({className: "form-group"}, 
-	                        React.DOM.label({for: "maxRows"}, this.props.enableCustomFormatText, ":"), 
-	                        React.DOM.input({type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
-	                    )
+	        var toggleCustom = that.props.allowToggleCustom ?   
+	                (React.createElement("div", {className: "form-group"}, 
+	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.enableCustomFormatText, ":"), 
+	                    React.createElement("input", {type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat})
+	                ))
 	                : "";
 
-	        return (React.DOM.div({className: "griddle-settings panel"}, 
-	                React.DOM.h5(null, this.props.settingsText), 
-	                React.DOM.div({className: "container-fluid griddle-columns"}, 
-	                    React.DOM.div({className: "row"}, nodes)
+	        return (React.createElement("div", {className: "griddle-settings panel"}, 
+	                React.createElement("h5", null, this.props.settingsText), 
+	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
+	                    React.createElement("div", {className: "row"}, nodes)
 	                ), 
-	                React.DOM.div({class: "form-group"}, 
-	                    React.DOM.label({for: "maxRows"}, this.props.maxRowsText, ":"), 
-	                    React.DOM.select({class: "form-control", onChange: this.setPageSize, value: this.props.resultsPerPage}, 
-	                        React.DOM.option({value: "5"}, "5"), 
-	                        React.DOM.option({value: "10"}, "10"), 
-	                        React.DOM.option({value: "25"}, "25"), 
-	                        React.DOM.option({value: "50"}, "50"), 
-	                        React.DOM.option({value: "100"}, "100")
+	                React.createElement("div", {className: "form-group"}, 
+	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.maxRowsText, ":"), 
+	                    React.createElement("select", {onChange: this.setPageSize, value: this.props.resultsPerPage}, 
+	                        React.createElement("option", {value: "5"}, "5"), 
+	                        React.createElement("option", {value: "10"}, "10"), 
+	                        React.createElement("option", {value: "25"}, "25"), 
+	                        React.createElement("option", {value: "50"}, "50"), 
+	                        React.createElement("option", {value: "100"}, "100")
 	                    )
 	                ), 
 	                toggleCustom
@@ -812,7 +835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = "sort-ascending"
-	            }  else if (that.props.sortColumn == col && that.props.sortAscending == false){
+	            }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
 	                columnSort += "sort-descending"
 	            }
 	            var displayName = col;
@@ -825,12 +848,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-	            return (React.DOM.th({onClick: that.sort, 'data-title': col, className: columnSort, key: displayName}, displayName));
+	            return (React.createElement("th", {onClick: that.sort, 'data-title': col, className: columnSort, key: displayName}, displayName));
 	        });
 
 	        return(
-	            React.DOM.thead(null, 
-	                React.DOM.tr(null, 
+	            React.createElement("thead", null, 
+	                React.createElement("tr", null, 
 	                    nodes
 	                )
 	            )
@@ -866,7 +889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 
 	        return(
-	            React.DOM.div(null, this.props.noDataMessage)
+	            React.createElement("div", null, this.props.noDataMessage)
 	        );
 	    }
 	});
@@ -903,15 +926,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (typeof that.props.customFormat !== 'function'){
 	      console.log("Couldn't find valid template.");
-	      return (React.DOM.div({className: this.props.className}));
+	      return (React.createElement("div", {className: this.props.className}));
 	    }
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return that.props.customFormat({data: row, metadataColumns: that.props.metadataColumns, key: index})
+	        return React.createElement(that.props.customFormat, {data: row, metadataColumns: that.props.metadataColumns, key: index})
 	    });
 
 	    return (
-	      React.DOM.div({className: this.props.className}, 
+	      React.createElement("div", {className: this.props.className}, 
 	          nodes
 	      )
 	    );
@@ -951,10 +974,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (typeof that.props.customPager !== 'function'){
 	      console.log("Couldn't find valid template.");
-	      return (React.DOM.div(null));
+	      return (React.createElement("div", null));
 	    }
 
-	    return (that.props.customPager({maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	    return (React.createElement(that.props.customPager, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
 	  }
 	});
 
@@ -982,42 +1005,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	           "data": {
 	           },
-	           "metadataColumns": []
+	           "metadataColumns": [],
+	           "showChildren":false
 	        }
 	    },
 	    toggleChildren: function(){
 	        this.setState({
-	            showChildren: this.state.showChildren == false
+	            showChildren: this.state.showChildren === false
 	        });
-	    },
-	    getInitialState: function(){
-	        return { showChildren: false };
 	    },
 	    render: function(){
 	        var that = this;
 
-	        if(typeof this.props.data === "undefined"){return (React.DOM.tbody(null));}
+	        if(typeof this.props.data === "undefined"){return (React.createElement("tbody", null));}
 	        var arr = [];
-	        var hasChildren = (typeof this.props.data["children"] !== "undefined") && this.props.data["children"].length > 0;
 
-	        arr.push(GridRow({data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
-	          hasChildren: hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: 0}));
-
+	        arr.push(React.createElement(GridRow, {data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
+	          hasChildren: that.props.hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: that.props.uniqueId}));
+	          var children = null;
 	        if(that.state.showChildren){
-	            var children =  hasChildren && this.props.data["children"].map(function(row, index){
+	            children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
-	                  return (React.DOM.tr(null, React.DOM.td({colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      Griddle({results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
+	                  return (React.createElement("tr", null, React.createElement("td", {colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
+	                      React.createElement(Griddle, {results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
 
-	                return GridRow({data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata})
+	                return React.createElement(GridRow, {data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
 	            });
 
-	            
+
 	        }
 
-	        return React.DOM.tbody(null, that.state.showChildren ? arr.concat(children) : arr)
+	        return that.props.hasChildren === false ? arr[0] : React.createElement("tbody", null, that.state.showChildren ? arr.concat(children) : arr)
 	    }
 	});
 
@@ -1057,16 +1077,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function() {
 	        var that = this;
 
-	        var returnValue = null; 
-
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            if (that.props.columnMetadata != null && that.props.columnMetadata.length > 0){
-	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
-	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : meta.customComponent({data: col[1]});
-	              returnValue = (meta == null ? returnValue : React.DOM.td({onClick: that.handleClick, className: meta.cssClassName, key: index}, colData));
+	            var returnValue = null; 
+	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+
+	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
+	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1]});
+	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.handleClick, className: meta.cssClassName, key: index}, colData));
 	            }
 
-	            return returnValue || (React.DOM.td({onClick: that.handleClick, key: index}, col[1]));
+	            return returnValue || (React.createElement("td", {onClick: that.handleClick, key: index}, col[1]));
 	        });
 
 	        //this is kind of hokey - make it better
@@ -1078,7 +1098,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
 	        }
 
-	        return (React.DOM.tr({className: className}, nodes));
+	        return (React.createElement("tr", {className: className}, nodes));
 	    }
 	});
 

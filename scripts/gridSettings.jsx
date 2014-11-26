@@ -25,11 +25,11 @@ var GridSettings = React.createClass({
         };
     },
     setPageSize: function(event){
-        var value = parseInt(event.target.value);
+        var value = parseInt(event.target.value, 10);
         this.props.setPageSize(value);
     },
     handleChange: function(event){
-        if(event.target.checked == true && _.contains(this.props.selectedColumns, event.target.dataset.name) == false){
+        if(event.target.checked === true && _.contains(this.props.selectedColumns, event.target.dataset.name) === false){
             this.props.selectedColumns.push(event.target.dataset.name);
             this.props.setColumns(this.props.selectedColumns);
         } else {
@@ -54,11 +54,11 @@ var GridSettings = React.createClass({
             });
         }
 
-        var toggleCustom = that.props.allowToggleCustom
-                ?   <div className="form-group">
-                        <label for="maxRows">{this.props.enableCustomFormatText}:</label>
-                        <input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} />
-                    </div>
+        var toggleCustom = that.props.allowToggleCustom ?   
+                (<div className="form-group">
+                    <label htmlFor="maxRows">{this.props.enableCustomFormatText}:</label>
+                    <input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} />
+                </div>)
                 : "";
 
         return (<div className="griddle-settings panel">
@@ -66,9 +66,9 @@ var GridSettings = React.createClass({
                 <div className="container-fluid griddle-columns">
                     <div className="row">{nodes}</div>
                 </div>
-                <div class="form-group">
-                    <label for="maxRows">{this.props.maxRowsText}:</label>
-                    <select class="form-control" onChange={this.setPageSize} value={this.props.resultsPerPage}>
+                <div className="form-group">
+                    <label htmlFor="maxRows">{this.props.maxRowsText}:</label>
+                    <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>

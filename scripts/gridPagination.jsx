@@ -16,11 +16,11 @@ var GridPagination = React.createClass({
             "maxPage": 0,
             "nextText": "",
             "previousText": "",
-            "currentPage": 0,
+            "currentPage": 0
         }
     },
     pageChange: function(event){
-        this.props.setPage(parseInt(event.target.value)-1);
+        this.props.setPage(parseInt(event.target.value, 10)-1);
     },
     render: function(){
         var previous = "";
@@ -30,7 +30,7 @@ var GridPagination = React.createClass({
             previous = <span onClick={this.props.previous} className="previous"><i className="glyphicon glyphicon-chevron-left"></i>{this.props.previousText}</span>
         }
 
-        if(this.props.currentPage != (this.props.maxPage -1)){
+        if(this.props.currentPage !== (this.props.maxPage -1)){
             next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="glyphicon glyphicon-chevron-right"></i></span>
         }
 
