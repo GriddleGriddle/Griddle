@@ -169,7 +169,13 @@ var Griddle = React.createClass({
     setPageSize: function(size){
         //make this better.
         this.props.resultsPerPage = size;
-        this.setMaxPage();
+
+        if (this.hasExternalResults()) {
+            // Reload the results by setting the page.
+            this.setPage(0);
+        } else {
+            this.setMaxPage();
+        }
     },
     toggleColumnChooser: function(){
         this.setState({
@@ -184,7 +190,9 @@ var Griddle = React.createClass({
     getMaxPage: function(results, totalResults){
         if (!totalResults) {
             if (this.hasExternalResults()) {
-                totalResults = this.state.totalResults;
+                this.updateStateWithExternalResults(state, function(updatedState) {
+                    that.setState(updatedState);
+                });
             } else {
                 totalResults = (results||this.state.filteredResults||this.state.results).length;
             }

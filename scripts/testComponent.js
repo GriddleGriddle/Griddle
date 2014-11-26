@@ -69,7 +69,7 @@ var TestComponent = React.createClass({
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {
-            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
+            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} showSettings={true} tableClassName="table" />
         } else {
             example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"
             showFilter={true} showSettings={true}

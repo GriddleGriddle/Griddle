@@ -225,7 +225,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    setPageSize: function(size){
 	        //make this better.
 	        this.props.resultsPerPage = size;
-	        this.setMaxPage();
+
+	        if (this.hasExternalResults()) {
+	            // Reload the results by setting the page.
+	            this.setPage(0);
+	        } else {
+	            this.setMaxPage();
+	        }
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
@@ -240,7 +246,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getMaxPage: function(results, totalResults){
 	        if (!totalResults) {
 	            if (this.hasExternalResults()) {
-	                totalResults = this.state.totalResults;
+	                this.updateStateWithExternalResults(state, function(updatedState) {
+	                    that.setState(updatedState);
+	                });
 	            } else {
 	                totalResults = (results||this.state.filteredResults||this.state.results).length;
 	            }
@@ -1049,6 +1057,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
 
 	/*
 	   Griddle - Simple Grid Component for React
