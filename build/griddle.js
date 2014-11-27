@@ -146,7 +146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        // Obtain the state results.
-	           state.filteredResults = _.filter(this.state.results,
+	           state.filteredResults = _.filter(this.props.results,
 	            function(item) {
 	                var arr = _.values(item);
 	                for(var i = 0; i < arr.length; i++){
@@ -228,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var results = this.getCurrentResults();
 
 	        //if we don't have any data don't mess with this
-	        if (results === undefined || this.state.results.length === 0){ return [];}
+	        if (results === undefined || results.length === 0){ return [];}
 
 	        var result = this.state.filteredColumns;
 
@@ -308,7 +308,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            isLoading: false
 	        };
 
-	        state.results = this.props.results;
 	        return state;
 	    },
 	    componentWillMount: function() {
@@ -360,7 +359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    //this is the current results
 	    getCurrentResults: function(){
-	      return this.state.filteredResults || this.state.results;
+	      return this.state.filteredResults || this.props.results;
 	    },
 	    render: function() {
 	        var that = this,

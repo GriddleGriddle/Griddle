@@ -41,7 +41,7 @@ describe('Griddle', function() {
   });
 
   it('gets the right data on load', function() {
-    expect(grid.state.results).toBe(fakeData);
+    expect(grid.props.results).toBe(fakeData);
   });
 
   it('sets the filteredResults when filter is added', function(){
