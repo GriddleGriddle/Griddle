@@ -9,7 +9,9 @@ Please submit issues / pull requests for anything you run into.
 
 ----------
 
-Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [Bootstrap 3](http://getbootstrap.com/) (as well as [React](http://facebook.github.io/react/)). Please check out the [documentation and examples](http://dynamictyped.github.io/Griddle).
+Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [React](http://facebook.github.io/react/). 
+
+Please check out the [documentation and examples](http://dynamictyped.github.io/Griddle).
 
 To use Griddle:
 

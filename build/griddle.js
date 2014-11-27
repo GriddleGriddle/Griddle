@@ -595,7 +595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //at least one item in the group has children.
 	        if (hasChildren) { anyHasChildren = hasChildren; }
 
-	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren})
+	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -1027,7 +1027,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.createElement("tr", null, React.createElement("td", {colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent"}, 
-	                      React.createElement(Griddle, {results: [row], tableClassName: "table", showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
+	                      React.createElement(Griddle, {results: [row], tableClassName: that.props.tableClassName, showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata})
 	                    )));
 	                }
 
