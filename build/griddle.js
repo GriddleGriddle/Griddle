@@ -109,7 +109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "showTableHeading":true,
 	            "showPager":true,
 	            "useExternal": false,
-	            "externalSetPage": null, 
+	            "externalSetPage": null,
 	            "externalChangeSort": null,
 	            "externalSetFilter": null,
 	            "externalSetPageSize":null,
@@ -120,13 +120,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function(filter) {
-	        if(this.props.useExternal) { 
+	        if(this.props.useExternal) {
 	            if(typeof this.props.externalSetFilter === "undefined"){
 	                console.log("Using external data but 'externalSetFilter' function is undefined.");
 	            }
 
-	            this.props.externalSetFilter(filter); 
-	            return; 
+	            this.props.externalSetFilter(filter);
+	            return;
 	        }
 
 	        var that = this,
@@ -165,13 +165,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            updateAfterResultsObtained(state);
 	    },
 	    setPageSize: function(size){
-	        if(this.props.useExternal) { 
+	        if(this.props.useExternal) {
 	            if(typeof this.props.externalSetPageSize === "undefined"){
-	                console.log("Using external data but page size function is undefined.");
+	                console.log("Using external data but setPageSize function is undefined.");
 	            }
 
-	            this.props.externalSetPageSize(size); 
-	            return; 
+	            this.props.externalSetPageSize(size);
+	            return;
 	        }
 
 	        //make this better.
@@ -190,7 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getMaxPage: function(results, totalResults){
 	        if (!totalResults) {
-	                totalResults = (results||this.state.filteredResults||this.state.results).length;
+	                totalResults = (results||this.getCurrentResults()).length;
 	        }
 	        var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
 	        return maxPage;
@@ -203,13 +203,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    setPage: function(number) {
-	        if(this.props.useExternal) { 
+	        if(this.props.useExternal) {
 	            if(typeof this.props.externalSetPage === "undefined"){
 	                console.log("Using external data but 'externalSetPage' function is undefined.");
 	            }
 
-	            this.props.externalSetPage(number); 
-	            return; 
+	            this.props.externalSetPage(number);
+	            return;
 	        }
 
 	       //check page size and move the filteredResults to pageSize * pageNumber
@@ -225,8 +225,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getColumns: function(){
 	        var that = this;
 
+	        var results = this.getCurrentResults();
+
 	        //if we don't have any data don't mess with this
-	        if (this.state.results === undefined || this.state.results.length === 0){ return [];}
+	        if (results === undefined || this.state.results.length === 0){ return [];}
 
 	        var result = this.state.filteredColumns;
 
@@ -238,7 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if(meta.indexOf(this.props.childrenColumnName) < 0){
 	                meta.push(this.props.childrenColumnName);
 	            }
-	            result =  _.keys(_.omit(this.state.results[0], meta));
+	            result =  _.keys(_.omit(results[0], meta));
 	        }
 
 
@@ -267,13 +269,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.state.page > 0) { this.setPage(this.state.page - 1); }
 	    },
 	    changeSort: function(sort){
-	        if(this.props.useExternal) { 
+	        if(this.props.useExternal) {
 	            if(typeof this.props.externalChangeSort === "undefined"){
 	                console.log("Using external data but 'externalChangeSort' function is undefined.");
 	            }
 
-	            this.props.externalChangeSort(sort); 
-	            return; 
+	            this.props.externalChangeSort(sort);
+	            return;
 	        }
 
 	        var that = this,
@@ -356,9 +358,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return transformedData;
 	    },
+	    //this is the current results
+	    getCurrentResults: function(){
+	      return this.state.filteredResults || this.state.results;
+	    },
 	    render: function() {
 	        var that = this,
-	            results = this.state.filteredResults || this.state.results; // Attempt to assign to the filtered results, if we have any.
+	            results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
 
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
@@ -400,11 +406,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keys = _.keys(_.omit(results[0], meta));
 
 	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomFormat ? 
+	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
 	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
-	            pagingContent = this.props.useCustomPager ? 
+	            pagingContent = this.props.useCustomPager ?
 	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
 	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
@@ -425,7 +431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomFormat ?       
+	        var gridBody = this.props.useCustomFormat ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
@@ -434,8 +440,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        resultContent
 	                        ));
 
-	        if (typeof this.state.results === 'undefined' || this.state.results.length === 0) {
-	            var myReturn = null; 
+	        if (typeof results === 'undefined' || results.length === 0) {
+	            var myReturn = null;
 	            if (this.props.customNoData != null) {
 	                myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoData, null)));
 
