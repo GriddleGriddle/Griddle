@@ -30,3 +30,13 @@ To run from source, type the following commands into a terminal:
 3. `webpack` (Learn more about [webpack](http://webpack.github.io))
 4. `grunt`
 5. That's it!
+
+###Changelog:###
+0.1.18: 
+
+1. Fixed a bug where initialSort property wasn't getting used
+2. Added initialSortAscending prop (defaults to true)
+3. Removed references to bootstrap
+4. Fixed an issue with filtering and external results
+5. External Results fixes/enhancements
+6. Metadata enhancements
