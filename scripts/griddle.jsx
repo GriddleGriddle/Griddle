@@ -27,6 +27,7 @@ var Griddle = React.createClass({
             "results": [], // Used if all results are already loaded.
             "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
+            "initialSortAscending": true,
             "gridClassName":"",
             "tableClassName":"",
             "customFormatClassName":"",
@@ -300,7 +301,7 @@ var Griddle = React.createClass({
             filteredColumns: [],
             filter: "",
             sortColumn: this.props.initialSort,
-            sortAscending: true,
+            sortAscending: this.props.initialSortAscending,
             showColumnChooser: false,
             isLoading: false
         };
