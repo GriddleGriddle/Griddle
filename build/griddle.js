@@ -107,15 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "noDataMessage":"There is no data to display.",
 	            "customNoData": null,
 	            "showTableHeading":true,
-	            "showPager":true,
-	            "useExternal": false,
-	            "externalSetPage": null, 
-	            "externalChangeSort": null,
-	            "externalSetFilter": null,
-	            "externalSetPageSize":null,
-	            "externalMaxPages":0,
-	            "externalCurrentPage":0,
-	            "externalResults": []
+	            "showPager":true
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
