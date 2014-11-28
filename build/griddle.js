@@ -120,15 +120,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function(filter) {
-	        if(this.props.useExternal) { 
-	            if(typeof this.props.externalSetFilter === "undefined"){
-	                console.log("Using external data but 'externalSetFilter' function is undefined.");
-	            }
-
-	            this.props.externalSetFilter(filter); 
-	            return; 
-	        }
-
 	        var that = this,
 	        state = {
 	            page: 0,
@@ -165,15 +156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            updateAfterResultsObtained(state);
 	    },
 	    setPageSize: function(size){
-	        if(this.props.useExternal) { 
-	            if(typeof this.props.externalSetPageSize === "undefined"){
-	                console.log("Using external data but page size function is undefined.");
-	            }
-
-	            this.props.externalSetPageSize(size); 
-	            return; 
-	        }
-
 	        //make this better.
 	        this.props.resultsPerPage = size;
 	        this.setMaxPage();
@@ -203,15 +185,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    setPage: function(number) {
-	        if(this.props.useExternal) { 
-	            if(typeof this.props.externalSetPage === "undefined"){
-	                console.log("Using external data but 'externalSetPage' function is undefined.");
-	            }
-
-	            this.props.externalSetPage(number); 
-	            return; 
-	        }
-
 	       //check page size and move the filteredResults to pageSize * pageNumber
 	        if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
 	            var that = this,
@@ -267,15 +240,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.state.page > 0) { this.setPage(this.state.page - 1); }
 	    },
 	    changeSort: function(sort){
-	        if(this.props.useExternal) { 
-	            if(typeof this.props.externalChangeSort === "undefined"){
-	                console.log("Using external data but 'externalChangeSort' function is undefined.");
-	            }
-
-	            this.props.externalChangeSort(sort); 
-	            return; 
-	        }
-
 	        var that = this,
 	            state = {
 	                page:0,

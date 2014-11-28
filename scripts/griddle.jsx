@@ -64,7 +64,7 @@ var Griddle = React.createClass({
     },
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
-        if(this.props.useExternal) { 
+        if(useExternal) { 
             if(typeof this.props.externalSetFilter === "undefined"){
                 console.log("Using external data but 'externalSetFilter' function is undefined.");
             }
@@ -109,7 +109,7 @@ var Griddle = React.createClass({
             updateAfterResultsObtained(state);
     },
     setPageSize: function(size){
-        if(this.props.useExternal) { 
+        if(useExternal) { 
             if(typeof this.props.externalSetPageSize === "undefined"){
                 console.log("Using external data but page size function is undefined.");
             }
@@ -147,7 +147,7 @@ var Griddle = React.createClass({
         }
     },
     setPage: function(number) {
-        if(this.props.useExternal) { 
+        if(useExternal) { 
             if(typeof this.props.externalSetPage === "undefined"){
                 console.log("Using external data but 'externalSetPage' function is undefined.");
             }
@@ -211,7 +211,7 @@ var Griddle = React.createClass({
         if (this.state.page > 0) { this.setPage(this.state.page - 1); }
     },
     changeSort: function(sort){
-        if(this.props.useExternal) { 
+        if(useExternal) { 
             if(typeof this.props.externalChangeSort === "undefined"){
                 console.log("Using external data but 'externalChangeSort' function is undefined.");
             }
