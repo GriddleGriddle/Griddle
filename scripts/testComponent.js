@@ -6,7 +6,72 @@ var BoldFormatter = React.createClass({
     render: function(){
         return <strong>{this.props.data}</strong>
     }
-})
+});
+
+var ExternalFormatter = React.createClass({
+    getDefaultProps: function(){
+        return {
+          "currentPage": 0,
+          "maxPages": 10,
+          "results": [
+            {
+              "id": 0,
+              "name": "Mayer Leonard",
+              "city": "Kapowsin",
+              "state": "Hawaii",
+              "country": "United Kingdom",
+              "company": "Ovolo",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 1,
+              "name": "Koch Becker",
+              "city": "Johnsonburg",
+              "state": "New Jersey",
+              "country": "Madagascar",
+              "company": "Eventage",
+              "favoriteNumber": 2
+            },
+            {
+              "id": 2,
+              "name": "Lowery Hopkins",
+              "city": "Blanco",
+              "state": "Arizona",
+              "country": "Ukraine",
+              "company": "Comtext",
+              "favoriteNumber": 3
+            },
+            {
+              "id": 3,
+              "name": "Walters Mays",
+              "city": "Glendale",
+              "state": "Illinois",
+              "country": "New Zealand",
+              "company": "Corporana",
+              "favoriteNumber": 6
+            }
+          ]
+        }
+    },
+    setPage: function(index){
+      debugger;
+    },
+    changeSort: function(index){
+      debugger;
+    },
+    setFilter: function(filter){
+       debugger;
+    },
+    setPageSize: function(size){
+       debugger;
+    },
+    render: function(){
+      return <Griddle useExternal={true} externalSetPage={this.setPage}
+        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
+        externalSetPageSize={this.setPageSize} externalMaxPage={this.props.maxPages}
+        externalCurrentPage={this.props.currentPage} externalResults={this.props.results} />
+    }
+});
 
 var columnMeta = [
   {
@@ -69,7 +134,7 @@ var TestComponent = React.createClass({
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {
-            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} showSettings={true} tableClassName="table" />
+            example = <ExternalFormatter />
         } else {
             example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"
             showFilter={true} showSettings={true}

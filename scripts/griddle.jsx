@@ -57,7 +57,7 @@ var Griddle = React.createClass({
             "externalChangeSort": null,
             "externalSetFilter": null,
             "externalSetPageSize":null,
-            "externalMaxPages":0,
+            "externalMaxPages":null,
             "externalCurrentPage":null,
             "externalResults": []
         };
@@ -311,6 +311,10 @@ var Griddle = React.createClass({
     },
     //this is the current results
     getCurrentResults: function(){
+      if (this.props.useExternal){
+          return this.props.externalResults;
+      }
+
       return this.state.filteredResults || this.props.results;
     },
     getCurrentPage: function(){
