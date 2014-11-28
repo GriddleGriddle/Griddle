@@ -367,6 +367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    //this is the current results
 	    getCurrentResults: function(){
+	      debugger;
 	      if (this.props.useExternal){
 	          return this.props.externalResults;
 	      }

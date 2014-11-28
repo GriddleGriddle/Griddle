@@ -9,52 +9,23 @@ var BoldFormatter = React.createClass({
 });
 
 var ExternalFormatter = React.createClass({
-    getDefaultProps: function(){
-        return {
+    getInitialState: function(){
+      var initial = { "results": fakeData.slice(0, 5),
           "currentPage": 0,
           "maxPages": 10,
-          "results": [
-            {
-              "id": 0,
-              "name": "Mayer Leonard",
-              "city": "Kapowsin",
-              "state": "Hawaii",
-              "country": "United Kingdom",
-              "company": "Ovolo",
-              "favoriteNumber": 7
-            },
-            {
-              "id": 1,
-              "name": "Koch Becker",
-              "city": "Johnsonburg",
-              "state": "New Jersey",
-              "country": "Madagascar",
-              "company": "Eventage",
-              "favoriteNumber": 2
-            },
-            {
-              "id": 2,
-              "name": "Lowery Hopkins",
-              "city": "Blanco",
-              "state": "Arizona",
-              "country": "Ukraine",
-              "company": "Comtext",
-              "favoriteNumber": 3
-            },
-            {
-              "id": 3,
-              "name": "Walters Mays",
-              "city": "Glendale",
-              "state": "Illinois",
-              "country": "New Zealand",
-              "company": "Corporana",
-              "favoriteNumber": 6
-            }
-          ]
-        }
+          "pageSize": 5
+      };
+
+      return initial;
     },
     setPage: function(index){
       debugger;
+      var number = index === 0 ? 0 : index * 10;
+      this.setState(
+        {
+          "results": fakeData.slice(number, number+5),
+          "currentPage": index
+        });
     },
     changeSort: function(index){
       debugger;
@@ -63,13 +34,12 @@ var ExternalFormatter = React.createClass({
        debugger;
     },
     setPageSize: function(size){
-       debugger;
     },
     render: function(){
       return <Griddle useExternal={true} externalSetPage={this.setPage}
         externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
-        externalSetPageSize={this.setPageSize} externalMaxPage={this.props.maxPages}
-        externalCurrentPage={this.props.currentPage} externalResults={this.props.results} />
+        externalSetPageSize={this.setPageSize} externalMaxPages={this.state.maxPages}
+        externalCurrentPage={this.state.currentPage} externalResults={this.state.results} tableClassName="table" />
     }
 });
 

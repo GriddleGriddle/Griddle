@@ -311,6 +311,7 @@ var Griddle = React.createClass({
     },
     //this is the current results
     getCurrentResults: function(){
+      debugger;
       if (this.props.useExternal){
           return this.props.externalResults;
       }
