@@ -114,7 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalSetFilter": null,
 	            "externalSetPageSize":null,
 	            "externalMaxPages":0,
-	            "externalCurrentPage":0,
+	            "externalCurrentPage":null,
 	            "externalResults": []
 	        };
 	    },
@@ -189,6 +189,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    },
 	    getMaxPage: function(results, totalResults){
+	        if(this.props.useExternal){
+	          return this.props.externalMaxPages
+	        }
+
 	        if (!totalResults) {
 	                totalResults = (results||this.getCurrentResults()).length;
 	        }
@@ -263,10 +267,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    },
 	    nextPage: function() {
-	        if (this.state.page < this.state.maxPage - 1) { this.setPage(this.state.page + 1); }
+	        currentPage = this.getCurrentPage();
+	        if (currentPage < this.state.maxPage - 1) { this.setPage(currentPage + 1); }
 	    },
 	    previousPage: function() {
-	        if (this.state.page > 0) { this.setPage(this.state.page - 1); }
+	      currentPage = this.getCurrentPage();
+	        if (currentPage > 0) { this.setPage(currentPage - 1); }
 	    },
 	    changeSort: function(sort){
 	        if(this.props.useExternal) {
@@ -330,9 +336,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 
-	            if (pageList && (this.props.resultsPerPage * (this.state.page+1) <= this.props.resultsPerPage * this.state.maxPage) && (this.state.page >= 0)) {
+	            var currentPage = this.getCurrentPage();
+
+	            if (pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
 	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-	                var rest = _.rest(data, this.state.page * this.props.resultsPerPage);
+	                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
 	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
 	            }
 	        var meta = [].concat(this.props.metadataColumns);
@@ -360,6 +368,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //this is the current results
 	    getCurrentResults: function(){
 	      return this.state.filteredResults || this.props.results;
+	    },
+	    getCurrentPage: function(){
+	      return this.props.externalCurrentPage||this.state.page;
 	    },
 	    render: function() {
 	        var that = this,
@@ -410,8 +421,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
 	            pagingContent = this.props.useCustomPager ?
-	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
-	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.state.page, maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
 	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
