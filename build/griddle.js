@@ -81,6 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "columnMetadata": [],
 	            "resultsPerPage":5,
 	            "results": [], // Used if all results are already loaded.
+	            "getExternalResults": null, // Used if obtaining results from an API, etc.
 	            "initialSort": "",
 	            "initialSortAscending": true,
 	            "gridClassName":"",
@@ -129,6 +130,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        // Obtain the state results.
+	        if (this.hasExternalResults()) {
+	            // Update the state with external results.
+	            this.updateStateWithExternalResults(state, updateAfterResultsObtained);
+	        } else {
 	           state.filteredResults = _.filter(this.state.results,
 	            function(item) {
 	                var arr = _.values(item);
@@ -146,11 +151,79 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // Update the state after obtaining the results.
 	            updateAfterResultsObtained(state);
+	        }
+	    },
+	    getExternalResults: function(state, callback) {
+	        var filter,
+	            sortColumn,
+	            sortAscending,
+	            page;
+
+	        // Fill the search properties.
+	        if (state !== undefined && state.filter !== undefined) {
+	            filter = state.filter;
+	        } else {
+	            filter = this.state.filter;
+	        }
+
+	        if (state !== undefined && state.sortColumn !== undefined) {
+	            sortColumn = state.sortColumn;
+	        } else {
+	            sortColumn = this.state.sortColumn;
+	        }
+
+	        sortColumn = _.isEmpty(sortColumn) ? this.props.initialSort : sortColumn;
+
+	        if (state !== undefined && state.sortAscending !== undefined) {
+	            sortAscending = state.sortAscending;
+	        } else {
+	            sortAscending = this.state.sortAscending;
+	        }
+
+	        if (state !== undefined && state.page !== undefined) {
+	            page = state.page;
+	        } else {
+	            page = this.state.page;
+	        }
+
+	        // Obtain the results
+	        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
+	    },
+	    updateStateWithExternalResults: function(state, callback) {
+	        var that = this;
+
+	        // Update the table to indicate that it's loading.
+	        this.setState({ isLoading: true });
+
+	        // Grab the results.
+	        this.getExternalResults(state, function(externalResults) {
+	            // Fill the state result properties
+	            state.results = externalResults.results;
+	            state.totalResults = externalResults.totalResults;
+	            state.maxPage = that.getMaxPage(externalResults.results, state.totalResults);
+	            state.isLoading = false;
+
+	            // If the current page is larger than the max page, reset the page.
+	            if (state.page >= state.maxPage) {
+	                state.page = state.maxPage - 1;
+	            }
+
+	            callback(state);
+	        });
+	    },
+	    hasExternalResults: function() {
+	        return typeof(this.props.getExternalResults) === 'function';
 	    },
 	    setPageSize: function(size){
 	        //make this better.
 	        this.props.resultsPerPage = size;
-	        this.setMaxPage();
+
+	        if (this.hasExternalResults()) {
+	            // Reload the results by setting the page.
+	            this.setPage(0);
+	        } else {
+	            this.setMaxPage();
+	        }
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
@@ -164,7 +237,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getMaxPage: function(results, totalResults){
 	        if (!totalResults) {
+	            if (this.hasExternalResults()) {
+	                totalResults = this.state.totalResults;
+	            } else {
 	                totalResults = (results||this.state.filteredResults||this.state.results).length;
+	            }
 	        }
 	        var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
 	        return maxPage;
@@ -184,7 +261,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    page: number
 	                };
 
+	            if (this.hasExternalResults()) {
+	                this.updateStateWithExternalResults(state, function(updatedState) {
+	                    that.setState(updatedState);
+	                });
+	            } else {
 	                that.setState(state);
+	            }
 	        }
 	    },
 	    getColumns: function(){
@@ -244,10 +327,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            state.sortAscending = !this.state.sortAscending;
 	        }
 
-	        this.setState(state);
+	        if (this.hasExternalResults()) {
+	            this.updateStateWithExternalResults(state, function(updatedState) {
+	                that.setState(updatedState);
+	            });
+	        } else {
+	            this.setState(state);
+	        }
 	    },
 	    componentWillReceiveProps: function(nextProps) {
-	        this.setMaxPage(nextProps.results);
+	        if (this.hasExternalResults()) {
+	            // TODO: Confirm
+	            var state = this.state,
+	                that = this;
+
+	            // Update the state with external results.
+	            state = this.updateStateWithExternalResults(state, function(updatedState) {
+	                that.setState(updatedState);
+	            });
+	        } else {
+	            this.setMaxPage(nextProps.results);
+	        }
 	    },
 	    getInitialState: function() {
 	        var state =  {
@@ -262,18 +362,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	            isLoading: false
 	        };
 
-	        state.results = this.props.results;
+	        // If we need to get external results, grab the results.
+	        if (!this.hasExternalResults()) {
+	            state.results = this.props.results;
+	        } else {
+	            state.isLoading = true; // Initialize to 'loading'
+	        }
+
+
 	        return state;
 	    },
 	    componentWillMount: function() {
-	        this.setMaxPage();
+	        if (!this.hasExternalResults()) {
+	            this.setMaxPage();
+	        }
 	    },
 	    componentDidMount: function() {
 	        var state = this.state;
 	        var that = this;
+	        if (this.hasExternalResults()) {
+	            // Update the state with external results when mounting
+	            state = this.updateStateWithExternalResults(state, function(updatedState) {
+	                that.setState(updatedState);
+	                that.setMaxPage();
+	            });
+	        }
 	    },
+
 	    getDataForRender: function(data, cols, pageList){
 	        var that = this;
+	        if (!this.hasExternalResults()) {
 	            //get the correct page size
 	            if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
 	                data = _.sortBy(data, function(item){
@@ -290,6 +408,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                var rest = _.rest(data, this.state.page * this.props.resultsPerPage);
 	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
 	            }
+	        } else {
+	            // Don't sort or page data if loaded externally.
+	        }
+
 	        var meta = [].concat(this.props.metadataColumns);
 	        if (meta.indexOf(this.props.childrenColumnName) < 0){
 	            meta.push(this.props.childrenColumnName);
