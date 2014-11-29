@@ -214,7 +214,7 @@ var Griddle = React.createClass({
     },
     nextPage: function() {
         currentPage = this.getCurrentPage();
-        if (currentPage < this.state.maxPage - 1) { this.setPage(currentPage + 1); }
+        if (currentPage < this.getCurrentMaxPage() - 1) { this.setPage(currentPage + 1); }
     },
     previousPage: function() {
       currentPage = this.getCurrentPage();
@@ -329,6 +329,9 @@ var Griddle = React.createClass({
     getCurrentSortAscending: function(){
         return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
     },
+    getCurrentMaxPage: function(){
+        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+    },
     render: function() {
         var that = this,
             results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -378,8 +381,8 @@ var Griddle = React.createClass({
                 : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
 
             pagingContent = this.props.useCustomPager ?
-                (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
-                : (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.state.maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
+                (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
+                : (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
         } else {
             // Otherwise, display the loading content.
             resultContent = (<div className="loading img-responsive center-block"></div>);

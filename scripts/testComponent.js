@@ -10,7 +10,11 @@ var BoldFormatter = React.createClass({
 
 var externalData = fakeData.slice(0, 53); 
 
+//This whole thing is throw-away code.
+//It's basically to show that you can wrap up griddle
+//and give external data to it from another source (api / localstorage / etc)
 var ExternalFormatter = React.createClass({
+
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,
@@ -18,7 +22,7 @@ var ExternalFormatter = React.createClass({
           "pageSize": 6,
           "externalSortColumn":null,
           "externalSortAscending":true,
-          "pretendServerData": externalData,
+          "pretendServerData": externalData
       };
 
       return initial;
@@ -38,36 +42,46 @@ var ExternalFormatter = React.createClass({
           "currentPage": index
         });
     },
-    changeSort: function(sort, sortAscending){
-      //this should change the sort for the given column
-      data = _.sortBy(this.state.pretendServerData, function(item){
+    sortData: function(sort, sortAscending, data){
+      //throw away method to do the sorting so that other functions can access
+      //this should all happen on the server so please don't base anything off this code
+      //it's purely to show that you can wrap Griddle and control what page it shows as and all that
+      sortedData = _.sortBy(data, function(item){
         return item[sort];
       });
 
       if(sortAscending === false){
-        data.reverse();
+        sortedData.reverse();
       }
 
-      this.setState({
+      return {
         "currentPage": 0,
         "externalSortColumn": sort,
         "externalSortAscending": sortAscending,
-        "pretendServerData": data,
-        "results": data.slice(0,this.state.pageSize)
-      });
+        "pretendServerData": sortedData,
+        "results": sortedData.slice(0,this.state.pageSize)
+      };
+    },
+    changeSort: function(sort, sortAscending){
+      //this should change the sort for the given column
+      this.setState(this.sortData(sort, sortAscending, this.state.pretendServerData));
     },
     setFilter: function(filter){
+        /*
+          like everything else -- this is pretend code used to simulate something that we would do on the 
+          server-side (aka we would generally post the filter as well as other information used to populate
+          the grid) and send back to the view (which would handle passing the data back to Griddle)
+        */ 
+
+        var sortedData = this.sortData(this.state.externalSortColumn, this.state.externalSortAscending, externalData);
+
         if(filter === ""){
-            this.setState({
-                pretendServerData: externalData,
-                maxPages: Math.round(externalData > this.state.pageSize ? externalData/this.state.pageSize : 1),
-                "results": externalData.slice(0,this.state.pageSize)
-            });
+            this.setState(_.extend(sortedData, {maxPages: Math.round(sortedData.pretendServerData.length > this.state.pageSize ? sortedData.pretendServerData.length/this.state.pageSize : 1)}));
 
             return;
         }
 
-        var filteredData = _.filter(this.state.pretendServerData,
+        var filteredData = _.filter(sortedData.pretendServerData,
             function(item) {
                 var arr = _.values(item);
                 for(var i = 0; i < arr.length; i++){
@@ -81,7 +95,7 @@ var ExternalFormatter = React.createClass({
 
         this.setState({
             pretendServerData: filteredData,
-            maxPages: Math.round(filteredData > this.state.pageSize ? filteredData/this.state.pageSize : 1),
+            maxPages: Math.round(filteredData.length > this.state.pageSize ? filteredData.length/this.state.pageSize : 1),
             "results": filteredData.slice(0,this.state.pageSize)
         });
     },

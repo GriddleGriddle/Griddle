@@ -270,7 +270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    nextPage: function() {
 	        currentPage = this.getCurrentPage();
-	        if (currentPage < this.state.maxPage - 1) { this.setPage(currentPage + 1); }
+	        if (currentPage < this.getCurrentMaxPage() - 1) { this.setPage(currentPage + 1); }
 	    },
 	    previousPage: function() {
 	      currentPage = this.getCurrentPage();
@@ -385,6 +385,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getCurrentSortAscending: function(){
 	        return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
 	    },
+	    getCurrentMaxPage: function(){
+	        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+	    },
 	    render: function() {
 	        var that = this,
 	            results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -434,8 +437,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
 	            pagingContent = this.props.useCustomPager ?
-	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
-	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.state.maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
+	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
 	        } else {
 	            // Otherwise, display the loading content.
 	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
