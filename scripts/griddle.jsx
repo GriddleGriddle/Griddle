@@ -59,6 +59,8 @@ var Griddle = React.createClass({
             "externalSetPageSize":null,
             "externalMaxPages":null,
             "externalCurrentPage":null,
+            "externalSortColumn": null,
+            "externalSortAscending": true,
             "externalResults": []
         };
     },
@@ -224,7 +226,8 @@ var Griddle = React.createClass({
                 console.log("Using external data but 'externalChangeSort' function is undefined.");
             }
 
-            this.props.externalChangeSort(sort);
+            this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
+            
             return;
         }
 
@@ -320,6 +323,12 @@ var Griddle = React.createClass({
     getCurrentPage: function(){
       return this.props.externalCurrentPage||this.state.page;
     },
+    getCurrentSort: function(){
+        return this.props.useExternal ? this.props.externalSortColumn : this.state.sortColumn;
+    },
+    getCurrentSortAscending: function(){
+        return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
+    },
     render: function() {
         var that = this,
             results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -393,7 +402,7 @@ var Griddle = React.createClass({
             <div>{resultContent}</div>
             :       (<div className="grid-body">
                         {this.props.showTableHeading ? <table className={headerTableClassName}>
-                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.state.sortColumn} sortAscending={this.state.sortAscending} columnMetadata={this.props.columnMetadata}/>
+                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
                         </table> : ""}
                         {resultContent}
                         </div>);

@@ -8,30 +8,82 @@ var BoldFormatter = React.createClass({
     }
 });
 
+var externalData = fakeData.slice(0, 53); 
+
 var ExternalFormatter = React.createClass({
     getInitialState: function(){
-      var initial = { "results": fakeData.slice(0, 5),
+      var initial = { "results": [],
           "currentPage": 0,
-          "maxPages": 10,
-          "pageSize": 5
+          "maxPages": 0,
+          "pageSize": 6,
+          "externalSortColumn":null,
+          "externalSortAscending":true,
+          "pretendServerData": externalData,
       };
 
       return initial;
     },
+    componentWillMount: function(){
+        this.setState({
+            maxPages: Math.round(this.state.pretendServerData.length/this.state.pageSize),
+            "results": this.state.pretendServerData.slice(0,this.state.pageSize)
+        })
+    },
     setPage: function(index){
-      debugger;
-      var number = index === 0 ? 0 : index * 10;
+      //This should interact with the data source to get the page at the given index
+      var number = index === 0 ? 0 : index * this.state.pageSize;
       this.setState(
         {
-          "results": fakeData.slice(number, number+5),
+          "results": this.state.pretendServerData.slice(number, number+5>this.state.pretendServerData.length ? this.state.pretendServerData.length : number+this.state.pageSize),
           "currentPage": index
         });
     },
-    changeSort: function(index){
-      debugger;
+    changeSort: function(sort, sortAscending){
+      //this should change the sort for the given column
+      data = _.sortBy(this.state.pretendServerData, function(item){
+        return item[sort];
+      });
+
+      if(sortAscending === false){
+        data.reverse();
+      }
+
+      this.setState({
+        "currentPage": 0,
+        "externalSortColumn": sort,
+        "externalSortAscending": sortAscending,
+        "pretendServerData": data,
+        "results": data.slice(0,this.state.pageSize)
+      });
     },
     setFilter: function(filter){
-       debugger;
+        if(filter === ""){
+            this.setState({
+                pretendServerData: externalData,
+                maxPages: Math.round(externalData > this.state.pageSize ? externalData/this.state.pageSize : 1),
+                "results": externalData.slice(0,this.state.pageSize)
+            });
+
+            return;
+        }
+
+        var filteredData = _.filter(this.state.pretendServerData,
+            function(item) {
+                var arr = _.values(item);
+                for(var i = 0; i < arr.length; i++){
+                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+                    return true;
+                   }
+                }
+
+                return false;
+            });
+
+        this.setState({
+            pretendServerData: filteredData,
+            maxPages: Math.round(filteredData > this.state.pageSize ? filteredData/this.state.pageSize : 1),
+            "results": filteredData.slice(0,this.state.pageSize)
+        });
     },
     setPageSize: function(size){
     },
@@ -39,7 +91,8 @@ var ExternalFormatter = React.createClass({
       return <Griddle useExternal={true} externalSetPage={this.setPage}
         externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
         externalSetPageSize={this.setPageSize} externalMaxPages={this.state.maxPages}
-        externalCurrentPage={this.state.currentPage} externalResults={this.state.results} tableClassName="table" />
+        externalCurrentPage={this.state.currentPage} externalResults={this.state.results} tableClassName="table"
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} showFilter={true} />
     }
 });
 
