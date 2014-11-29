@@ -338,7 +338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var currentPage = this.getCurrentPage();
 
-	            if (pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
+	            if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
 	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
 	                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
 	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
@@ -367,7 +367,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    //this is the current results
 	    getCurrentResults: function(){
-	      debugger;
 	      if (this.props.useExternal){
 	          return this.props.externalResults;
 	      }
