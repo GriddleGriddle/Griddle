@@ -388,7 +388,6 @@ var Griddle = React.createClass({
             resultContent = (<div className="loading img-responsive center-block"></div>);
         }
 
-debugger;
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
