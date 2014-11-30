@@ -176,6 +176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
+	debugger;
 	        //make this better.
 	        this.props.resultsPerPage = size;
 	        this.setMaxPage();
@@ -444,6 +445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
 	        }
 
+	debugger;
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 

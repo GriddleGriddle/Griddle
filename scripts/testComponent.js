@@ -19,7 +19,7 @@ var ExternalFormatter = React.createClass({
       var initial = { "results": [],
           "currentPage": 0,
           "maxPages": 0,
-          "pageSize": 6,
+          "externalResultsPerPage": 5,
           "externalSortColumn":null,
           "externalSortAscending":true,
           "pretendServerData": externalData
@@ -29,16 +29,16 @@ var ExternalFormatter = React.createClass({
     },
     componentWillMount: function(){
         this.setState({
-            maxPages: Math.round(this.state.pretendServerData.length/this.state.pageSize),
-            "results": this.state.pretendServerData.slice(0,this.state.pageSize)
+            maxPages: Math.round(this.state.pretendServerData.length/this.state.externalResultsPerPage),
+            "results": this.state.pretendServerData.slice(0,this.state.externalResultsPerPage)
         })
     },
     setPage: function(index){
       //This should interact with the data source to get the page at the given index
-      var number = index === 0 ? 0 : index * this.state.pageSize;
+      var number = index === 0 ? 0 : index * this.state.externalResultsPerPage;
       this.setState(
         {
-          "results": this.state.pretendServerData.slice(number, number+5>this.state.pretendServerData.length ? this.state.pretendServerData.length : number+this.state.pageSize),
+          "results": this.state.pretendServerData.slice(number, number+5>this.state.pretendServerData.length ? this.state.pretendServerData.length : number+this.state.externalResultsPerPage),
           "currentPage": index
         });
     },
@@ -53,13 +53,12 @@ var ExternalFormatter = React.createClass({
       if(sortAscending === false){
         sortedData.reverse();
       }
-
       return {
         "currentPage": 0,
         "externalSortColumn": sort,
         "externalSortAscending": sortAscending,
         "pretendServerData": sortedData,
-        "results": sortedData.slice(0,this.state.pageSize)
+        "results": sortedData.slice(0,this.state.externalResultsPerPage)
       };
     },
     changeSort: function(sort, sortAscending){
@@ -76,7 +75,7 @@ var ExternalFormatter = React.createClass({
         var sortedData = this.sortData(this.state.externalSortColumn, this.state.externalSortAscending, externalData);
 
         if(filter === ""){
-            this.setState(_.extend(sortedData, {maxPages: Math.round(sortedData.pretendServerData.length > this.state.pageSize ? sortedData.pretendServerData.length/this.state.pageSize : 1)}));
+            this.setState(_.extend(sortedData, {maxPages: Math.round(sortedData.pretendServerData.length > this.state.externalResultsPerPage ? sortedData.pretendServerData.length/this.state.externalResultsPerPage : 1)}));
 
             return;
         }
@@ -95,18 +94,24 @@ var ExternalFormatter = React.createClass({
 
         this.setState({
             pretendServerData: filteredData,
-            maxPages: Math.round(filteredData.length > this.state.pageSize ? filteredData.length/this.state.pageSize : 1),
-            "results": filteredData.slice(0,this.state.pageSize)
+            maxPages: Math.round(filteredData.length > this.state.externalResultsPerPage ? filteredData.length/this.state.externalResultsPerPage : 1),
+            "results": filteredData.slice(0,this.state.externalResultsPerPage)
         });
     },
     setPageSize: function(size){
+        this.setState({
+            currentPage: 0,
+            externalResultsPerPage: size,
+            maxPages: Math.round(this.state.pretendServerData.length > size ? this.state.pretendServerData.length/size : 1),
+            results: this.state.pretendServerData.slice(0,size)
+        });
     },
     render: function(){
       return <Griddle useExternal={true} externalSetPage={this.setPage}
         externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
         externalSetPageSize={this.setPageSize} externalMaxPages={this.state.maxPages}
-        externalCurrentPage={this.state.currentPage} externalResults={this.state.results} tableClassName="table"
-        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} showFilter={true} />
+        externalCurrentPage={this.state.currentPage} externalResults={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} showFilter={true} showSettings={true} />
     }
 });
 
