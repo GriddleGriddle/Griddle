@@ -117,7 +117,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalCurrentPage":null,
 	            "externalSortColumn": null,
 	            "externalSortAscending": true,
-	            "externalResults": []
+	            "externalResults": [],
+	            "infiniteScroll": null,
+	            "bodyHeight": "initial"
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -283,7 +285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
-	            
+
 	            return;
 	        }
 
@@ -388,6 +390,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getCurrentMaxPage: function(){
 	        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
 	    },
+	    gridScroll: function(e){
+	      // TODO: Compute to see if we need to load more results.
+	    },
 	    render: function() {
 	        var that = this,
 	            results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -456,10 +461,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
+	        // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
+	        var gridStyle = this.props.infiniteScroll ? {
+	                          "overflow-y": "scroll",
+	                          "height": this.props.bodyHeight
+	                        } : null;
 
 	        var gridBody = this.props.useCustomFormat ?
-	            React.createElement("div", null, resultContent)
-	            :       (React.createElement("div", {className: "grid-body"}, 
+	            React.createElement("div", {onScroll: this.gridScroll, style: gridStyle}, resultContent)
+	            :       (React.createElement("div", {onScroll: this.gridScroll, className: "grid-body", style: gridStyle}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
 	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
 	                        ) : "", 

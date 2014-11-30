@@ -8,7 +8,7 @@ var BoldFormatter = React.createClass({
     }
 });
 
-var externalData = fakeData.slice(0, 53); 
+var externalData = fakeData.slice(0, 53);
 
 //This whole thing is throw-away code.
 //It's basically to show that you can wrap up griddle
@@ -68,10 +68,10 @@ var ExternalFormatter = React.createClass({
     },
     setFilter: function(filter){
         /*
-          like everything else -- this is pretend code used to simulate something that we would do on the 
+          like everything else -- this is pretend code used to simulate something that we would do on the
           server-side (aka we would generally post the filter as well as other information used to populate
           the grid) and send back to the view (which would handle passing the data back to Griddle)
-        */ 
+        */
 
         var sortedData = this.sortData(this.state.externalSortColumn, this.state.externalSortAscending, externalData);
 
@@ -167,7 +167,7 @@ var TestComponent = React.createClass({
         var example = ""
 
         if (this.props.simple){
-            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} infiniteScroll={true} bodyHeight="100px" tableClassName="table"/>
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {
