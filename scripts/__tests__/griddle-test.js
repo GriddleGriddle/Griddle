@@ -31,13 +31,13 @@ describe('Griddle', function() {
       }
     ];
 
-    grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
+    grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
   });
 
 
   it('gets added to the dom', function(){
-    expect(TestUtils.isDOMComponent(grid));
-    expect(TestUtils.isElementOfType(grid), Griddle);
+    var griddle = TestUtils.findRenderedDOMComponentWithClass(grid, 'test');
+    expect(TestUtils.isDOMComponent(griddle)).toBe(true);
   });
 
   it('gets the right data on load', function() {
