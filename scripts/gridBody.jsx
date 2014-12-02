@@ -16,7 +16,8 @@ var GridBody = React.createClass({
     return{
       "data": [],
       "metadataColumns": [],
-      "className": ""
+      "className": "",
+      "rowHeight": null
     }
   },
   render: function() {
@@ -30,7 +31,9 @@ var GridBody = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        debugger;
+
+        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} rowHeight={that.props.rowHeight} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this

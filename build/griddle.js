@@ -119,7 +119,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalSortAscending": true,
 	            "externalResults": [],
 	            "infiniteScroll": null,
-	            "bodyHeight": "initial"
+	            "bodyHeight": null,
+	            "rowHeight": null
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -439,7 +440,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, rowHeight: this.props.rowHeight}));
 
 	            pagingContent = this.props.useCustomPager ?
 	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
@@ -546,7 +547,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return{
 	      "data": [],
 	      "metadataColumns": [],
-	      "className": ""
+	      "className": "",
+	      "rowHeight": null
 	    }
 	  },
 	  render: function() {
@@ -560,7 +562,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //at least one item in the group has children.
 	        if (hasChildren) { anyHasChildren = hasChildren; }
 
-	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
+	        debugger;
+
+	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, rowHeight: that.props.rowHeight, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -985,7 +989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(typeof this.props.data === "undefined"){return (React.createElement("tbody", null));}
 	        var arr = [];
 
-	        arr.push(React.createElement(GridRow, {data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
+	        arr.push(React.createElement(GridRow, {data: this.props.data, rowHeight: this.props.rowHeight, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
 	          hasChildren: that.props.hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: that.props.uniqueId}));
 	          var children = null;
 	        if(that.state.showChildren){
@@ -996,7 +1000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    )));
 	                }
 
-	                return React.createElement(GridRow, {data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
+	                return React.createElement(GridRow, {data: row, style: rowStyle, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
 	            });
 
 
@@ -1033,17 +1037,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "data": {},
 	        "metadataColumns": [],
 	        "hasChildren": false,
-	        "columnMetadata": null
+	        "columnMetadata": null,
+	        "rowHeight": null
 	      }
 	    },
 	    handleClick: function(){
-	      this.props.toggleChildren(); 
+	      this.props.toggleChildren();
 	    },
 	    render: function() {
 	        var that = this;
 
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            var returnValue = null; 
+	            var returnValue = null;
 	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
 	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
@@ -1063,7 +1068,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
 	        }
 
-	        return (React.createElement("tr", {className: className}, nodes));
+	        // If infinite scrolling is enabled, the height of items must be specified.
+	        var rowStyle = this.props.rowHeight ? {
+	                        "height" : this.props.rowHeight
+	                      } : null;
+
+	        return (React.createElement("tr", {className: className, style: rowStyle}, nodes));
 	    }
 	});
 

@@ -18,17 +18,18 @@ var GridRow = React.createClass({
         "data": {},
         "metadataColumns": [],
         "hasChildren": false,
-        "columnMetadata": null
+        "columnMetadata": null,
+        "rowHeight": null
       }
     },
     handleClick: function(){
-      this.props.toggleChildren(); 
+      this.props.toggleChildren();
     },
     render: function() {
         var that = this;
 
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            var returnValue = null; 
+            var returnValue = null;
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
@@ -48,7 +49,12 @@ var GridRow = React.createClass({
             className = that.props.showChildren ? "parent-row expanded" : "parent-row";
         }
 
-        return (<tr className={className}>{nodes}</tr>);
+        // If infinite scrolling is enabled, the height of items must be specified.
+        var rowStyle = this.props.rowHeight ? {
+                        "height" : this.props.rowHeight
+                      } : null;
+
+        return (<tr className={className} style={rowStyle}>{nodes}</tr>);
     }
 });
 

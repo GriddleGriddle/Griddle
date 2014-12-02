@@ -63,7 +63,8 @@ var Griddle = React.createClass({
             "externalSortAscending": true,
             "externalResults": [],
             "infiniteScroll": null,
-            "bodyHeight": "initial"
+            "bodyHeight": null,
+            "rowHeight": null
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -383,7 +384,7 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>);
+                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} rowHeight={this.props.rowHeight}/>);
 
             pagingContent = this.props.useCustomPager ?
                 (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
