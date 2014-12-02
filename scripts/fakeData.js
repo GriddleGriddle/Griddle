@@ -90,7 +90,7 @@ var propertiesItem = [
             "description": "The total number of items"
           }
         ]
-      }],
+      }]
 
   },
   {
@@ -2780,63 +2780,21 @@ var fakeData =  [
   }];
 
   var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+    var initialIndex = page * pageSize;
+    var endIndex = initialIndex + pageSize;
+
     setTimeout(function() {
+      var results = [], 
+          totalResults = 0;
+
+      if (filterString !== 'nothing') {
+        results = fakeData.slice(initialIndex, endIndex);
+        totalResults = fakeData.length;
+      }
+
       callback({
-        results : [{
-          "id": 64,
-          "name": "Murphy Santos",
-          "city": "Waiohinu",
-          "state": "Alaska",
-          "country": "Haiti",
-          "company": "Isodrive",
-          "favoriteNumber": 0
-        },
-        {
-          "id": 65,
-          "name": "Walls Cherry",
-          "city": "Avalon",
-          "state": "North Dakota",
-          "country": "Mozambique",
-          "company": "Bolax",
-          "favoriteNumber": 10
-        },
-        {
-          "id": 66,
-          "name": "Carney Olson",
-          "city": "Nanafalia",
-          "state": "Arkansas",
-          "country": "Pakistan",
-          "company": "Unq",
-          "favoriteNumber": 10
-        },
-        {
-          "id": 67,
-          "name": "Jennings Bowers",
-          "city": "Kenwood",
-          "state": "New Hampshire",
-          "country": "Cayman Islands",
-          "company": "Deepends",
-          "favoriteNumber": 10
-        },
-        {
-          "id": 68,
-          "name": "Browning Wooten",
-          "city": "Jessie",
-          "state": "Massachusetts",
-          "country": "Guam",
-          "company": "Eventex",
-          "favoriteNumber": 5
-        },
-        {
-          "id": 69,
-          "name": "Preston Britt",
-          "city": "Dennard",
-          "state": "Utah",
-          "country": "Cyprus",
-          "company": "Sureplex",
-          "favoriteNumber": 4
-        }],
-        totalResults: 123
+        results: results,
+        totalResults: totalResults
       });
-    }, 500);
+    }, 1000);
   }

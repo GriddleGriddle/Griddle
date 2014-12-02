@@ -66,10 +66,10 @@ var TestComponent = React.createClass({
 
         if (this.props.simple){
             example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>
-        } else if(this.props.subgrid == true){
+        } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
-        } else if (this.props.external == true) {
-            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} tableClassName="table" />
+        } else if (this.props.external === true) {
+            example = <Griddle getExternalResults={fakeDataMethod} columnMetadata={columnMeta}  showFilter={true} showSettings={true} tableClassName="table" />
         } else {
             example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"
             showFilter={true} showSettings={true}
@@ -113,11 +113,11 @@ var OtherPager = React.createClass({
             "maxPage": 0,
             "nextText": "",
             "previousText": "",
-            "currentPage": 0,
+            "currentPage": 0
         }
     },
     pageChange: function(event){
-        this.props.setPage(parseInt(event.target.getAttribute("data-value")));
+        this.props.setPage(parseInt(event.target.getAttribute("data-value"), 10));
     },
     render: function(){
         var previous = "";
@@ -127,7 +127,7 @@ var OtherPager = React.createClass({
             previous = <span onClick={this.props.previous} className="previous"><i className="glyphicon glyphicon-arrow-left"></i>{this.props.previousText}</span>
         }
 
-        if(this.props.currentPage != (this.props.maxPage -1)){
+        if(this.props.currentPage !== (this.props.maxPage -1)){
             next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="glyphicon glyphicon-arrow-right"></i></span>
         }
 
@@ -163,7 +163,7 @@ React.render(
 );
 
 React.render(
-    <Griddle results={emptyData} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
+    <Griddle results={emptyData} showFilter={true} noDataMessage={"No data could be found."} />, document.getElementById('noDataMessage')
 );
 
 React.render(
