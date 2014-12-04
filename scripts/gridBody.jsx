@@ -17,7 +17,12 @@ var GridBody = React.createClass({
       "data": [],
       "metadataColumns": [],
       "className": "",
-      "rowHeight": null
+      "infiniteScroll": false,
+      "gridScroll": null,
+      "bodyHeight": null,
+      "rowHeight": null,
+      "topSpacerRowHeight": null,
+      "bottomSpacerRowHeight": null
     }
   },
   render: function() {
@@ -31,8 +36,6 @@ var GridBody = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        debugger;
-
         return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} rowHeight={that.props.rowHeight} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
@@ -41,11 +44,17 @@ var GridBody = React.createClass({
       nodes = <tbody>{nodes}</tbody>
     }
 
+    // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
+    var gridStyle = this.props.infiniteScroll ? {
+                  "overflow-y": "scroll",
+                  "height": this.props.bodyHeight
+                } : null;
     return (
-
-            <table className={this.props.className}>
-                {nodes}
-            </table>
+            <div onScroll={this.props.gridScroll} style={gridStyle}>
+              <table className={this.props.className}>
+                  {nodes}
+              </table>
+            </div>
         );
     }
 });

@@ -261,7 +261,9 @@ var Griddle = React.createClass({
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
             showColumnChooser: false,
-            isLoading: false
+            isLoading: false,
+            topSpacerRowHeight: "0px",
+            bottomSpacerRowHeight: "0px"
         };
 
         return state;
@@ -335,8 +337,8 @@ var Griddle = React.createClass({
     getCurrentMaxPage: function(){
         return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
     },
-    gridScroll: function(e){
-      // TODO: Compute to see if we need to load more results.
+    gridScroll: function(){
+      // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
     },
     render: function() {
         var that = this,
@@ -384,11 +386,19 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} rowHeight={this.props.rowHeight}/>);
+                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} gridScroll={this.gridScroll} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight}/>);
 
-            pagingContent = this.props.useCustomPager ?
-                (<CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/>)
-                : (<GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>);
+            // Grab the paging content if it's to be displayed
+            if (this.props.showPager && !this.props.infiniteScroll) {
+              pagingContent = (
+                  <div className="grid-footer clearfix">
+                      {this.props.useCustomPager ?
+                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
+                          <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                      }
+                  </div>
+              );
+            }
         } else {
             // Otherwise, display the loading content.
             resultContent = (<div className="loading img-responsive center-block"></div>);
@@ -406,15 +416,9 @@ var Griddle = React.createClass({
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
-        // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
-        var gridStyle = this.props.infiniteScroll ? {
-                          "overflow-y": "scroll",
-                          "height": this.props.bodyHeight
-                        } : null;
-
         var gridBody = this.props.useCustomFormat ?
-            <div onScroll={this.gridScroll} style={gridStyle}>{resultContent}</div>
-            :       (<div onScroll={this.gridScroll} className="grid-body" style={gridStyle}>
+            <div>{resultContent}</div>
+            :       (<div className="grid-body">
                         {this.props.showTableHeading ? <table className={headerTableClassName}>
                             <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
                         </table> : ""}
@@ -437,16 +441,13 @@ var Griddle = React.createClass({
 
         }
 
-
         return (
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
                     {gridBody}
-                    {that.props.showPager ? <div className="grid-footer clearfix">
-                        {pagingContent}
-                    </div> : ""}
+                    {pagingContent}
                 </div>
             </div>
         );
