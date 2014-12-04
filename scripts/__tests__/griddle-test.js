@@ -9,6 +9,36 @@ describe('Griddle', function() {
   var fakeData;
   var grid;
 
+  var expectFakeData = function(grid){
+      var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid, 'tr')
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      expect(thRow[0].getDOMNode().textContent).toBe("id");
+      expect(thRow[1].getDOMNode().textContent).toBe("name");
+      expect(thRow[2].getDOMNode().textContent).toBe("city");
+      expect(thRow[3].getDOMNode().textContent).toBe("state");
+      expect(thRow[4].getDOMNode().textContent).toBe("country");
+      expect(thRow[5].getDOMNode().textContent).toBe("company");
+      expect(thRow[6].getDOMNode().textContent).toBe("favoriteNumber");
+
+      var firstRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[1], "td");
+      expect(firstRow[0].getDOMNode().textContent).toBe("0");
+      expect(firstRow[1].getDOMNode().textContent).toBe("Mayer Leonard");
+      expect(firstRow[2].getDOMNode().textContent).toBe("Kapowsin");
+      expect(firstRow[3].getDOMNode().textContent).toBe("Hawaii");
+      expect(firstRow[4].getDOMNode().textContent).toBe("United Kingdom");
+      expect(firstRow[5].getDOMNode().textContent).toBe("Ovolo");
+      expect(firstRow[6].getDOMNode().textContent).toBe("7");
+
+      var secondRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[2], "td");
+      expect(secondRow[0].getDOMNode().textContent).toBe("1");
+      expect(secondRow[1].getDOMNode().textContent).toBe("Koch Becker");
+      expect(secondRow[2].getDOMNode().textContent).toBe("Johnsonburg");
+      expect(secondRow[3].getDOMNode().textContent).toBe("New Jersey");
+      expect(secondRow[4].getDOMNode().textContent).toBe("Madagascar");
+      expect(secondRow[5].getDOMNode().textContent).toBe("Eventage");
+      expect(secondRow[6].getDOMNode().textContent).toBe("2");
+  }
+
   beforeEach(function(){
     fakeData = [
       {
@@ -31,6 +61,26 @@ describe('Griddle', function() {
       }
     ];
 
+    fakeData2 = [
+      {
+        "id": 0,
+        "name": "Mayer Leonard",
+        "city": "Kapowsin",
+        "state": "Hawaii",
+        "country": "United Kingdom",
+        "company": "Ovolo",
+        "favoriteNumber": 7
+      },
+      {
+        "id": 1,
+        "name": "Koch Becker",
+        "city": "Johnsonburg",
+        "state": "New Jersey",
+        "country": "Madagascar",
+        "company": "Eventage",
+        "favoriteNumber": 2
+      }
+    ];
     grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
   });
 
@@ -181,37 +231,31 @@ describe('Griddle', function() {
   });
 
   it('uses externalResults when set', function(){
-    grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData} useExternal={true} gridClassName="test" />);
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData} useExternal={true} gridClassName="test" />);
     expect(grid2.props.externalResults).toBe(fakeData);
-    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-    expect(rows.length).toEqual(3);
 
-    //maybe overkill
-    var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
-    expect(thRow[0].getDOMNode().textContent).toBe("id");
-    expect(thRow[1].getDOMNode().textContent).toBe("name");
-    expect(thRow[2].getDOMNode().textContent).toBe("city");
-    expect(thRow[3].getDOMNode().textContent).toBe("state");
-    expect(thRow[4].getDOMNode().textContent).toBe("country");
-    expect(thRow[5].getDOMNode().textContent).toBe("company");
-    expect(thRow[6].getDOMNode().textContent).toBe("favoriteNumber");
+    expectFakeData(grid2);
 
-    var firstRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[1], "td");
-    expect(firstRow[0].getDOMNode().textContent).toBe("0");
-    expect(firstRow[1].getDOMNode().textContent).toBe("Mayer Leonard");
-    expect(firstRow[2].getDOMNode().textContent).toBe("Kapowsin");
-    expect(firstRow[3].getDOMNode().textContent).toBe("Hawaii");
-    expect(firstRow[4].getDOMNode().textContent).toBe("United Kingdom");
-    expect(firstRow[5].getDOMNode().textContent).toBe("Ovolo");
-    expect(firstRow[6].getDOMNode().textContent).toBe("7");
+  });
 
-    var secondRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[2], "td");
-    expect(secondRow[0].getDOMNode().textContent).toBe("1");
-    expect(secondRow[1].getDOMNode().textContent).toBe("Koch Becker");
-    expect(secondRow[2].getDOMNode().textContent).toBe("Johnsonburg");
-    expect(secondRow[3].getDOMNode().textContent).toBe("New Jersey");
-    expect(secondRow[4].getDOMNode().textContent).toBe("Madagascar");
-    expect(secondRow[5].getDOMNode().textContent).toBe("Eventage");
-    expect(secondRow[6].getDOMNode().textContent).toBe("2");
+  it('does not use results when external results is set', function(){
+      //here we're setting both results and external
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData} results={fakeData2} useExternal={true} gridClassName="test" />);
+      expectFakeData(grid2);
+  });
+
+  it('calls external sort function when clicked', function(){
+      var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+          results={fakeData2}
+          useExternal={true}
+          externalChangeSort={mock}
+          gridClassName="test" />);
+
+      var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+
+      TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
+      expect(mock.mock.calls.length).toEqual(1);
   });
 });
