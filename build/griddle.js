@@ -1083,7 +1083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
 	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
-	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1]});
+	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1], rowData: that.props.data});
 	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.handleClick, className: meta.cssClassName, key: index}, colData));
 	            }
 
