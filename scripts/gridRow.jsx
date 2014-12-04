@@ -51,7 +51,7 @@ var GridRow = React.createClass({
 
         // If infinite scrolling is enabled, the height of items must be specified.
         var rowStyle = this.props.rowHeight ? {
-                        "height" : this.props.rowHeight
+                        "height" : this.props.rowHeight + "px"
                       } : null;
 
         return (<tr className={className} style={rowStyle}>{nodes}</tr>);

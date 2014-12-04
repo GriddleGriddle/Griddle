@@ -18,11 +18,25 @@ var GridBody = React.createClass({
       "metadataColumns": [],
       "className": "",
       "infiniteScroll": false,
-      "gridScroll": null,
       "bodyHeight": null,
       "rowHeight": null,
       "infiniteScrollSpacerHeight": null
     }
+  },
+  gridScroll: function(scroll){
+    // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
+
+    // If the scroll height is greater than the current amount of rows displayed, update the page.
+    var scrollTop = this.refs.scrollable.getDOMNode().scrollTop
+    var scrollHeight = this.refs.scrollable.getDOMNode().scrollHeight;
+    var scrollHeightDiff = scrollHeight - scrollTop - this.props.infiniteScrollSpacerHeight;
+
+    if (scrollHeightDiff <= this.props.infiniteScrollSpacerHeight) {
+      alert('yo');
+    }
+
+    debugger;
+
   },
   render: function() {
     var that = this;
@@ -44,10 +58,13 @@ var GridBody = React.createClass({
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
         "overflow-y": "scroll",
-        "height": this.props.bodyHeight
+        "height": this.props.bodyHeight + "px"
+      };
+      var spacerStyle = {
+        "height": this.props.infiniteScrollSpacerHeight + "px"
       };
 
-      infiniteScrollSpacerRow = <tr style={{"height": this.props.infiniteScrollSpacerHeight}}></tr>;
+      infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
     }
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -56,7 +73,7 @@ var GridBody = React.createClass({
     }
 
     return (
-            <div onScroll={this.props.gridScroll} style={gridStyle}>
+            <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
               <table className={this.props.className}>
                   {nodes}
               </table>

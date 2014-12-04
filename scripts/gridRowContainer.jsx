@@ -41,7 +41,7 @@ var GridRowContainer = React.createClass({
                     </td></tr>);
                 }
 
-                return <GridRow data={row} style={rowStyle} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
             });
 
 

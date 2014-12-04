@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "infiniteScroll": null,
 	            "bodyHeight": null,
 	            "rowHeight": null,
-	            "infiniteScrollSpacerHeight": "50px"
+	            "infiniteScrollSpacerHeight": 50
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -392,18 +392,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getCurrentMaxPage: function(){
 	        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
 	    },
-	    gridScroll: function(scroll){
-	      // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
-
-	      // If the scroll height is greater than the current amount of rows displayed, update the page.
-
-	      var state = {
-
-	      };
-
-	      bottomSpacerRowHeight: "0px"
-
-	    },
 	    render: function() {
 	        var that = this,
 	            results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -450,7 +438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, gridScroll: this.gridScroll, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
+	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
@@ -558,11 +546,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "metadataColumns": [],
 	      "className": "",
 	      "infiniteScroll": false,
-	      "gridScroll": null,
 	      "bodyHeight": null,
 	      "rowHeight": null,
 	      "infiniteScrollSpacerHeight": null
 	    }
+	  },
+	  gridScroll: function(scroll){
+	    // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
+
+	    // If the scroll height is greater than the current amount of rows displayed, update the page.
+	    var scrollTop = this.refs.scrollable.getDOMNode().scrollTop
+	    var scrollHeight = this.refs.scrollable.getDOMNode().scrollHeight;
+	    var scrollHeightDiff = scrollHeight - scrollTop - this.props.infiniteScrollSpacerHeight;
+
+	    if (scrollHeightDiff <= this.props.infiniteScrollSpacerHeight) {
+	      alert('yo');
+	    }
+
+	    debugger;
+
 	  },
 	  render: function() {
 	    var that = this;
@@ -584,10 +586,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
 	      gridStyle = {
 	        "overflow-y": "scroll",
-	        "height": this.props.bodyHeight
+	        "height": this.props.bodyHeight + "px"
+	      };
+	      var spacerStyle = {
+	        "height": this.props.infiniteScrollSpacerHeight + "px"
 	      };
 
-	      infiniteScrollSpacerRow = React.createElement("tr", {style: {"height": this.props.infiniteScrollSpacerHeight}});
+	      infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
 	    }
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -596,7 +601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return (
-	            React.createElement("div", {onScroll: this.props.gridScroll, style: gridStyle}, 
+	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
 	              React.createElement("table", {className: this.props.className}, 
 	                  nodes
 	              )
@@ -1024,7 +1029,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    )));
 	                }
 
-	                return React.createElement(GridRow, {data: row, style: rowStyle, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
+	                return React.createElement(GridRow, {data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
 	            });
 
 
@@ -1094,7 +1099,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // If infinite scrolling is enabled, the height of items must be specified.
 	        var rowStyle = this.props.rowHeight ? {
-	                        "height" : this.props.rowHeight
+	                        "height" : this.props.rowHeight + "px"
 	                      } : null;
 
 	        return (React.createElement("tr", {className: className, style: rowStyle}, nodes));
