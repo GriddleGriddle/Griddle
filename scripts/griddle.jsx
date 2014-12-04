@@ -64,7 +64,8 @@ var Griddle = React.createClass({
             "externalResults": [],
             "infiniteScroll": null,
             "bodyHeight": null,
-            "rowHeight": null
+            "rowHeight": null,
+            "infiniteScrollSpacerHeight": "50px"
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -261,9 +262,7 @@ var Griddle = React.createClass({
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
             showColumnChooser: false,
-            isLoading: false,
-            topSpacerRowHeight: "0px",
-            bottomSpacerRowHeight: "0px"
+            isLoading: false
         };
 
         return state;
@@ -337,8 +336,17 @@ var Griddle = React.createClass({
     getCurrentMaxPage: function(){
         return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
     },
-    gridScroll: function(){
+    gridScroll: function(scroll){
       // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
+
+      // If the scroll height is greater than the current amount of rows displayed, update the page.
+
+      var state = {
+
+      };
+
+      bottomSpacerRowHeight: "0px"
+
     },
     render: function() {
         var that = this,
@@ -386,7 +394,7 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} gridScroll={this.gridScroll} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight}/>);
+                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} gridScroll={this.gridScroll} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.props.infiniteScroll) {
