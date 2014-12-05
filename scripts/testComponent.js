@@ -167,7 +167,7 @@ var TestComponent = React.createClass({
         var example = ""
 
         if (this.props.simple){
-            example = <Griddle results={fakeData} columnMetadata={columnMeta} infiniteScroll={true} bodyHeight={100} rowHeight={30} tableClassName="table"/>
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={10} infiniteScroll={true} bodyHeight={100} rowHeight={30} tableClassName="table"/>
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {

@@ -222,7 +222,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
-	       //check page size and move the filteredResults to pageSize * pageNumber
+	        //check page size and move the filteredResults to pageSize * pageNumber
 	        if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
 	            var that = this,
 	                state = {
@@ -346,9 +346,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentPage = this.getCurrentPage();
 
 	            if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
-	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-	                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
-	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
+	                if (this.props.infiniteScroll) {
+	                  // If we're doing infinite scroll, grab all results up to the current page.
+	                  data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
+	                } else {
+	                  //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+	                  var rest = _.rest(data, currentPage * this.props.resultsPerPage);
+	                  data = _.initial(rest, rest.length-this.props.resultsPerPage);
+	                }
 	            }
 	        var meta = [].concat(this.props.metadataColumns);
 	        if (meta.indexOf(this.props.childrenColumnName) < 0){
@@ -438,7 +443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
+	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
@@ -546,25 +551,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "metadataColumns": [],
 	      "className": "",
 	      "infiniteScroll": false,
+	      "nextPage": null,
+	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
-	      "rowHeight": null,
-	      "infiniteScrollSpacerHeight": null
+	      "rowHeight": null
 	    }
 	  },
 	  gridScroll: function(scroll){
-	    // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
-
 	    // If the scroll height is greater than the current amount of rows displayed, update the page.
 	    var scrollTop = this.refs.scrollable.getDOMNode().scrollTop
 	    var scrollHeight = this.refs.scrollable.getDOMNode().scrollHeight;
 	    var scrollHeightDiff = scrollHeight - scrollTop - this.props.infiniteScrollSpacerHeight;
+	    var compareHeight = scrollHeightDiff * 0.8;
 
-	    if (scrollHeightDiff <= this.props.infiniteScrollSpacerHeight) {
-	      alert('yo');
+	    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+	      this.props.nextPage();
 	    }
-
-	    debugger;
-
 	  },
 	  render: function() {
 	    var that = this;
@@ -588,11 +590,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "overflow-y": "scroll",
 	        "height": this.props.bodyHeight + "px"
 	      };
-	      var spacerStyle = {
-	        "height": this.props.infiniteScrollSpacerHeight + "px"
-	      };
 
-	      infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
+	      // Only add the spacer row if the height is defined.
+	      if (this.props.infiniteScrollSpacerHeight) {
+	        var spacerStyle = {
+	          "height": this.props.infiniteScrollSpacerHeight + "px"
+	        };
+
+	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
+	      }
 	    }
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this

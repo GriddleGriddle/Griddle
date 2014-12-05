@@ -166,7 +166,7 @@ var Griddle = React.createClass({
             return;
         }
 
-       //check page size and move the filteredResults to pageSize * pageNumber
+        //check page size and move the filteredResults to pageSize * pageNumber
         if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
             var that = this,
                 state = {
@@ -290,9 +290,14 @@ var Griddle = React.createClass({
             var currentPage = this.getCurrentPage();
 
             if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
-                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
-                data = _.initial(rest, rest.length-this.props.resultsPerPage);
+                if (this.props.infiniteScroll) {
+                  // If we're doing infinite scroll, grab all results up to the current page.
+                  data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
+                } else {
+                  //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+                  var rest = _.rest(data, currentPage * this.props.resultsPerPage);
+                  data = _.initial(rest, rest.length-this.props.resultsPerPage);
+                }
             }
         var meta = [].concat(this.props.metadataColumns);
         if (meta.indexOf(this.props.childrenColumnName) < 0){
@@ -382,7 +387,7 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
+                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.props.infiniteScroll) {

@@ -18,25 +18,22 @@ var GridBody = React.createClass({
       "metadataColumns": [],
       "className": "",
       "infiniteScroll": false,
+      "nextPage": null,
+      "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
-      "rowHeight": null,
-      "infiniteScrollSpacerHeight": null
+      "rowHeight": null
     }
   },
   gridScroll: function(scroll){
-    // Recalculate topSpacerRowHeight + bottomSpacerRowHeight
-
     // If the scroll height is greater than the current amount of rows displayed, update the page.
     var scrollTop = this.refs.scrollable.getDOMNode().scrollTop
     var scrollHeight = this.refs.scrollable.getDOMNode().scrollHeight;
     var scrollHeightDiff = scrollHeight - scrollTop - this.props.infiniteScrollSpacerHeight;
+    var compareHeight = scrollHeightDiff * 0.7;
 
-    if (scrollHeightDiff <= this.props.infiniteScrollSpacerHeight) {
-      alert('yo');
+    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+      this.props.nextPage();
     }
-
-    debugger;
-
   },
   render: function() {
     var that = this;
@@ -60,11 +57,15 @@ var GridBody = React.createClass({
         "overflow-y": "scroll",
         "height": this.props.bodyHeight + "px"
       };
-      var spacerStyle = {
-        "height": this.props.infiniteScrollSpacerHeight + "px"
-      };
 
-      infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
+      // Only add the spacer row if the height is defined.
+      if (this.props.infiniteScrollSpacerHeight) {
+        var spacerStyle = {
+          "height": this.props.infiniteScrollSpacerHeight + "px"
+        };
+
+        infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
+      }
     }
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
