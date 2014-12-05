@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
-	var GridBody = __webpack_require__(3);
+	var GridTable = __webpack_require__(3);
 	var GridFilter = __webpack_require__(4);
 	var GridPagination = __webpack_require__(5);
 	var GridSettings = __webpack_require__(6);
@@ -440,10 +440,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
+	            //construct the table heading component
+	            var tableHeading = (this.props.showTableHeading ?
+	                React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
+	                : "");
+
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
+	                : (React.createElement(GridTable, {tableHeading: tableHeading, columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
@@ -473,12 +478,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
-	        var gridBody = this.props.useCustomFormat ?
+
+	        //todo: refactor this since it's basically the same now with a diff class
+	        var gridTable = this.props.useCustomFormat ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
-	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
-	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
-	                        ) : "", 
 	                        resultContent
 	                        ));
 
@@ -503,7 +507,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                topSection, 
 	                columnSelector, 
 	                React.createElement("div", {className: "grid-container panel"}, 
-	                    gridBody, 
+	                    gridTable, 
 	                    pagingContent
 	                )
 	            )
@@ -544,7 +548,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridRowContainer = __webpack_require__(11);
 	var _ = __webpack_require__(2);
 
-	var GridBody = React.createClass({displayName: 'GridBody',
+	var GridTable = React.createClass({displayName: 'GridTable',
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
@@ -554,7 +558,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "nextPage": null,
 	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
-	      "rowHeight": null
+	      "rowHeight": null,
+	      "tableHeading": ""
 	    }
 	  },
 	  gridScroll: function(scroll){
@@ -570,8 +575,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // Make sure that we load results a little before reaching the bottom.
 	    var compareHeight = scrollHeightDiff * 0.9;
-
-	    debugger;
 
 	    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
 	      this.props.nextPage();
@@ -618,6 +621,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return (
 	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
 	              React.createElement("table", {className: this.props.className}, 
+	                  this.props.tableHeading, 
 	                  nodes
 	              )
 	            )
@@ -625,7 +629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	});
 
-	module.exports = GridBody;
+	module.exports = GridTable;
 
 
 /***/ },

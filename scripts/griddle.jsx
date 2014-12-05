@@ -8,7 +8,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
-var GridBody = require('./gridBody.jsx');
+var GridTable = require('./gridTable.jsx');
 var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
@@ -384,10 +384,15 @@ var Griddle = React.createClass({
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
 
+            //construct the table heading component
+            var tableHeading = (this.props.showTableHeading ?
+                <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
+                : "");
+
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
+                : (<GridTable tableHeading={tableHeading} columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.props.infiniteScroll) {
@@ -417,12 +422,11 @@ var Griddle = React.createClass({
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
 
-        var gridBody = this.props.useCustomFormat ?
+
+        //todo: refactor this since it's basically the same now with a diff class
+        var gridTable = this.props.useCustomFormat ?
             <div>{resultContent}</div>
             :       (<div className="grid-body">
-                        {this.props.showTableHeading ? <table className={headerTableClassName}>
-                            <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
-                        </table> : ""}
                         {resultContent}
                         </div>);
 
@@ -447,7 +451,7 @@ var Griddle = React.createClass({
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
-                    {gridBody}
+                    {gridTable}
                     {pagingContent}
                 </div>
             </div>

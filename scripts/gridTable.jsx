@@ -11,7 +11,7 @@ var React = require('react/addons');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var _ = require('underscore');
 
-var GridBody = React.createClass({
+var GridTable = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
@@ -21,7 +21,8 @@ var GridBody = React.createClass({
       "nextPage": null,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
-      "rowHeight": null
+      "rowHeight": null,
+      "tableHeading": ""
     }
   },
   gridScroll: function(scroll){
@@ -37,8 +38,6 @@ var GridBody = React.createClass({
 
     // Make sure that we load results a little before reaching the bottom.
     var compareHeight = scrollHeightDiff * 0.9;
-
-    debugger;
 
     if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
       this.props.nextPage();
@@ -85,6 +84,7 @@ var GridBody = React.createClass({
     return (
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
               <table className={this.props.className}>
+                  {this.props.tableHeading}
                   {nodes}
               </table>
             </div>
@@ -92,4 +92,4 @@ var GridBody = React.createClass({
     }
 });
 
-module.exports = GridBody;
+module.exports = GridTable;
