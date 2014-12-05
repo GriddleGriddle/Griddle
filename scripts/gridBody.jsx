@@ -26,10 +26,19 @@ var GridBody = React.createClass({
   },
   gridScroll: function(scroll){
     // If the scroll height is greater than the current amount of rows displayed, update the page.
-    var scrollTop = this.refs.scrollable.getDOMNode().scrollTop
-    var scrollHeight = this.refs.scrollable.getDOMNode().scrollHeight;
-    var scrollHeightDiff = scrollHeight - scrollTop - this.props.infiniteScrollSpacerHeight;
-    var compareHeight = scrollHeightDiff * 0.7;
+    var scrollable = this.refs.scrollable.getDOMNode();
+    var scrollTop = scrollable.scrollTop
+    var scrollHeight = scrollable.scrollHeight;
+    var clientHeight = scrollable.clientHeight;
+
+    // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
+    // the spacer's height.
+    var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+
+    // Make sure that we load results a little before reaching the bottom.
+    var compareHeight = scrollHeightDiff * 0.9;
+
+    debugger;
 
     if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
       this.props.nextPage();

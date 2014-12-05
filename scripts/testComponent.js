@@ -167,7 +167,7 @@ var TestComponent = React.createClass({
         var example = ""
 
         if (this.props.simple){
-            example = <Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={10} infiniteScroll={true} bodyHeight={100} rowHeight={30} tableClassName="table"/>
+            example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {
@@ -297,4 +297,7 @@ React.render(
 
 React.render(
     <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} />, document.getElementById('properties-grid')
+);
+React.render(
+    example = <Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={20} infiniteScroll={true} bodyHeight={400} rowHeight={30} tableClassName="table"/>, document.getElementById('infinitescroll')
 );

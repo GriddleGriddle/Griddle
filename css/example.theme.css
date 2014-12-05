@@ -5,8 +5,8 @@ body{
 header{
 	display: block;
 	background-color: #D35627;
-	color: #FFF;	
-	padding: 10px 0px 10px 0px; 
+	color: #FFF;
+	padding: 10px 0px 10px 0px;
 	border-bottom: 5px solid #E76C3C;
 }
 
@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, small {
 	font-family: 'Oxygen', sans-serif;
 }
 
-dd{ 
+dd{
 	color: #555;
 }
 header small{
@@ -22,7 +22,7 @@ header small{
 }
 
 header .btn-group{
-	float:right; 
+	float:right;
 	margin-top:15px;
 }
 
@@ -31,9 +31,9 @@ header .btn-group{
 		padding-bottom: 15px;
 	}
 
-#start { 
+#start {
 	background-color: #FFF;
-	padding: 20px 0px 20px 0px; 
+	padding: 20px 0px 20px 0px;
 	color: #777;
 	border-bottom: 5px solid #BBB;
 }
@@ -41,7 +41,7 @@ header .btn-group{
 #example1 {
 	border-bottom: 5px solid #DDD;
 }
-	#example1 .grid-body{ 
+	#example1 .grid-body{
 		min-height: 270px;
 	}
 
@@ -65,7 +65,7 @@ header .btn-group{
 	border-bottom: 5px solid #BBB;
 }
 
-#example4 .grid-body{ 
+#example4 .grid-body{
 		min-height: 270px;
 	}
 
@@ -83,6 +83,7 @@ header .btn-group{
 }
 
 #properties{
+	background-color: #FFF;
 	border-bottom: 5px solid #DDD;
 }
 
@@ -91,8 +92,8 @@ header .btn-group{
 	}
 
 	#properties dt{
-		float:left; 
-		width: 160px; 
+		float:left;
+		width: 160px;
 	}
 
 	#properties dd{
@@ -107,7 +108,7 @@ header .btn-group{
 		clear: both;
 	}
 
-.griddle-custom{ 
+.griddle-custom{
 	background-color: #FFF;
 	padding: 5px 5px 0px 5px;
 	border-radius: 5px;
@@ -118,7 +119,7 @@ header .btn-group{
 }
 
 #customdata .griddle-custom .grid-footer{
-	background:none; 
+	background:none;
 }
 
 .griddle thead{
@@ -161,16 +162,16 @@ header .btn-group{
 }
 
 .properties-name{
-	width: 300px; 
+	width: 300px;
 	font-weight: bold;
 }
 
-footer{ 
+footer{
 	padding:10px;
-	background-color: #939393;	
+	background-color: #939393;
 }
 
-footer a, footer a:visited{	
+footer a, footer a:visited{
 	color: #555;
 	text-decoration: underline;
 }
