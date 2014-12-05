@@ -244,7 +244,7 @@ describe('Griddle', function() {
       expectFakeData(grid2);
   });
 
-  it('calls external sort function when clicked', function(){
+  it('calls external sort function when clicked and useExternal is true', function(){
       var mock = jest.genMockFunction();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
           results={fakeData2}
@@ -258,4 +258,42 @@ describe('Griddle', function() {
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
       expect(mock.mock.calls.length).toEqual(1);
   });
+
+  it('does not call external sort function when useExternal is false', function(){
+          var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+          results={fakeData2}
+          useExternal={false}
+          externalChangeSort={mock}
+          gridClassName="test" />);
+
+      var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+
+      TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
+      expect(mock.mock.calls.length).toEqual(0);
+  });
+
+  it('calls external filter when filter changed and useExternal is true', function(){
+      var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+        useExternal={true} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
+
+      var input = TestUtils.findRenderedDOMComponentWithTag(grid2, "input");
+      TestUtils.Simulate.change(input, {target: {value: 'Hi'}});
+      expect(mock.mock.calls.length).toEqual(1);
+  });
+
+  it('does not call external filter when filter changed and useExternal is false', function(){
+    var mock = jest.genMockFunction();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={false} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
+
+      var input = TestUtils.findRenderedDOMComponentWithTag(grid2, "input");
+      TestUtils.Simulate.change(input, {target: {value: 'Hi'}});
+      expect(mock.mock.calls.length).toEqual(0);
+  });
+
+
+
 });
