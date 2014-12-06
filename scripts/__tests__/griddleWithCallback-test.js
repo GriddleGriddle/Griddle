@@ -2,7 +2,7 @@
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../griddleWithCallback.jsx');
 
-var React = require('react/addons');
+var React = require('react');
 var Griddle = require('../griddle.jsx');
 var GriddleWithCallback = require('../griddleWithCallback.jsx');
 var TestUtils = React.addons.TestUtils;
