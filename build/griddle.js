@@ -440,11 +440,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
-	            //construct the table heading component
-	            var tableHeading = (this.props.showTableHeading ?
-	                React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
-	                : "");
-
 	            // Grab the current and max page values.
 	            var currentPage = this.getCurrentPage();
 	            var maxPage = this.getCurrentMaxPage();
@@ -455,7 +450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridTable, {tableHeading: tableHeading, columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll:  this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages}));
+	                : (React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
@@ -552,6 +547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(1);
+	var GridTitle = __webpack_require__(7);
 	var GridRowContainer = __webpack_require__(11);
 	var _ = __webpack_require__(2);
 
@@ -571,21 +567,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 	  gridScroll: function(scroll){
-	    // If the scroll height is greater than the current amount of rows displayed, update the page.
-	    var scrollable = this.refs.scrollable.getDOMNode();
-	    var scrollTop = scrollable.scrollTop
-	    var scrollHeight = scrollable.scrollHeight;
-	    var clientHeight = scrollable.clientHeight;
+	    if (this.props.infiniteScroll) {
+	      // If the scroll height is greater than the current amount of rows displayed, update the page.
+	      var scrollable = this.refs.scrollable.getDOMNode();
+	      var scrollTop = scrollable.scrollTop
+	      var scrollHeight = scrollable.scrollHeight;
+	      var clientHeight = scrollable.clientHeight;
 
-	    // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
-	    // the spacer's height.
-	    var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+	      // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
+	      // the spacer's height.
+	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
 
-	    // Make sure that we load results a little before reaching the bottom.
-	    var compareHeight = scrollHeightDiff * 0.8;
+	      // Make sure that we load results a little before reaching the bottom.
+	      var compareHeight = scrollHeightDiff * 0.8;
 
-	    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
-	      this.props.nextPage();
+	      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+	        this.props.nextPage();
+	      }
 	    }
 	  },
 	  render: function() {
@@ -607,6 +605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.props.infiniteScroll) {
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
 	      gridStyle = {
+	        "position": "relative",
 	        "overflow-y": "scroll",
 	        "height": this.props.bodyHeight + "px"
 	      };
@@ -617,12 +616,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          "height": this.props.infiniteScrollSpacerHeight + "px"
 	        };
 
-	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle}, "hihihihihihi");
+	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
 	      }
 	    }
 
-
-	    debugger;
+	    //construct the table heading component
+	    var tableHeading = (this.props.showTableHeading ?
+	        React.createElement(GridTitle, {columns: this.props.columns, changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, columnMetadata: this.props.columnMetadata})
+	        : "");
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren){
@@ -632,7 +633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return (
 	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
 	              React.createElement("table", {className: this.props.className}, 
-	                  this.props.tableHeading, 
+	                  tableHeading, 
 	                  nodes
 	              )
 	            )

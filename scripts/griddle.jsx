@@ -384,11 +384,6 @@ var Griddle = React.createClass({
             // Grab the column keys from the first results
             keys = _.keys(_.omit(results[0], meta));
 
-            //construct the table heading component
-            var tableHeading = (this.props.showTableHeading ?
-                <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
-                : "");
-
             // Grab the current and max page values.
             var currentPage = this.getCurrentPage();
             var maxPage = this.getCurrentMaxPage();
@@ -399,7 +394,7 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridTable tableHeading={tableHeading} columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={ this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
+                : (<GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.props.infiniteScroll) {

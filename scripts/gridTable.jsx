@@ -8,6 +8,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react/addons');
+var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var _ = require('underscore');
 
@@ -27,21 +28,23 @@ var GridTable = React.createClass({
     }
   },
   gridScroll: function(scroll){
-    // If the scroll height is greater than the current amount of rows displayed, update the page.
-    var scrollable = this.refs.scrollable.getDOMNode();
-    var scrollTop = scrollable.scrollTop
-    var scrollHeight = scrollable.scrollHeight;
-    var clientHeight = scrollable.clientHeight;
+    if (this.props.infiniteScroll) {
+      // If the scroll height is greater than the current amount of rows displayed, update the page.
+      var scrollable = this.refs.scrollable.getDOMNode();
+      var scrollTop = scrollable.scrollTop
+      var scrollHeight = scrollable.scrollHeight;
+      var clientHeight = scrollable.clientHeight;
 
-    // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
-    // the spacer's height.
-    var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+      // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
+      // the spacer's height.
+      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
 
-    // Make sure that we load results a little before reaching the bottom.
-    var compareHeight = scrollHeightDiff * 0.8;
+      // Make sure that we load results a little before reaching the bottom.
+      var compareHeight = scrollHeightDiff * 0.8;
 
-    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
-      this.props.nextPage();
+      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+        this.props.nextPage();
+      }
     }
   },
   render: function() {
@@ -63,6 +66,7 @@ var GridTable = React.createClass({
     if (this.props.infiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
+        "position": "relative",
         "overflow-y": "scroll",
         "height": this.props.bodyHeight + "px"
       };
@@ -77,6 +81,11 @@ var GridTable = React.createClass({
       }
     }
 
+    //construct the table heading component
+    var tableHeading = (this.props.showTableHeading ?
+        <GridTitle columns={this.props.columns} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata}/>
+        : "");
+
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
@@ -85,7 +94,7 @@ var GridTable = React.createClass({
     return (
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
               <table className={this.props.className}>
-                  {this.props.tableHeading}
+                  {tableHeading}
                   {nodes}
               </table>
             </div>
