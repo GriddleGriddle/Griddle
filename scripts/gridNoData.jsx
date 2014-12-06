@@ -7,7 +7,7 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require('react/addons');
+var React = require('react');
 
 var GridNoData = React.createClass({
     getDefaultProps: function(){

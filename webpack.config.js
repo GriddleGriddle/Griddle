@@ -16,7 +16,7 @@ module.exports = {
     ]
   },
   externals: {
-    "react/addons": "React",
+    "react": "React",
     "underscore": "_"
   }
 };
