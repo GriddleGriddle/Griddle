@@ -389,18 +389,25 @@ var Griddle = React.createClass({
                 <GridTitle columns={cols} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} columnMetadata={this.props.columnMetadata}/>
                 : "");
 
+            // Grab the current and max page values.
+            var currentPage = this.getCurrentPage();
+            var maxPage = this.getCurrentMaxPage();
+
+            // Determine if we need to enable infinite scrolling on the table.
+            var hasMorePages = (currentPage + 1) < maxPage;
+
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridTable tableHeading={tableHeading} columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}/>);
+                : (<GridTable tableHeading={tableHeading} columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={ this.props.infiniteScroll} nextPage={this.nextPage} bodyHeight={this.props.bodyHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.props.infiniteScroll) {
               pagingContent = (
                   <div className="grid-footer clearfix">
                       {this.props.useCustomPager ?
-                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
-                          <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={this.getCurrentPage()} maxPage={this.getCurrentMaxPage()} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
+                          <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
                       }
                   </div>
               );

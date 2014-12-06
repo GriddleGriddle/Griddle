@@ -19,6 +19,7 @@ var GridTable = React.createClass({
       "className": "",
       "infiniteScroll": false,
       "nextPage": null,
+      "hasMorePages": false,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
       "rowHeight": null,
@@ -37,7 +38,7 @@ var GridTable = React.createClass({
     var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
 
     // Make sure that we load results a little before reaching the bottom.
-    var compareHeight = scrollHeightDiff * 0.9;
+    var compareHeight = scrollHeightDiff * 0.8;
 
     if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
       this.props.nextPage();
@@ -67,7 +68,7 @@ var GridTable = React.createClass({
       };
 
       // Only add the spacer row if the height is defined.
-      if (this.props.infiniteScrollSpacerHeight) {
+      if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
         var spacerStyle = {
           "height": this.props.infiniteScrollSpacerHeight + "px"
         };
@@ -75,6 +76,9 @@ var GridTable = React.createClass({
         infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
       }
     }
+
+
+    debugger;
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){

@@ -445,18 +445,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	                React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
 	                : "");
 
+	            // Grab the current and max page values.
+	            var currentPage = this.getCurrentPage();
+	            var maxPage = this.getCurrentMaxPage();
+
+	            // Determine if we need to enable infinite scrolling on the table.
+	            var hasMorePages = (currentPage + 1) < maxPage;
+
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridTable, {tableHeading: tableHeading, columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight}));
+	                : (React.createElement(GridTable, {tableHeading: tableHeading, columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll:  this.props.infiniteScroll, nextPage: this.nextPage, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
 	              pagingContent = (
 	                  React.createElement("div", {className: "grid-footer clearfix"}, 
 	                      this.props.useCustomPager ?
-	                          React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}) :
-	                          React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
+	                          React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}) :
+	                          React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
 	                      
 	                  )
 	              );
@@ -556,6 +563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "className": "",
 	      "infiniteScroll": false,
 	      "nextPage": null,
+	      "hasMorePages": false,
 	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
 	      "rowHeight": null,
@@ -574,7 +582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
 
 	    // Make sure that we load results a little before reaching the bottom.
-	    var compareHeight = scrollHeightDiff * 0.9;
+	    var compareHeight = scrollHeightDiff * 0.8;
 
 	    if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
 	      this.props.nextPage();
@@ -604,14 +612,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      // Only add the spacer row if the height is defined.
-	      if (this.props.infiniteScrollSpacerHeight) {
+	      if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
 	        var spacerStyle = {
 	          "height": this.props.infiniteScrollSpacerHeight + "px"
 	        };
 
-	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
+	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle}, "hihihihihihi");
 	      }
 	    }
+
+
+	    debugger;
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren){
