@@ -600,7 +600,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, rowHeight: that.props.rowHeight, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
+	    var tableStyle = null;
 	    var gridStyle = null;
+	    var headerStyle = null;
 	    var infiniteScrollSpacerRow = null;
 	    if (this.props.infiniteScroll) {
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
@@ -609,6 +611,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "overflow-y": "scroll",
 	        "height": this.props.bodyHeight + "px"
 	      };
+
+	      /* TODO: This doesn't work so swell at the moment.
+	      // Update the header style so that it's stationary.
+	      headerStyle = {
+	        "position": "fixed",
+	        "top": 0,
+	        "width": "100%"
+	      };
+
+	      tableStyle = {
+	        "padding-top": "50px" // TODO: Moreso testing to see if this works.
+	      };
+	      */
 
 	      // Only add the spacer row if the height is defined.
 	      if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
@@ -622,7 +637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = (this.props.showTableHeading ?
-	        React.createElement(GridTitle, {columns: this.props.columns, changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, columnMetadata: this.props.columnMetadata})
+	        React.createElement(GridTitle, {columns: this.props.columns, changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, columnMetadata: this.props.columnMetadata, headerStyle: headerStyle})
 	        : "");
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -632,7 +647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return (
 	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
-	              React.createElement("table", {className: this.props.className}, 
+	              React.createElement("table", {className: this.props.className, style: tableStyle}, 
 	                  tableHeading, 
 	                  nodes
 	              )
@@ -850,7 +865,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	           "columns":[],
 	           "sortColumn": "",
-	           "sortAscending": true
+	           "sortAscending": true,
+	           "headerStyle": null
 	        }
 	    },
 	    sort: function(event){
@@ -881,7 +897,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        return(
-	            React.createElement("thead", null, 
+	            React.createElement("thead", {style: this.props.headerStyle}, 
 	                React.createElement("tr", null, 
 	                    nodes
 	                )
