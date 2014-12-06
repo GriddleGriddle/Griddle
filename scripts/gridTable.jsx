@@ -77,9 +77,6 @@ var GridTable = React.createClass({
       }
     }
 
-
-    debugger;
-
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
