@@ -57,11 +57,10 @@ var Griddle = React.createClass({
             "externalChangeSort": null,
             "externalSetFilter": null,
             "externalSetPageSize":null,
-            "externalMaxPages":null,
+            "externalMaxPage":null,
             "externalCurrentPage":null,
             "externalSortColumn": null,
-            "externalSortAscending": true,
-            "externalResults": []
+            "externalSortAscending": true
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -136,7 +135,7 @@ var Griddle = React.createClass({
     },
     getMaxPage: function(results, totalResults){
         if(this.props.useExternal){
-          return this.props.externalMaxPages
+          return this.props.externalMaxPage;
         }
 
         if (!totalResults) {
@@ -227,7 +226,7 @@ var Griddle = React.createClass({
             }
 
             this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
-            
+
             return;
         }
 
@@ -314,10 +313,6 @@ var Griddle = React.createClass({
     },
     //this is the current results
     getCurrentResults: function(){
-      if (this.props.useExternal){
-          return this.props.externalResults;
-      }
-
       return this.state.filteredResults || this.props.results;
     },
     getCurrentPage: function(){
@@ -330,7 +325,7 @@ var Griddle = React.createClass({
         return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
     },
     getCurrentMaxPage: function(){
-        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
     },
     render: function() {
         var that = this,

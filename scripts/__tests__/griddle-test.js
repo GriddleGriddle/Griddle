@@ -230,20 +230,6 @@ describe('Griddle', function() {
       expect(grid2.props.results).toBe(fakeData);
   });
 
-  it('uses externalResults when set', function(){
-    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData} useExternal={true} gridClassName="test" />);
-    expect(grid2.props.externalResults).toBe(fakeData);
-
-    expectFakeData(grid2);
-
-  });
-
-  it('does not use results when external results is set', function(){
-      //here we're setting both results and external
-      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData} results={fakeData2} useExternal={true} gridClassName="test" />);
-      expectFakeData(grid2);
-  });
-
   it('calls external sort function when clicked and useExternal is true', function(){
       var mock = jest.genMockFunction();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
@@ -294,6 +280,62 @@ describe('Griddle', function() {
       expect(mock.mock.calls.length).toEqual(0);
   });
 
+  //basically if external is true it should never use filteredResults
+  it('does not set filtered results when filter changes and external results is true', function(){
+      var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+        useExternal={true} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
 
+      var input = TestUtils.findRenderedDOMComponentWithTag(grid2, "input");
+      TestUtils.Simulate.change(input, {target: {value: 'Un'}});
+      expect(grid2.state.filteredResults).toBe(null);
+  });
 
+  it('calls external set page when page changed and useExternal is true', function(){
+      var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+        useExternal={true} showFilter={true} externalSetPage={mock} gridClassName="test" />);
+
+      grid2.setPage(2);
+      expect(mock.mock.calls.length).toEqual(1);
+  });
+
+  it('calls external set page size when page changed and useExternal is true', function(){
+      var mock = jest.genMockFunction();
+      var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+        useExternal={true} showFilter={true} externalSetPageSize={mock} gridClassName="test" />);
+
+      grid2.setPageSize(2);
+      expect(mock.mock.calls.length).toEqual(1);
+  });
+
+  it('uses external max pages when useExternal is true', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} externalMaxPage={8} gridClassName="test" />);
+
+    expect(grid2.getCurrentMaxPage()).toEqual(8);
+    expect(grid2.state.maxPage).toEqual(8);
+  });
+
+  it('uses external current page when useExternal is true', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} externalCurrentPage={8} gridClassName="test" />);
+
+      expect(grid2.getCurrentPage()).toEqual(8);
+  });
+
+  it('uses external sort column when useExternal is true', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} externalSortColumn={'name'} gridClassName="test" />);
+
+      expect(grid2.getCurrentSort()).toEqual('name');
+      expect(grid2.state.sortColumn).toEqual("");
+  });
+
+  it ('uses external sort ascending when useExternal is true', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} externalSortAscending={true} gridClassName="test" />);
+
+      expect(grid2.getCurrentSortAscending()).toBe(true);
+  })
 });

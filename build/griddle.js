@@ -113,11 +113,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalChangeSort": null,
 	            "externalSetFilter": null,
 	            "externalSetPageSize":null,
-	            "externalMaxPages":null,
+	            "externalMaxPage":null,
 	            "externalCurrentPage":null,
 	            "externalSortColumn": null,
-	            "externalSortAscending": true,
-	            "externalResults": []
+	            "externalSortAscending": true
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -176,7 +175,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
-	debugger;
 	        //make this better.
 	        this.props.resultsPerPage = size;
 	        this.setMaxPage();
@@ -193,7 +191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getMaxPage: function(results, totalResults){
 	        if(this.props.useExternal){
-	          return this.props.externalMaxPages
+	          return this.props.externalMaxPage;
 	        }
 
 	        if (!totalResults) {
@@ -284,7 +282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
-	            
+
 	            return;
 	        }
 
@@ -371,10 +369,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    //this is the current results
 	    getCurrentResults: function(){
-	      if (this.props.useExternal){
-	          return this.props.externalResults;
-	      }
-
 	      return this.state.filteredResults || this.props.results;
 	    },
 	    getCurrentPage: function(){
@@ -387,7 +381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
 	    },
 	    getCurrentMaxPage: function(){
-	        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+	        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
 	    },
 	    render: function() {
 	        var that = this,
@@ -445,7 +439,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
 	        }
 
-	debugger;
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 
