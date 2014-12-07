@@ -71,39 +71,35 @@ var Griddle = React.createClass({
         }
 
         var that = this,
-        state = {
+        updatedState = {
             page: 0,
             filter: filter
-        },
-        updateAfterResultsObtained = function(updatedState) {
-            //if filter is null or undefined reset the filter.
-            if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-                updatedState.filter = filter;
-                updatedState.filteredResults = null;
+        };
+        
+        // Obtain the state results.
+       updatedState.filteredResults = _.filter(this.props.results,
+       function(item) {
+            var arr = _.values(item);
+            for(var i = 0; i < arr.length; i++){
+               if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+                return true;
+               }
             }
 
-            // Set the state.
-            that.setState(updatedState);
-        };
+            return false;
+        });
 
-        // Obtain the state results.
-           state.filteredResults = _.filter(this.props.results,
-            function(item) {
-                var arr = _.values(item);
-                for(var i = 0; i < arr.length; i++){
-                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                    return true;
-                   }
-                }
+        // Update the max page.
+        updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
 
-                return false;
-            });
+        //if filter is null or undefined reset the filter.
+        if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+            updatedState.filter = filter;
+            updatedState.filteredResults = null;
+        }
 
-            // Update the max page.
-            state.maxPage = that.getMaxPage(state.filteredResults);
-
-            // Update the state after obtaining the results.
-            updateAfterResultsObtained(state);
+        // Set the state.
+        that.setState(updatedState);
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
@@ -448,6 +444,25 @@ var Griddle = React.createClass({
             </div>
         );
 
+    },
+    /* Obsolete */
+    //This method shims the old external results with the new, non-callback way
+    getExternalResultsInit: function(){
+/*            "useExternal": false,
+            "externalSetPage": null,
+            "externalChangeSort": null,
+            "externalSetFilter": null,
+            "externalSetPageSize":null,
+            "externalMaxPage":null,
+            "externalCurrentPage": null,
+            "externalSortColumn": null,
+            "externalSortAscending": true 
+*/
+
+
+    },
+    getExternalResults: function(){
+        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
     }
 });
 
