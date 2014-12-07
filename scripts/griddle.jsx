@@ -66,10 +66,6 @@ var Griddle = React.createClass({
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetFilter === "undefined"){
-                console.log("Using external data but 'externalSetFilter' function is undefined.");
-            }
-
             this.props.externalSetFilter(filter);
             return;
         }
@@ -111,10 +107,6 @@ var Griddle = React.createClass({
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetPageSize === "undefined"){
-                console.log("Using external data but setPageSize function is undefined.");
-            }
-
             this.props.externalSetPageSize(size);
             return;
         }
@@ -153,10 +145,6 @@ var Griddle = React.createClass({
     },
     setPage: function(number) {
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetPage === "undefined"){
-                console.log("Using external data but 'externalSetPage' function is undefined.");
-            }
-
             this.props.externalSetPage(number);
             return;
         }
@@ -221,10 +209,6 @@ var Griddle = React.createClass({
     },
     changeSort: function(sort){
         if(this.props.useExternal) {
-            if(typeof this.props.externalChangeSort === "undefined"){
-                console.log("Using external data but 'externalChangeSort' function is undefined.");
-            }
-
             this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
 
             return;
@@ -263,12 +247,41 @@ var Griddle = React.createClass({
         return state;
     },
     componentWillMount: function() {
+        this.verifyExternal();
         this.setMaxPage();
     },
     componentDidMount: function() {
         var state = this.state;
         var that = this;
     },
+    verifyExternal: function(){
+        if(this.props.useExternal === true){
+            //hooray for big ugly nested if
+            if(this.props.externalSetPage === null){
+                console.error("useExternal is set to true but there is no externalSetPage function specified.")
+            }
+
+            if(this.props.externalChangeSort === null){
+                console.error("useExternal is set to true but there is no externalChangeSort function specified.")
+            }
+
+            if(this.props.externalSetFilter === null){
+                console.error("useExternal is set to true but there is no externalSetFilter function specified.")
+            }
+
+            if(this.props.externalSetPageSize === null){
+                console.error("useExternal is set to true but there is no externalSetPageSize function specified.")
+            }
+
+            if(this.props.externalMaxPage === null){
+                console.error("useExternal is set to true but externalMaxPage is not set.")
+            }
+
+            if(this.props.externalCurrentPage === null){
+                console.error("useExternal is set to true but externalCurrentPage is not set.")
+            }
+        }
+    },    
     getDataForRender: function(data, cols, pageList){
         var that = this;
             //get the correct page size

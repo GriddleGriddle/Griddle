@@ -319,12 +319,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return state;
 	    },
 	    componentWillMount: function() {
+	        this.verifyExternal();
 	        this.setMaxPage();
 	    },
 	    componentDidMount: function() {
 	        var state = this.state;
 	        var that = this;
 	    },
+	    verifyExternal: function(){
+	        if(this.props.useExternal === true){
+	            //hooray for big ugly nested if
+	            if(this.props.externalSetPage === null){
+	                console.error("useExternal is set to true but there is no externalSetPage function specified.")
+	            }
+
+	            if(this.props.externalChangeSort === null){
+	                console.error("useExternal is set to true but there is no externalChangeSort function specified.")
+	            }
+
+	            if(this.props.externalSetFilter === null){
+	                console.error("useExternal is set to true but there is no externalSetFilter function specified.")
+	            }
+
+	            if(this.props.externalSetPageSize === null){
+	                console.error("useExternal is set to true but there is no externalSetPageSize function specified.")
+	            }
+
+	            if(this.props.externalMaxPage === null){
+	                console.error("useExternal is set to true but externalMaxPage is not set.")
+	            }
+
+	            if(this.props.externalCurrentPage === null){
+	                console.error("useExternal is set to true but externalCurrentPage is not set.")
+	            }
+	        }
+	    },    
 	    getDataForRender: function(data, cols, pageList){
 	        var that = this;
 	            //get the correct page size

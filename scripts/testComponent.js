@@ -107,11 +107,11 @@ var ExternalFormatter = React.createClass({
         });
     },
     render: function(){
-      return <Griddle useExternal={true} externalSetPage={this.setPage}
+      return <Griddle useExternal={true} /*externalSetPage={this.setPage}
         externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
         externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
         externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
-        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} showFilter={true} showSettings={true} />
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} */showFilter={true} showSettings={true} />
     }
 });
 
