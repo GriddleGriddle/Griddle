@@ -450,7 +450,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //clean this stuff up so it's not if else all over the place.
 	            resultContent = this.props.useCustomFormat ?
 	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, bodyHeight: this.props.bodyHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages}));
+	                : (React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.props.infiniteScroll, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages}));
 
 	            // Grab the paging content if it's to be displayed
 	            if (this.props.showPager && !this.props.infiniteScroll) {
