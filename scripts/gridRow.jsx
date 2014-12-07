@@ -18,8 +18,7 @@ var GridRow = React.createClass({
         "data": {},
         "metadataColumns": [],
         "hasChildren": false,
-        "columnMetadata": null,
-        "rowHeight": null
+        "columnMetadata": null
       }
     },
     handleClick: function(){
@@ -49,12 +48,7 @@ var GridRow = React.createClass({
             className = that.props.showChildren ? "parent-row expanded" : "parent-row";
         }
 
-        // If infinite scrolling is enabled, the height of items must be specified.
-        var rowStyle = this.props.rowHeight ? {
-                        "height" : this.props.rowHeight + "px"
-                      } : null;
-
-        return (<tr className={className} style={rowStyle}>{nodes}</tr>);
+        return (<tr className={className}>{nodes}</tr>);
     }
 });
 

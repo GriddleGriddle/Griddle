@@ -562,7 +562,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "hasMorePages": false,
 	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
-	      "rowHeight": null,
 	      "tableHeading": ""
 	    }
 	  },
@@ -597,7 +596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //at least one item in the group has children.
 	        if (hasChildren) { anyHasChildren = hasChildren; }
 
-	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, rowHeight: that.props.rowHeight, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
+	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
 	    var tableStyle = null;
@@ -1065,7 +1064,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(typeof this.props.data === "undefined"){return (React.createElement("tbody", null));}
 	        var arr = [];
 
-	        arr.push(React.createElement(GridRow, {data: this.props.data, rowHeight: this.props.rowHeight, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
+	        arr.push(React.createElement(GridRow, {data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
 	          hasChildren: that.props.hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: that.props.uniqueId}));
 	          var children = null;
 	        if(that.state.showChildren){
@@ -1113,8 +1112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "data": {},
 	        "metadataColumns": [],
 	        "hasChildren": false,
-	        "columnMetadata": null,
-	        "rowHeight": null
+	        "columnMetadata": null
 	      }
 	    },
 	    handleClick: function(){
@@ -1144,12 +1142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
 	        }
 
-	        // If infinite scrolling is enabled, the height of items must be specified.
-	        var rowStyle = this.props.rowHeight ? {
-	                        "height" : this.props.rowHeight + "px"
-	                      } : null;
-
-	        return (React.createElement("tr", {className: className, style: rowStyle}, nodes));
+	        return (React.createElement("tr", {className: className}, nodes));
 	    }
 	});
 

@@ -23,7 +23,6 @@ var GridTable = React.createClass({
       "hasMorePages": false,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
-      "rowHeight": null,
       "tableHeading": ""
     }
   },
@@ -58,7 +57,7 @@ var GridTable = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} rowHeight={that.props.rowHeight} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
     var tableStyle = null;
