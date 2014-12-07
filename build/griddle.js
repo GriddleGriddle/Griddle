@@ -500,25 +500,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            )
 	        );
 
-	    },
-	    /* Obsolete */
-	    //This method shims the old external results with the new, non-callback way
-	    getExternalResultsInit: function(){
-	/*            "useExternal": false,
-	            "externalSetPage": null,
-	            "externalChangeSort": null,
-	            "externalSetFilter": null,
-	            "externalSetPageSize":null,
-	            "externalMaxPage":null,
-	            "externalCurrentPage": null,
-	            "externalSortColumn": null,
-	            "externalSortAscending": true 
-	*/
-
-
-	    },
-	    getExternalResults: function(){
-	        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
 	    }
 	});
 
