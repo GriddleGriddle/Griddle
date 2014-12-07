@@ -40,6 +40,8 @@ describe('Griddle', function() {
   }
 
   beforeEach(function(){
+    spyOn(console, 'error');
+
     fakeData = [
       {
         "id": 0,
@@ -337,5 +339,93 @@ describe('Griddle', function() {
       useExternal={true} externalSortAscending={true} gridClassName="test" />);
 
       expect(grid2.getCurrentSortAscending()).toBe(true);
-  })
+  });
+
+  it('should log an error if useExternal is true and externalSetPage is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPage function specified.");
+  });
+
+  it('should not log error with externalSetPage if it is available', function(){
+   var mock = jest.genMockFunction();
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalSetPage={mock} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPage function specified."); 
+  }); 
+
+  it('should log an error if useExternal is true and externalChangeSort is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but there is no externalChangeSort function specified.");
+  });
+
+  it('should not log error with externalChangeSort if it is available', function(){
+   var mock = jest.genMockFunction();
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalChangeSort={mock} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalChangeSort function specified."); 
+  });
+
+  it('should log an error if useExternal is true and externalSetFilter is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but there is no externalSetFilter function specified.");
+  });
+
+  it('should not log error with useExternal if externalSetFilter is available', function(){
+   var mock = jest.genMockFunction();
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalSetFilter={mock} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetFilter function specified."); 
+  }); 
+
+  it('should log an error if useExternal is true and externalSetPageSize is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPageSize function specified.");
+  });
+
+  it('should not log error with externalSetPage if it is available', function(){
+   var mock = jest.genMockFunction();
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalSetPageSize={mock} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPageSize function specified."); 
+  });
+
+  it('should log an error if useExternal is true and externalMaxPage is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but externalMaxPage is not set.");
+  });
+
+  it('should not log error with externalMaxPage if it is available', function(){
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalMaxPage={8} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalMaxPage is not set."); 
+  });
+
+  it('should log an error if useExternal is true and externalCurrentPage is not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+      useExternal={true} gridClassName="test" />);
+
+    expect(console.error).toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
+  });
+
+  it('should not log error with externalCurrentPage if it is available', function(){
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useExternal={true} externalCurrentPage={8} gridClassName="test" />);
+
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data."); 
+  });
 });

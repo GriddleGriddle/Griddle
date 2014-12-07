@@ -58,7 +58,7 @@ var Griddle = React.createClass({
             "externalSetFilter": null,
             "externalSetPageSize":null,
             "externalMaxPage":null,
-            "externalCurrentPage":null,
+            "externalCurrentPage": null,
             "externalSortColumn": null,
             "externalSortAscending": true
         };
@@ -258,27 +258,27 @@ var Griddle = React.createClass({
         if(this.props.useExternal === true){
             //hooray for big ugly nested if
             if(this.props.externalSetPage === null){
-                console.error("useExternal is set to true but there is no externalSetPage function specified.")
+                console.error("useExternal is set to true but there is no externalSetPage function specified.");
             }
 
             if(this.props.externalChangeSort === null){
-                console.error("useExternal is set to true but there is no externalChangeSort function specified.")
+                console.error("useExternal is set to true but there is no externalChangeSort function specified.");
             }
 
             if(this.props.externalSetFilter === null){
-                console.error("useExternal is set to true but there is no externalSetFilter function specified.")
+                console.error("useExternal is set to true but there is no externalSetFilter function specified.");
             }
 
             if(this.props.externalSetPageSize === null){
-                console.error("useExternal is set to true but there is no externalSetPageSize function specified.")
+                console.error("useExternal is set to true but there is no externalSetPageSize function specified.");
             }
 
             if(this.props.externalMaxPage === null){
-                console.error("useExternal is set to true but externalMaxPage is not set.")
+                console.error("useExternal is set to true but externalMaxPage is not set.");
             }
 
             if(this.props.externalCurrentPage === null){
-                console.error("useExternal is set to true but externalCurrentPage is not set.")
+                console.error("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
             }
         }
     },    

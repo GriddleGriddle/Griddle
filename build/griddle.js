@@ -114,7 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalSetFilter": null,
 	            "externalSetPageSize":null,
 	            "externalMaxPage":null,
-	            "externalCurrentPage":null,
+	            "externalCurrentPage": null,
 	            "externalSortColumn": null,
 	            "externalSortAscending": true
 	        };
@@ -122,10 +122,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function(filter) {
 	        if(this.props.useExternal) {
-	            if(typeof this.props.externalSetFilter === "undefined"){
-	                console.log("Using external data but 'externalSetFilter' function is undefined.");
-	            }
-
 	            this.props.externalSetFilter(filter);
 	            return;
 	        }
@@ -167,10 +163,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    setPageSize: function(size){
 	        if(this.props.useExternal) {
-	            if(typeof this.props.externalSetPageSize === "undefined"){
-	                console.log("Using external data but setPageSize function is undefined.");
-	            }
-
 	            this.props.externalSetPageSize(size);
 	            return;
 	        }
@@ -209,10 +201,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    setPage: function(number) {
 	        if(this.props.useExternal) {
-	            if(typeof this.props.externalSetPage === "undefined"){
-	                console.log("Using external data but 'externalSetPage' function is undefined.");
-	            }
-
 	            this.props.externalSetPage(number);
 	            return;
 	        }
@@ -277,10 +265,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    changeSort: function(sort){
 	        if(this.props.useExternal) {
-	            if(typeof this.props.externalChangeSort === "undefined"){
-	                console.log("Using external data but 'externalChangeSort' function is undefined.");
-	            }
-
 	            this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
 
 	            return;
@@ -330,27 +314,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(this.props.useExternal === true){
 	            //hooray for big ugly nested if
 	            if(this.props.externalSetPage === null){
-	                console.error("useExternal is set to true but there is no externalSetPage function specified.")
+	                console.error("useExternal is set to true but there is no externalSetPage function specified.");
 	            }
 
 	            if(this.props.externalChangeSort === null){
-	                console.error("useExternal is set to true but there is no externalChangeSort function specified.")
+	                console.error("useExternal is set to true but there is no externalChangeSort function specified.");
 	            }
 
 	            if(this.props.externalSetFilter === null){
-	                console.error("useExternal is set to true but there is no externalSetFilter function specified.")
+	                console.error("useExternal is set to true but there is no externalSetFilter function specified.");
 	            }
 
 	            if(this.props.externalSetPageSize === null){
-	                console.error("useExternal is set to true but there is no externalSetPageSize function specified.")
+	                console.error("useExternal is set to true but there is no externalSetPageSize function specified.");
 	            }
 
 	            if(this.props.externalMaxPage === null){
-	                console.error("useExternal is set to true but externalMaxPage is not set.")
+	                console.error("useExternal is set to true but externalMaxPage is not set.");
 	            }
 
 	            if(this.props.externalCurrentPage === null){
-	                console.error("useExternal is set to true but externalCurrentPage is not set.")
+	                console.error("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
 	            }
 	        }
 	    },    
