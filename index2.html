@@ -18,7 +18,7 @@
 		var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
 			var initialIndex = page * pageSize;
 			var endIndex = initialIndex + pageSize;
-debugger;
+
 			setTimeout(function() {
 				var results = [],
 				totalResults = 0;
@@ -35,6 +35,12 @@ debugger;
 			}, 1000);
 		};
 
+var Loading = React.createClass({
+	render: function(){
+		return <div className="loading img-responsive center-block">Loading</div>;
+	}
+});
+
 var CallbackResults = React.createClass({
 	getDefaultProps: function(){
 		return {
@@ -48,68 +54,53 @@ var CallbackResults = React.createClass({
           "maxPage": 0,
           "sortColumn":null,
           "sortAscending":true,
-          "pretendServerData": externalData
       };
 
 			// If we need to get external results, grab the results.
-			if (!this.hasExternalResults()) {
-				initial.results = this.props.results;
-			} else {
 				initial.isLoading = true; // Initialize to 'loading'
-			}
 
       return initial;
     },
     componentDidMount: function(){
-        this.setState({
-        	"externalResultsPerPage": this.props.resultsPerPage,
-            "maxPage": Math.round(this.state.pretendServerData.length/this.props.resultsPerPage),
-            "results": this.state.pretendServerData.slice(0,this.props.resultsPerPage)
-        })
+			var state = this.state;
+			var that = this;
+
+			if (!this.hasExternalResults()) {
+				console.error("When using GriddleWithCallback, a callback must be supplied.");
+			}
+
+			// Update the state with external results when mounting
+			state = this.updateStateWithExternalResults(state, function(updatedState) {
+				that.setState(updatedState);
+			});
     },
 		componentWillReceiveProps: function(nextProps) {
-			if (this.hasExternalResults()) {
-				var state = this.state,
-				that = this;
+			var state = this.state,
+			that = this;
 
-				// Update the state with external results.
-				state = this.updateStateWithExternalResults(state, function(updatedState) {
-					that.setState(updatedState);
-				});
-			} else {
-				this.setMaxPage(nextProps.results);
-			}
+			// Update the state with external results.
+			state = this.updateStateWithExternalResults(state, function(updatedState) {
+				that.setState(updatedState);
+			});
 		},
     setPage: function(index, pageSize){
       //This should interact with the data source to get the page at the given index
 			var that = this;
-			debugger;
       var number = index === 0 ? 0 : index * (pageSize||this.state.externalResultsPerPage);
 
 			var state = {
 				page: index
 			};
 
-			if (this.hasExternalResults()) {
-				this.updateStateWithExternalResults(state, function(updatedState) {
-					debugger;
-					that.setState(updatedState);
-				});
-			} else {
-				this.setState(
-					{
-						"results": this.state.pretendServerData.slice(number, number+5>this.state.pretendServerData.length ? this.state.pretendServerData.length : number+this.state.externalResultsPerPage),
-						"page": index
-					});
-			}
-
+			this.updateStateWithExternalResults(state, function(updatedState) {
+				that.setState(updatedState);
+			});
     },
 		getExternalResults: function(state, callback) {
 			var filter,
 			sortColumn,
 			sortAscending,
 			page;
-
 			// Fill the search properties.
 			if (state !== undefined && state.filter !== undefined) {
 				filter = state.filter;
@@ -164,11 +155,7 @@ var CallbackResults = React.createClass({
 		},
 		getMaxPage: function(results, totalResults){
 			if (!totalResults) {
-				if (this.hasExternalResults()) {
-					totalResults = this.state.totalResults;
-				} else {
-					totalResults = (results||this.state.filteredResults||this.state.results).length;
-				}
+				totalResults = this.state.totalResults;
 			}
 			var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
 			return maxPage;
@@ -188,7 +175,7 @@ var CallbackResults = React.createClass({
         "page": 0,
         "sortColumn": sort,
         "sortAscending": sortAscending,
-        "pretendServerData": sortedData,
+        "results": sortedData,
         "results": sortedData.slice(0,this.state.externalResultsPerPage)
       };
     },
@@ -204,13 +191,9 @@ var CallbackResults = React.createClass({
 				sortAscending: true
 			};
 
-			if (this.hasExternalResults()){
-				this.updateStateWithExternalResults(state, function(updatedState) {
-					debugger;
-					that.setState(updatedState);
-				});
-			}
-      this.setState(this.sortData(sort, sortAscending, this.state.pretendServerData));
+			this.updateStateWithExternalResults(state, function(updatedState) {
+				that.setState(updatedState);
+			});
     },
     setFilter: function(filter){
         /*
@@ -219,64 +202,35 @@ var CallbackResults = React.createClass({
           the grid) and send back to the view (which would handle passing the data back to Griddle)
         */
 				var that = this;
-				
-				if(this.hasExternalResults()){
-					var state = {
-						page: 0,
-						filter: filter
+
+				var state = {
+					page: 0,
+					filter: filter
+				}
+
+				this.updateStateWithExternalResults(state, function(updatedState) {
+					//if filter is null or undefined reset the filter.
+					if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+						updatedState.filter = filter;
+						updatedState.filteredResults = null;
 					}
 
-					this.updateStateWithExternalResults(state, function(updatedState) {
-						//if filter is null or undefined reset the filter.
-						if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-							updatedState.filter = filter;
-							updatedState.filteredResults = null;
-						}
-
-						// Set the state.
-						that.setState(updatedState);
-					});
-				} else {
-	        var sortedData = this.sortData(this.state.sortColumn, this.state.sortAscending, externalData);
-
-	        if(filter === ""){
-	            this.setState(_.extend(sortedData, {maxPage: Math.round(sortedData.pretendServerData.length > this.state.externalResultsPerPage ? sortedData.pretendServerData.length/this.state.externalResultsPerPage : 1)}));
-
-	            return;
-	        }
-
-	        var filteredData = _.filter(sortedData.pretendServerData,
-	            function(item) {
-	                var arr = _.values(item);
-	                for(var i = 0; i < arr.length; i++){
-	                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-	                    return true;
-	                   }
-	                }
-
-	                return false;
-	            });
-
-	        this.setState({
-	            pretendServerData: filteredData,
-	            maxPage: Math.round(filteredData.length > this.state.externalResultsPerPage ? filteredData.length/this.state.externalResultsPerPage : 1),
-	            "results": filteredData.slice(0,this.state.externalResultsPerPage)
-	        });
-				}
+					// Set the state.
+					that.setState(updatedState);
+				});
     },
     setPageSize: function(size){
-			if(this.hasExternalResults()){
-				this.setPage(0, size);
-			} else {
-        this.setState({
-            page: 0,
-            externalResultsPerPage: size,
-            maxPage: Math.round(this.state.pretendServerData.length > size ? this.state.pretendServerData.length/size : 1),
-            results: this.state.pretendServerData.slice(0,size)
-        });
-			}
+			this.setPage(0, size);
     },
     render: function(){
+			if(this.state.isLoading){
+				return <Griddle useExternal={true} externalSetPage={this.setPage}
+	        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
+	        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
+	        externalCurrentPage={this.state.page} results={[{"fake":"forLoading"}]} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
+	        externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} showFilter={true} showSettings={true}
+					useCustomFormat="true" customFormat={Loading} />
+			}
       return <Griddle useExternal={true} externalSetPage={this.setPage}
         externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
         externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
