@@ -175,8 +175,7 @@ var CallbackResults = React.createClass({
         "page": 0,
         "sortColumn": sort,
         "sortAscending": sortAscending,
-        "results": sortedData,
-        "results": sortedData.slice(0,this.state.externalResultsPerPage)
+        "results": sortedData
       };
     },
 		hasExternalResults: function() {
