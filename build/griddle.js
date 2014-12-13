@@ -323,6 +323,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return state;
 	    },
 	    componentWillMount: function() {
+	        // If a custom format or pager is included, log that it's not compatible with infinite scrolling (at the moment)
+	        if (this.props.infiniteScroll && (this.props.useCustomFormat || this.props.useCustomPager)) {
+	          console.log("The 'useCustomFormat' and 'useCustomPager' properties are currently incompatible with infinite scrolling.");
+	        }
+
 	        this.setMaxPage();
 	    },
 	    componentDidMount: function() {
@@ -397,9 +402,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
 	    },
 	    isInfiniteScrollEnabled: function(){
-	      // If a custom format or pager is included, log that it's not compatible with infinite scrolling (at the moment)
+	      // If a custom format or pager is included, don't allow for infinite scrolling.
 	      if (this.props.useCustomFormat || this.props.useCustomPager) {
-	        console.log("The 'useCustomFormat' and 'useCustomPager' properties are currently incompatible with infinite scrolling.");
 	        return false;
 	      }
 
