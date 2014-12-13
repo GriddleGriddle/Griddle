@@ -289,7 +289,7 @@ var Griddle = React.createClass({
             var currentPage = this.getCurrentPage();
 
             if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
-                if (this.props.infiniteScroll) {
+                if (this.isInfiniteScrollEnabled()) {
                   // If we're doing infinite scroll, grab all results up to the current page.
                   data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
                 } else {
@@ -339,6 +339,16 @@ var Griddle = React.createClass({
     },
     getCurrentMaxPage: function(){
         return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+    },
+    isInfiniteScrollEnabled: function(){
+      // If a custom format or pager is included, log that it's not compatible with infinite scrolling (at the moment)
+      if (this.props.useCustomFormat || this.props.useCustomPager) {
+        console.log("The 'useCustomFormat' and 'useCustomPager' properties are currently incompatible with infinite scrolling.");
+        return false;
+      }
+
+      // Otherwise, send back the property.
+      return this.props.infiniteScroll;
     },
     render: function() {
         var that = this,
@@ -393,10 +403,10 @@ var Griddle = React.createClass({
             //clean this stuff up so it's not if else all over the place.
             resultContent = this.props.useCustomFormat ?
                 (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.props.infiniteScroll} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
+                : (<GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
 
             // Grab the paging content if it's to be displayed
-            if (this.props.showPager && !this.props.infiniteScroll) {
+            if (this.props.showPager && !this.isInfiniteScrollEnabled()) {
               pagingContent = (
                   <div className="grid-footer clearfix">
                       {this.props.useCustomPager ?
