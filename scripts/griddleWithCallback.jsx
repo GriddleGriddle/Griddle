@@ -38,15 +38,15 @@ var GriddleWithCallback = React.createClass({
 				that.setState(updatedState);
 			});
     },
-		componentWillReceiveProps: function(nextProps) {
-			var state = this.state,
-			that = this;
+	componentWillReceiveProps: function(nextProps) {
+		var state = this.state,
+		that = this;
 
-			// Update the state with external results.
-			state = this.updateStateWithExternalResults(state, function(updatedState) {
-				that.setState(updatedState);
-			});
-		},
+		// Update the state with external results.
+		state = this.updateStateWithExternalResults(state, function(updatedState) {
+			that.setState(updatedState);
+		});
+	},
     setPage: function(index, pageSize){
         //This should interact with the data source to get the page at the given index
 		var that = this;
@@ -59,70 +59,70 @@ var GriddleWithCallback = React.createClass({
 			that.setState(updatedState);
 		});
     },
-		getExternalResults: function(state, callback) {
-			var filter,
-			sortColumn,
-			sortAscending,
-			page,
-			pageSize; 
+	getExternalResults: function(state, callback) {
+		var filter,
+		sortColumn,
+		sortAscending,
+		page,
+		pageSize; 
 
-			// Fill the search properties.
-			if (state !== undefined && state.filter !== undefined) {
-				filter = state.filter;
-			} else {
-				filter = this.state.filter;
+		// Fill the search properties.
+		if (state !== undefined && state.filter !== undefined) {
+			filter = state.filter;
+		} else {
+			filter = this.state.filter;
+		}
+
+		if (state !== undefined && state.sortColumn !== undefined) {
+			sortColumn = state.sortColumn;
+		} else {
+			sortColumn = this.state.sortColumn;
+		}
+
+		sortColumn = _.isEmpty(sortColumn) ? this.props.initialSort : sortColumn;
+
+		if (state !== undefined && state.sortAscending !== undefined) {
+			sortAscending = state.sortAscending;
+		} else {
+			sortAscending = this.state.sortAscending;
+		}
+
+		if (state !== undefined && state.page !== undefined) {
+			page = state.page;
+		} else {
+			page = this.state.page;
+		}
+
+		if (state !== undefined && state.pageSize !== undefined) {
+			pageSize = state.pageSize;
+		} else {
+			pageSize = this.state.pageSize;
+		}
+
+		// Obtain the results
+		this.props.getExternalResults(filter, sortColumn, sortAscending, page, pageSize, callback);
+	},
+	updateStateWithExternalResults: function(state, callback) {
+		var that = this;
+
+		// Update the table to indicate that it's loading.
+		this.setState({ isLoading: true });
+		// Grab the results.
+		this.getExternalResults(state, function(externalResults) {
+			// Fill the state result properties
+			state.results = externalResults.results;
+			state.totalResults = externalResults.totalResults;
+			state.maxPage = that.getMaxPage(externalResults.pageSize, externalResults.totalResults);
+			state.isLoading = false;
+
+			// If the current page is larger than the max page, reset the page.
+			if (state.page >= state.maxPage) {
+				state.page = state.maxPage - 1;
 			}
 
-			if (state !== undefined && state.sortColumn !== undefined) {
-				sortColumn = state.sortColumn;
-			} else {
-				sortColumn = this.state.sortColumn;
-			}
-
-			sortColumn = _.isEmpty(sortColumn) ? this.props.initialSort : sortColumn;
-
-			if (state !== undefined && state.sortAscending !== undefined) {
-				sortAscending = state.sortAscending;
-			} else {
-				sortAscending = this.state.sortAscending;
-			}
-
-			if (state !== undefined && state.page !== undefined) {
-				page = state.page;
-			} else {
-				page = this.state.page;
-			}
-
-			if (state !== undefined && state.pageSize !== undefined) {
-				pageSize = state.pageSize;
-			} else {
-				pageSize = this.state.pageSize;
-			}
-
-			// Obtain the results
-			this.props.getExternalResults(filter, sortColumn, sortAscending, page, pageSize, callback);
-		},
-		updateStateWithExternalResults: function(state, callback) {
-			var that = this;
-
-			// Update the table to indicate that it's loading.
-			this.setState({ isLoading: true });
-			// Grab the results.
-			this.getExternalResults(state, function(externalResults) {
-				// Fill the state result properties
-				state.results = externalResults.results;
-				state.totalResults = externalResults.totalResults;
-				state.maxPage = that.getMaxPage(externalResults.pageSize, externalResults.totalResults);
-				state.isLoading = false;
-
-				// If the current page is larger than the max page, reset the page.
-				if (state.page >= state.maxPage) {
-					state.page = state.maxPage - 1;
-				}
-
-				callback(state);
-			});
-		},
+			callback(state);
+		});
+	},
 	getMaxPage: function(pageSize, totalResults){
 			if (!totalResults) {
 				totalResults = this.state.totalResults;
