@@ -30,7 +30,8 @@ var GriddleWithCallback = React.createClass({
 			var that = this;
 
 			if (!this.hasExternalResults()) {
-				console.error("When using GriddleWithCallback, a callback must be supplied.");
+				console.error("When using GriddleWithCallback, a getExternalResults callback must be supplied.");
+				return; 
 			}
 
 			// Update the state with external results when mounting
