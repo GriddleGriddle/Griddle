@@ -1,10 +1,10 @@
 module.exports = {
-  entry: './scripts/griddle.jsx',
+  entry: {Griddle: ['./scripts/griddle.jsx'], GriddleWithCallback: './scripts/griddleWithCallback.jsx' },
   output: {
     path: __dirname,
-    filename: 'build/griddle.js',
+    filename: 'build/[name].js',
     publicPath: '/',
-    library: "Griddle",
+    library: "[name]",
     libraryTarget: "umd"
   },
   resolve: {
