@@ -26,7 +26,15 @@ var GridTable = React.createClass({
       "tableHeading": ""
     }
   },
-  gridScroll: function(scroll){
+  componentDidMount: function() {
+    // After the initial render, see if we need to load additional pages.
+    this.gridScroll();
+  },
+  componentDidUpdate: function(prevProps, prevState) {
+    // After the subsequent renders, see if we need to load additional pages.
+    this.gridScroll();
+  },
+  gridScroll: function(){
     if (this.props.infiniteScroll) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
       var scrollable = this.refs.scrollable.getDOMNode();
@@ -71,19 +79,6 @@ var GridTable = React.createClass({
         "overflow-y": "scroll",
         "height": this.props.bodyHeight + "px"
       };
-
-      /* TODO: This doesn't work so swell at the moment.
-      // Update the header style so that it's stationary.
-      headerStyle = {
-        "position": "fixed",
-        "top": 0,
-        "width": "100%"
-      };
-
-      tableStyle = {
-        "padding-top": "50px" // TODO: Moreso testing to see if this works.
-      };
-      */
 
       // Only add the spacer row if the height is defined.
       if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
