@@ -294,7 +294,7 @@ React.render(
 );
 
 React.render(
-    <Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomRowFormat="true" showFilter="true" tableClassName="table" customRowFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
+    <Griddle results={fakeData} columnMetadata={columnMeta} customFormatClassName="row" useCustomRowFormat={true} showFilter="true" tableClassName="table" customRowFormat={OtherComponent} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdata')
 );
 
 React.render(

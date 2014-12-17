@@ -98,7 +98,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "nextText": "Next",
 	            "previousText": "Previous",
 	            "maxRowsText": "Rows per page",
-	            "enableCustomRowFormatText": "Enable Custom Formatting",
+	            "enableCustomFormatText": "Enable Custom Formatting",
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            "childrenColumnName": "children",
@@ -107,8 +107,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "showFilter": false,
 	            "showSettings": false,
 	            "useCustomRowFormat": false,
+	            "useCustomGridFormat": false,
 	            "useCustomPager": false,
 	            "customRowFormat": null,
+	            "customGridFormat": null,
 	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
@@ -176,13 +178,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
-	            showColumnChooser: this.state.showColumnChooser === false
+	            showColumnChooser: !this.state.showColumnChooser
 	        });
 	    },
-	    toggleCustomRowFormat: function(){
-	        this.setProps({
-	            useCustomRowFormat: this.props.useCustomRowFormat === false
-	        });
+	    toggleCustomFormat: function(){
+	        debugger;
+	        if(this.state.customFormatType === "grid"){
+	            this.setProps({
+	                useCustomGridFormat: !this.props.useCustomGridFormat
+	            });
+	        } else if(this.state.customFormatType === "row"){
+	            this.setProps({
+	                useCustomRowFormat: !this.props.useCustomRowFormat 
+	            });
+	        }
 	    },
 	    getMaxPage: function(results, totalResults){
 	        if(this.props.useExternal){
@@ -309,10 +318,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyExternal();
 	        this.verifyCustom();
 	        this.setMaxPage();
-	    },
-	    componentDidMount: function() {
-	        var state = this.state;
-	        var that = this;
+	        //don't like the magic strings
+	        debugger;
+	        if(this.props.useCustomGridFormat === true){
+	            this.setState({
+	                 customFormatType: "grid"
+	            });
+	        } else if(this.props.useCustomRowFormat === true){
+	            this.setState({
+	                customFormatType: "row"
+	            });
+	        }
 	    },
 	    verifyExternal: function(){
 	        if(this.props.useExternal === true){
@@ -343,8 +359,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },    
 	    verifyCustom: function(){
+	        if(this.props.useCustomGridFormat === true && this.props.customGridComponent === null){
+	            console.error("useCustomGridFormat is set to true but no custom component was specified.")           
+	        }
 	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
-	            console.error("useCustom is set to true but no custom component was specified.")
+	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
 	        }
 	    },
 	    getDataForRender: function(data, cols, pageList){
@@ -448,10 +467,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
-	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomRowFormat ?
-	                (React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	            //clean this stuff up so it's not if else all over the place. ugly if 
+	            if(this.props.useCustomGridFormat){
+	                resultContent = React.createElement(CustomGridFormatContainer, {data: data, className: this.props.customGridFormatClassName})                
+	            } else if(this.props.useCustomRowFormat){
+	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
+	            } else { 
+	                resultContent = React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName})
+	            }
 
 	            pagingContent = this.props.useCustomPager ?
 	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
@@ -464,7 +487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 
-	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomRowFormat: this.toggleCustomRowFormat, useCustomRowFormat: this.props.useCustomRowFormat, enableCustomRowFormatText: this.props.enableCustomRowFormatText, columnMetadata: this.props.columnMetadata})
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -474,7 +497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomRowFormat ?
+	        var gridBody = (this.props.useCustomGridFormat || this.props.useCustomRowFormat) ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 

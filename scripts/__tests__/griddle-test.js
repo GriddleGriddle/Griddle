@@ -454,4 +454,24 @@ describe('Griddle', function() {
 
     expect(console.error).toHaveBeenCalledWith("useCustomRowFormat is set to true but no custom component was specified."); 
   });
+
+  it('uses custom grid component when set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} customGridFormat={SomeCustomComponent} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toBeGreaterThan(0)
+  });
+
+  it('doesnt use custom grid component when not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toEqual(0);
+  });
+
+  it('should throw an error if useCustomGridFormat is true and no component is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomGridFormat is set to true but no custom component was specified."); 
+  });
 });
