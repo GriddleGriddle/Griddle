@@ -5,6 +5,12 @@ var React = require('react/addons');
 var Griddle = require('../griddle.jsx');
 var TestUtils = React.addons.TestUtils;
 
+var SomeCustomComponent = React.createClass({
+  render: function(){
+    return <h1>Test</h1>
+  }
+});
+
 describe('Griddle', function() {
   var fakeData;
   var grid;
@@ -428,4 +434,24 @@ describe('Griddle', function() {
 
    expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data."); 
   });
+
+  it('uses custom component when set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFormat={true} customFormat={SomeCustomComponent} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toBeGreaterThan(0)
+  });
+
+  it('doesnt use custom component when not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toEqual(0);
+  });
+
+  it('should throw an error if useCustom is true and no component is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFormat={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustom is set to true but no custom component was specified."); 
+  })
 });

@@ -45,7 +45,7 @@ var Griddle = React.createClass({
             "showSettings": false,
             "useCustomFormat": false,
             "useCustomPager": false,
-            "customFormat": {},
+            "customFormat": null,
             "customPager": {},
             "allowToggleCustom":false,
             "noDataMessage":"There is no data to display.",
@@ -244,6 +244,7 @@ var Griddle = React.createClass({
     },
     componentWillMount: function() {
         this.verifyExternal();
+        this.verifyCustom();
         this.setMaxPage();
     },
     componentDidMount: function() {
@@ -278,6 +279,11 @@ var Griddle = React.createClass({
             }
         }
     },    
+    verifyCustom: function(){
+        if (this.props.useCustomFormat === true && this.props.customFormat === null){
+            console.error("useCustom is set to true but no custom component was specified.")
+        }
+    },
     getDataForRender: function(data, cols, pageList){
         var that = this;
             //get the correct page size
