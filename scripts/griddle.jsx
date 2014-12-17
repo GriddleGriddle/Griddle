@@ -7,7 +7,7 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require('react/addons');
+var React = require('react');
 var GridTable = require('./gridTable.jsx');
 var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
@@ -25,6 +25,7 @@ var Griddle = React.createClass({
             "columnMetadata": [],
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
+            "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
             "initialSortAscending": true,
             "gridClassName":"",
@@ -95,7 +96,7 @@ var Griddle = React.createClass({
         };
 
         // Obtain the state results.
-           state.filteredResults = _.filter(this.props.results,
+        state.filteredResults = _.filter(this.props.results,
             function(item) {
                 var arr = _.values(item);
                 for(var i = 0; i < arr.length; i++){
@@ -107,11 +108,11 @@ var Griddle = React.createClass({
                 return false;
             });
 
-            // Update the max page.
-            state.maxPage = that.getMaxPage(state.filteredResults);
+        // Update the max page.
+        state.maxPage = that.getMaxPage(state.filteredResults);
 
-            // Update the state after obtaining the results.
-            updateAfterResultsObtained(state);
+        // Update the state after obtaining the results.
+        updateAfterResultsObtained(state);
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
@@ -123,9 +124,44 @@ var Griddle = React.createClass({
             return;
         }
 
+        // Obtain the results
+        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
+    },
+    updateStateWithExternalResults: function(state, callback) {
+        var that = this;
+
+        // Update the table to indicate that it's loading.
+        this.setState({ isLoading: true });
+
+        // Grab the results.
+        this.getExternalResults(state, function(externalResults) {
+            // Fill the state result properties
+            state.results = externalResults.results;
+            state.totalResults = externalResults.totalResults;
+            state.maxPage = that.getMaxPage(externalResults.results, state.totalResults);
+            state.isLoading = false;
+
+            // If the current page is larger than the max page, reset the page.
+            if (state.page >= state.maxPage) {
+                state.page = state.maxPage - 1;
+            }
+
+            callback(state);
+        });
+    },
+    hasExternalResults: function() {
+        return typeof(this.props.getExternalResults) === 'function';
+    },
+    setPageSize: function(size){
         //make this better.
         this.props.resultsPerPage = size;
-        this.setMaxPage();
+
+        if (this.hasExternalResults()) {
+            // Reload the results by setting the page.
+            this.setPage(0);
+        } else {
+            this.setMaxPage();
+        }
     },
     toggleColumnChooser: function(){
         this.setState({
@@ -143,7 +179,7 @@ var Griddle = React.createClass({
         }
 
         if (!totalResults) {
-                totalResults = (results||this.getCurrentResults()).length;
+          totalResults = (results||this.getCurrentResults()).length;
         }
         var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
         return maxPage;
@@ -152,7 +188,7 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage !== maxPage){
-            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
+          this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
         }
     },
     setPage: function(number) {
@@ -172,7 +208,13 @@ var Griddle = React.createClass({
                     page: number
                 };
 
+            if (this.hasExternalResults()) {
+                this.updateStateWithExternalResults(state, function(updatedState) {
+                    that.setState(updatedState);
+                });
+            } else {
                 that.setState(state);
+            }
         }
     },
     getColumns: function(){
@@ -233,7 +275,6 @@ var Griddle = React.createClass({
 
             return;
         }
-
         var that = this,
             state = {
                 page:0,
@@ -246,10 +287,27 @@ var Griddle = React.createClass({
             state.sortAscending = !this.state.sortAscending;
         }
 
-        this.setState(state);
+        if (this.hasExternalResults()) {
+            this.updateStateWithExternalResults(state, function(updatedState) {
+                that.setState(updatedState);
+            });
+        } else {
+            this.setState(state);
+        }
     },
     componentWillReceiveProps: function(nextProps) {
-        this.setMaxPage(nextProps.results);
+        if (this.hasExternalResults()) {
+            // TODO: Confirm
+            var state = this.state,
+                that = this;
+
+            // Update the state with external results.
+            state = this.updateStateWithExternalResults(state, function(updatedState) {
+                that.setState(updatedState);
+            });
+        } else {
+            this.setMaxPage(nextProps.results);
+        }
     },
     getInitialState: function() {
         var state =  {
@@ -277,9 +335,18 @@ var Griddle = React.createClass({
     componentDidMount: function() {
         var state = this.state;
         var that = this;
+        if (this.hasExternalResults()) {
+            // Update the state with external results when mounting
+            state = this.updateStateWithExternalResults(state, function(updatedState) {
+                that.setState(updatedState);
+                that.setMaxPage();
+            });
+        }
     },
+
     getDataForRender: function(data, cols, pageList){
         var that = this;
+        if (!this.hasExternalResults()) {
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
                 data = _.sortBy(data, function(item){
@@ -303,6 +370,10 @@ var Griddle = React.createClass({
                   data = _.initial(rest, rest.length-this.props.resultsPerPage);
                 }
             }
+        } else {
+            // Don't sort or page data if loaded externally.
+        }
+
         var meta = [].concat(this.props.metadataColumns);
         if (meta.indexOf(this.props.childrenColumnName) < 0){
             meta.push(this.props.childrenColumnName);

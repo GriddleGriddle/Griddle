@@ -7,7 +7,7 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require('react/addons');
+var React = require('react');
 var _ = require('underscore');
 
 var GridRow = React.createClass({
@@ -32,7 +32,7 @@ var GridRow = React.createClass({
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
-              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} />;
+              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
               returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName} key={index}>{colData}</td>);
             }
 
