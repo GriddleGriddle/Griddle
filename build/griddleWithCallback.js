@@ -271,7 +271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridSettings = __webpack_require__(7);
 	var GridTitle = __webpack_require__(8);
 	var GridNoData = __webpack_require__(9);
-	var CustomFormatContainer = __webpack_require__(10);
+	var CustomRowFormatContainer = __webpack_require__(10);
 	var CustomPaginationContainer = __webpack_require__(11);
 	var _ = __webpack_require__(3);
 
@@ -286,13 +286,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "initialSortAscending": true,
 	            "gridClassName":"",
 	            "tableClassName":"",
-	            "customFormatClassName":"",
+	            "customRowFormatClassName":"",
 	            "settingsText": "Settings",
 	            "filterPlaceholderText": "Filter Results",
 	            "nextText": "Next",
 	            "previousText": "Previous",
 	            "maxRowsText": "Rows per page",
-	            "enableCustomFormatText": "Enable Custom Formatting",
+	            "enableCustomRowFormatText": "Enable Custom Formatting",
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            "childrenColumnName": "children",
@@ -300,9 +300,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "metadataColumns": [],
 	            "showFilter": false,
 	            "showSettings": false,
-	            "useCustomFormat": false,
+	            "useCustomRowFormat": false,
 	            "useCustomPager": false,
-	            "customFormat": null,
+	            "customRowFormat": null,
 	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
@@ -373,9 +373,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            showColumnChooser: this.state.showColumnChooser === false
 	        });
 	    },
-	    toggleCustomFormat: function(){
+	    toggleCustomRowFormat: function(){
 	        this.setProps({
-	            useCustomFormat: this.props.useCustomFormat === false
+	            useCustomRowFormat: this.props.useCustomRowFormat === false
 	        });
 	    },
 	    getMaxPage: function(results, totalResults){
@@ -537,7 +537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },    
 	    verifyCustom: function(){
-	        if (this.props.useCustomFormat === true && this.props.customFormat === null){
+	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
 	            console.error("useCustom is set to true but no custom component was specified.")
 	        }
 	    },
@@ -643,8 +643,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keys = _.keys(_.omit(results[0], meta));
 
 	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomFormat ?
-	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
+	            resultContent = this.props.useCustomRowFormat ?
+	                (React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat}))
 	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
 
 	            pagingContent = this.props.useCustomPager ?
@@ -658,17 +658,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 
-	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomRowFormat: this.toggleCustomRowFormat, useCustomRowFormat: this.props.useCustomRowFormat, enableCustomRowFormatText: this.props.enableCustomRowFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
 
 	        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
 	        //add custom to the class name so we can style it differently
-	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+	        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomFormat ?
+	        var gridBody = this.props.useCustomRowFormat ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
@@ -1078,7 +1078,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var CustomFormatContainer = React.createClass({displayName: 'CustomFormatContainer',
+	var CustomRowFormatContainer = React.createClass({displayName: 'CustomRowFormatContainer',
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
@@ -1107,7 +1107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 
-	module.exports = CustomFormatContainer;
+	module.exports = CustomRowFormatContainer;
 
 
 /***/ },

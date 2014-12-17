@@ -435,23 +435,23 @@ describe('Griddle', function() {
    expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data."); 
   });
 
-  it('uses custom component when set', function(){
-    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFormat={true} customFormat={SomeCustomComponent} />);
+  it('uses custom row component when set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowFormat={true} customRowFormat={SomeCustomComponent} />);
 
     var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
     expect(rows.length).toBeGreaterThan(0)
   });
 
-  it('doesnt use custom component when not set', function(){
+  it('doesnt use custom row component when not set', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
 
     var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
     expect(rows.length).toEqual(0);
   });
 
-  it('should throw an error if useCustom is true and no component is added', function(){
-    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFormat={true} />);
+  it('should throw an error if useCustomRowFormat is true and no component is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowFormat={true} />);
 
-    expect(console.error).toHaveBeenCalledWith("useCustom is set to true but no custom component was specified."); 
-  })
+    expect(console.error).toHaveBeenCalledWith("useCustomRowFormat is set to true but no custom component was specified."); 
+  });
 });
