@@ -13,7 +13,8 @@
   "dependencies": {
     "react": "~0.12.0",
     "react-tools": "~0.12.0",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "react-chartist": "~0.2.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

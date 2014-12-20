@@ -376,7 +376,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    },
 	    toggleCustomFormat: function(){
-	        debugger;
 	        if(this.state.customFormatType === "grid"){
 	            this.setProps({
 	                useCustomGridFormat: !this.props.useCustomGridFormat
@@ -513,7 +512,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyCustom();
 	        this.setMaxPage();
 	        //don't like the magic strings
-	        debugger;
 	        if(this.props.useCustomGridFormat === true){
 	            this.setState({
 	                 customFormatType: "grid"
@@ -553,7 +551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },    
 	    verifyCustom: function(){
-	        if(this.props.useCustomGridFormat === true && this.props.customGridComponent === null){
+	        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
 	            console.error("useCustomGridFormat is set to true but no custom component was specified.")           
 	        }
 	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
@@ -625,7 +623,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
 	        //figure out if we want to show the filter section
-	        var filter = this.props.showFilter ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
+	        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
 	        var settings = this.props.showSettings ? React.createElement("span", {className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.createElement("i", {className: "glyphicon glyphicon-cog"})) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
@@ -662,8 +660,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keys = _.keys(_.omit(results[0], meta));
 
 	            //clean this stuff up so it's not if else all over the place. ugly if 
-	            if(this.props.useCustomGridFormat){
-	                resultContent = React.createElement(CustomGridFormatContainer, {data: data, className: this.props.customGridFormatClassName})                
+	            if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+	                //this should send all the results it has
+	                resultContent = React.createElement(this.props.customGridFormat, {data: this.props.results, className: this.props.customGridFormatClassName})                
 	            } else if(this.props.useCustomRowFormat){
 	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
 	            } else { 
@@ -715,15 +714,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return myReturn;
 
 	        }
-
-
 	        return (
 	            React.createElement("div", {className: gridClassName}, 
 	                topSection, 
 	                columnSelector, 
 	                React.createElement("div", {className: "grid-container panel"}, 
 	                    gridBody, 
-	                    that.props.showPager ? React.createElement("div", {className: "grid-footer clearfix"}, 
+	                    that.props.showPager && (that.props.useCustomGridFormat===false) ? React.createElement("div", {className: "grid-footer clearfix"}, 
 	                        pagingContent
 	                    ) : ""
 	                )
@@ -762,7 +759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRowContainer = __webpack_require__(12);
+	var GridRowContainer = __webpack_require__(13);
 	var _ = __webpack_require__(3);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
@@ -1174,7 +1171,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1187,7 +1185,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRow = __webpack_require__(13);
+	var GridRow = __webpack_require__(14);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -1234,7 +1232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */

@@ -366,7 +366,7 @@ var Griddle = React.createClass({
         var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
-        var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
+        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
         var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
 
         //if we have neither filter or settings don't need to render this stuff
@@ -404,9 +404,10 @@ var Griddle = React.createClass({
 
             //clean this stuff up so it's not if else all over the place. ugly if 
             if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
-                resultContent = <this.props.customGridFormat data={data} className={this.props.customGridFormatClassName} />                
+                //this should send all the results it has
+                resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />                
             } else if(this.props.useCustomRowFormat){
-                resultContent = <CustomRowFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
+                resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
             } else { 
                 resultContent = <GridBody columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}/>
             }
@@ -456,15 +457,13 @@ var Griddle = React.createClass({
             return myReturn;
 
         }
-
-
         return (
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
                 <div className="grid-container panel">
                     {gridBody}
-                    {that.props.showPager ? <div className="grid-footer clearfix">
+                    {that.props.showPager && (that.props.useCustomGridFormat===false) ? <div className="grid-footer clearfix">
                         {pagingContent}
                     </div> : ""}
                 </div>

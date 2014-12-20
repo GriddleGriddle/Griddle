@@ -471,7 +471,15 @@ describe('Griddle', function() {
 
   it('should throw an error if useCustomGridFormat is true and no component is added', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} />);
-
     expect(console.error).toHaveBeenCalledWith("useCustomGridFormat is set to true but no custom component was specified."); 
   });
+
+  it('show display a warning if useCustomGridFormat and useCustomRowFormat are both true', function(){
+    var mock = jest.genMockFunction();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} customGridFormat={mock} useCustomRowFormat={true} customRowFormat={mock} />)
+  })
+
+  //it('should not show filter when useCustomGridFormat is true', function(){})
+  //it('should not show footer when useCustomGridFormat is true', function(){})
+  //it('should give the grid the entire dataset and not use the filtered data', function(){})
 });

@@ -301,7 +301,21 @@ React.render(
     <Griddle results={fakeData} customFormatClassName="row" useCustomFormat="true" useCustomPager="true" showFilter="true" tableClassName="table" customFormat={OtherComponent} customPager={OtherPager} showSettings="true" allowToggleCustom="true" />, document.getElementById('customdatacustompager')
 );
 
-React.render(
+/*React.render(
     <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} />, document.getElementById('properties-grid')
+); */
+
+var CustomGridComponent = React.createClass({
+  getInitialProps: function(){
+    data: []
+  },
+  render: function(){
+    debugger;
+    return <div>{this.props.data.length}</div>;
+  }
+});
+
+React.render(
+    <Griddle results={propertiesItem} showFilter={true} showSettings={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} useCustomGridFormat={true} customGridFormat={CustomGridComponent} />, document.getElementById('properties-grid')
 );
 
