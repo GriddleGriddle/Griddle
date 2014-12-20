@@ -486,7 +486,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 
-	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, showSetPageSize: !this.props.useCustomGridFormat, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
@@ -565,7 +565,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRowContainer = __webpack_require__(13);
+	var GridRowContainer = __webpack_require__(12);
 	var _ = __webpack_require__(3);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
@@ -769,12 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                ))
 	                : "";
 
-	        return (React.createElement("div", {className: "griddle-settings panel"}, 
-	                React.createElement("h5", null, this.props.settingsText), 
-	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
-	                    React.createElement("div", {className: "row"}, nodes)
-	                ), 
-	                React.createElement("div", {className: "form-group"}, 
+	        var setPageSize = this.props.showSetPageSize ? (React.createElement("div", null, 
 	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.maxRowsText, ":"), 
 	                    React.createElement("select", {onChange: this.setPageSize, value: this.props.resultsPerPage}, 
 	                        React.createElement("option", {value: "5"}, "5"), 
@@ -783,7 +778,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        React.createElement("option", {value: "50"}, "50"), 
 	                        React.createElement("option", {value: "100"}, "100")
 	                    )
+	            )) : "";
+
+	        return (React.createElement("div", {className: "griddle-settings panel"}, 
+	                React.createElement("h5", null, this.props.settingsText), 
+	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
+	                    React.createElement("div", {className: "row"}, nodes)
 	                ), 
+	                setPageSize, 
 	                toggleCustom
 	            ));
 	    }
@@ -977,8 +979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */,
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1038,6 +1039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 13 */,
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
