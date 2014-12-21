@@ -1,5 +1,5 @@
 module.exports = {
-  entry: {Griddle: ['./scripts/griddle.jsx'], GriddleWithCallback: './scripts/griddleWithCallback.jsx' },
+  entry: {Griddle: ['./scripts/griddle.jsx'], GriddleWithCallback: './scripts/griddleWithCallback.jsx', TestChart: './scripts/testChart.jsx' },
   output: {
     path: __dirname,
     filename: 'build/[name].js',

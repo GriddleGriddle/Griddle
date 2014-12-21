@@ -5,9 +5,26 @@ var React = require('react/addons');
 var Griddle = require('../griddle.jsx');
 var TestUtils = React.addons.TestUtils;
 
+var SomeCustomComponent = React.createClass({
+  render: function(){
+    return <h1>Test</h1>
+  }
+});
+
 describe('Griddle', function() {
   var fakeData;
   var grid;
+
+  var CustomGridComponent = React.createClass({
+    getInitialProps: function(){
+      return {
+        data: []
+      }
+    },
+    render: function(){
+      return <div>{this.props.data.length}</div>;
+    }
+  });
 
   var expectFakeData = function(grid){
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid, 'tr')
@@ -418,7 +435,6 @@ describe('Griddle', function() {
   it('should log an error if useExternal is true and externalCurrentPage is not set', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
       useExternal={true} gridClassName="test" />);
-
     expect(console.error).toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
   });
 
@@ -428,4 +444,95 @@ describe('Griddle', function() {
 
    expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data."); 
   });
+
+  it('uses custom row component when set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowFormat={true} customRowFormat={SomeCustomComponent} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toBeGreaterThan(0)
+  });
+
+  it('doesnt use custom row component when not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toEqual(0);
+  });
+
+  it('should throw an error if useCustomRowFormat is true and no component is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowFormat={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomRowFormat is set to true but no custom component was specified."); 
+  });
+
+  it('uses custom grid component when set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} customGridFormat={SomeCustomComponent} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toBeGreaterThan(0)
+  });
+
+  it('doesnt use custom grid component when not set', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} />);
+
+    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+    expect(rows.length).toEqual(0);
+  });
+
+  it('should throw an error if useCustomGridFormat is true and no component is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} />);
+    expect(console.error).toHaveBeenCalledWith("useCustomGridFormat is set to true but no custom component was specified."); 
+  });
+
+  it('show display a warning if useCustomGridFormat and useCustomRowFormat are both true', function(){
+    var mock = jest.genMockFunction();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} customGridFormat={mock} useCustomRowFormat={true} customRowFormat={mock} />)
+  })
+
+ it('should not show filter when useCustomGridFormat is true', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useCustomGridFormat={true} customGridFormat={CustomGridComponent} gridClassName="test" />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
+  expect(rows.length).toEqual(0);
+ });
+
+ it('should show filter when useCustomGridFormat is false', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    showFilter={true} gridClassName="test" />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
+  expect(rows.length).toEqual(1);
+ });
+
+it('should not show footer when useCustomGridFormat is true', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" useCustomGridFormat={true} customGridFormat={CustomGridComponent} />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'select')
+  expect(rows.length).toEqual(0);
+});
+
+ it('should show footer when useCustomGridFormat is false', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'select')
+  expect(rows.length).toEqual(1);
+ });
+
+
+  it('should give the grid the entire dataset and not use the filtered data', function(){
+    var griddle2 = <Griddle results={fakeData} gridClassName="test" resultsPerPage={1}  useCustomGridFormat={true} customGridFormat={CustomGridComponent} />;
+    var grid2 = TestUtils.renderIntoDocument(griddle2);
+
+    var component = TestUtils.scryRenderedComponentsWithType(grid2, CustomGridComponent)
+    expect(component.length).toEqual(1);
+
+    expect(component[0].props.data.length).toEqual(2);
+  });
+
+  it('throws error if useCustomGridFormat and useCustomRowFormat are both true', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridFormat={true} customGridFormat={CustomGridComponent} useCustomRowFormat={true} customRowFormat={CustomGridComponent} />); 
+    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridFormat and customRowFormat."); 
+    
+  })
 });

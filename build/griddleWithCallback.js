@@ -271,7 +271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridSettings = __webpack_require__(7);
 	var GridTitle = __webpack_require__(8);
 	var GridNoData = __webpack_require__(9);
-	var CustomFormatContainer = __webpack_require__(10);
+	var CustomRowFormatContainer = __webpack_require__(10);
 	var CustomPaginationContainer = __webpack_require__(11);
 	var _ = __webpack_require__(3);
 
@@ -286,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "initialSortAscending": true,
 	            "gridClassName":"",
 	            "tableClassName":"",
-	            "customFormatClassName":"",
+	            "customRowFormatClassName":"",
 	            "settingsText": "Settings",
 	            "filterPlaceholderText": "Filter Results",
 	            "nextText": "Next",
@@ -300,9 +300,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "metadataColumns": [],
 	            "showFilter": false,
 	            "showSettings": false,
-	            "useCustomFormat": false,
+	            "useCustomRowFormat": false,
+	            "useCustomGridFormat": false,
 	            "useCustomPager": false,
-	            "customFormat": {},
+	            "customRowFormat": null,
+	            "customGridFormat": null,
 	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
@@ -370,13 +372,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    toggleColumnChooser: function(){
 	        this.setState({
-	            showColumnChooser: this.state.showColumnChooser === false
+	            showColumnChooser: !this.state.showColumnChooser
 	        });
 	    },
 	    toggleCustomFormat: function(){
-	        this.setProps({
-	            useCustomFormat: this.props.useCustomFormat === false
-	        });
+	        if(this.state.customFormatType === "grid"){
+	            this.setProps({
+	                useCustomGridFormat: !this.props.useCustomGridFormat
+	            });
+	        } else if(this.state.customFormatType === "row"){
+	            this.setProps({
+	                useCustomRowFormat: !this.props.useCustomRowFormat 
+	            });
+	        }
 	    },
 	    getMaxPage: function(results, totalResults){
 	        if(this.props.useExternal){
@@ -501,12 +509,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    componentWillMount: function() {
 	        this.verifyExternal();
+	        this.verifyCustom();
 	        this.setMaxPage();
+	        //don't like the magic strings
+	        if(this.props.useCustomGridFormat === true){
+	            this.setState({
+	                 customFormatType: "grid"
+	            });
+	        } else if(this.props.useCustomRowFormat === true){
+	            this.setState({
+	                customFormatType: "row"
+	            });
+	        }
 	    },
-	    componentDidMount: function() {
-	        var state = this.state;
-	        var that = this;
-	    },
+	    //todo: clean these verify methods up
 	    verifyExternal: function(){
 	        if(this.props.useExternal === true){
 	            //hooray for big ugly nested if
@@ -535,6 +551,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    },    
+	    verifyCustom: function(){
+	        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
+	            console.error("useCustomGridFormat is set to true but no custom component was specified.")           
+	        }
+	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
+	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
+	        }
+	        if(this.props.useCustomGridFormat === true && this.props.useCustomRowFormat === true){
+	            console.error("Cannot currently use both customGridFormat and customRowFormat.");
+	        }
+	    },
 	    getDataForRender: function(data, cols, pageList){
 	        var that = this;
 	            //get the correct page size
@@ -600,7 +627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
 	        //figure out if we want to show the filter section
-	        var filter = this.props.showFilter ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
+	        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
 	        var settings = this.props.showSettings ? React.createElement("span", {className: "settings", onClick: this.toggleColumnChooser}, this.props.settingsText, " ", React.createElement("i", {className: "glyphicon glyphicon-cog"})) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
@@ -636,10 +663,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
-	            //clean this stuff up so it's not if else all over the place.
-	            resultContent = this.props.useCustomFormat ?
-	                (React.createElement(CustomFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customFormatClassName, customFormat: this.props.customFormat}))
-	                : (React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName}));
+	            //clean this stuff up so it's not if else all over the place. ugly if 
+	            if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+	                //this should send all the results it has
+	                resultContent = React.createElement(this.props.customGridFormat, {data: this.props.results, className: this.props.customGridFormatClassName})                
+	            } else if(this.props.useCustomRowFormat){
+	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
+	            } else { 
+	                resultContent = React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName})
+	            }
 
 	            pagingContent = this.props.useCustomPager ?
 	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
@@ -652,17 +684,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement("div", {className: "row"}, 
 	                React.createElement("div", {className: "col-md-12"}, 
-	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	                    React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, showSetPageSize: !this.props.useCustomGridFormat, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridFormat, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	                )
 	            )
 	        ) : "";
 
 	        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
 	        //add custom to the class name so we can style it differently
-	        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+	        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = this.props.useCustomFormat ?
+	        var gridBody = (this.props.useCustomGridFormat || this.props.useCustomRowFormat) ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
 	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
@@ -686,15 +718,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return myReturn;
 
 	        }
-
-
 	        return (
 	            React.createElement("div", {className: gridClassName}, 
 	                topSection, 
 	                columnSelector, 
 	                React.createElement("div", {className: "grid-container panel"}, 
 	                    gridBody, 
-	                    that.props.showPager ? React.createElement("div", {className: "grid-footer clearfix"}, 
+	                    that.props.showPager && (that.props.useCustomGridFormat===false) ? React.createElement("div", {className: "grid-footer clearfix"}, 
 	                        pagingContent
 	                    ) : ""
 	                )
@@ -733,7 +763,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRowContainer = __webpack_require__(12);
+	var GridRowContainer = __webpack_require__(13);
 	var _ = __webpack_require__(3);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
@@ -937,12 +967,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                ))
 	                : "";
 
-	        return (React.createElement("div", {className: "griddle-settings panel"}, 
-	                React.createElement("h5", null, this.props.settingsText), 
-	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
-	                    React.createElement("div", {className: "row"}, nodes)
-	                ), 
-	                React.createElement("div", {className: "form-group"}, 
+	        var setPageSize = this.props.showSetPageSize ? (React.createElement("div", null, 
 	                    React.createElement("label", {htmlFor: "maxRows"}, this.props.maxRowsText, ":"), 
 	                    React.createElement("select", {onChange: this.setPageSize, value: this.props.resultsPerPage}, 
 	                        React.createElement("option", {value: "5"}, "5"), 
@@ -951,7 +976,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        React.createElement("option", {value: "50"}, "50"), 
 	                        React.createElement("option", {value: "100"}, "100")
 	                    )
+	            )) : "";
+
+	        return (React.createElement("div", {className: "griddle-settings panel"}, 
+	                React.createElement("h5", null, this.props.settingsText), 
+	                React.createElement("div", {className: "container-fluid griddle-columns"}, 
+	                    React.createElement("div", {className: "row"}, nodes)
 	                ), 
+	                setPageSize, 
 	                toggleCustom
 	            ));
 	    }
@@ -1072,7 +1104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var CustomFormatContainer = React.createClass({displayName: 'CustomFormatContainer',
+	var CustomRowFormatContainer = React.createClass({displayName: 'CustomRowFormatContainer',
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
@@ -1101,7 +1133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 
-	module.exports = CustomFormatContainer;
+	module.exports = CustomRowFormatContainer;
 
 
 /***/ },
@@ -1145,7 +1177,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1158,7 +1191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRow = __webpack_require__(13);
+	var GridRow = __webpack_require__(14);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getInitialState: function(){
@@ -1205,7 +1238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
