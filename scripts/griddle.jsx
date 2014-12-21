@@ -265,6 +265,7 @@ var Griddle = React.createClass({
             });
         }
     },
+    //todo: clean these verify methods up
     verifyExternal: function(){
         if(this.props.useExternal === true){
             //hooray for big ugly nested if
@@ -299,6 +300,9 @@ var Griddle = React.createClass({
         }
         if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
             console.error("useCustomRowFormat is set to true but no custom component was specified.")
+        }
+        if(this.props.useCustomGridFormat === true && this.props.useCustomRowFormat === true){
+            console.error("Cannot currently use both customGridFormat and customRowFormat.");
         }
     },
     getDataForRender: function(data, cols, pageList){

@@ -522,6 +522,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 	    },
+	    //todo: clean these verify methods up
 	    verifyExternal: function(){
 	        if(this.props.useExternal === true){
 	            //hooray for big ugly nested if
@@ -556,6 +557,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
 	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
+	        }
+	        if(this.props.useCustomGridFormat === true && this.props.useCustomRowFormat === true){
+	            console.error("Cannot currently use both customGridFormat and customRowFormat.");
 	        }
 	    },
 	    getDataForRender: function(data, cols, pageList){
@@ -759,7 +763,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRowContainer = __webpack_require__(12);
+	var GridRowContainer = __webpack_require__(13);
 	var _ = __webpack_require__(3);
 
 	var GridBody = React.createClass({displayName: 'GridBody',
@@ -1173,7 +1177,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1233,7 +1238,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */,
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 

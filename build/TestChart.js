@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var ChartistGraph = __webpack_require__(13); 
+	var ChartistGraph = __webpack_require__(12); 
 
 	var TestChart = React.createClass({displayName: 'TestChart',
 		getInitialProps: function(){
@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 13:
+/***/ 12:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
