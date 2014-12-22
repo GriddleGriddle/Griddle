@@ -61,12 +61,7 @@ var GridSettings = React.createClass({
                 </div>)
                 : "";
 
-        return (<div className="griddle-settings panel">
-                <h5>{this.props.settingsText}</h5>
-                <div className="container-fluid griddle-columns">
-                    <div className="row">{nodes}</div>
-                </div>
-                <div className="form-group">
+        var setPageSize = this.props.showSetPageSize ? (<div>
                     <label htmlFor="maxRows">{this.props.maxRowsText}:</label>
                     <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
                         <option value="5">5</option>
@@ -75,7 +70,14 @@ var GridSettings = React.createClass({
                         <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
+            </div>) : "";
+
+        return (<div className="griddle-settings panel">
+                <h5>{this.props.settingsText}</h5>
+                <div className="container-fluid griddle-columns">
+                    <div className="row">{nodes}</div>
                 </div>
+                {setPageSize}
                 {toggleCustom}
             </div>);
     }

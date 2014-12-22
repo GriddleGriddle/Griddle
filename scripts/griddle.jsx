@@ -14,7 +14,7 @@ var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridTitle = require('./gridTitle.jsx');
 var GridNoData = require('./gridNoData.jsx');
-var CustomFormatContainer = require('./customFormatContainer.jsx');
+var CustomRowFormatContainer = require('./customRowFormatContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var _ = require('underscore');
 
@@ -25,12 +25,11 @@ var Griddle = React.createClass({
             "columnMetadata": [],
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
-            "getExternalResults": null, // Used if obtaining results from an API, etc.
             "initialSort": "",
             "initialSortAscending": true,
             "gridClassName":"",
             "tableClassName":"",
-            "customFormatClassName":"",
+            "customRowFormatClassName":"",
             "settingsText": "Settings",
             "filterPlaceholderText": "Filter Results",
             "nextText": "Next",
@@ -44,9 +43,11 @@ var Griddle = React.createClass({
             "metadataColumns": [],
             "showFilter": false,
             "showSettings": false,
-            "useCustomFormat": false,
+            "useCustomRowFormat": false,
+            "useCustomGridFormat": false,
             "useCustomPager": false,
-            "customFormat": {},
+            "customRowFormat": null,
+            "customGridFormat": null,
             "customPager": {},
             "allowToggleCustom":false,
             "noDataMessage":"There is no data to display.",
@@ -58,8 +59,8 @@ var Griddle = React.createClass({
             "externalChangeSort": null,
             "externalSetFilter": null,
             "externalSetPageSize":null,
-            "externalMaxPages":null,
-            "externalCurrentPage":null,
+            "externalMaxPage":null,
+            "externalCurrentPage": null,
             "externalSortColumn": null,
             "externalSortAscending": true,
             "externalResults": [],
@@ -71,111 +72,70 @@ var Griddle = React.createClass({
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetFilter === "undefined"){
-                console.log("Using external data but 'externalSetFilter' function is undefined.");
-            }
-
             this.props.externalSetFilter(filter);
             return;
         }
 
         var that = this,
-        state = {
+        updatedState = {
             page: 0,
             filter: filter
-        },
-        updateAfterResultsObtained = function(updatedState) {
-            //if filter is null or undefined reset the filter.
-            if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-                updatedState.filter = filter;
-                updatedState.filteredResults = null;
-            }
-
-            // Set the state.
-            that.setState(updatedState);
         };
 
         // Obtain the state results.
-        state.filteredResults = _.filter(this.props.results,
-            function(item) {
-                var arr = _.values(item);
-                for(var i = 0; i < arr.length; i++){
-                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                    return true;
-                   }
-                }
+       updatedState.filteredResults = _.filter(this.props.results,
+       function(item) {
+            var arr = _.values(item);
+            for(var i = 0; i < arr.length; i++){
+               if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+                return true;
+               }
+            }
 
-                return false;
-            });
+            return false;
+        });
 
         // Update the max page.
-        state.maxPage = that.getMaxPage(state.filteredResults);
+        updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
 
-        // Update the state after obtaining the results.
-        updateAfterResultsObtained(state);
+        //if filter is null or undefined reset the filter.
+        if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+            updatedState.filter = filter;
+            updatedState.filteredResults = null;
+        }
+
+        // Set the state.
+        that.setState(updatedState);
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetPageSize === "undefined"){
-                console.log("Using external data but setPageSize function is undefined.");
-            }
-
             this.props.externalSetPageSize(size);
             return;
         }
 
-        // Obtain the results
-        this.props.getExternalResults(filter, sortColumn, sortAscending, page, this.props.resultsPerPage, callback);
-    },
-    updateStateWithExternalResults: function(state, callback) {
-        var that = this;
-
-        // Update the table to indicate that it's loading.
-        this.setState({ isLoading: true });
-
-        // Grab the results.
-        this.getExternalResults(state, function(externalResults) {
-            // Fill the state result properties
-            state.results = externalResults.results;
-            state.totalResults = externalResults.totalResults;
-            state.maxPage = that.getMaxPage(externalResults.results, state.totalResults);
-            state.isLoading = false;
-
-            // If the current page is larger than the max page, reset the page.
-            if (state.page >= state.maxPage) {
-                state.page = state.maxPage - 1;
-            }
-
-            callback(state);
-        });
-    },
-    hasExternalResults: function() {
-        return typeof(this.props.getExternalResults) === 'function';
-    },
-    setPageSize: function(size){
         //make this better.
         this.props.resultsPerPage = size;
-
-        if (this.hasExternalResults()) {
-            // Reload the results by setting the page.
-            this.setPage(0);
-        } else {
-            this.setMaxPage();
-        }
+        this.setMaxPage();
     },
     toggleColumnChooser: function(){
         this.setState({
-            showColumnChooser: this.state.showColumnChooser === false
+            showColumnChooser: !this.state.showColumnChooser
         });
     },
     toggleCustomFormat: function(){
-        this.setProps({
-            useCustomFormat: this.props.useCustomFormat === false
-        });
+        if(this.state.customFormatType === "grid"){
+            this.setProps({
+                useCustomGridFormat: !this.props.useCustomGridFormat
+            });
+        } else if(this.state.customFormatType === "row"){
+            this.setProps({
+                useCustomRowFormat: !this.props.useCustomRowFormat
+            });
+        }
     },
     getMaxPage: function(results, totalResults){
         if(this.props.useExternal){
-          return this.props.externalMaxPages
+          return this.props.externalMaxPage;
         }
 
         if (!totalResults) {
@@ -193,10 +153,6 @@ var Griddle = React.createClass({
     },
     setPage: function(number) {
         if(this.props.useExternal) {
-            if(typeof this.props.externalSetPage === "undefined"){
-                console.log("Using external data but 'externalSetPage' function is undefined.");
-            }
-
             this.props.externalSetPage(number);
             return;
         }
@@ -208,13 +164,7 @@ var Griddle = React.createClass({
                     page: number
                 };
 
-            if (this.hasExternalResults()) {
-                this.updateStateWithExternalResults(state, function(updatedState) {
-                    that.setState(updatedState);
-                });
-            } else {
                 that.setState(state);
-            }
         }
     },
     getColumns: function(){
@@ -267,14 +217,11 @@ var Griddle = React.createClass({
     },
     changeSort: function(sort){
         if(this.props.useExternal) {
-            if(typeof this.props.externalChangeSort === "undefined"){
-                console.log("Using external data but 'externalChangeSort' function is undefined.");
-            }
-
             this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
 
             return;
         }
+
         var that = this,
             state = {
                 page:0,
@@ -287,27 +234,10 @@ var Griddle = React.createClass({
             state.sortAscending = !this.state.sortAscending;
         }
 
-        if (this.hasExternalResults()) {
-            this.updateStateWithExternalResults(state, function(updatedState) {
-                that.setState(updatedState);
-            });
-        } else {
-            this.setState(state);
-        }
+        this.setState(state);
     },
     componentWillReceiveProps: function(nextProps) {
-        if (this.hasExternalResults()) {
-            // TODO: Confirm
-            var state = this.state,
-                that = this;
-
-            // Update the state with external results.
-            state = this.updateStateWithExternalResults(state, function(updatedState) {
-                that.setState(updatedState);
-            });
-        } else {
-            this.setMaxPage(nextProps.results);
-        }
+        this.setMaxPage(nextProps.results);
     },
     getInitialState: function() {
         var state =  {
@@ -325,28 +255,62 @@ var Griddle = React.createClass({
         return state;
     },
     componentWillMount: function() {
-        // If a custom format or pager is included, log that it's not compatible with infinite scrolling (at the moment)
-        if (this.props.infiniteScroll && (this.props.useCustomFormat || this.props.useCustomPager)) {
-          console.log("The 'useCustomFormat' and 'useCustomPager' properties are currently incompatible with infinite scrolling.");
-        }
-
+        this.verifyExternal();
+        this.verifyCustom();
         this.setMaxPage();
-    },
-    componentDidMount: function() {
-        var state = this.state;
-        var that = this;
-        if (this.hasExternalResults()) {
-            // Update the state with external results when mounting
-            state = this.updateStateWithExternalResults(state, function(updatedState) {
-                that.setState(updatedState);
-                that.setMaxPage();
+        //don't like the magic strings
+        if(this.props.useCustomGridFormat === true){
+            this.setState({
+                 customFormatType: "grid"
+            });
+        } else if(this.props.useCustomRowFormat === true){
+            this.setState({
+                customFormatType: "row"
             });
         }
     },
+    //todo: clean these verify methods up
+    verifyExternal: function(){
+        if(this.props.useExternal === true){
+            //hooray for big ugly nested if
+            if(this.props.externalSetPage === null){
+                console.error("useExternal is set to true but there is no externalSetPage function specified.");
+            }
 
+            if(this.props.externalChangeSort === null){
+                console.error("useExternal is set to true but there is no externalChangeSort function specified.");
+            }
+
+            if(this.props.externalSetFilter === null){
+                console.error("useExternal is set to true but there is no externalSetFilter function specified.");
+            }
+
+            if(this.props.externalSetPageSize === null){
+                console.error("useExternal is set to true but there is no externalSetPageSize function specified.");
+            }
+
+            if(this.props.externalMaxPage === null){
+                console.error("useExternal is set to true but externalMaxPage is not set.");
+            }
+
+            if(this.props.externalCurrentPage === null){
+                console.error("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
+            }
+        }
+    },
+    verifyCustom: function(){
+        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
+            console.error("useCustomGridFormat is set to true but no custom component was specified.")
+        }
+        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
+            console.error("useCustomRowFormat is set to true but no custom component was specified.")
+        }
+        if(this.props.useCustomGridFormat === true && this.props.useCustomRowFormat === true){
+            console.error("Cannot currently use both customGridFormat and customRowFormat.");
+        }
+    },
     getDataForRender: function(data, cols, pageList){
         var that = this;
-        if (!this.hasExternalResults()) {
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
                 data = _.sortBy(data, function(item){
@@ -370,10 +334,6 @@ var Griddle = React.createClass({
                   data = _.initial(rest, rest.length-this.props.resultsPerPage);
                 }
             }
-        } else {
-            // Don't sort or page data if loaded externally.
-        }
-
         var meta = [].concat(this.props.metadataColumns);
         if (meta.indexOf(this.props.childrenColumnName) < 0){
             meta.push(this.props.childrenColumnName);
@@ -398,10 +358,6 @@ var Griddle = React.createClass({
     },
     //this is the current results
     getCurrentResults: function(){
-      if (this.props.useExternal){
-          return this.props.externalResults;
-      }
-
       return this.state.filteredResults || this.props.results;
     },
     getCurrentPage: function(){
@@ -414,7 +370,7 @@ var Griddle = React.createClass({
         return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
     },
     getCurrentMaxPage: function(){
-        return this.props.useExternal ? this.props.externalMaxPages : this.state.maxPage;
+        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
     },
     isInfiniteScrollEnabled: function(){
       // If a custom format or pager is included, don't allow for infinite scrolling.
@@ -432,7 +388,7 @@ var Griddle = React.createClass({
         var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
-        var filter = this.props.showFilter ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
+        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
         var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
 
         //if we have neither filter or settings don't need to render this stuff
@@ -475,14 +431,19 @@ var Griddle = React.createClass({
             // Determine if we need to enable infinite scrolling on the table.
             var hasMorePages = (currentPage + 1) < maxPage;
 
-            //clean this stuff up so it's not if else all over the place.
-            resultContent = this.props.useCustomFormat ?
-                (<CustomFormatContainer data= {data} columns={cols} metadataColumns={meta} className={this.props.customFormatClassName} customFormat={this.props.customFormat}/>)
-                : (<GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>);
+            //clean this stuff up so it's not if else all over the place. ugly if
+            if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+                //this should send all the results it has
+                resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />
+            } else if(this.props.useCustomRowFormat){
+                resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
+            } else {
+                resultContent = <GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
+            }
 
             // Grab the paging content if it's to be displayed
             if (this.props.showPager && !this.isInfiniteScrollEnabled()) {
-              pagingContent = (
+                pagingContent = (
                   <div className="grid-footer clearfix">
                       {this.props.useCustomPager ?
                           <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
@@ -499,14 +460,14 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <div className="row">
                 <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText}  setPageSize={this.setPageSize} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
+                    <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize} showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
                 </div>
             </div>
         ) : "";
 
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
-        gridClassName += this.props.useCustomFormat ? " griddle-custom" : "";
+        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
 
 
         //todo: refactor this since it's basically the same now with a diff class

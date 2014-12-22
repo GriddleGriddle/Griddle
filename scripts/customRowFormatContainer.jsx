@@ -9,7 +9,7 @@
 */
 var React = require('react');
 
-var CustomFormatContainer = React.createClass({
+var CustomRowFormatContainer = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
@@ -38,4 +38,4 @@ var CustomFormatContainer = React.createClass({
   }
 });
 
-module.exports = CustomFormatContainer;
+module.exports = CustomRowFormatContainer;

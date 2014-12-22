@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="css/griddle.css" rel="stylesheet" />
+		<link href="css/example.theme.css" rel="stylesheet" />		
+		<link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+		<link href="css/chartist.css" rel="stylesheet" />
+		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+		<script src="http://fb.me/react-0.12.0.js"></script>
+		<script src="http://fb.me/JSXTransformer-0.12.0.js"></script>
+		<script src="scripts/fakeData.js"></script>
+		<script type="text/javascript" src="scripts/chartist.js"></script>
+		<script type="text/javascript" src="build/griddle.js"></script>
+		<script type="text/javascript" src="build/TestChart.js"></script>
+	</head>
+	<body style="padding: 15px">
+		<div id="grid-external" style="width:500px; height:500px;"></div>
+		<script type="text/jsx">
+			var data = [
+				{
+					"January": 35,
+					"February": 20,
+					"March": 27,
+					"April": 32,
+					"May": 23,
+					"June": 42
+				},
+				{
+					"January": 31,
+					"February": 30,
+					"March": 17,
+					"April": 42,
+					"May": 26,
+					"June": 11
+				},
+				{
+					"January": 28,
+					"February": 18,
+					"March": 19,
+					"April": 23,
+					"May": 36,
+					"June": 40
+				}
+			];
+			React.render(<Griddle allowToggleCustom={true} showSettings={true} results={data} useCustomGridFormat={true} customGridFormat={TestChart} tableClassName="table"/>, document.getElementById('grid-external'));
+		</script>
+	</body>
+</html>

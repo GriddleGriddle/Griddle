@@ -76,7 +76,7 @@ var GridTable = React.createClass({
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
         "position": "relative",
-        "overflow-y": "scroll",
+        "overflowY": "scroll",
         "height": this.props.bodyHeight + "px"
       };
 
