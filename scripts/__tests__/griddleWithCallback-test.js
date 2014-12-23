@@ -28,4 +28,21 @@ describe('griddleWithCallback', function(){
 
 	   expect(console.error).not.toHaveBeenCalledWith("When using GriddleWithCallback, a getExternalResults callback must be supplied."); 
 	});
+
+	it('passes props with the spread operator if not defined on props of griddleWithCallback', function(){
+		var mock = jest.genMockFunction();
+	    var grid2 = TestUtils.renderIntoDocument(<GriddleWithCallback getExternalResults={mock} />);
+
+	    // check that the showPager is undefined and the pager is there
+	    expect(typeof grid2.props.showPager === 'undefined');
+
+	    var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'select')
+		expect(rows.length).toEqual(1);
+
+	    var grid3 = TestUtils.renderIntoDocument(<GriddleWithCallback showPager={false} getExternalResults={mock} />);
+
+	    //pager should not be rendered now.
+		var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid3, 'select')
+		expect(rows.length).toEqual(0);
+	})
 });

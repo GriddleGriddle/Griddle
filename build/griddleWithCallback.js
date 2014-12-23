@@ -233,19 +233,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    render: function(){
 			if(this.state.isLoading){
-				return React.createElement(Griddle, {useExternal: true, externalSetPage: this.setPage, 
+				return React.createElement(Griddle, React.__spread({},  this.props, {useExternal: true, externalSetPage: this.setPage, 
 			        externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 			        externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
 			        externalCurrentPage: this.state.page, results: [{"fake":"forLoading"}], tableClassName: "table", resultsPerPage: this.state.pageSize, 
 			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true, 
-					useCustomFormat: "true", customFormat: this.props.loadingComponent})
+					useCustomFormat: "true", customFormat: this.props.loadingComponent}))
 			}
 
-			return React.createElement(Griddle, {useExternal: true, externalSetPage: this.setPage, 
+			return React.createElement(Griddle, React.__spread({},  this.props, {useExternal: true, externalSetPage: this.setPage, 
 				externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 				externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
 				externalCurrentPage: this.state.page, results: this.state.results, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true})
+				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true}))
 	    }
 	});
 
