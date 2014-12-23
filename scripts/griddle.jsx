@@ -443,7 +443,7 @@ var Griddle = React.createClass({
             }
 
             // Grab the paging content if it's to be displayed
-            if (this.props.showPager && !this.isInfiniteScrollEnabled()) {
+            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
                 pagingContent = (
                   <div className="grid-footer clearfix">
                       {this.props.useCustomPager ?

@@ -700,7 +700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            // Grab the paging content if it's to be displayed
-	            if (this.props.showPager && !this.isInfiniteScrollEnabled()) {
+	            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
 	                pagingContent = (
 	                  React.createElement("div", {className: "grid-footer clearfix"}, 
 	                      this.props.useCustomPager ?
