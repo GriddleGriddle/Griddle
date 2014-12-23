@@ -42,7 +42,7 @@ describe('griddleWithCallback', function(){
 	    var grid3 = TestUtils.renderIntoDocument(<GriddleWithCallback showPager={false} getExternalResults={mock} />);
 
 	    //pager should not be rendered now.
-		var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid3, 'select')
+		rows = TestUtils.scryRenderedDOMComponentsWithTag(grid3, 'select')
 		expect(rows.length).toEqual(0);
 	})
 });
