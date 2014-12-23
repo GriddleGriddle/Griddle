@@ -129,6 +129,13 @@ header .btn-group{
 	border-top:1px solid #ddd;
 }
 
+/* custom shouldn't have border. */
+.griddle-custom .grid-footer{
+	border: none;
+}
+
+
+
 /* duplicate to griddle center but this is mostly for the demo page*/
 .center{
 	text-align: center;

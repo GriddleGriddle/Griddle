@@ -13,7 +13,7 @@ var externalData = fakeData.slice(0, 53);
 //This whole thing is throw-away code.
 //It's basically to show that you can wrap up griddle
 //and give external data to it from another source (api / localstorage / etc)
-var ExternalFormatter = React.createClass({
+var ExternalComponent = React.createClass({
 
     getInitialState: function(){
       var initial = { "results": [],
@@ -176,7 +176,7 @@ var TestComponent = React.createClass({
         } else if(this.props.subgrid === true){
             example = <Griddle results={fakeSubgridData} columnMetadata={columnMeta} tableClassName="table" />
         } else if (this.props.external === true) {
-            example = <ExternalFormatter />
+            example = <ExternalComponent />
         } else {
             example = <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"
             showFilter={true} showSettings={true}
