@@ -311,6 +311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "customNoData": null,
 	            "showTableHeading":true,
 	            "showPager":true,
+	            "useFixedHeader":false,
 	            "useExternal": false,
 	            "externalSetPage": null,
 	            "externalChangeSort": null,
@@ -695,7 +696,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if(this.props.useCustomRowFormat){
 	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
 	            } else {
-	                resultContent = React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages})
+	                resultContent = React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages})
 	            }
 
 	            // Grab the paging content if it's to be displayed
@@ -806,6 +807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "infiniteScroll": false,
 	      "nextPage": null,
 	      "hasMorePages": false,
+	      "useFixedHeader": false,
 	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
 	      "tableHeading": ""
@@ -853,7 +855,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
-	    var tableStyle = null;
 	    var gridStyle = null;
 	    var headerStyle = null;
 	    var infiniteScrollSpacerRow = null;
@@ -885,9 +886,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      nodes = React.createElement("tbody", null, nodes, infiniteScrollSpacerRow)
 	    }
 
-	    return (
+	    return this.props.useFixedHeader ?
+	        (
+	          React.createElement("div", null, 
+	            React.createElement("table", {className: this.props.className}, 
+	              tableHeading
+	            ), 
 	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
-	              React.createElement("table", {className: this.props.className, style: tableStyle}, 
+	              React.createElement("table", {className: this.props.className}, 
+	                  nodes
+	              )
+	            )
+	          )
+	        ) : (
+	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
+	              React.createElement("table", {className: this.props.className}, 
 	                  tableHeading, 
 	                  nodes
 	              )

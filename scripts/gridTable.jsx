@@ -21,6 +21,7 @@ var GridTable = React.createClass({
       "infiniteScroll": false,
       "nextPage": null,
       "hasMorePages": false,
+      "useFixedHeader": false,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
       "tableHeading": ""
@@ -68,7 +69,6 @@ var GridTable = React.createClass({
         return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
-    var tableStyle = null;
     var gridStyle = null;
     var headerStyle = null;
     var infiniteScrollSpacerRow = null;
@@ -100,9 +100,21 @@ var GridTable = React.createClass({
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
     }
 
-    return (
+    return this.props.useFixedHeader ?
+        (
+          <div>
+            <table className={this.props.className}>
+              {tableHeading}
+            </table>
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
-              <table className={this.props.className} style={tableStyle}>
+              <table className={this.props.className}>
+                  {nodes}
+              </table>
+            </div>
+          </div>
+        ) : (
+            <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
+              <table className={this.props.className}>
                   {tableHeading}
                   {nodes}
               </table>
