@@ -177,7 +177,7 @@ var GriddleWithCallback = React.createClass({
     },
     render: function(){
 		if(this.state.isLoading){
-			return <Griddle useExternal={true} externalSetPage={this.setPage}
+			return <Griddle {...this.props} useExternal={true} externalSetPage={this.setPage}
 		        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
 		        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
 		        externalCurrentPage={this.state.page} results={[{"fake":"forLoading"}]} tableClassName="table" resultsPerPage={this.state.pageSize}
@@ -185,7 +185,7 @@ var GriddleWithCallback = React.createClass({
 				useCustomFormat="true" customFormat={this.props.loadingComponent} />
 		}
 
-		return <Griddle useExternal={true} externalSetPage={this.setPage}
+		return <Griddle {...this.props} useExternal={true} externalSetPage={this.setPage}
 			externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
 			externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
 			externalCurrentPage={this.state.page} results={this.state.results} tableClassName="table" resultsPerPage={this.state.pageSize}
