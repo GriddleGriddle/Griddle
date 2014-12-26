@@ -86,7 +86,7 @@ module.exports = function(grunt) {
         files: [
           { expand: true, src: ['build/*'], dest: 'docs/html/scripts', flatten: true},
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
-          { expand: true, src: ['scripts/testComponent.js', 'scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         
+          { expand: true, src: ['examples/common/scripts/testComponent.js', 'examples/common/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         
         ]
       }
     },
