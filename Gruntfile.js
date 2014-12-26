@@ -1,3 +1,4 @@
+// jshint ignore: start
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -106,7 +107,7 @@ module.exports = function(grunt) {
         },
         module: {
           loaders: [
-            {test: /\.jsx$/, loader: 'jsx'},
+            {test: /\.jsx$/, loader: 'jsx'}
           ]
         },
         externals: {
@@ -132,7 +133,7 @@ module.exports = function(grunt) {
         },
         module: {
           loaders: [
-            {test: /\.jsx$/, loader: 'jsx'},
+            {test: /\.jsx$/, loader: 'jsx'}
           ]
         },
         externals: {

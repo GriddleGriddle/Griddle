@@ -27,7 +27,7 @@ var CustomRowFormatContainer = React.createClass({
     }
 
     var nodes = this.props.data.map(function(row, index){
-        return <that.props.customFormat data={row} metadataColumns={that.props.metadataColumns} key={index}/>
+        return <that.props.customFormat data={row} metadataColumns={that.props.metadataColumns} key={index} />
     });
 
     return (

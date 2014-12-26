@@ -22,13 +22,13 @@ var GridRow = React.createClass({
       }
     },
     handleClick: function(){
-      this.props.toggleChildren(); 
+      this.props.toggleChildren();
     },
     render: function() {
         var that = this;
 
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-            var returnValue = null; 
+            var returnValue = null;
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){

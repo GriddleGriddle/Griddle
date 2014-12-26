@@ -71,7 +71,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridBody = __webpack_require__(4);
+	var GridTable = __webpack_require__(4);
 	var GridFilter = __webpack_require__(5);
 	var GridPagination = __webpack_require__(6);
 	var GridSettings = __webpack_require__(7);
@@ -117,6 +117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "customNoData": null,
 	            "showTableHeading":true,
 	            "showPager":true,
+	            "useFixedHeader":false,
 	            "useExternal": false,
 	            "externalSetPage": null,
 	            "externalChangeSort": null,
@@ -125,7 +126,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalMaxPage":null,
 	            "externalCurrentPage": null,
 	            "externalSortColumn": null,
-	            "externalSortAscending": true
+	            "externalSortAscending": true,
+	            "externalResults": [],
+	            "infiniteScroll": null,
+	            "bodyHeight": null,
+	            "infiniteScrollSpacerHeight": 50
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
@@ -140,7 +145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            page: 0,
 	            filter: filter
 	        };
-	        
+
 	        // Obtain the state results.
 	       updatedState.filteredResults = _.filter(this.props.results,
 	       function(item) {
@@ -188,7 +193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        } else if(this.state.customFormatType === "row"){
 	            this.setProps({
-	                useCustomRowFormat: !this.props.useCustomRowFormat 
+	                useCustomRowFormat: !this.props.useCustomRowFormat
 	            });
 	        }
 	    },
@@ -198,7 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        if (!totalResults) {
-	                totalResults = (results||this.getCurrentResults()).length;
+	          totalResults = (results||this.getCurrentResults()).length;
 	        }
 	        var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
 	        return maxPage;
@@ -207,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
 	        if (this.state.maxPage !== maxPage){
-	            this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
+	          this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
 	        }
 	    },
 	    setPage: function(number) {
@@ -216,7 +221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
-	       //check page size and move the filteredResults to pageSize * pageNumber
+	        //check page size and move the filteredResults to pageSize * pageNumber
 	        if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
 	            var that = this,
 	                state = {
@@ -356,10 +361,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                console.error("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
 	            }
 	        }
-	    },    
+	    },
 	    verifyCustom: function(){
 	        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
-	            console.error("useCustomGridFormat is set to true but no custom component was specified.")           
+	            console.error("useCustomGridFormat is set to true but no custom component was specified.")
 	        }
 	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
 	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
@@ -384,9 +389,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentPage = this.getCurrentPage();
 
 	            if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
-	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-	                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
-	                data = _.initial(rest, rest.length-this.props.resultsPerPage);
+	                if (this.isInfiniteScrollEnabled()) {
+	                  // If we're doing infinite scroll, grab all results up to the current page.
+	                  data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
+	                } else {
+	                  //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+	                  var rest = _.rest(data, currentPage * this.props.resultsPerPage);
+	                  data = _.initial(rest, rest.length-this.props.resultsPerPage);
+	                }
 	            }
 	        var meta = [].concat(this.props.metadataColumns);
 	        if (meta.indexOf(this.props.childrenColumnName) < 0){
@@ -425,6 +435,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getCurrentMaxPage: function(){
 	        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
+	    },
+	    isInfiniteScrollEnabled: function(){
+	      // If a custom format or pager is included, don't allow for infinite scrolling.
+	      if (this.props.useCustomFormat || this.props.useCustomPager) {
+	        return false;
+	      }
+
+	      // Otherwise, send back the property.
+	      return this.props.infiniteScroll;
 	    },
 	    render: function() {
 	        var that = this,
@@ -469,19 +488,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // Grab the column keys from the first results
 	            keys = _.keys(_.omit(results[0], meta));
 
-	            //clean this stuff up so it's not if else all over the place. ugly if 
+	            // Grab the current and max page values.
+	            var currentPage = this.getCurrentPage();
+	            var maxPage = this.getCurrentMaxPage();
+
+	            // Determine if we need to enable infinite scrolling on the table.
+	            var hasMorePages = (currentPage + 1) < maxPage;
+
+	            //clean this stuff up so it's not if else all over the place. ugly if
 	            if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
 	                //this should send all the results it has
-	                resultContent = React.createElement(this.props.customGridFormat, {data: this.props.results, className: this.props.customGridFormatClassName})                
+	                resultContent = React.createElement(this.props.customGridFormat, {data: this.props.results, className: this.props.customGridFormatClassName})
 	            } else if(this.props.useCustomRowFormat){
 	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
-	            } else { 
-	                resultContent = React.createElement(GridBody, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName})
+	            } else {
+	                resultContent = React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages})
 	            }
 
-	            pagingContent = this.props.useCustomPager ?
-	                (React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}))
-	                : (React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: this.getCurrentPage(), maxPage: this.getCurrentMaxPage(), setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText}));
+	            // Grab the paging content if it's to be displayed
+	            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
+	                pagingContent = (
+	                  React.createElement("div", {className: "grid-footer clearfix"}, 
+	                      this.props.useCustomPager ?
+	                          React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}) :
+	                          React.createElement(GridPagination, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
+	                      
+	                  )
+	              );
+	            }
 	        } else {
 	            // Otherwise, display the loading content.
 	            resultContent = (React.createElement("div", {className: "loading img-responsive center-block"}));
@@ -500,12 +534,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
 
 
-	        var gridBody = (this.props.useCustomGridFormat || this.props.useCustomRowFormat) ?
+	        //todo: refactor this since it's basically the same now with a diff class
+	        var gridTable = this.props.useCustomFormat ?
 	            React.createElement("div", null, resultContent)
 	            :       (React.createElement("div", {className: "grid-body"}, 
-	                        this.props.showTableHeading ? React.createElement("table", {className: headerTableClassName}, 
-	                            React.createElement(GridTitle, {columns: cols, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), columnMetadata: this.props.columnMetadata})
-	                        ) : "", 
 	                        resultContent
 	                        ));
 
@@ -524,15 +556,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return myReturn;
 
 	        }
+
 	        return (
 	            React.createElement("div", {className: gridClassName}, 
 	                topSection, 
 	                columnSelector, 
 	                React.createElement("div", {className: "grid-container panel"}, 
-	                    gridBody, 
-	                    that.props.showPager && (that.props.useCustomGridFormat===false) ? React.createElement("div", {className: "grid-footer clearfix"}, 
-	                        pagingContent
-	                    ) : ""
+	                    gridTable, 
+	                    pagingContent
 	                )
 	            )
 	        );
@@ -569,15 +600,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
+	var GridTitle = __webpack_require__(8);
 	var GridRowContainer = __webpack_require__(12);
 	var _ = __webpack_require__(3);
 
-	var GridBody = React.createClass({displayName: 'GridBody',
+	var GridTable = React.createClass({displayName: 'GridTable',
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
 	      "metadataColumns": [],
-	      "className": ""
+	      "className": "",
+	      "infiniteScroll": false,
+	      "nextPage": null,
+	      "hasMorePages": false,
+	      "useFixedHeader": false,
+	      "infiniteScrollSpacerHeight": null,
+	      "bodyHeight": null,
+	      "tableHeading": ""
+	    }
+	  },
+	  componentDidMount: function() {
+	    // After the initial render, see if we need to load additional pages.
+	    this.gridScroll();
+	  },
+	  componentDidUpdate: function(prevProps, prevState) {
+	    // After the subsequent renders, see if we need to load additional pages.
+	    this.gridScroll();
+	  },
+	  gridScroll: function(){
+	    if (this.props.infiniteScroll) {
+	      // If the scroll height is greater than the current amount of rows displayed, update the page.
+	      var scrollable = this.refs.scrollable.getDOMNode();
+	      var scrollTop = scrollable.scrollTop
+	      var scrollHeight = scrollable.scrollHeight;
+	      var clientHeight = scrollable.clientHeight;
+
+	      // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
+	      // the spacer's height.
+	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+
+	      // Make sure that we load results a little before reaching the bottom.
+	      var compareHeight = scrollHeightDiff * 0.8;
+
+	      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+	        this.props.nextPage();
+	      }
 	    }
 	  },
 	  render: function() {
@@ -594,21 +661,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, {data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className})
 	    });
 
-	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
-	    if (!anyHasChildren){
-	      nodes = React.createElement("tbody", null, nodes)
+	    var gridStyle = null;
+	    var headerStyle = null;
+	    var infiniteScrollSpacerRow = null;
+	    if (this.props.infiniteScroll) {
+	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
+	      gridStyle = {
+	        "position": "relative",
+	        "overflowY": "scroll",
+	        "height": this.props.bodyHeight + "px"
+	      };
+
+	      // Only add the spacer row if the height is defined.
+	      if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
+	        var spacerStyle = {
+	          "height": this.props.infiniteScrollSpacerHeight + "px"
+	        };
+
+	        infiniteScrollSpacerRow = React.createElement("tr", {style: spacerStyle});
+	      }
 	    }
 
-	    return (
+	    //construct the table heading component
+	    var tableHeading = (this.props.showTableHeading ?
+	        React.createElement(GridTitle, {columns: this.props.columns, changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, columnMetadata: this.props.columnMetadata, headerStyle: headerStyle})
+	        : "");
 
+	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
+	    if (!anyHasChildren){
+	      nodes = React.createElement("tbody", null, nodes, infiniteScrollSpacerRow)
+	    }
+
+	    return this.props.useFixedHeader ?
+	        (
+	          React.createElement("div", null, 
 	            React.createElement("table", {className: this.props.className}, 
-	                nodes
+	              tableHeading
+	            ), 
+	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
+	              React.createElement("table", {className: this.props.className}, 
+	                  nodes
+	              )
+	            )
+	          )
+	        ) : (
+	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
+	              React.createElement("table", {className: this.props.className}, 
+	                  tableHeading, 
+	                  nodes
+	              )
 	            )
 	        );
 	    }
 	});
 
-	module.exports = GridBody;
+	module.exports = GridTable;
 
 
 /***/ },
@@ -819,7 +926,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	           "columns":[],
 	           "sortColumn": "",
-	           "sortAscending": true
+	           "sortAscending": true,
+	           "headerStyle": null
 	        }
 	    },
 	    sort: function(event){
@@ -850,7 +958,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        return(
-	            React.createElement("thead", null, 
+	            React.createElement("thead", {style: this.props.headerStyle}, 
 	                React.createElement("tr", null, 
 	                    nodes
 	                )
@@ -1070,13 +1178,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    },
 	    handleClick: function(){
-	      this.props.toggleChildren(); 
+	      this.props.toggleChildren();
 	    },
 	    render: function() {
 	        var that = this;
 
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
-	            var returnValue = null; 
+	            var returnValue = null;
 	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
 	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){

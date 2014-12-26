@@ -15,7 +15,8 @@ var GridTitle = React.createClass({
         return {
            "columns":[],
            "sortColumn": "",
-           "sortAscending": true
+           "sortAscending": true,
+           "headerStyle": null
         }
     },
     sort: function(event){
@@ -46,7 +47,7 @@ var GridTitle = React.createClass({
         });
 
         return(
-            <thead>
+            <thead style={this.props.headerStyle}>
                 <tr>
                     {nodes}
                 </tr>
