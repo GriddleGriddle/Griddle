@@ -30,7 +30,7 @@
 </head>
 <body>
 
-  <!-- Primary Page Layout
+  <!-- Primary Page 
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <header class="background-primary-dark">
     <div class="container">
@@ -56,6 +56,11 @@
           <h3>Griddle is a simple grid component for use with <a href="http://facebook.github.io/react/">React</a></h3>
         </div>
       </div>
+      <div class="row">
+        <div id="grid-basic">
+        
+        </div>      
+      </div>
       <div class="row center">
         <a href="#" class="button border-light text-light big">Get Started</a>
         <a href="#" class="button border-light text-light big">Download</a>
@@ -64,7 +69,18 @@
       </div>
     </div>
   </div>
-<!-- End Document
+<!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+  <script src="scripts/Griddle.js"></script>
+  <script src="scripts/fakeData.js"></script>
+  <script type="text/jsx">
+  /** @jsx React.DOM */
+    React.render(
+        <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table"/>, document.getElementById('grid-basic')
+    );
+  </script>
 </body>
 </html>
