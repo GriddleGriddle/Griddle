@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     },
     open: {
       server: {
-        url: 'http://localhost:<%= connect.server.options.port %>/docs/html'
+        url: 'http://localhost:<%= connect.server.options.port %>/docs/html/old.html'
       }
     },
     react: {
@@ -45,13 +45,13 @@ module.exports = function(grunt) {
           {
             expand: true,
             src: 'docs/dist/**/*.md',
-            dest: 'html/',
+            dest: 'docs/html/',
             flatten: true,
             ext: '.html'
           }
         ],
         options: {
-          template: 'template.jst',
+          template: 'docs/src/template/template.jst',
           preCompile: function(src, context) {},
           postCompile: function(src, context) {},
           templateContext: {},
@@ -73,20 +73,21 @@ module.exports = function(grunt) {
           // Task-specific options go here.
         },
         // Files to perform replacements and includes with
-        src: 'docs/src/*.md',
+        src: 'docs/src/**/*.md',
         // Destination directory to copy files to
-        dest: 'docs/dist/'
+        dest: 'docs/dist/',
       }
     },
     clean: {
-      docs: [ "docs/html"]
+      docs: [ "docs/html"],
+      includes: [ "docs/dist"]
     },
     copy: {
       docs: {
         files: [
           { expand: true, src: ['build/*'], dest: 'docs/html/scripts', flatten: true},
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
-          { expand: true, src: ['examples/common/scripts/testComponent.js', 'examples/common/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         
+          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         
         ]
       }
     },
@@ -152,10 +153,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-webpack'); 
   grunt.loadNpmTasks('grunt-contrib-clean'); 
+  grunt.loadNpmTasks('grunt-markdown');
+  grunt.loadNpmTasks('grunt-include-replace');
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
       'clean',
+      'includereplace',
+      'markdown',
+      'clean:includes',
       'webpack:docs',
       'copy',
       'open',
