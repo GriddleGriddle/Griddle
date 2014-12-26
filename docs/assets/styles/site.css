@@ -1,0 +1,71 @@
+/* html elements */
+header{
+	padding: 10px 0px 10px 0px;
+}
+
+a, a:visited{
+	color: #03A9F4;
+	text-decoration: none;
+}
+/* backgrounds */
+/* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */ 
+.background-primary { background-color: #673AB7; }
+.background-primary-dark { background-color: #512DA8; }
+.background-primary-light { background-color: #D1C4E9; }
+.background-accent { background-color: #03A9F4; }
+.background-dark-grey { background-color: #727272; }
+.background-light-grey { background-color: #B6B6B6; }
+.background-light { background-color: #FFF; }
+
+/* borders */
+.border-bottom { 
+	border:0px;
+	border-bottom: 2px solid;
+}
+.border-primary { border-color: #673AB7; }
+.border-primary-dark { border-color: #512DA8; }
+.border-primary-light { border-color:#D1C4E9; }
+.border-accent { border-color: #03A9F4; }
+.border-dark-grey { border-color: #727272; }
+.border-light-grey { border-color: #B6B6B6; }
+.border-light { border-color: #FFF; }
+
+/* text colors */
+.text { color: #212121; }
+.text-light { color: #FFF; }
+.text-primary { color: #673AB7; }
+.text-primary-dark { color: #512DA8; }
+.text-primary-light { color: #D1C4E9; }
+.text-accent { color: #03A9F4; }
+.text-dark-grey { color: #727272; }
+.text-light-grey {color: #B6B6B6; }
+
+.chalkboard{
+	background-repeat: repeat;
+}
+/* Skeleton overrides
+---------------------------------  */
+.button.big{
+	height:50px;
+	font-size: 1.5rem;
+	padding-top:.5rem;
+}
+.button:visited{
+	color:#FFF;
+	border:#FFF;
+}
+
+.button.text-light:hover{
+	color: #D1C4E9;
+	border-color: #D1C4E9;
+}
+
+/* Alignment
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.right{
+	text-align: right;
+}
+
+.center{
+	text-align: center;
+}
