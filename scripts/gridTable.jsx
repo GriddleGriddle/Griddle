@@ -22,6 +22,7 @@ var GridTable = React.createClass({
       "nextPage": null,
       "hasMorePages": false,
       "useFixedHeader": false,
+      "useFixedLayout": true,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
       "tableHeading": "",
@@ -71,7 +72,15 @@ var GridTable = React.createClass({
     });
 
     var gridStyle = null;
-    var tableStyle = {"width": "100%"};
+
+    var tableStyle = {
+      width: "100%"
+    };
+
+    if(this.props.useFixedLayout){
+      tableStyle.tableLayout = "fixed";
+    }
+
     var infiniteScrollSpacerRow = null;
     if (this.props.infiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.

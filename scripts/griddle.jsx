@@ -68,7 +68,8 @@ var Griddle = React.createClass({
             "externalResults": [],
             "infiniteScroll": null,
             "bodyHeight": null,
-            "infiniteScrollSpacerHeight": 50
+            "infiniteScrollSpacerHeight": 50,
+            "useFixedLayout": true
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -396,12 +397,29 @@ var Griddle = React.createClass({
         //if we have neither filter or settings don't need to render this stuff
         var topSection = "";
         if (this.props.showFilter || this.props.showSettings){
+
+            var filterStyles = this.props.useGriddleStyles ? 
+                {
+                    float: "left",
+                    width: "50%",
+                    textAlign: "left",
+                    color: "#222"
+                } : null;
+
+            var settingsStyles = this.props.useGriddleStyles ? 
+                {
+                    float: "left",
+                    width: "50%",
+                    textAlign: "right"
+                } : null
+
+
            topSection = (
-            <div className="row top-section">
-                <div className="griddle-filter">
+            <div className="top-section">
+                <div className="griddle-filter" style={filterStyles}>
                    {filter}
                 </div>
-                <div className="griddle-settings-toggle">
+                <div className="griddle-settings-toggle" style={settingsStyles}>
                     {settings}
                 </div>
             </div>);
@@ -452,7 +470,7 @@ var Griddle = React.createClass({
             } else if(this.props.useCustomRowFormat){
                 resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
             } else {
-                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
+                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
             }
 
 

@@ -145,7 +145,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['**/*.jsx'],
+        files: ['**/*.jsx', '**/*.md'],
         tasks: ['build'],
         options: {
           spawn: false,
@@ -168,8 +168,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
+      'build',
       'connect',
-      'watch'
+      'open',
+      'watch',
     ]);
   });
 
@@ -181,7 +183,6 @@ module.exports = function(grunt) {
       'clean:includes',
       'webpack:docs',
       'copy',
-      'open',
     ]);
   })
 

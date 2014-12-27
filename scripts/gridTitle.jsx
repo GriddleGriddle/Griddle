@@ -35,7 +35,8 @@ var GridTitle = React.createClass({
               titleStyles = {
                 backgroundColor: "#EDEDEF",
                 border: "0",
-                color: "#222"
+                color: "#222",
+                padding: "5px"
               } 
 
               if(index === 0){

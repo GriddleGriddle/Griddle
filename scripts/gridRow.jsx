@@ -28,9 +28,9 @@ var GridRow = React.createClass({
     render: function() {
         var that = this;
 
-debugger;
         var columnStyles = this.props.useGriddleStyles ? 
           {
+            padding: "5px",
             backgroundColor: "#FFF",
             borderTopColor: "#DDD",
             color: "#222"
