@@ -397,25 +397,31 @@ var Griddle = React.createClass({
         //if we have neither filter or settings don't need to render this stuff
         var topSection = "";
         if (this.props.showFilter || this.props.showSettings){
+            var filterStyles = null,
+                settingsStyles = null,
+                topContainerStyles = null;
 
-            var filterStyles = this.props.useGriddleStyles ? 
-                {
+            if(this.props.useGriddleStyles){
+                filterStyles = {
                     float: "left",
                     width: "50%",
                     textAlign: "left",
                     color: "#222"
-                } : null;
+                };
 
-            var settingsStyles = this.props.useGriddleStyles ? 
-                {
+                settingsStyles= {
                     float: "left",
                     width: "50%",
                     textAlign: "right"
-                } : null
+                };
 
+                topContainerStyles = {
+                    clear: "both"
+                }
+            }
 
            topSection = (
-            <div className="top-section">
+            <div className="top-section" style={topContainerStyles}>
                 <div className="griddle-filter" style={filterStyles}>
                    {filter}
                 </div>
