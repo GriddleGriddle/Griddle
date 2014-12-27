@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     },
     open: {
       server: {
-        url: 'http://localhost:<%= connect.server.options.port %>/docs/html/old.html'
+        url: 'http://localhost:<%= connect.server.options.port %>/docs/html/'
       }
     },
     react: {
@@ -85,7 +85,6 @@ module.exports = function(grunt) {
     copy: {
       docs: {
         files: [
-          { expand: true, src: ['build/*'], dest: 'docs/html/scripts', flatten: true},
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         

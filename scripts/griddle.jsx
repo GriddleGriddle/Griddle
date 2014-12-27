@@ -46,6 +46,7 @@ var Griddle = React.createClass({
             "useCustomRowFormat": false,
             "useCustomGridFormat": false,
             "useCustomPager": false,
+            "useGriddleStyles": true,
             "customRowFormat": null,
             "customGridFormat": null,
             "customPager": {},
@@ -397,10 +398,10 @@ var Griddle = React.createClass({
         if (this.props.showFilter || this.props.showSettings){
            topSection = (
             <div className="row top-section">
-                <div className="col-xs-6">
+                <div className="griddle-filter">
                    {filter}
                 </div>
-                <div className="col-xs-6 right">
+                <div className="griddle-settings-toggle">
                     {settings}
                 </div>
             </div>);
@@ -432,6 +433,18 @@ var Griddle = React.createClass({
             // Determine if we need to enable infinite scrolling on the table.
             var hasMorePages = (currentPage + 1) < maxPage;
 
+            // Grab the paging content if it's to be displayed
+            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
+                pagingContent = (
+                  <div className="griddle-footer">
+                      {this.props.useCustomPager ?
+                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
+                          <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                      }
+                  </div>
+              );
+            }
+
             //clean this stuff up so it's not if else all over the place. ugly if
             if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
                 //this should send all the results it has
@@ -439,31 +452,17 @@ var Griddle = React.createClass({
             } else if(this.props.useCustomRowFormat){
                 resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
             } else {
-                resultContent = <GridTable columnMetadata={this.props.columnMetadata} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
+                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
             }
 
-            // Grab the paging content if it's to be displayed
-            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
-                pagingContent = (
-                  <div className="grid-footer clearfix">
-                      {this.props.useCustomPager ?
-                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
-                          <GridPagination next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
-                      }
-                  </div>
-              );
-            }
+
         } else {
             // Otherwise, display the loading content.
             resultContent = (<div className="loading img-responsive center-block"></div>);
         }
 
         var columnSelector = this.state.showColumnChooser ? (
-            <div className="row">
-                <div className="col-md-12">
-                    <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize} showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
-                </div>
-            </div>
+            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize} showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
 
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
@@ -474,7 +473,7 @@ var Griddle = React.createClass({
         //todo: refactor this since it's basically the same now with a diff class
         var gridTable = this.props.useCustomFormat ?
             <div>{resultContent}</div>
-            :       (<div className="grid-body">
+            :       (<div className="griddle-body">
                         {resultContent}
                         </div>);
 
@@ -498,9 +497,8 @@ var Griddle = React.createClass({
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
-                <div className="grid-container panel">
+                <div className="griddle-container">
                     {gridTable}
-                    {pagingContent}
                 </div>
             </div>
         );

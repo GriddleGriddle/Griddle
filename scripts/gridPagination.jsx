@@ -8,6 +8,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var _ = require('underscore');
 
 //needs props maxPage, currentPage, nextFunction, prevFunction
 var GridPagination = React.createClass({
@@ -27,11 +28,26 @@ var GridPagination = React.createClass({
         var next = "";
 
         if(this.props.currentPage > 0){
-            previous = <span onClick={this.props.previous} className="previous"><i className="glyphicon glyphicon-chevron-left"></i>{this.props.previousText}</span>
+            previous = <span onClick={this.props.previous} className="previous"><i className="griddle-icon-left"></i>{this.props.previousText}</span>
         }
 
         if(this.props.currentPage !== (this.props.maxPage -1)){
-            next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="glyphicon glyphicon-chevron-right"></i></span>
+            next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="griddle-icon-right"></i></span>
+        }
+
+        var leftStyle = null;
+        var middleStyle = null; 
+        var rightStyle = null; 
+
+        if(typeof this.props.useGriddleStyles !== 'undefined' && this.props.useGriddleStyles === true){
+            leftStyle = {
+                "float": "left",
+                "width": "33%",
+                "min-height": "1px"
+            };
+
+            rightStyle = _.extend({"text-align":"right"}, leftStyle);
+            middleStyle = _.extend({"text-align":"center"}, leftStyle);  
         }
 
         var options = [];
@@ -42,13 +58,13 @@ var GridPagination = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-xs-4">{previous}</div>
-                <div className="col-xs-4 center">
+                <div className="griddle-previous" style={leftStyle}>{previous}</div>
+                <div className="griddle-page" style={middleStyle}>
                     <select value={this.props.currentPage+1} onChange={this.pageChange}>
                         {options}
                     </select> / {this.props.maxPage}
                 </div>
-                <div className="col-xs-4 right">{next}</div>
+                <div className="griddle-next" style={rightStyle}>{next}</div>
             </div>
         )
     }

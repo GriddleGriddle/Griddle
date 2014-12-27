@@ -24,7 +24,8 @@ var GridTable = React.createClass({
       "useFixedHeader": false,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
-      "tableHeading": ""
+      "tableHeading": "",
+      "useGriddleStyles": true
     }
   },
   componentDidMount: function() {
@@ -70,6 +71,7 @@ var GridTable = React.createClass({
     });
 
     var gridStyle = null;
+    var tableStyle = {"width": "100%"};
     var headerStyle = null;
     var infiniteScrollSpacerRow = null;
     if (this.props.infiniteScroll) {
@@ -77,7 +79,8 @@ var GridTable = React.createClass({
       gridStyle = {
         "position": "relative",
         "overflowY": "scroll",
-        "height": this.props.bodyHeight + "px"
+        "height": this.props.bodyHeight + "px",
+        "width": "100%"
       };
 
       // Only add the spacer row if the height is defined.
@@ -100,23 +103,45 @@ var GridTable = React.createClass({
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
     }
 
+    var pagingContent = "";  
+    if(this.props.showPager){
+      var pagingStyles = this.props.useGriddleStyles ?
+        {
+          "padding" : "0",
+          "background-color": "#EDEDED",
+          "border-bottom-left-radius": "5px",
+          "border-bottom-right-radius": "5px",
+          "border": "0px",
+          "color": "#222"
+        } 
+        : null;
+
+      pagingContent = (<tbody><tr>
+          <td colSpan={this.props.columns.length} style={pagingStyles}>
+            {this.props.pagingContent}
+          </td>
+        </tr></tbody>)
+    }
+
     return this.props.useFixedHeader ?
         (
           <div>
-            <table className={this.props.className}>
+            <table className={this.props.className} style={tableStyle}>
               {tableHeading}
             </table>
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
               <table className={this.props.className}>
                   {nodes}
+                  {pagingContent}
               </table>
             </div>
           </div>
         ) : (
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
-              <table className={this.props.className}>
+              <table className={this.props.className} style={tableStyle}>
                   {tableHeading}
                   {nodes}
+                  {pagingContent}
               </table>
             </div>
         );

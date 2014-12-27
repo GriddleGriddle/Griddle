@@ -72,9 +72,9 @@ var GridSettings = React.createClass({
                     </select>
             </div>) : "";
 
-        return (<div className="griddle-settings panel">
+        return (<div className="griddle-settings">
                 <h5>{this.props.settingsText}</h5>
-                <div className="container-fluid griddle-columns">
+                <div className="griddle-columns">
                     <div className="row">{nodes}</div>
                 </div>
                 {setPageSize}
