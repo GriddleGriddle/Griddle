@@ -18,7 +18,8 @@ var GridRow = React.createClass({
         "data": {},
         "metadataColumns": [],
         "hasChildren": false,
-        "columnMetadata": null
+        "columnMetadata": null,
+        "useGriddleStyles": true
       }
     },
     handleClick: function(){
@@ -27,16 +28,24 @@ var GridRow = React.createClass({
     render: function() {
         var that = this;
 
+debugger;
+        var columnStyles = this.props.useGriddleStyles ? 
+          {
+            backgroundColor: "#FFF",
+            borderTopColor: "#DDD",
+            color: "#222"
+          } : null;
+
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
             var returnValue = null;
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
               var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName} key={index}>{colData}</td>);
+              returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={that.handleClick} key={index}>{col[1]}</td>);
+            return returnValue || (<td onClick={that.handleClick} key={index} style={columnStyles}>{col[1]}</td>);
         });
 
         //this is kind of hokey - make it better

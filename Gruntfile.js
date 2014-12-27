@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         options: {
           port: 9000,
           hostname: '*',
-          keepalive: true
+          livereload: true
         }
       }
     },
@@ -142,7 +142,17 @@ module.exports = function(grunt) {
           "underscore": "_"
         }
       }
-    }
+    },
+    watch: {
+      scripts: {
+        files: ['**/*.jsx'],
+        tasks: ['build'],
+        options: {
+          spawn: false,
+          interrupt: true,
+        },
+      },
+    },
   });
 
   grunt.loadNpmTasks('grunt-open');
@@ -158,6 +168,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
+      'connect',
+      'watch'
+    ]);
+  });
+
+  grunt.registerTask('build', function(target){
+    grunt.task.run([
       'clean',
       'includereplace',
       'markdown',
@@ -165,9 +182,8 @@ module.exports = function(grunt) {
       'webpack:docs',
       'copy',
       'open',
-      'connect'
     ]);
-  });
+  })
 
   // Default task(s).
   grunt.registerTask('default', ['serve']);

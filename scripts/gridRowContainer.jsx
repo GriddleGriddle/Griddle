@@ -11,6 +11,11 @@ var React = require('react');
 var GridRow = require('./gridRow.jsx');
 
 var GridRowContainer = React.createClass({
+    getDefaultProps: function(){
+      return {
+        "useGriddleStyles": true
+      };
+    },
     getInitialState: function(){
         return {
            "data": {
@@ -30,7 +35,7 @@ var GridRowContainer = React.createClass({
         if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
         var arr = [];
 
-        arr.push(<GridRow data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
+        arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
           hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId}/>);
           var children = null;
         if(that.state.showChildren){
@@ -41,7 +46,7 @@ var GridRowContainer = React.createClass({
                     </td></tr>);
                 }
 
-                return <GridRow data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+                return <GridRow useGriddleStyles={this.props.useGriddleStyles} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
             });
 
 

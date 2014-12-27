@@ -41,13 +41,13 @@ var GridPagination = React.createClass({
 
         if(typeof this.props.useGriddleStyles !== 'undefined' && this.props.useGriddleStyles === true){
             leftStyle = {
-                "float": "left",
-                "width": "33%",
-                "min-height": "1px"
+                float: "left",
+                width: "33%",
+                minHeight: "1px"
             };
 
-            rightStyle = _.extend({"text-align":"right"}, leftStyle);
-            middleStyle = _.extend({"text-align":"center"}, leftStyle);  
+            rightStyle = _.extend({textAlign:"right"}, leftStyle);
+            middleStyle = _.extend({textAlign:"center"}, leftStyle);  
         }
 
         var options = [];

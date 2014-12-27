@@ -67,12 +67,11 @@ var GridTable = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        return <GridRowContainer useGriddleStyles={that.props.useGriddleStyles} data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
     var gridStyle = null;
     var tableStyle = {"width": "100%"};
-    var headerStyle = null;
     var infiniteScrollSpacerRow = null;
     if (this.props.infiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
@@ -95,7 +94,7 @@ var GridTable = React.createClass({
 
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
-        <GridTitle columns={this.props.columns} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata} headerStyle={headerStyle}/>
+        <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata}/>
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -108,11 +107,11 @@ var GridTable = React.createClass({
       var pagingStyles = this.props.useGriddleStyles ?
         {
           "padding" : "0",
-          "background-color": "#EDEDED",
-          "border-bottom-left-radius": "5px",
-          "border-bottom-right-radius": "5px",
-          "border": "0px",
-          "color": "#222"
+          backgroundColor: "#EDEDED",
+          borderBottomLeftRadius: "5px",
+          borderBottomRightRadius: "5px",
+          border: "0px",
+          color: "#222"
         } 
         : null;
 
