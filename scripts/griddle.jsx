@@ -47,6 +47,7 @@ var Griddle = React.createClass({
             "useCustomGridFormat": false,
             "useCustomPager": false,
             "useGriddleStyles": true,
+            "useSortCharacters": true,
             "customRowFormat": null,
             "customGridFormat": null,
             "customPager": {},
@@ -478,7 +479,7 @@ var Griddle = React.createClass({
             } else if(this.props.useCustomRowFormat){
                 resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
             } else {
-                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
+                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} useSortCharacters={this.props.useSortCharacters} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
             }
 
 
