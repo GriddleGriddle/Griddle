@@ -117,9 +117,7 @@ var GridTable = React.createClass({
         {
           "padding" : "0",
           backgroundColor: "#EDEDED",
-          borderBottomLeftRadius: "5px",
-          borderBottomRightRadius: "5px",
-          border: "0px",
+          border: "0",
           color: "#222"
         } 
         : null;

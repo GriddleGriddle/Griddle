@@ -523,7 +523,7 @@ var Griddle = React.createClass({
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
-                <div className="griddle-container">
+                <div className="griddle-container" style={this.props.useGriddleStyles ? { border: "1px solid #DDD"} : null }>
                     {gridTable}
                 </div>
             </div>

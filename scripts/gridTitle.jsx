@@ -35,17 +35,10 @@ var GridTitle = React.createClass({
               titleStyles = {
                 backgroundColor: "#EDEDEF",
                 border: "0",
+                borderBottom: "1px solid #DDD",
                 color: "#222",
                 padding: "5px"
               } 
-
-              if(index === 0){
-                titleStyles.borderTopLeftRadius = "5px";
-              }
-
-              if(index === that.props.columns.length -1){
-                titleStyles.borderTopRightRadius = "5px";
-              }
             }
 
             if(that.props.sortColumn == col && that.props.sortAscending){

@@ -45,7 +45,7 @@ var GridPagination = React.createClass({
                 "float": "left",
                 width: "33%",
                 minHeight: "1px",
-                margin: "10px 0 10px 0"
+                marginTop: "5px"
             };
 
             rightStyle = _.extend({textAlign:"right"}, leftStyle);
@@ -59,7 +59,7 @@ var GridPagination = React.createClass({
         }
 
         return (
-            <div className="row">
+            <div style={this.props.useGriddleStyles ? { minHeight: "35px" } : null }>
                 <div className="griddle-previous" style={leftStyle}>{previous}</div>
                 <div className="griddle-page" style={middleStyle}>
                     <select value={this.props.currentPage+1} onChange={this.pageChange}>

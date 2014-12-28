@@ -60,6 +60,9 @@ a, a:visited{
 	border-color: #D1C4E9;
 }
 
+table{
+	margin-bottom: 0px;
+}
 /* Headers
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 h1, h2, h3, h4, h5, h6 {
@@ -86,8 +89,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .griddle select{
-	padding: 0 5px 0 5px;
-    max-height: 30px;
+	padding: 0;
+    max-height: 20px;
     margin: 0;
 }
 
