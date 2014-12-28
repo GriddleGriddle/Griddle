@@ -17,7 +17,8 @@ var GridPagination = React.createClass({
             "maxPage": 0,
             "nextText": "",
             "previousText": "",
-            "currentPage": 0
+            "currentPage": 0,
+            "useGriddleStyles": true
         }
     },
     pageChange: function(event){
@@ -28,22 +29,23 @@ var GridPagination = React.createClass({
         var next = "";
 
         if(this.props.currentPage > 0){
-            previous = <span onClick={this.props.previous} className="previous"><i className="griddle-icon-left"></i>{this.props.previousText}</span>
+            previous = <span onClick={this.props.previous} className="previous" style={this.props.useGriddleStyles ? {paddingLeft: "10px"} : null}><i className="griddle-icon-left"></i>{this.props.previousText}</span>
         }
 
         if(this.props.currentPage !== (this.props.maxPage -1)){
-            next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="griddle-icon-right"></i></span>
+            next = <span onClick={this.props.next} className="next" style={this.props.useGriddleStyles ? {paddingRight: "10px"} : null}>{this.props.nextText}<i className="griddle-icon-right"></i></span>
         }
 
         var leftStyle = null;
         var middleStyle = null; 
         var rightStyle = null; 
 
-        if(typeof this.props.useGriddleStyles !== 'undefined' && this.props.useGriddleStyles === true){
+        if(this.props.useGriddleStyles === true){
             leftStyle = {
                 float: "left",
                 width: "33%",
-                minHeight: "1px"
+                minHeight: "1px",
+                margin: "10px 0 10px 0"
             };
 
             rightStyle = _.extend({textAlign:"right"}, leftStyle);
@@ -60,7 +62,11 @@ var GridPagination = React.createClass({
             <div className="row">
                 <div className="griddle-previous" style={leftStyle}>{previous}</div>
                 <div className="griddle-page" style={middleStyle}>
-                    <select value={this.props.currentPage+1} onChange={this.pageChange}>
+                    <select value={this.props.currentPage+1} onChange={this.pageChange} 
+                        style={this.props.useGriddleStyles ? { padding: "padding: 0 5px 0 5px",
+                            maxHeight: "30px",
+                            margin: "0" } : null }
+                    >
                         {options}
                     </select> / {this.props.maxPage}
                 </div>

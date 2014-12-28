@@ -69,3 +69,9 @@ a, a:visited{
 .center{
 	text-align: center;
 }
+
+/* Griddle defaults for demo site
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.griddle{
+	font-family: Arial, Helvetica, sans-serif;
+}
