@@ -94,6 +94,17 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+.griddle-container, .griddle-settings{
+	border-radius: 5px;
+}
+
 .griddle-settings input, .griddle-settings select{
 	margin: 0 5px 0 5px;
+}
+
+/* Example Site specific Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#grid-basic{
+	margin-bottom: 20px;
 }
