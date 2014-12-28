@@ -21,6 +21,7 @@ var GridSettings = React.createClass({
             "resultsPerPage": 0,
             "allowToggleCustom": false,
             "useCustomFormat": false,
+            "useGriddleStyles": true,
             "toggleCustomFormat": function(){}
         };
     },
@@ -50,7 +51,7 @@ var GridSettings = React.createClass({
                 if(typeof meta !== "undefined" && meta != null && meta.locked){
                     return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{col}</label></div>
                 }
-                return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
+                return <div className="griddle-column-selection checkbox" style={that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null }><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
             });
         }
 
@@ -62,20 +63,22 @@ var GridSettings = React.createClass({
                 : "";
 
         var setPageSize = this.props.showSetPageSize ? (<div>
-                    <label htmlFor="maxRows">{this.props.maxRowsText}:</label>
-                    <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                    <label htmlFor="maxRows">{this.props.maxRowsText}:
+                        <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
             </div>) : "";
 
-        return (<div className="griddle-settings">
-                <h5>{this.props.settingsText}</h5>
-                <div className="griddle-columns">
-                    <div className="row">{nodes}</div>
+
+        return (<div className="griddle-settings" style={this.props.useGriddleStyles ? { backgroundColor: "#FFF", borderRadius: "5px", color: "#222", padding: "10px", marginBottom: "10px"} : null }>
+                <strong>{this.props.settingsText}</strong>
+                <div className="griddle-columns" style={this.props.useGriddleStyles ? { clear: "both", display: "table", width: "100%", borderBottom: "1px solid #EDEDED", marginBottom: "10px"} : null }>
+                    {nodes}
                 </div>
                 {setPageSize}
                 {toggleCustom}

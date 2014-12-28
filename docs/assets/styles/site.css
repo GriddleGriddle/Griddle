@@ -60,6 +60,11 @@ a, a:visited{
 	border-color: #D1C4E9;
 }
 
+/* Headers
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+h1, h2, h3, h4, h5 {
+	margin-bottom: 10px;
+}
 /* Alignment
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .right{
@@ -70,8 +75,22 @@ a, a:visited{
 	text-align: center;
 }
 
-/* Griddle defaults for demo site
+/* Griddle defaults for demo site -- mostly to override stuff in skeleton
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .griddle{
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+.griddle label { 
+	font-weight: normal;
+}
+
+.griddle select{
+	padding: 0 5px 0 5px;
+    max-height: 30px;
+    margin: 0;
+}
+
+.griddle-settings input, .griddle-settings select{
+	margin: 0 5px 0 5px;
 }

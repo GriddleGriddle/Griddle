@@ -403,20 +403,22 @@ var Griddle = React.createClass({
 
             if(this.props.useGriddleStyles){
                 filterStyles = {
-                    float: "left",
+                    "float": "left",
                     width: "50%",
                     textAlign: "left",
                     color: "#222"
                 };
 
                 settingsStyles= {
-                    float: "left",
+                    "float": "left",
                     width: "50%",
                     textAlign: "right"
                 };
 
                 topContainerStyles = {
-                    clear: "both"
+                    clear: "both", 
+                    display: "table",
+                    width: "100%"
                 }
             }
 

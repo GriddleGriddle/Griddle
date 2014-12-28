@@ -29,11 +29,11 @@ var GridPagination = React.createClass({
         var next = "";
 
         if(this.props.currentPage > 0){
-            previous = <span onClick={this.props.previous} className="previous" style={this.props.useGriddleStyles ? {paddingLeft: "10px"} : null}><i className="griddle-icon-left"></i>{this.props.previousText}</span>
+            previous = <span onClick={this.props.previous} className="previous" style={this.props.useGriddleStyles ? {paddingLeft: "10px"} : null}>{this.props.previousText}</span>
         }
 
         if(this.props.currentPage !== (this.props.maxPage -1)){
-            next = <span onClick={this.props.next} className="next" style={this.props.useGriddleStyles ? {paddingRight: "10px"} : null}>{this.props.nextText}<i className="griddle-icon-right"></i></span>
+            next = <span onClick={this.props.next} className="next" style={this.props.useGriddleStyles ? {paddingRight: "10px"} : null}>{this.props.nextText}</span>
         }
 
         var leftStyle = null;
@@ -42,7 +42,7 @@ var GridPagination = React.createClass({
 
         if(this.props.useGriddleStyles === true){
             leftStyle = {
-                float: "left",
+                "float": "left",
                 width: "33%",
                 minHeight: "1px",
                 margin: "10px 0 10px 0"
@@ -62,11 +62,7 @@ var GridPagination = React.createClass({
             <div className="row">
                 <div className="griddle-previous" style={leftStyle}>{previous}</div>
                 <div className="griddle-page" style={middleStyle}>
-                    <select value={this.props.currentPage+1} onChange={this.pageChange} 
-                        style={this.props.useGriddleStyles ? { padding: "padding: 0 5px 0 5px",
-                            maxHeight: "30px",
-                            margin: "0" } : null }
-                    >
+                    <select value={this.props.currentPage+1} onChange={this.pageChange}>
                         {options}
                     </select> / {this.props.maxPage}
                 </div>
