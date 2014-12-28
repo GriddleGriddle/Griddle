@@ -76,7 +76,7 @@ var GridSettings = React.createClass({
 
 
         return (<div className="griddle-settings" style={this.props.useGriddleStyles ? { backgroundColor: "#FFF", borderRadius: "5px", color: "#222", padding: "10px", marginBottom: "10px"} : null }>
-                <strong>{this.props.settingsText}</strong>
+                <h6>{this.props.settingsText}</h6>
                 <div className="griddle-columns" style={this.props.useGriddleStyles ? { clear: "both", display: "table", width: "100%", borderBottom: "1px solid #EDEDED", marginBottom: "10px"} : null }>
                     {nodes}
                 </div>
