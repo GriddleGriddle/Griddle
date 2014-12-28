@@ -17,7 +17,8 @@ var GridTitle = React.createClass({
            "sortColumn": "",
            "sortAscending": true,
            "headerStyle": null,
-           "useGriddleStyles": true
+           "useGriddleStyles": true,
+           "useSortCharacters": true
         }
     },
     sort: function(event){
@@ -28,6 +29,7 @@ var GridTitle = React.createClass({
 
         var nodes = this.props.columns.map(function(col, index){
             var columnSort = "";
+            var sortCharacter = ""; 
 
             var titleStyles = null; 
 
@@ -42,9 +44,11 @@ var GridTitle = React.createClass({
             }
 
             if(that.props.sortColumn == col && that.props.sortAscending){
-                columnSort = "sort-ascending"
+                columnSort = "sort-ascending";
+                sortCharacter = " ▴";
             }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
-                columnSort += "sort-descending"
+                columnSort += "sort-descending";
+                sortCharacter = " ▾";
             }
             var displayName = col;
             if (that.props.columnMetadata != null){
@@ -56,6 +60,9 @@ var GridTitle = React.createClass({
               }
             }
 
+            if(that.props.useSortCharacters){
+              displayName = displayName + sortCharacter;
+            }
             return (<th onClick={that.sort} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}</th>);
         });
 
