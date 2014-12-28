@@ -150,6 +150,7 @@ module.exports = function(grunt) {
         options: {
           spawn: false,
           interrupt: true,
+          livereload: true
         },
       },
     },
