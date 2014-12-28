@@ -145,7 +145,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['**/*.jsx', '**/*.md'],
+        files: ['**/*.jsx', "docs/assets/**/*.*", "docs/src/**/*.*"],
         tasks: ['build'],
         options: {
           spawn: false,

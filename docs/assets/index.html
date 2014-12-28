@@ -79,7 +79,7 @@
   <script type="text/jsx">
   /** @jsx React.DOM */
     React.render(
-        <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" showFilter={true} showSettings={true}/>, document.getElementById('grid-basic')
+        <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>
 </body>
