@@ -87,14 +87,14 @@ module.exports = function(grunt) {
         files: [
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
-          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}         
+          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}
         ]
       }
     },
     webpack: {
       default: {
         entry: {
-          Griddle: ['./scripts/griddle.jsx'], 
+          Griddle: ['./scripts/griddle.jsx'],
           GriddleWithCallback: './scripts/griddleWithCallback.jsx'},
         output: {
           path: __dirname,
@@ -118,8 +118,8 @@ module.exports = function(grunt) {
       },
       docs: {
         entry: {
-            Griddle: ['./scripts/griddle.jsx'], 
-            GriddleWithCallback: './scripts/griddleWithCallback.jsx', 
+            Griddle: ['./scripts/griddle.jsx'],
+            GriddleWithCallback: './scripts/griddleWithCallback.jsx',
             TestChart: './examples/basic/testChart.jsx'
         },
         output: {
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/src/**/*.*"],
+        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/assets/**/*.html", "docs/src/**/*.*"],
         tasks: ['build'],
         options: {
           spawn: false,
@@ -162,8 +162,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-react');
   grunt.loadNpmTasks('grunt-jsxhint');
-  grunt.loadNpmTasks('grunt-webpack'); 
-  grunt.loadNpmTasks('grunt-contrib-clean'); 
+  grunt.loadNpmTasks('grunt-webpack');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-include-replace');
 

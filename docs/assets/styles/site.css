@@ -8,7 +8,7 @@ a, a:visited{
 	text-decoration: none;
 }
 /* backgrounds */
-/* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */ 
+/* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */
 .background-primary { background-color: #673AB7; }
 .background-primary-dark { background-color: #512DA8; }
 .background-primary-light { background-color: #D1C4E9; }
@@ -18,7 +18,7 @@ a, a:visited{
 .background-light { background-color: #FFF; }
 
 /* borders */
-.border-bottom { 
+.border-bottom {
 	border:0px;
 	border-bottom: 2px solid;
 }
@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.griddle label { 
+.griddle label {
 	font-weight: normal;
 }
 
@@ -107,4 +107,12 @@ h1, h2, h3, h4, h5, h6 {
 
 #grid-basic{
 	margin-bottom: 20px;
+}
+
+.content-section{
+	padding: 30px 0 30px 0;
+}
+
+#two h3{
+		text-align: center;
 }
