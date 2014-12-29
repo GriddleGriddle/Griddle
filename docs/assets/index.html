@@ -32,7 +32,7 @@
 
   <!-- Primary Page
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <header class="background-primary-dark">
+  <header class="background-primary-dark border-bottom border-primary-light border-big ">
     <div class="container">
         <div class="twelve columns right">
           <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
@@ -49,7 +49,7 @@
        </div>
     </div>
   </header>
-  <div class="background-primary text-light border-primary-dark border-bottom content-section">
+  <div class="background-primary text-light border-primary-dark border-bottom border-big content-section">
     <div class="container">
       <div class="row">
         <div class="twelve columns center">
@@ -60,34 +60,46 @@
 
       </div>
       <div class="row center">
-        <a href="#" class="button border-light text-light big">Get Started</a>
+        <a href="#" class="button border-light text-light big">Documentation</a>
         <a href="#" class="button border-light text-light big">Download</a>
       </div>
-      <div class="row">
+      <div class="row center">
+        <h4 class="text-light text-primary-light">OR</h4>
+      </div>
+      <div class="row center">
+        <code class="big background-primary-light border-primary-dark text-primary-dark">npm install griddle-react --save</code>
       </div>
     </div>
   </div>
-  <div class="background-primary-light border-primary-dark content-section" id="two">
+  <div class="border-primary-dark content-section" id="two">
     <div class="container">
       <div class="row">
         <div class="four columns">
-          <h3 class="text-primary">Configurable</h3>
-          <p>
-            Griddle makes few assumptions about how your grid should be styled. At the most basic level, Griddle renders as an HTML table with additional behavior and styling. Don't like the default styles? Rather display your grid data as a visualization? No problem, we've got you covered!
+          <h3 class="text-primary border-primary-light border-bottom">Configurable</h3>
+            <div class="text-section">
+            <p>
+              Griddle makes few assumptions about how your grid should be styled. By default Griddle renders as an HTML table with some light styling. Don't like the default styles? Rather display your grid data as a visualization? No problem, we've got you covered!
           </p>
+          </div>
           <a href="#styling">Learn more about configuring Griddle</a>
         </div>
         <div class="four columns">
-          <h3 class="text-primary">Functional</h3>
-          <p>
-            Out of the box, Griddle has sorting, filtering, paging and some user customization such as column selection and results per page. Additionally, Griddle supports simple sub-grids and even more complex functionality is on the roadmap.
-          </p>
+          <h3 class="text-primary border-primary-light border-bottom">Functional</h3>
+          <div class="text-section">
+            <p>
+              Out of the box, Griddle has sorting, filtering, paging, infinite scrolling and more. Griddle also supports simple sub-grids. A good deal of functionality is built in! Is there a feature you'd love to see added to Griddle? Add it to <a href="https://github.com/DynamicTyped/Griddle/wiki/Roadmap">the roadmap</a> (under Potential Updates)
+            </p>
+          </div>
+          <a href="#styling">Read more about Griddle's features</a>
         </div>
         <div class="four columns">
-          <h3 class="text-primary">Fast</h3>
-          <p>
-            Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Whether you have several or hundreds of records, Griddle should render your data quickly.
-          </p>
+          <h3 class="text-primary border-primary-light border-bottom">Fast</h3>
+          <div class="text-section">
+            <p>
+              Griddle is powered by React and its virtual DOM. Only the current page of the grid is rendered at any given time. Data can be loaded all at once or paged on the server. Whether you have several or hundreds of records, Griddle should render your data quickly.
+            </p>
+          </div>
+          <a href="#styling">Learn more about loading data</a>
         </div>
       </div>
     </div>

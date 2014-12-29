@@ -7,7 +7,9 @@ a, a:visited{
 	color: #03A9F4;
 	text-decoration: none;
 }
-/* backgrounds */
+
+/* Colors
+---------------------------------  */
 /* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */
 .background-primary { background-color: #673AB7; }
 .background-primary-dark { background-color: #512DA8; }
@@ -16,19 +18,6 @@ a, a:visited{
 .background-dark-grey { background-color: #727272; }
 .background-light-grey { background-color: #B6B6B6; }
 .background-light { background-color: #FFF; }
-
-/* borders */
-.border-bottom {
-	border:0px;
-	border-bottom: 2px solid;
-}
-.border-primary { border-color: #673AB7; }
-.border-primary-dark { border-color: #512DA8; }
-.border-primary-light { border-color:#D1C4E9; }
-.border-accent { border-color: #03A9F4; }
-.border-dark-grey { border-color: #727272; }
-.border-light-grey { border-color: #B6B6B6; }
-.border-light { border-color: #FFF; }
 
 /* text colors */
 .text { color: #212121; }
@@ -40,9 +29,28 @@ a, a:visited{
 .text-dark-grey { color: #727272; }
 .text-light-grey {color: #B6B6B6; }
 
-.chalkboard{
-	background-repeat: repeat;
+/* Borders
+---------------------------------  */
+.border-primary { border-color: #673AB7; border-width: 1px;}
+.border-primary-dark { border-color: #512DA8; border-width: 1px;}
+.border-primary-light { border-color:#D1C4E9; border-width: 1px;}
+.border-accent { border-color: #03A9F4; border-width: 1px;}
+.border-dark-grey { border-color: #727272; border-width: 1px;}
+.border-light-grey { border-color: #B6B6B6; border-width: 1px;}
+.border-light { border-color: #FFF; }
+
+.border-big {
+	border-bottom-width:4px;
+	border-bottom-style: solid;
 }
+
+.border-bottom {
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom-style: solid;
+}
+
 /* Skeleton overrides
 ---------------------------------  */
 .button.big{
@@ -62,6 +70,10 @@ a, a:visited{
 
 table{
 	margin-bottom: 0px;
+}
+
+p{
+	margin-bottom: 10px;
 }
 /* Headers
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -114,5 +126,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #two h3{
-		text-align: center;
+	text-align: center;
+}
+
+#two .text-section{
+	height: 210px;
+}
+
+code.big{
+	font-size: 18px;
+	padding:10px 30px 10px 30px;
+	margin-top: 20px;
 }
