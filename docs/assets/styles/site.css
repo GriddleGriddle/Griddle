@@ -8,6 +8,11 @@ a, a:visited{
 	text-decoration: none;
 }
 
+hr{
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
 /* Colors
 ---------------------------------  */
 /* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */
@@ -33,6 +38,7 @@ a, a:visited{
 ---------------------------------  */
 .border-primary { border-color: #673AB7; border-width: 1px;}
 .border-primary-dark { border-color: #512DA8; border-width: 1px;}
+.border-secondary { border-color: #804AE3; border-width: 1px;}
 .border-primary-light { border-color:#D1C4E9; border-width: 1px;}
 .border-accent { border-color: #03A9F4; border-width: 1px;}
 .border-dark-grey { border-color: #727272; border-width: 1px;}
@@ -131,6 +137,14 @@ h1, h2, h3, h4, h5, h6 {
 
 #tldr .text-section{
 	height: 210px;
+}
+
+#about a{
+	color: #727272;
+}
+
+#about a:hover{
+	color: #525252;
 }
 
 code.big{
