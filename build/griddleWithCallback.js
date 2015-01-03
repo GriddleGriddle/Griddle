@@ -62,7 +62,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		getDefaultProps: function(){
 			return {
 				getExternalResults: null,
-				resultsPerPage: 5, 
+				resultsPerPage: 5,
 				loadingComponent: null
 			}
 		},
@@ -81,13 +81,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    componentDidMount: function(){
 				var state = this.state;
-				state.pageSize = this.props.resultsPerPage; 
+				state.pageSize = this.props.resultsPerPage;
 
 				var that = this;
 
 				if (!this.hasExternalResults()) {
 					console.error("When using GriddleWithCallback, a getExternalResults callback must be supplied.");
-					return; 
+					return;
 				}
 
 				// Update the state with external results when mounting
@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			sortColumn,
 			sortAscending,
 			page,
-			pageSize; 
+			pageSize;
 
 			// Fill the search properties.
 			if (state !== undefined && state.filter !== undefined) {
@@ -237,7 +237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			        externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 			        externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
 			        externalCurrentPage: this.state.page, results: [{"fake":"forLoading"}], tableClassName: "table", resultsPerPage: this.state.pageSize, 
-			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true, 
+			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, 
 					useCustomFormat: "true", customFormat: this.props.loadingComponent}))
 			}
 
@@ -245,11 +245,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 				externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
 				externalCurrentPage: this.state.page, results: this.state.results, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true}))
+				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending}))
 	    }
 	});
 
 	module.exports = GriddleWithCallback;
+
 
 /***/ },
 /* 1 */
