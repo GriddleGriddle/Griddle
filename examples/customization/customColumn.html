@@ -1,0 +1,62 @@
+<div id="customLink"></div>
+
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var LinkComponent = React.createClass({
+  render: function(){
+    url ="#speakers/" + this.props.rowData.state + "/" + this.props.data;
+    return <a href={url}>{this.props.data}</a>
+  }
+});
+
+var customColumnMetadata = [
+{
+  "columnName": "id",
+  "order": 1,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "name",
+  "order": 2,
+  "locked": false,
+  "visible": true,
+  "customComponent": LinkComponent
+},
+{
+  "columnName": "city",
+  "order": 3,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "state",
+  "order": 4,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "country",
+  "order": 5,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "company",
+  "order": 6,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "favoriteNumber",
+  "order":  7,
+  "locked": false,
+  "visible": true
+}
+];
+
+React.render(
+<Griddle results={fakeData} columnMetadata={customColumnMetadata} columns={["name", "city", "state", "country"]}/>, document.getElementById('customLink')
+);
+</script>

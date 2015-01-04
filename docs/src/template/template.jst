@@ -1,16 +1,68 @@
-<html>
-	<head>
-		<title>Griddle - React grid component</title>
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="css/griddle.css" rel="stylesheet" />
-		<link href="css/example.theme.css" rel="stylesheet" />
-		<link href='//fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
-		<script type="text/javascript" src="build/griddle.js"></script>
-	</head>
-	<body>
-		<%=content%> 
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>Griddle - React Grid Component</title>
+	<meta name="description" content="Griddle - React Grid component. ">
+	<meta name="author" content="Ryan Lanciaux">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/skeleton.css">
+	<link rel="stylesheet" href="styles/site.css">
+
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+	
+	<!-- Scripts
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="scripts/Griddle.js"></script>
+	<script src="scripts/fakeData.js"></script>
+</head>
+<body>
+	<header class="background-primary-dark border-bottom border-secondary">
+		<div class="container">
+			<div class="twelve columns right">
+				<iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
+				allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+				<iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=fork&count=true"
+				allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="four columns">
+					<a href="/"><img src="images/griddle.png" alt="Griddle"/></a>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="container">
+		<div class="row">
+			<div class="two columns">
+				something
+			</div>
+			<div class="ten columns">
+				<%=content%>
+			</div>
+		</div>
+	</div>
+
+</body>
 </html>
