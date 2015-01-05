@@ -13,6 +13,21 @@ hr{
 	margin-bottom: 1.5rem;
 }
 
+dl{
+	margin-left: 20px;
+}
+
+dt{
+	font-weight: bold;
+	color: #512DA8;
+}
+
+dd{
+	margin-left: 0;
+	-webkit-margin-start: 0;
+	color: #555;
+}
+
 /* Colors
 ---------------------------------  */
 /* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */
@@ -122,8 +137,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Example Site specific Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-
-#grid-basic{
+.griddle{
 	margin-bottom: 20px;
 }
 
@@ -151,4 +165,38 @@ code.big{
 	font-size: 18px;
 	padding:10px 30px 10px 30px;
 	margin-top: 20px;
+}
+
+/* Docs Pages specific styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.page-content{
+	margin-top: 20px;
+}
+.docs h1, .docs h2 {
+	color: #512DA8;
+}
+
+.docs h3, .docs h4 {
+	color: #673AB7;
+}
+
+.docs h5, .docs h6 {
+	color: #D1C4E9;
+}
+
+/* ugly styles for example */
+.custom-row-card{
+	float: left;
+	width: 33%;
+	margin-bottom: 2rem;
+}
+
+.custom-row-card .name{
+	position: relative;
+}
+
+.custom-row-card .name small{
+	position: absolute;
+	top: 3px;
+	right: 25px;
 }

@@ -386,6 +386,12 @@ var Griddle = React.createClass({
       return this.props.infiniteScroll;
     },
     render: function() {
+        var clearFix = {
+                    clear: "both",
+                    display: "table",
+                    width: "100%"
+        };
+
         var that = this,
             results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
 
@@ -416,11 +422,7 @@ var Griddle = React.createClass({
                     textAlign: "right"
                 };
 
-                topContainerStyles = {
-                    clear: "both", 
-                    display: "table",
-                    width: "100%"
-                }
+                topContainerStyles = clearFix;
             }
 
            topSection = (
@@ -477,9 +479,9 @@ var Griddle = React.createClass({
                 //this should send all the results it has
                 resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />
             } else if(this.props.useCustomRowFormat){
-                resultContent = <CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat}/>
+                resultContent = <div><CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat} style={clearFix} />{this.props.showPager&&pagingContent}</div>
             } else {
-                resultContent = <GridTable useGriddleStyles={this.props.useGriddleStyles} useSortCharacters={this.props.useSortCharacters} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages}/>
+                resultContent = <div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} useSortCharacters={this.props.useSortCharacters} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>
             }
 
 
@@ -495,14 +497,6 @@ var Griddle = React.createClass({
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
-
-
-        //todo: refactor this since it's basically the same now with a diff class
-        var gridTable = this.props.useCustomFormat ?
-            <div>{resultContent}</div>
-            :       (<div className="griddle-body">
-                        {resultContent}
-                        </div>);
 
         if (typeof results === 'undefined' || results.length === 0) {
             var myReturn = null;
@@ -525,7 +519,7 @@ var Griddle = React.createClass({
                 {topSection}
                 {columnSelector}
                 <div className="griddle-container" style={this.props.useGriddleStyles ? { border: "1px solid #DDD"} : null }>
-                    {gridTable}
+                    {resultContent}
                 </div>
             </div>
         );

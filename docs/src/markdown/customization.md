@@ -4,13 +4,25 @@ __Please Note: Styling is similar to customization but is in its [own section](#
 
 Griddle comes with a number of customization options to help it fit with your project goals.
 
+<hr />
+
 ###Custom Columns###
 
-Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties. The **data** consists of the information that would normally be rendered in the column. The **rowData** property contains the data for all items in the same row.
+Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties.
 
-####Example:####
+<dl>
+  <dt>data</dt>
+  <dd><strong>object</strong> - the data that would normally be rendered in the column.</dd>
+</dl>
 
-We are going to make the body of one of the columns a link. This link will use data from another column to determin the href.
+<dl>
+  <dt>rowData</dt>
+  <dd><strong>object</strong> - the data for all items in the same row</dd>
+</dl>
+
+#####Example:#####
+
+We are going to make the body of one of the columns a link. This link will use data from another column to determine the href.
 
 Assume we have the following data for our grid:
 
@@ -73,3 +85,44 @@ React.render(<Griddle data={someData} columnMetdata={columnMeta} />,
 ```
 
 @@include('./customization/customColumn.html')
+
+<hr />
+
+
+###Custom Rows###
+
+Sometimes you may want to display grid data in a format other than a grid but still have pagination, filtering, etc. This type of formatting can be accomplished with the custom row format properties. To use custom row formatting, the **useCustomRowFormat** and the **customRowFormat** properties will need to be set.
+
+<dl>
+  <dt>useCustomRowFormat</dt>
+  <dd><strong>bool</strong> - determines if custom row formats are applied</dd>
+</dl>
+
+<dl>
+  <dt>customRowFormat</dt>
+  <dd><strong>Component</strong> - the component to render in place of a grid row. This component receives a property named <strong>data</strong></dd>
+</dl>
+
+#####Example:#####
+
+We are going to render our grid as a series of cards, keeping the pagination and filtering from Griddle in tact. Assume we are using the same data in the custom column example. We will need to create a custom component as follows:
+
+```
+var OtherComponent = React.createClass({
+  getDefaultProps: function(){
+    return { "data": {} };
+  },
+  render: function(){
+    return (<div className="custom-row-card">
+    <div className="name"><strong>{this.props.data.name}</strong><small>{this.props.data.company}</small></div>
+    <div>{this.props.data.city}</div>
+    <div>{this.props.data.state}, {this.props.data.country}</div>
+    </div>);
+  }
+});
+
+```
+
+From there, Griddle can be rendered with the useCustomRowFormat and customRowFormat properties:
+
+@@include('./customization/customRow.html')
