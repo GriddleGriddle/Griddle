@@ -55,10 +55,9 @@ var GridSettings = React.createClass({
             });
         }
 
-        var toggleCustom = that.props.allowToggleCustom ?   
+        var toggleCustom = that.props.allowToggleCustom ?
                 (<div className="form-group">
-                    <label htmlFor="maxRows">{this.props.enableCustomFormatText}:</label>
-                    <input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} />
+                    <label htmlFor="maxRows"><input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} /> {this.props.enableCustomFormatText}</label>
                 </div>)
                 : "";
 

@@ -95,7 +95,9 @@ module.exports = function(grunt) {
       default: {
         entry: {
           Griddle: ['./scripts/griddle.jsx'],
-          GriddleWithCallback: './scripts/griddleWithCallback.jsx'},
+          GriddleWithCallback: './scripts/griddleWithCallback.jsx',
+
+          },
         output: {
           path: __dirname,
           filename: 'build/[name].js',
@@ -113,14 +115,15 @@ module.exports = function(grunt) {
         },
         externals: {
           "react": "React",
-          "underscore": "_"
+          "underscore": "_",
+
         }
       },
       docs: {
         entry: {
             Griddle: ['./scripts/griddle.jsx'],
             GriddleWithCallback: './scripts/griddleWithCallback.jsx',
-            TestChart: './examples/basic/testChart.jsx'
+            ChartistGraph: ['./node_modules/react-chartist/index.js']
         },
         output: {
           path: __dirname,
@@ -139,7 +142,8 @@ module.exports = function(grunt) {
         },
         externals: {
           "react": "React",
-          "underscore": "_"
+          "underscore": "_",
+          "Chartist": "chartist"
         }
       }
     },

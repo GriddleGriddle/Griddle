@@ -413,7 +413,8 @@ var Griddle = React.createClass({
                     "float": "left",
                     width: "50%",
                     textAlign: "left",
-                    color: "#222"
+                    color: "#222",
+                    minHeight: "1px"
                 };
 
                 settingsStyles= {

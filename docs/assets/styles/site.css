@@ -184,6 +184,10 @@ code.big{
 	color: #D1C4E9;
 }
 
+.docs .griddle h5, .docs .griddle h6{
+	color: #512DA8;
+}
+
 /* ugly styles for example */
 .custom-row-card{
 	float: left;
