@@ -90,7 +90,7 @@
 				}
 			});
 
-			React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading}/>, document.getElementById("grid-external"));
+			React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("grid-external"));
 		</script>
 	</body>
 </html>

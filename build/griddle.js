@@ -437,8 +437,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
 	    },
 	    isInfiniteScrollEnabled: function(){
-	      // If a custom format or pager is included, don't allow for infinite scrolling.
-	      if (this.props.useCustomFormat || this.props.useCustomPager) {
+	      // If a custom pager is included, don't allow for infinite scrolling.
+	      if (this.props.useCustomPager) {
 	        return false;
 	      }
 
@@ -502,7 +502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if(this.props.useCustomRowFormat){
 	                resultContent = React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat})
 	            } else {
-	                resultContent = React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages})
+	                resultContent = React.createElement(GridTable, {columnMetadata: this.props.columnMetadata, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, bodyHeight: this.props.bodyHeight, infiniteScroll: this.isInfiniteScrollEnabled(), infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages, isLoading: this.state.isLoading})
 	            }
 
 	            // Grab the paging content if it's to be displayed
@@ -616,7 +616,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "useFixedHeader": false,
 	      "infiniteScrollSpacerHeight": null,
 	      "bodyHeight": null,
-	      "tableHeading": ""
+	      "tableHeading": "",
+	      "isLoading": false
 	    }
 	  },
 	  componentDidMount: function() {
@@ -628,7 +629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.gridScroll();
 	  },
 	  gridScroll: function(){
-	    if (this.props.infiniteScroll) {
+	    if (this.props.infiniteScroll && !this.props.isLoading) {
 	      // If the scroll height is greater than the current amount of rows displayed, update the page.
 	      var scrollable = this.refs.scrollable.getDOMNode();
 	      var scrollTop = scrollable.scrollTop

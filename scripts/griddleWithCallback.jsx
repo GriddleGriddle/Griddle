@@ -6,7 +6,7 @@ var GriddleWithCallback = React.createClass({
 	getDefaultProps: function(){
 		return {
 			getExternalResults: null,
-			resultsPerPage: 5, 
+			resultsPerPage: 5,
 			loadingComponent: null
 		}
 	},
@@ -25,13 +25,13 @@ var GriddleWithCallback = React.createClass({
     },
     componentDidMount: function(){
 			var state = this.state;
-			state.pageSize = this.props.resultsPerPage; 
+			state.pageSize = this.props.resultsPerPage;
 
 			var that = this;
 
 			if (!this.hasExternalResults()) {
 				console.error("When using GriddleWithCallback, a getExternalResults callback must be supplied.");
-				return; 
+				return;
 			}
 
 			// Update the state with external results when mounting
@@ -65,7 +65,7 @@ var GriddleWithCallback = React.createClass({
 		sortColumn,
 		sortAscending,
 		page,
-		pageSize; 
+		pageSize;
 
 		// Fill the search properties.
 		if (state !== undefined && state.filter !== undefined) {
@@ -111,7 +111,12 @@ var GriddleWithCallback = React.createClass({
 		// Grab the results.
 		this.getExternalResults(state, function(externalResults) {
 			// Fill the state result properties
-			state.results = externalResults.results;
+			if (that.props.infiniteScroll && that.state.results) {
+				state.results = that.state.results.concat(externalResults.results);
+			} else {
+				state.results = externalResults.results;
+			}
+
 			state.totalResults = externalResults.totalResults;
 			state.maxPage = that.getMaxPage(externalResults.pageSize, externalResults.totalResults);
 			state.isLoading = false;
@@ -176,11 +181,15 @@ var GriddleWithCallback = React.createClass({
 			this.setPage(0, size);
     },
     render: function(){
+
 		if(this.state.isLoading){
+			var loadingResults = this.props.infiniteScroll ? this.state.results : [{"fake":"forLoading"}];
+			var maxPage = this.props.infiniteScroll ? this.state.page : this.state.max;
+
 			return <Griddle {...this.props} useExternal={true} externalSetPage={this.setPage}
 		        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
-		        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
-		        externalCurrentPage={this.state.page} results={[{"fake":"forLoading"}]} tableClassName="table" resultsPerPage={this.state.pageSize}
+		        externalSetPageSize={this.setPageSize} externalMaxPage={maxPage}
+		        externalCurrentPage={this.state.page} results={loadingResults} tableClassName="table" resultsPerPage={this.state.pageSize}
 		        externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} showFilter={true} showSettings={true}
 				useCustomFormat="true" customFormat={this.props.loadingComponent} />
 		}
@@ -189,7 +198,7 @@ var GriddleWithCallback = React.createClass({
 			externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
 			externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
 			externalCurrentPage={this.state.page} results={this.state.results} tableClassName="table" resultsPerPage={this.state.pageSize}
-			externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} showFilter={true} showSettings={true} />
+			externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} showFilter={true} showSettings={true}/>
     }
 });
 
