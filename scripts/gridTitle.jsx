@@ -7,7 +7,7 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require('react/addons');
+var React = require('react');
 var _ = require('underscore');
 
 var GridTitle = React.createClass({
@@ -15,7 +15,8 @@ var GridTitle = React.createClass({
         return {
            "columns":[],
            "sortColumn": "",
-           "sortAscending": true
+           "sortAscending": true,
+           "headerStyle": null
         }
     },
     sort: function(event){
@@ -46,7 +47,7 @@ var GridTitle = React.createClass({
         });
 
         return(
-            <thead>
+            <thead style={this.props.headerStyle}>
                 <tr>
                     {nodes}
                 </tr>

@@ -1,5 +1,6 @@
 Griddle
 =======
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 **GRIDDLE IS IN DEVELOPMENT**
@@ -32,6 +33,12 @@ To run from source, type the following commands into a terminal:
 5. That's it!
 
 ###Changelog:###
+0.1.19:
+
+1. Updated some of the documentation to note forthcoming changes to ExternalResults etc.
+2. Custom cell components now have a property  `rowData` as well as the `data`. [See here for more info](https://github.com/DynamicTyped/Griddle/issues/32)
+3. Components reference just `React` now instead of `React/Addons`. 
+
 0.1.18: 
 
 1. Fixed a bug where initialSort property wasn't getting used
