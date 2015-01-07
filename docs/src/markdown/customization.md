@@ -163,7 +163,7 @@ In some cases, it may be ideal to use Griddle but display a global format other 
   <dd><strong>bool</strong> - whether or not the user should be able to toggle between custom format and grid format.</dd>
 </dl>
 
-####Example:####
+#####Example:#####
 
 As stated above we are going to render a visualization of temperature data rather than a chart. To start off we need to create a visualization component that uses a data property to obtain its values (the following example uses the awesome [chartist library](http://gionkunz.github.io/chartist-js/) and [accompanying react component](https://fraserxu.me/react-chartist/)):
 
