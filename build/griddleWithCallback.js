@@ -246,7 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			        externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 			        externalSetPageSize: this.setPageSize, externalMaxPage: maxPage, 
 			        externalCurrentPage: this.state.page, results: loadingResults, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true, 
+			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, 
 					useCustomFormat: "true", customFormat: this.props.loadingComponent}))
 			}
 
@@ -254,7 +254,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
 				externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
 				externalCurrentPage: this.state.page, results: this.state.results, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, showFilter: true, showSettings: true}))
+				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending}))
 	    }
 	});
 
