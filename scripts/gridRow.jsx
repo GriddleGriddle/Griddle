@@ -23,7 +23,10 @@ var GridRow = React.createClass({
         "useGriddleIcons": true,
         "isSubGriddle": false,
         "parentRowCollapsedClassName": "parent-row",
-        "parentRowExpandedClassName": "parent-row expanded"
+        "parentRowExpandedClassName": "parent-row expanded",
+        "parentRowCollapsedComponent": "▶",
+        "parentRowExpandedComponent": "▼"
+
       }
     },
     handleClick: function(){
@@ -45,9 +48,9 @@ var GridRow = React.createClass({
 
             //todo: Make this not as ridiculous looking
             firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
-              <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>▶</span> :
+              <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{that.props.parentRowCollapsedComponent}</span> :
               index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useGriddleIcons ?
-                <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>▼</span> : "";
+                <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>{that.props.parentRowExpandedComponent}</span> : "";
 
             if(index === 0 && that.props.isChildRow && that.props.useGriddleStyles){
               columnStyles = _.extend(columnStyles, {paddingLeft:10})

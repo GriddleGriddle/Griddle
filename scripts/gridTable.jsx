@@ -35,8 +35,8 @@ var GridTable = React.createClass({
       "parentRowExpandedClassName": "parent-row expanded",
       "sortAscendingComponent": " ▴",
       "sortDescendingComponent": " ▾",
-      "parentRowCollapsedComponent": null,
-      "parentRowExpandedComponent": null
+      "parentRowCollapsedComponent": "▶",
+      "parentRowExpandedComponent": "▼"
     }
   },
   componentDidMount: function() {
@@ -77,8 +77,13 @@ var GridTable = React.createClass({
 
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
-
-        return <GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName} parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName} data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        
+        return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
+          sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
+          parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
+          parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+          data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
+          uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
     });
 
     var gridStyle = null;
@@ -110,7 +115,7 @@ var GridTable = React.createClass({
         infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
       }
     }
-    
+
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}

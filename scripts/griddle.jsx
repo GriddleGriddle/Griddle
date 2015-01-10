@@ -79,9 +79,9 @@ var Griddle = React.createClass({
             "parentRowExpandedClassName": "parent-row expanded",
             /* icon components */
             "sortAscendingComponent": " ▴",
-            "sortDescendingComponent": " ▾",
-            "parentRowCollapsedComponent": null,
-            "parentRowExpandedComponent": null
+            "sortDescendingComponent": " ▼",
+            "parentRowCollapsedComponent": "▶",
+            "parentRowExpandedComponent": "▼"
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -501,7 +501,7 @@ var Griddle = React.createClass({
                   sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
                   parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
                   sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-                  parentRowCollpasedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
+                  parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
                   bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>)
             }
 
