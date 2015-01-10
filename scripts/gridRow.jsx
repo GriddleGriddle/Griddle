@@ -20,8 +20,10 @@ var GridRow = React.createClass({
         "hasChildren": false,
         "columnMetadata": null,
         "useGriddleStyles": true,
-        "useInternalIcons": true,
-        "isSubGriddle": false
+        "useGriddleIcons": true,
+        "isSubGriddle": false,
+        "parentRowCollapsedClassName": "parent-row",
+        "parentRowExpandedClassName": "parent-row expanded"
       }
     },
     handleClick: function(){
@@ -42,9 +44,9 @@ var GridRow = React.createClass({
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             //todo: Make this not as ridiculous looking
-            firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useInternalIcons ?
+            firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
               <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>▶</span> :
-              index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useInternalIcons ?
+              index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useGriddleIcons ?
                 <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>▼</span> : "";
 
             if(index === 0 && that.props.isChildRow && that.props.useGriddleStyles){
@@ -67,7 +69,7 @@ var GridRow = React.createClass({
         if(that.props.isChildRow){
             className = "child-row";
         } else if (that.props.hasChildren){
-            className = that.props.showChildren ? "parent-row expanded" : "parent-row";
+            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
 
         return (<tr className={className}>{nodes}</tr>);

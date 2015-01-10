@@ -18,19 +18,22 @@ var GridTitle = React.createClass({
            "sortAscending": true,
            "headerStyle": null,
            "useGriddleStyles": true,
-           "useInternalIcons": true
+           "usGriddleIcons": true,
+           "sortAscendingClassName": "sort-ascending",
+           "sortDescendingClassName": "sort-descending",
+           "sortAscendingComponent": " ▴",
+           "sortDescendingComponent": " ▾"
         }
     },
     sort: function(event){
-        this.props.changeSort(event.target.dataset.title);
+        this.props.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
     },
     render: function(){
         var that = this;
 
         var nodes = this.props.columns.map(function(col, index){
             var columnSort = "";
-            var sortCharacter = "";
-
+            var sortComponent = null;
             var titleStyles = null;
 
             if (that.props.useGriddleStyles){
@@ -44,12 +47,13 @@ var GridTitle = React.createClass({
             }
 
             if(that.props.sortColumn == col && that.props.sortAscending){
-                columnSort = "sort-ascending";
-                sortCharacter = " ▴";
+                columnSort = that.props.sortAscendingClassName;
+                sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
             }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
-                columnSort += "sort-descending";
-                sortCharacter = " ▾";
+                columnSort += that.props.sortDescendingClassName;
+                sortComponent = that.props.useGriddleIcons && that.props.sortDescendingComponent;
             }
+
             var displayName = col;
             if (that.props.columnMetadata != null){
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
@@ -60,10 +64,7 @@ var GridTitle = React.createClass({
               }
             }
 
-            if(that.props.useInternalIcons){
-              displayName = displayName + sortCharacter;
-            }
-            return (<th onClick={that.sort} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}</th>);
+            return (<th onClick={that.sort} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
         });
 
 
