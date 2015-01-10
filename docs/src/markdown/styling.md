@@ -16,4 +16,12 @@ First off we need to download and include the stylesheet (or include it from a C
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 ```
 
+Once FontAwesome is loaded, we need to load Griddle with the sortAscendingComponent and sortDescendingComponent properties set to elements using FontAwesome's classes.
+
+```
+React.render(<Griddle results={fakeData} sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("some-id"));
+```
+
 @@include('./styling/icons.html')
+
+<hr />
