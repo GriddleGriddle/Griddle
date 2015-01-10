@@ -13,7 +13,9 @@ var GridRow = require('./gridRow.jsx');
 var GridRowContainer = React.createClass({
     getDefaultProps: function(){
       return {
-        "useGriddleStyles": true
+        "useGriddleStyles": true,
+        "useInternalIcons": true,
+        "isSubGriddle": false
       };
     },
     getInitialState: function(){
@@ -35,21 +37,21 @@ var GridRowContainer = React.createClass({
         if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
         var arr = [];
 
-        arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
-          hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId}/>);
+        arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
+          hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useInternalIcons={that.props.useInternalIcons}/>);
           var children = null;
+
         if(that.state.showChildren){
+
             children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
                 if(typeof row["children"] !== "undefined"){
-                  return (<tr><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent">
-                      <Griddle results={[row]} tableClassName={that.props.tableClassName} showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}/>
+                  return (<tr style={{paddingLeft: 5}}><td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent" style={that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}>
+                      <Griddle isSubGriddle={true} results={[row]} tableClassName={that.props.tableClassName} showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}/>
                     </td></tr>);
                 }
 
-                return <GridRow useGriddleStyles={that.props.useGriddleStyles} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+                return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
             });
-
-
         }
 
         return that.props.hasChildren === false ? arr[0] : <tbody>{that.state.showChildren ? arr.concat(children) : arr}</tbody>

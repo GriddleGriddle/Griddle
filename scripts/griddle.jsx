@@ -70,7 +70,8 @@ var Griddle = React.createClass({
             "infiniteScroll": null,
             "bodyHeight": null,
             "infiniteScrollSpacerHeight": 50,
-            "useFixedLayout": true
+            "useFixedLayout": true,
+            "isSubGriddle": false
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -482,7 +483,7 @@ var Griddle = React.createClass({
             } else if(this.props.useCustomRowFormat){
                 resultContent = <div><CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat} style={clearFix} />{this.props.showPager&&pagingContent}</div>
             } else {
-                resultContent = <div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} useSortCharacters={this.props.useSortCharacters} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>
+                resultContent = <div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} useSortCharacters={this.props.useSortCharacters} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata} showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName} infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()} sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader} bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>
             }
 
 
@@ -519,7 +520,7 @@ var Griddle = React.createClass({
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
-                <div className="griddle-container" style={this.props.useGriddleStyles ? { border: "1px solid #DDD"} : null }>
+                <div className="griddle-container" style={this.props.useGriddleStyles&&!this.props.isSubGriddle? { border: "1px solid #DDD"} : null }>
                     {resultContent}
                 </div>
             </div>

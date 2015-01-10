@@ -27,7 +27,8 @@ var GridTable = React.createClass({
       "bodyHeight": null,
       "tableHeading": "",
       "useGriddleStyles": true,
-      "useSortCharacters": true
+      "useSortCharacters": true,
+      "isSubGriddle": false
     }
   },
   componentDidMount: function() {
@@ -69,7 +70,7 @@ var GridTable = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        return <GridRowContainer useGriddleStyles={that.props.useGriddleStyles} data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        return <GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
     });
 
     var gridStyle = null;
@@ -112,7 +113,7 @@ var GridTable = React.createClass({
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
     }
 
-    var pagingContent = "";  
+    var pagingContent = "";
     if(this.props.showPager){
       var pagingStyles = this.props.useGriddleStyles ?
         {
@@ -120,7 +121,7 @@ var GridTable = React.createClass({
           backgroundColor: "#EDEDED",
           border: "0",
           color: "#222"
-        } 
+        }
         : null;
 
       pagingContent = (<tbody><tr>
