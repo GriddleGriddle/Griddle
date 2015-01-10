@@ -54,10 +54,10 @@ var GridRow = React.createClass({
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
               var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
+              returnValue = (meta == null ? returnValue : <td onClick={that.props.hasChildren && that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={that.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={that.props.hasChildren && that.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         //this is kind of hokey - make it better
