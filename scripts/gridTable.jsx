@@ -27,7 +27,7 @@ var GridTable = React.createClass({
       "bodyHeight": null,
       "tableHeading": "",
       "useGriddleStyles": true,
-      "useSortCharacters": true,
+      "useInternalIcons": true,
       "isSubGriddle": false
     }
   },
@@ -105,7 +105,7 @@ var GridTable = React.createClass({
 
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
-        <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} useSortCharacters={this.props.useSortCharacters} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata}/>
+        <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} useInternalIcons={this.props.useInternalIcons} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata}/>
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
