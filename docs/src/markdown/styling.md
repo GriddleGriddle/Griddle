@@ -99,6 +99,103 @@ React.render(<Griddle results={fakeData}
   document.getElementById("some-id"));
 ```
 
+When clicking on the ColumnHeaders, the font-awesome icons are used instead of the default characters.
+
 @@include('./styling/icons.html')
 
 <hr />
+
+###Overriding Griddle's Styles###
+
+Don't like Griddle's default styles? No problem -- turn them off entirely by setting the `useGriddleStyles` property to false. Griddle will render as a plain table (unless infinite scrolling is turned on) that you can apply your styles to. The following is Griddle rendered using [Skeleton framework](http://getskeleton.com/)'s default table styling.
+
+@@include('./styling/plain.html')
+
+We've [included a stylesheet](styles/griddle.css) that contains the default, inline styling that can be used as a starting point for creating custom Griddle styles (available at [/docs/assets/styles/griddle.css](styles/griddle.css)).
+
+```
+.griddle-container{
+  border:1px solid #DDD;
+}
+
+.griddle top-section{
+  clear:both;
+  display:table;
+  width:100%;
+}
+
+.griddle .griddle-filter{
+  float:left;
+  width:50%;
+  text-align:left;
+  color:#222;
+  min-height:1px;
+}
+
+.griddle .griddle-settings-toggle{
+  float:left;
+  width:50%;
+  text-align:right;
+}
+
+.griddle .griddle-settings{
+  background-color:#FFF;
+  border:1px solid #DDD;
+  color:#222;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+.griddle .griddle-settings .griddle-columns{
+  clear:both;
+  display:table;
+  width:100%;
+  border-bottom:1px solid #EDEDED;
+  margin-bottom:10px;
+}
+
+.griddle .griddle-settings .griddle-column-selection{
+  float:left;
+  width:20%;
+}
+.griddle table{
+  width:100%;table-layout:fixed;
+}
+
+.griddle th{
+  background-color:#EDEDEF;
+  border:0px;
+  border-bottom:1px solid #DDD;
+  color:#222;
+  padding:5px;
+}
+
+.griddle td{
+  padding:5px;
+  background-color:#FFF;
+  border-top-color:#DDD;
+  color:#222;
+}
+
+.griddle .footer-container{
+  padding:0px;
+  background-color:#EDEDED;
+  border:0px;
+  color:#222;
+}
+
+.griddle .griddle-previous, .griddle .griddle-page, .griddle .griddle-next{
+  float:left;
+  width:33%;
+  min-height:1px;
+  margin-top:5px;
+}
+
+.griddle .griddle-page{
+  text-align:center;
+}
+
+.griddle .griddle-next{
+  text-align:right;
+}
+```

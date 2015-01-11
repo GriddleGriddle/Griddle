@@ -142,7 +142,7 @@ var GridTable = React.createClass({
         : null;
 
       pagingContent = (<tbody><tr>
-          <td colSpan={this.props.columns.length} style={pagingStyles}>
+          <td colSpan={this.props.columns.length} style={pagingStyles} className="footer-container">
             {this.props.pagingContent}
           </td>
         </tr></tbody>)
@@ -151,7 +151,7 @@ var GridTable = React.createClass({
     return this.props.useFixedHeader ?
         (
           <div>
-            <table className={this.props.className} style={tableStyle}>
+            <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
               {tableHeading}
             </table>
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
@@ -163,7 +163,7 @@ var GridTable = React.createClass({
           </div>
         ) : (
             <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
-              <table className={this.props.className} style={tableStyle}>
+              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                   {tableHeading}
                   {nodes}
                   {pagingContent}
