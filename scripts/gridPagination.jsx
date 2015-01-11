@@ -22,7 +22,7 @@ var GridPagination = React.createClass({
             "nextClassName": "griddle-next",
             "previousClassName": "griddle-previous",
             "nextIconComponent": null,
-            "previousIconComponent": null,
+            "previousIconComponent": null
         }
     },
     pageChange: function(event){
