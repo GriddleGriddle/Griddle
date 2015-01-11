@@ -77,7 +77,7 @@ var GridTable = React.createClass({
 
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
-        
+
         return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
           sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
           parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}

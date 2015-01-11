@@ -22,7 +22,7 @@ var GridTitle = React.createClass({
            "sortAscendingClassName": "sort-ascending",
            "sortDescendingClassName": "sort-descending",
            "sortAscendingComponent": " ▴",
-           "sortDescendingComponent": " ▾"
+           "sortDescendingComponent": " ▾",
         }
     },
     sort: function(event){

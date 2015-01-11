@@ -77,11 +77,17 @@ var Griddle = React.createClass({
             "sortDescendingClassName": "sort-descending",
             "parentRowCollapsedClassName": "parent-row",
             "parentRowExpandedClassName": "parent-row expanded",
+            "settingsToggleClassName": "settings",
+            "nextClassName": "griddle-next",
+            "previousClassName": "griddle-previous",
             /* icon components */
             "sortAscendingComponent": " ▴",
             "sortDescendingComponent": " ▼",
             "parentRowCollapsedComponent": "▶",
-            "parentRowExpandedComponent": "▼"
+            "parentRowExpandedComponent": "▼",
+            "settingsIconComponent": "",
+            "nextIconComponent": "",
+            "previousIconComponent":""
         };
     },
     /* if we have a filter display the max page and results accordingly */
@@ -410,7 +416,7 @@ var Griddle = React.createClass({
 
         //figure out if we want to show the filter section
         var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
-        var settings = this.props.showSettings ? <span className="settings" onClick={this.toggleColumnChooser}>{this.props.settingsText} <i className="glyphicon glyphicon-cog"></i></span> : "";
+        var settings = this.props.showSettings ? <span className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser}>{this.props.settingsText}{this.props.settingsIconComponent}</span> : "";
 
         //if we have neither filter or settings don't need to render this stuff
         var topSection = "";
@@ -480,7 +486,7 @@ var Griddle = React.createClass({
                   <div className="griddle-footer">
                       {this.props.useCustomPager ?
                           <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
-                          <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                          <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
                       }
                   </div>
               );
@@ -512,7 +518,7 @@ var Griddle = React.createClass({
         }
 
         var columnSelector = this.state.showColumnChooser ? (
-            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize} showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
+            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText} settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize} showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom} toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
 
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
