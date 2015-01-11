@@ -53,7 +53,7 @@ var Griddle = React.createClass({
             "customPager": {},
             "allowToggleCustom":false,
             "noDataMessage":"There is no data to display.",
-            "customNoData": null,
+            "customNoDataComponent": null,
             "showTableHeading":true,
             "showPager":true,
             "useFixedHeader":false,
@@ -531,8 +531,8 @@ var Griddle = React.createClass({
 
         if (typeof results === 'undefined' || results.length === 0) {
             var myReturn = null;
-            if (this.props.customNoData != null) {
-                myReturn = (<div className={gridClassName}><this.props.customNoData /></div>);
+            if (this.props.customNoDataComponent != null) {
+                myReturn = (<div className={gridClassName}><this.props.customNoDataComponent /></div>);
 
                 return myReturn
             }
