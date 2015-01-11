@@ -66,7 +66,6 @@ var Griddle = React.createClass({
             "externalCurrentPage": null,
             "externalSortColumn": null,
             "externalSortAscending": true,
-            "externalResults": [],
             "infiniteScroll": null,
             "bodyHeight": null,
             "infiniteScrollSpacerHeight": 50,
