@@ -72,6 +72,7 @@ var Griddle = React.createClass({
             "infiniteScrollSpacerHeight": 50,
             "useFixedLayout": true,
             "isSubGriddle": false,
+            "enableSort": true,
             /* css class names */
             "sortAscendingClassName": "sort-ascending",
             "sortDescendingClassName": "sort-descending",
@@ -190,7 +191,6 @@ var Griddle = React.createClass({
     },
     getColumns: function(){
         var that = this;
-
         var results = this.getCurrentResults();
 
         //if we don't have any data don't mess with this
@@ -237,7 +237,8 @@ var Griddle = React.createClass({
         if (currentPage > 0) { this.setPage(currentPage - 1); }
     },
     changeSort: function(sort){
-        if(this.props.useExternal) {
+        if(this.props.enableSort === false){ return; }
+        if(this.props.useExterna) {
             this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
 
             return;
@@ -288,7 +289,12 @@ var Griddle = React.createClass({
             this.setState({
                 customFormatType: "row"
             });
+        } else {
+          this.setState({
+            filteredColumns: this.props.columns
+          })
         }
+
     },
     //todo: clean these verify methods up
     verifyExternal: function(){

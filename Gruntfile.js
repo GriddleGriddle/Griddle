@@ -87,7 +87,7 @@ module.exports = function(grunt) {
         files: [
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
-          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js'], dest: 'docs/html/scripts', flatten: true}
+          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js', 'examples/assets/scripts/swapi.min.js'], dest: 'docs/html/scripts', flatten: true}
         ]
       }
     },
@@ -149,7 +149,7 @@ module.exports = function(grunt) {
     },
     watch: {
       scripts: {
-        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/assets/**/*.html", "docs/src/**/*.*"],
+        files: ['**/*.jsx', "docs/assets/**/*.css", "docs/assets/**/*.html", "docs/src/**/*.*", "examples/**/*.*"],
         tasks: ['build'],
         options: {
           spawn: false,
