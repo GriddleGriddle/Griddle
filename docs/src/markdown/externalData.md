@@ -117,7 +117,7 @@ getExternalData: function(page){
 }
 ```
 
-The rest of the component was modified to use this method for changing the pages and obtaining initial data. Notice that filtering, sorting, etc are not enabled on this example (the next example has all of these options turned on). 
+The component was then modified to use getExternalData method for changing the pages and obtaining the initial data. Notice that filtering, sorting, etc are not enabled on this example (the next example has all of these options turned on). 
 
 ```javascript
 var ExternalSwapiComponent = React.createClass({
@@ -164,7 +164,7 @@ var ExternalSwapiComponent = React.createClass({
 
 #####Simulated External Results Example:#####
 
-The following example is using the skeleton template above and simulating what loading results externally could look like (while still using the example data that has been used through-out the Griddle documentation). This example is included as it uses more of the required external properties.
+The following example is using the skeleton template above and simulating what loading results externally could look like (while still using the example data that has been used through-out the Griddle documentation). 
 
 Please keep in mind that a good deal of this code is to simulate the type of actions that would generally take place on a server (or wherever the data is coming from) -- most of the time the functions should deal with passing data back and forth to the source of the data (e.g. an API).
 
@@ -272,4 +272,30 @@ React.render(<SimulatedExternalComponent />, document.getElementById("griddle-ex
 
 @@include('./externalData/external-simulated.html')
 
+<hr />
 
+####Griddle With Callback####
+
+Previous versions of Griddle had a built-in callback for obtaining external data. This has since been moved into its own component to help simplify the main Griddle component. The call definition is the same. 
+
+#####Example:#####
+
+Lets assume we want to obtain Star Wars data like in the example above except using GriddleWithCallback instead of using the exernal results properties. We will start out by creating a callback method. The Griddle callback has access to `filterString, sortColumn, sortAscending, page, pageSize, callback` parameters.
+
+For the example, our Callback looks like this: 
+
+```javascript
+var loadData = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+	page+=1;
+
+	swapiModule.getStarships(page, function(data){
+		callback({
+			results: data.results,
+			totalResults: data.count,
+			pageSize: pageSize
+		});	
+	});
+};
+```
+
+@@include('./externalData/callback-swapi.html')

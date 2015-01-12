@@ -189,7 +189,7 @@ var GriddleWithCallback = React.createClass({
 			externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
 			externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
 			externalCurrentPage={this.state.page} results={this.state.results} tableClassName="table" resultsPerPage={this.state.pageSize}
-			externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} showFilter={true} showSettings={true} />
+			externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} />
     }
 });
 
