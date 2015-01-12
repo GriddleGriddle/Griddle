@@ -268,8 +268,7 @@ var Griddle = React.createClass({
             filter: "",
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
-            showColumnChooser: false,
-            isLoading: false
+            showColumnChooser: false
         };
 
         return state;
@@ -463,63 +462,57 @@ var Griddle = React.createClass({
         var keys = [];
         var cols = this.getColumns();
 
-        // If we're not loading results, fill the table with legitimate data.
-        if (!this.state.isLoading) {
-            //figure out which columns are displayed and show only those
-            var data = this.getDataForRender(results, cols, true);
+        //figure out which columns are displayed and show only those
+        var data = this.getDataForRender(results, cols, true);
 
-            //don't repeat this -- it's happening in getColumns and getDataForRender too...
-            var meta = this.props.metadataColumns;
-            if(meta.indexOf(this.props.childrenColumnName) < 0){
-                meta.push(this.props.childrenColumnName);
-            }
-
-            // Grab the column keys from the first results
-            keys = _.keys(_.omit(results[0], meta));
-
-            // Grab the current and max page values.
-            var currentPage = this.getCurrentPage();
-            var maxPage = this.getCurrentMaxPage();
-
-            // Determine if we need to enable infinite scrolling on the table.
-            var hasMorePages = (currentPage + 1) < maxPage;
-
-            // Grab the paging content if it's to be displayed
-            if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
-                pagingContent = (
-                  <div className="griddle-footer">
-                      {this.props.useCustomPager ?
-                          <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
-                          <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
-                      }
-                  </div>
-              );
-            }
-
-            //clean this stuff up so it's not if else all over the place. ugly if
-            if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
-                //this should send all the results it has
-                resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />
-            } else if(this.props.useCustomRowFormat){
-                resultContent = <div><CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat} style={clearFix} />{this.props.showPager&&pagingContent}</div>
-            } else {
-                resultContent = (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
-                  useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
-                  showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
-                  infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
-                  sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
-                  sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
-                  parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
-                  sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-                  parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-                  bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>)
-            }
-
-
-        } else {
-            // Otherwise, display the loading content.
-            resultContent = (<div className="loading img-responsive center-block"></div>);
+        //don't repeat this -- it's happening in getColumns and getDataForRender too...
+        var meta = this.props.metadataColumns;
+        if(meta.indexOf(this.props.childrenColumnName) < 0){
+            meta.push(this.props.childrenColumnName);
         }
+
+        // Grab the column keys from the first results
+        keys = _.keys(_.omit(results[0], meta));
+
+        // Grab the current and max page values.
+        var currentPage = this.getCurrentPage();
+        var maxPage = this.getCurrentMaxPage();
+
+        // Determine if we need to enable infinite scrolling on the table.
+        var hasMorePages = (currentPage + 1) < maxPage;
+
+        // Grab the paging content if it's to be displayed
+        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
+            pagingContent = (
+              <div className="griddle-footer">
+                  {this.props.useCustomPager ?
+                      <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
+                      <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+                  }
+              </div>
+          );
+        }
+
+        //clean this stuff up so it's not if else all over the place. ugly if
+        if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+            //this should send all the results it has
+            resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />
+        } else if(this.props.useCustomRowFormat){
+            resultContent = <div><CustomRowFormatContainer data={data} columns={cols} metadataColumns={meta} className={this.props.customRowFormatClassName} customFormat={this.props.customRowFormat} style={clearFix} />{this.props.showPager&&pagingContent}</div>
+        } else {
+            resultContent = (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
+              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
+              showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
+              infiniteScroll={this.isInfiniteScrollEnabled()} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
+              sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
+              sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
+              parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
+              sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
+              parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
+              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>)
+        }
+
+
 
         var columnSelector = this.state.showColumnChooser ? (
             <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
