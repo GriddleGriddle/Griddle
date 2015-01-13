@@ -181,25 +181,13 @@ var GriddleWithCallback = React.createClass({
 			this.setPage(0, size);
     },
     render: function(){
-
-		if(this.state.isLoading){
-			var loadingResults = this.props.infiniteScroll ? this.state.results : [{"fake":"forLoading"}];
-			var maxPage = this.props.infiniteScroll ? this.state.page : this.state.max;
-
 			return <Griddle {...this.props} useExternal={true} externalSetPage={this.setPage}
-		        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
-		        externalSetPageSize={this.setPageSize} externalMaxPage={maxPage}
-		        externalCurrentPage={this.state.page} results={loadingResults} tableClassName="table" resultsPerPage={this.state.pageSize}
-		        externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending}
-				useCustomFormat="true" customFormat={this.props.loadingComponent} />
-		}
-
-		return <Griddle {...this.props} useExternal={true} externalSetPage={this.setPage}
-			externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
-			externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
-			externalCurrentPage={this.state.page} results={this.state.results} tableClassName="table" resultsPerPage={this.state.pageSize}
-			externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending} />
-    }
+				externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
+				externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPage}
+				externalCurrentPage={this.state.page} results={this.state.results} tableClassName="table" resultsPerPage={this.state.pageSize}
+				externalSortColumn={this.state.sortColumn} externalSortAscending={this.state.sortAscending}
+				externalLoadingComponent={this.props.loadingComponent} externalIsLoading={this.state.isLoading} />
+	  }
 });
 
 module.exports = GriddleWithCallback;
