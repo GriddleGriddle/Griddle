@@ -30,8 +30,9 @@ var CustomRowFormatContainer = React.createClass({
         return <that.props.customFormat data={row} metadataColumns={that.props.metadataColumns} key={index} />
     });
 
+    var footer = this.props.showPager&&this.props.pagingContent;
     return (
-      <div className={this.props.className}>
+      <div className={this.props.className} style={this.props.style}>
           {nodes}
       </div>
     );

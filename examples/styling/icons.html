@@ -1,0 +1,9 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<style type="text/css">
+  .fa {margin-left: 5px; }
+</style>
+<div id="griddle-subgrid"></div>
+
+<script type="text/jsx">
+React.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]}  sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("griddle-subgrid"));
+</script>

@@ -22,10 +22,23 @@ var GridTable = React.createClass({
       "nextPage": null,
       "hasMorePages": false,
       "useFixedHeader": false,
+      "useFixedLayout": true,
       "infiniteScrollSpacerHeight": null,
       "bodyHeight": null,
       "tableHeading": "",
-      "isLoading": false
+      "useGriddleStyles": true,
+      "useGriddleIcons": true,
+      "isSubGriddle": false,
+      "sortAscendingClassName": "sort-ascending",
+      "sortDescendingClassName": "sort-descending",
+      "parentRowCollapsedClassName": "parent-row",
+      "parentRowExpandedClassName": "parent-row expanded",
+      "sortAscendingComponent": " ▴",
+      "sortDescendingComponent": " ▾",
+      "parentRowCollapsedComponent": "▶",
+      "parentRowExpandedComponent": "▼",
+      "externalLoadingComponent": null,
+      "externalIsLoading": false
     }
   },
   componentDidMount: function() {
@@ -37,7 +50,7 @@ var GridTable = React.createClass({
     this.gridScroll();
   },
   gridScroll: function(){
-    if (this.props.infiniteScroll && !this.props.isLoading) {
+    if (this.props.infiniteScroll && !this.props.externalIsLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
       var scrollable = this.refs.scrollable.getDOMNode();
       var scrollTop = scrollable.scrollTop
@@ -67,18 +80,32 @@ var GridTable = React.createClass({
         //at least one item in the group has children.
         if (hasChildren) { anyHasChildren = hasChildren; }
 
-        return <GridRowContainer data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>
+        return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
+          sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
+          parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
+          parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+          data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
+          uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
     });
 
     var gridStyle = null;
-    var headerStyle = null;
+    var loadingContent = null;
+    var tableStyle = {
+      width: "100%"
+    };
+
+    if(this.props.useFixedLayout){
+      tableStyle.tableLayout = "fixed";
+    }
+
     var infiniteScrollSpacerRow = null;
     if (this.props.infiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
         "position": "relative",
         "overflowY": "scroll",
-        "height": this.props.bodyHeight + "px"
+        "height": this.props.bodyHeight + "px",
+        "width": "100%"
       };
 
       // Only add the spacer row if the height is defined.
@@ -89,11 +116,27 @@ var GridTable = React.createClass({
 
         infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
       }
+
+      // If we're currently
+      if (this.props.externalIsLoading) {
+        var defaultLoadingStyle = {
+          textAlign: "center",
+          paddingBottom: "40px"
+        };
+
+        loadingContent = this.props.externalLoadingComponent ?
+          (<this.props.externalLoadingComponent/>) :
+          (<div style={defaultLoadingStyle}>Loading...</div>);
+      }
     }
 
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
-        <GridTitle columns={this.props.columns} changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending} columnMetadata={this.props.columnMetadata} headerStyle={headerStyle}/>
+        <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
+          changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending}
+          sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
+          sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
+          columnMetadata={this.props.columnMetadata}/>
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -101,26 +144,52 @@ var GridTable = React.createClass({
       nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
     }
 
-    return this.props.useFixedHeader ?
-        (
-          <div>
-            <table className={this.props.className}>
-              {tableHeading}
-            </table>
-            <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
-              <table className={this.props.className}>
-                  {nodes}
+    var pagingContent = "";
+    if(this.props.showPager){
+      var pagingStyles = this.props.useGriddleStyles ?
+        {
+          "padding" : "0",
+          backgroundColor: "#EDEDED",
+          border: "0",
+          color: "#222"
+        }
+        : null;
+
+      pagingContent = (<tbody><tr>
+          <td colSpan={this.props.columns.length} style={pagingStyles} className="footer-container">
+            {this.props.pagingContent}
+          </td>
+        </tr></tbody>)
+    }
+
+    // If we have a fixed header, split into two tables.
+    if (this.props.useFixedHeader){
+      if (this.props.useGriddleStyles) {
+        tableStyle.tableLayout = "fixed";
+      }
+
+      return <div>
+              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                {tableHeading}
               </table>
-            </div>
-          </div>
-        ) : (
-            <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
-              <table className={this.props.className}>
+              <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
+                <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                    {nodes}
+                    {pagingContent}
+                </table>
+                {loadingContent}
+              </div>
+            </div>;
+    }
+
+    return  <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
+              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                   {tableHeading}
                   {nodes}
+                  {pagingContent}
               </table>
+              {loadingContent}
             </div>
-        );
     }
 });
 

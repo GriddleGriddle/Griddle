@@ -1,0 +1,15 @@
+<div id="griddle-nodata-component"></div>
+
+<script type="text/jsx">
+  var NoDataComponent = React.createClass({
+    render: function(){
+      return (<div className="noDataComponent">
+        <h1>No data is available</h1>
+        <a href="http://www.google.com">You can google for more data</a>
+      </div>
+      );
+    }
+  });
+
+  React.render(<Griddle customNoDataComponent={NoDataComponent} />, document.getElementById("griddle-nodata-component"));
+</script>
