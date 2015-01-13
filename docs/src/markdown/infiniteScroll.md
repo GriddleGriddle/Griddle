@@ -44,6 +44,7 @@ Feel free to scroll through your external data, too! When data is loading, the l
 
 #####Example:#####
 ```
-<GriddleWithCallback showFilter={true} getExternalResults={fakeDataMethod} loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
+<GriddleWithCallback showFilter={true} getExternalResults={fakeDataMethod}
+ loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
 ```
 @@include('./infiniteScroll/infiniteScrollExternalResults.html')

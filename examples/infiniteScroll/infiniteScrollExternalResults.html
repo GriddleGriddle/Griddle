@@ -27,15 +27,15 @@
 
 
 			//sort the results if sortColumnSet
-            if(sortColumn&&sortColumn !== ""){
-                sortedResults = _.sortBy(fakeData, function(item){
-                    return item[sortColumn];
-                });
+      if(sortColumn&&sortColumn !== ""){
+          sortedResults = _.sortBy(fakeData, function(item){
+              return item[sortColumn];
+          });
 
-                if(sortAscending === false){
-                    sortedResults.reverse();
-                }
-            }
+          if(sortAscending === false){
+              sortedResults.reverse();
+          }
+      }
 
 			//filter the results if it's there
 			if (filterString&&filterString.length > 0) {
@@ -74,9 +74,14 @@
 			}
 		},
 		render: function(){
-			return <div className="loading">{this.props.loadingText}</div>;
+			var loadingStyle = {
+				textAlign: "center",
+				paddingBottom: "40px"
+			};
+
+			return <div className="loading container" style={loadingStyle}>{this.props.loadingText}</div>;
 		}
 	});
 
-	React.render(<GriddleWithCallback showFilter={true} getExternalResults={fakeDataMethod} loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
+	React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
 </script>

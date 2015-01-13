@@ -190,6 +190,18 @@ var TestLineChart = React.createClass({
 
 If you want to customize the paging component, just set the property 'useCustomPager' to true and pass in another component as property named 'customPager'. The example component below shows 11 buttons (5 previous, current, 5 next):
 
+<dl>
+  <dt>useCustomPager</dt>
+  <dd><strong>bool</strong> - Use custom pagination component rather than default pager. default: false</dd>
+</dl>
+
+<dl>
+  <dt>customPager</dt>
+  <dd><strong>object</strong> - The custom pagination component. default: {}</dd>
+</dl>
+
+#####Example#####
+
 ```javascript
 var OtherPager = React.createClass({
     getDefaultProps: function(){

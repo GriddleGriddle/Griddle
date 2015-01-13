@@ -66,6 +66,8 @@ var Griddle = React.createClass({
             "externalCurrentPage": null,
             "externalSortColumn": null,
             "externalSortAscending": true,
+            "externalLoadingComponent": null,
+            "externalIsLoading": false,
             "infiniteScroll": null,
             "bodyHeight": null,
             "infiniteScrollSpacerHeight": 50,
@@ -510,7 +512,8 @@ var Griddle = React.createClass({
               parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
               sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
               parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} hasMorePages={hasMorePages} /></div>)
+              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
+              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
         }
 
 
