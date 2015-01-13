@@ -154,28 +154,28 @@ var GriddleWithCallback = React.createClass({
 		});
     },
     setFilter: function(filter){
-        /*
-          like everything else -- this is pretend code used to simulate something that we would do on the
-          server-side (aka we would generally post the filter as well as other information used to populate
-          the grid) and send back to the view (which would handle passing the data back to Griddle)
-        */
-		var that = this;
+      /*
+        like everything else -- this is pretend code used to simulate something that we would do on the
+        server-side (aka we would generally post the filter as well as other information used to populate
+        the grid) and send back to the view (which would handle passing the data back to Griddle)
+      */
+			var that = this;
 
-		var state = {
-			page: 0,
-			filter: filter
-		}
-
-		this.updateStateWithExternalResults(state, function(updatedState) {
-			//if filter is null or undefined reset the filter.
-			if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-				updatedState.filter = filter;
-				updatedState.filteredResults = null;
+			var state = {
+				page: 0,
+				filter: filter
 			}
 
-			// Set the state.
-			that.setState(updatedState);
-		});
+			this.updateStateWithExternalResults(state, function(updatedState) {
+				//if filter is null or undefined reset the filter.
+				if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+					updatedState.filter = filter;
+					updatedState.filteredResults = null;
+				}
+
+				// Set the state.
+				that.setState(updatedState);
+			});
     },
     setPageSize: function(size){
 			this.setPage(0, size);
