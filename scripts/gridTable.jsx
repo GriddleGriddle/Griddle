@@ -36,7 +36,8 @@ var GridTable = React.createClass({
       "sortAscendingComponent": " ▴",
       "sortDescendingComponent": " ▾",
       "parentRowCollapsedComponent": "▶",
-      "parentRowExpandedComponent": "▼"
+      "parentRowExpandedComponent": "▼",
+      "isLoading": false
     }
   },
   componentDidMount: function() {
@@ -48,7 +49,7 @@ var GridTable = React.createClass({
     this.gridScroll();
   },
   gridScroll: function(){
-    if (this.props.infiniteScroll) {
+    if (this.props.infiniteScroll && !this.props.isLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
       var scrollable = this.refs.scrollable.getDOMNode();
       var scrollTop = scrollable.scrollTop

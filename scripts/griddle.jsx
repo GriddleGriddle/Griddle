@@ -397,8 +397,8 @@ var Griddle = React.createClass({
         return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
     },
     isInfiniteScrollEnabled: function(){
-      // If a custom format or pager is included, don't allow for infinite scrolling.
-      if (this.props.useCustomFormat || this.props.useCustomPager) {
+      // If a custom pager is included, don't allow for infinite scrolling.
+      if (this.props.useCustomPager) {
         return false;
       }
 
@@ -470,6 +470,7 @@ var Griddle = React.createClass({
         if(meta.indexOf(this.props.childrenColumnName) < 0){
             meta.push(this.props.childrenColumnName);
         }
+
 
         // Grab the column keys from the first results
         keys = _.keys(_.omit(results[0], meta));
