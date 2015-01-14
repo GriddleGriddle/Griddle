@@ -37,6 +37,7 @@ dd{
 .background-accent { background-color: #03A9F4; }
 .background-dark-grey { background-color: #727272; }
 .background-light-grey { background-color: #B6B6B6; }
+.background-lighter-grey { background-color: #EDEDED;}
 .background-light { background-color: #FFF; }
 
 /* text colors */
@@ -198,6 +199,29 @@ code.big{
 
 .docs .griddle h5, .docs .griddle h6{
 	color: #512DA8;
+}
+
+.feature-row{
+	border-bottom: 1px solid #727272;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+.feature-row.last{
+	border: none;
+}
+
+.feature-row .image-container{
+	background-color: #FFF;
+	border: 1px solid #B6B6B6;
+}
+
+.feature-row img{
+	max-width: 100%;
+}
+
+.feature-row figure{
+	margin: 0;
 }
 
 /* ugly styles for example */

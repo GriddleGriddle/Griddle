@@ -71,7 +71,7 @@
       </div>
     </div>
   </div>
-  <div class="border-primary-dark content-section border-bottom border-big" id="tldr">
+  <div class="border-dark-grey content-section border-bottom border-big" id="tldr">
     <div class="container">
       <div class="row">
         <div class="four columns">
@@ -102,6 +102,54 @@
           <div class="center"><a href="#styling">Learn more about loading data</a></div>
         </div>
       </div>
+    </div>
+  </div>
+  <div id="features" class="text content-section background-lighter-grey border-primary-dark border-bottom border-big">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <h2>TLDR Features</h2>
+        </div>
+      </div>
+      <div class="row feature-row">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Custom Formatting</h4>
+          <p>
+            Want to alternate your data between a grid and a visualization? No problem! Griddle can take optional custom components for the overall grid, row or the column level. <a href="customization.html">Learn more about customizing Griddle</a>.
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-grid-chart.gif" alt="Grid Format Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>
+      <div class="row feature-row">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Infinite Scrolling</h4>
+          <p>
+            Hate clicking on next / previous buttons? Enable infinite scrolling and get rid of them, forever! Infinite scrolling will work whether your data is loaded at once or continuously from the server! <a href="infiniteScroll.html">Read more about infinite scrolling</a>
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-infinite.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>      
+      <div class="row feature-row last">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Custom Styling</h4>
+          <p>
+            Third-party components should work with your styles rather than force you into specific styling structure or framework. Griddle comes with default inline styling, however, these styles can be turned off with a simple property change. When off, Griddle will render as a simple table that you can apply your styles to. <a href="styling.html">Read more about styling</a>
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-style.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>       
     </div>
   </div>
   <div class="order-primary text-primary-dark content-section background-primary-light border-dark-grey border-bottom border-big" id="quickstart">
@@ -172,6 +220,11 @@ var Griddle = require('griddle-react');</pre></code>
   <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+
+  <!-- Griddle doesn't need jQuery at all -- just for the freezeframe library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/freezeframe.min.js"></script>
+
   <script src="scripts/Griddle.js"></script>
   <script src="scripts/fakeData.js"></script>
   <script type="text/jsx">
