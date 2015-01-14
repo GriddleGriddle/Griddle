@@ -74,19 +74,24 @@ var GridTable = React.createClass({
     //figure out if we need to wrap the group in one tbody or many
     var anyHasChildren = false;
 
-    var nodes = this.props.data.map(function(row, index){
-        var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
+    var nodes = null;
 
-        //at least one item in the group has children.
-        if (hasChildren) { anyHasChildren = hasChildren; }
+    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
+    if (!this.props.externalIsLoading || this.props.infiniteScroll) {
+      nodes = this.props.data.map(function(row, index){
+          var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
-        return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
-          sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
-          parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
-          parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-          data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
-          uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
-    });
+          //at least one item in the group has children.
+          if (hasChildren) { anyHasChildren = hasChildren; }
+
+          return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
+            sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
+            parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
+            parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
+            uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
+      });
+    }
 
     var gridStyle = null;
     var loadingContent = null;
@@ -116,18 +121,27 @@ var GridTable = React.createClass({
 
         infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
       }
+    }
 
-      // If we're currently
-      if (this.props.externalIsLoading) {
-        var defaultLoadingStyle = {
+    // If we're currently loading, populate the loading content
+    if (this.props.externalIsLoading) {
+      var defaultLoadingStyle = null;
+      var defaultColSpan = null;
+
+      if (this.props.useGriddleStyles) {
+        defaultLoadingStyle = {
           textAlign: "center",
           paddingBottom: "40px"
         };
 
-        loadingContent = this.props.externalLoadingComponent ?
-          (<this.props.externalLoadingComponent/>) :
-          (<div style={defaultLoadingStyle}>Loading...</div>);
+        defaultColSpan = this.props.columns.length;
       }
+
+      var loadingComponent = this.props.externalLoadingComponent ?
+        (<this.props.externalLoadingComponent/>) :
+        (<div>Loading...</div>);
+
+      loadingContent = (<tbody><tr><td style={defaultLoadingStyle} colSpan={defaultColSpan}>{loadingComponent}</td></tr></tbody>);
     }
 
     //construct the table heading component
@@ -175,9 +189,9 @@ var GridTable = React.createClass({
               <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
                 <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                     {nodes}
+                    {loadingContent}
                     {pagingContent}
                 </table>
-                {loadingContent}
               </div>
             </div>;
     }
@@ -186,9 +200,9 @@ var GridTable = React.createClass({
               <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                   {tableHeading}
                   {nodes}
+                  {loadingContent}
                   {pagingContent}
               </table>
-              {loadingContent}
             </div>
     }
 });
