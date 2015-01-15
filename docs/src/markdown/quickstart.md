@@ -1,4 +1,4 @@
-##Basic Usage##
+##Quickstart##
 
 ####From NPM####
 
@@ -49,7 +49,7 @@ From there, render a Griddle component through React.renderComponent or in the R
 <Griddle results={fakeData} />
 ```
 
-@@include('./basicUsage/basic.html')
+@@include('./quickstart/basic.html')
 
 ##More Advanced Example##
 For many applications, simple paging and sorting is not enough. Griddle comes equipped with filtering, initial columns and additional grid settings out of the box. To use these features, simply define the showProperties and showFilters properties on the Griddle component definition. Check out the full list of properties available to Griddle in the [prop documentation](properties.html).
@@ -60,4 +60,4 @@ Using the same data as in the previous example, we can add filtering, grid setti
 <Griddle results={fakeData} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>
 ```
 
-@@include('./basicUsage/advanced.html')
+@@include('./quickstart/advanced.html')
