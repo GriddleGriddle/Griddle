@@ -303,7 +303,7 @@ var propertiesItem = [
   },
   {
     "property": "infiniteScrollSpacerHeight",
-    "description": "",
+    "description": "The height of a fake row to give the table body additional height if there are more rows that can be loaded when infinite scrolling is enabled.",
     "type": "int",
     "default": "50"
   },
@@ -418,7 +418,7 @@ var DefinitionItem = React.createClass({
       "type": "",
       "default": ""
     }}
-  }, 
+  },
   render: function(){
     return (
       <dl>
@@ -429,5 +429,5 @@ var DefinitionItem = React.createClass({
     )
   }
 })
-React.render(<Griddle results={propertiesItem} useCustomRowFormat={true} customRowFormat={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} />, document.getElementById('griddle-properties')); 
+React.render(<Griddle results={propertiesItem} useCustomRowFormat={true} customRowFormat={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} />, document.getElementById('griddle-properties'));
 </script>
