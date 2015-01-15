@@ -21,8 +21,8 @@ var GridTitle = React.createClass({
            "usGriddleIcons": true,
            "sortAscendingClassName": "sort-ascending",
            "sortDescendingClassName": "sort-descending",
-           "sortAscendingComponent": " ▴",
-           "sortDescendingComponent": " ▾"
+           "sortAscendingComponent": " ▲",
+           "sortDescendingComponent": " ▼"
         }
     },
     sort: function(event){

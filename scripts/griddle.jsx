@@ -71,7 +71,7 @@ var Griddle = React.createClass({
             "infiniteScroll": false,
             "bodyHeight": null,
             "infiniteScrollSpacerHeight": 50,
-            "useFixedLayout": false,
+            "useFixedLayout": true,
             "isSubGriddle": false,
             "enableSort": true,
             /* css class names */
@@ -83,7 +83,7 @@ var Griddle = React.createClass({
             "nextClassName": "griddle-next",
             "previousClassName": "griddle-previous",
             /* icon components */
-            "sortAscendingComponent": " ▴",
+            "sortAscendingComponent": " ▲",
             "sortDescendingComponent": " ▼",
             "parentRowCollapsedComponent": "▶",
             "parentRowExpandedComponent": "▼",
