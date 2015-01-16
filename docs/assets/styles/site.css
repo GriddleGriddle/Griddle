@@ -140,6 +140,11 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0 5px 0 5px;
 }
 
+.griddle-settings-toggle button {
+	color: #FFF;
+	text-transform: none;
+}
+
 /* Example Site specific Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .content-section{

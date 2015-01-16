@@ -421,7 +421,7 @@ var Griddle = React.createClass({
 
         //figure out if we want to show the filter section
         var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
-        var settings = this.props.showSettings ? <span className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser}>{this.props.settingsText}{this.props.settingsIconComponent}</span> : "";
+        var settings = this.props.showSettings ? <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>{this.props.settingsText}{this.props.settingsIconComponent}</button> : "";
 
         //if we have neither filter or settings don't need to render this stuff
         var topSection = "";
