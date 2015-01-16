@@ -38,7 +38,8 @@ var GridTable = React.createClass({
       "parentRowCollapsedComponent": "▶",
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
-      "externalIsLoading": false
+      "externalIsLoading": false,
+      "enableSort": true
     }
   },
   componentDidMount: function() {
@@ -150,7 +151,7 @@ var GridTable = React.createClass({
           changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending}
           sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
           sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-          columnMetadata={this.props.columnMetadata}/>
+          columnMetadata={this.props.columnMetadata} enableSort={this.props.enableSort}/>
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this

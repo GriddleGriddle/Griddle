@@ -22,7 +22,8 @@ var GridTitle = React.createClass({
            "sortAscendingClassName": "sort-ascending",
            "sortDescendingClassName": "sort-descending",
            "sortAscendingComponent": " ▲",
-           "sortDescendingComponent": " ▼"
+           "sortDescendingComponent": " ▼",
+           "enableSort": true
         }
     },
     sort: function(event){
@@ -42,9 +43,11 @@ var GridTitle = React.createClass({
                 border: "0",
                 borderBottom: "1px solid #DDD",
                 color: "#222",
-                padding: "5px"
+                padding: "5px",
+                cursor: that.props.enableSort ? "pointer" : "default"
               }
             }
+
 
             if(that.props.sortColumn == col && that.props.sortAscending){
                 columnSort = that.props.sortAscendingClassName;
