@@ -33,11 +33,11 @@ var GridPagination = React.createClass({
         var next = "";
 
         if(this.props.currentPage > 0){
-            previous = <span onClick={this.props.previous} style={this.props.useGriddleStyles ? {paddingLeft: "10px"} : null}>{this.props.previousIconComponent}{this.props.previousText}</span>
+            previous = <a href="#" onClick={this.props.previous} style={this.props.useGriddleStyles ? {paddingLeft: "10px", "color": "#222"} : null}>{this.props.previousIconComponent}{this.props.previousText}</a>
         }
 
         if(this.props.currentPage !== (this.props.maxPage -1)){
-            next = <span onClick={this.props.next} style={this.props.useGriddleStyles ? {paddingRight: "10px"} : null}>{this.props.nextText}{this.props.nextIconComponent}</span>
+            next = <a href="#" onClick={this.props.next} style={this.props.useGriddleStyles ? {paddingRight: "10px", "color":"#222"} : null}>{this.props.nextText}{this.props.nextIconComponent}</a>
         }
 
         var leftStyle = null;
