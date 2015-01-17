@@ -33,11 +33,11 @@ var GridPagination = React.createClass({
         var next = "";
 
         if(this.props.currentPage > 0){
-            previous = <a href="#" onClick={this.props.previous} style={this.props.useGriddleStyles ? {paddingLeft: "10px", "color": "#222"} : null}>{this.props.previousIconComponent}{this.props.previousText}</a>
+            previous = <button type="button" onClick={this.props.previous} style={this.props.useGriddleStyles ? {"color": "#222", border: "none", background: "none", margin: "0 0 0 10px"} : null}>{this.props.previousIconComponent}{this.props.previousText}</button>
         }
 
         if(this.props.currentPage !== (this.props.maxPage -1)){
-            next = <a href="#" onClick={this.props.next} style={this.props.useGriddleStyles ? {paddingRight: "10px", "color":"#222"} : null}>{this.props.nextText}{this.props.nextIconComponent}</a>
+            next = <button type="button" onClick={this.props.next} style={this.props.useGriddleStyles ? {"color":"#222", border: "none", background: "none", margin: "0 10px 0 0"} : null}>{this.props.nextText}{this.props.nextIconComponent}</button>
         }
 
         var leftStyle = null;
@@ -45,15 +45,15 @@ var GridPagination = React.createClass({
         var rightStyle = null;
 
         if(this.props.useGriddleStyles === true){
-            leftStyle = {
+            var baseStyle = {
                 "float": "left",
-                width: "33%",
                 minHeight: "1px",
                 marginTop: "5px"
             };
 
-            rightStyle = _.extend({textAlign:"right"}, leftStyle);
-            middleStyle = _.extend({textAlign:"center"}, leftStyle);
+            rightStyle = _.extend({textAlign:"right", width: "34%"}, baseStyle);
+            middleStyle = _.extend({textAlign:"center", width: "33%"}, baseStyle);
+            leftStyle = _.extend({ width: "33%"}, baseStyle)
         }
 
         var options = [];

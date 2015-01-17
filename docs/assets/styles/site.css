@@ -145,6 +145,14 @@ h1, h2, h3, h4, h5, h6 {
 	text-transform: none;
 }
 
+.griddle-next, button, .griddle-previous, button{
+	height: 18px;
+	padding: 0;
+	font-weight: normal;
+	text-transform: none;
+	font-size: 15px;
+}
+
 /* Example Site specific Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .content-section{
