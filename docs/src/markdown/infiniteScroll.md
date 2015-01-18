@@ -1,8 +1,8 @@
 ##Infinite Scroll##
-If you're looking to display multiple pages of data without the need to click 'Next' or manually select a page, use Griddle's infinite scrolling feature! One will need to set the 'infiniteScroll' property to true in Griddle, as well as include the maximum height of the scrollable area (in pixels).
+If you're looking to display multiple pages of data without the need to click 'Next' or manually select a page, use Griddle's infinite scrolling feature! One will need to set the 'enableInfiniteScroll' property to true in Griddle, as well as include the maximum height of the scrollable area (in pixels).
 
 <dl>
-  <dt>infiniteScroll</dt>
+  <dt>enableInfiniteScroll</dt>
   <dd><strong>bool</strong> - Whether or not paging is controlled by scroll position, rather than navigation. Default: false</dd>
 </dl>
 <dl>
