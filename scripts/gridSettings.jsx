@@ -56,6 +56,8 @@ var GridSettings = React.createClass({
 
                 if(typeof meta !== "undefined" && meta != null && meta.locked){
                     return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{displayName}</label></div>
+                } else if(typeof meta !== "undefined" && meta != null && typeof meta.visible !== "undefined" && meta.visible === false){
+                    return null; 
                 }
                 return <div className="griddle-column-selection checkbox" style={that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null }><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{displayName}</label></div>
             });

@@ -57,28 +57,32 @@ var propertyGridMeta = [
     "order": 1,
     "locked": false,
     "visible": true,
-    "cssClassName": "properties-name"
+    "cssClassName": "properties-name",
+    "displayName": "Property"
   },
   {
     "columnName": "description",
     "order": 2,
     "locked": false,
     "visible": true,
-    "cssClassName": "properties-description"
+    "cssClassName": "properties-description",
+    "displayName": "Description"
   },
   {
     "columnName": "type",
     "order": 3,
     "locked": false,
     "visible": true,
-    "cssClassName": "properties-type"
+    "cssClassName": "properties-type",
+    "displayName": "Type"
   },
   {
     "columnName": "default",
     "order": 4,
     "locked": false,
     "visible": true,
-    "cssClassName": "properties-default"
+    "cssClassName": "properties-default",
+    "displayName": "Default"
   }
 ]
 

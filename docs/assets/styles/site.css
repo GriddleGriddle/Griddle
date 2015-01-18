@@ -215,6 +215,10 @@ code.big{
 	color: #512DA8;
 }
 
+#docs-page button{
+	color: #222;
+}
+
 .feature-row{
 	border-bottom: 1px solid #727272;
 	margin-bottom: 20px;

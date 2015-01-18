@@ -8,6 +8,98 @@ Griddle comes with a number of customization options to help it fit with your pr
 
 ###Column Metadata###
 
+The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the `columnMetadata` property is where this would be defined. 
+
+The properties that the columnMetadata object can contain are as follows: 
+
+<dl>
+  <dt>columnName</dt>
+  <dd><strong>string (required)</strong> - this is the name of the column as it appears in the results passed into Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>order</dt>
+  <dd><strong>int</strong> - The order that this column should appear in Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>locked</dt>
+  <dd><strong>bool</strong> - Determines whether or not the user can disable this column from the settings.</dd>
+</dl>
+
+<dl>
+  <dt>cssClassName</dt>
+  <dd><strong>string</strong> - The css class name to apply to this column.</dd>
+</dl>
+
+<dl>
+  <dt>displayName</dt>
+  <dd><strong>string</strong> - The display name for the column. This is used when the name in the column heading and settings should be different from the data passed in to the Griddle component.</dd>
+</dl>
+<dl>
+  <dt>customComponent</dt>
+  <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
+</dl>
+
+#####Example:#####
+
+Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read `Employee Name` instead of name. 
+
+Our metadata object would look something like 
+
+```
+  {
+    "columnName": "name",
+    "order": 9,
+    "locked": false,
+    "visible": true,
+    "displayName": "Employee Name"
+  },
+  {
+    "columnName": "city",
+    "order": 8,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "state",
+    "order": 7,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "country",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "company",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  4,
+    "locked": false,
+    "visible": true,
+    "displayName": "Favorite Number"
+  }
+```
+
+We would then load Griddle as follows: 
+
+```
+React.render(
+  <Griddle results={fakeData} columnMetadata={exampleMetadata} showFilter={true} 
+    showSettings={true} columns={["name", "city", "state", "country"]}/>, 
+    document.getElementById('griddle-metadata')
+```
+
+@@include('./customization/customMetadata.html')
+
+<a name="customColumns"></a>
 ###Custom Columns###
 
 Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties.
