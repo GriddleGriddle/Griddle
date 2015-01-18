@@ -85,7 +85,6 @@ module.exports = function(grunt) {
     copy: {
       docs: {
         files: [
-          { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js', 'examples/assets/scripts/swapi.min.js', 'examples/assets/scripts/freezeframe.min.js', 'examples/assets/scripts/GriddleWithCallback.js'], dest: 'docs/html/scripts', flatten: true}
         ]
