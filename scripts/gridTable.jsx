@@ -18,7 +18,7 @@ var GridTable = React.createClass({
       "data": [],
       "metadataColumns": [],
       "className": "",
-      "infiniteScroll": false,
+      "enableInfiniteScroll": false,
       "nextPage": null,
       "hasMorePages": false,
       "useFixedHeader": false,
@@ -51,7 +51,7 @@ var GridTable = React.createClass({
     this.gridScroll();
   },
   gridScroll: function(){
-    if (this.props.infiniteScroll && !this.props.externalIsLoading) {
+    if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
       var scrollable = this.refs.scrollable.getDOMNode();
       var scrollTop = scrollable.scrollTop
@@ -78,7 +78,7 @@ var GridTable = React.createClass({
     var nodes = null;
 
     // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
-    if (!this.props.externalIsLoading || this.props.infiniteScroll) {
+    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
       nodes = this.props.data.map(function(row, index){
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
@@ -105,7 +105,7 @@ var GridTable = React.createClass({
     }
 
     var infiniteScrollSpacerRow = null;
-    if (this.props.infiniteScroll) {
+    if (this.props.enableInfiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
         "position": "relative",

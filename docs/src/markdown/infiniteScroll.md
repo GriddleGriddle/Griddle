@@ -22,7 +22,7 @@ If you're looking to display multiple pages of data without the need to click 'N
 #####Example:#####
 
 ```
-<Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} infiniteScroll={true} bodyHeight={400}/>
+<Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} enableInfiniteScroll={true} bodyHeight={400}/>
 ```
 
 @@include('./infiniteScroll/infiniteScroll.html')
@@ -35,7 +35,7 @@ Griddle handles fixed headers in an Infinite Scroll situation by utilizing two s
 
 #####Example:#####
 ```
-<Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
+<Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
 ```
 @@include('./infiniteScroll/infiniteScrollFixedHeader.html')
 
@@ -45,6 +45,6 @@ Feel free to scroll through your external data, too! When data is loading, the l
 #####Example:#####
 ```
 <GriddleWithCallback showFilter={true} getExternalResults={fakeDataMethod}
- loadingComponent={Loading} infiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
+ loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>
 ```
 @@include('./infiniteScroll/infiniteScrollExternalResults.html')

@@ -68,7 +68,7 @@ var Griddle = React.createClass({
             "externalSortAscending": true,
             "externalLoadingComponent": null,
             "externalIsLoading": false,
-            "infiniteScroll": false,
+            "enableInfiniteScroll": false,
             "bodyHeight": null,
             "infiniteScrollSpacerHeight": 50,
             "useFixedLayout": true,
@@ -405,7 +405,7 @@ var Griddle = React.createClass({
       }
 
       // Otherwise, send back the property.
-      return this.props.infiniteScroll;
+      return this.props.enableInfiniteScroll;
     },
     render: function() {
         var clearFix = {
@@ -506,7 +506,7 @@ var Griddle = React.createClass({
             resultContent = (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
               useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
               showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
-              infiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
+              enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
               sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
               sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
               parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}

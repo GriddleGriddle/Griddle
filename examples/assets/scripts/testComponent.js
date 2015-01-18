@@ -261,5 +261,5 @@ React.render(
     <Griddle results={propertiesItem} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} />, document.getElementById('properties-grid')
 );
 React.render(
-    example = <Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} infiniteScroll={true} useFixedHeader={true} bodyHeight={400} tableClassName="table"/>, document.getElementById('infinitescroll')
+    example = <Griddle results={fakeData} columnMetadata={columnMeta} resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400} tableClassName="table"/>, document.getElementById('infinitescroll')
 );
