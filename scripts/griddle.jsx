@@ -51,7 +51,7 @@ var Griddle = React.createClass({
             "customRowFormat": null,
             "customGridFormat": null,
             "customPager": {},
-            "allowToggleCustom":false,
+            "enableToggleCustom":false,
             "noDataMessage":"There is no data to display.",
             "customNoDataComponent": null,
             "showTableHeading":true,
@@ -521,7 +521,7 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
              settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} allowToggleCustom={this.props.allowToggleCustom}
+             showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
              toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowFormat || this.props.useCustomGridFormat}
              useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";

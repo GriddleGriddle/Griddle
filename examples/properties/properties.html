@@ -188,7 +188,7 @@ var propertiesItem = [
     "default": "{}"
   },
   {
-    "property": "allowToggleCustom",
+    "property": "enableToggleCustom",
     "description": "Determines whether or not the option to toggle between custom component and default grid is available in the settings",
     "type": "bool",
     "default": "false"
@@ -429,5 +429,5 @@ var DefinitionItem = React.createClass({
     )
   }
 })
-React.render(<Griddle results={propertiesItem} useCustomRowFormat={true} customRowFormat={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} />, document.getElementById('griddle-properties'));
+React.render(<Griddle results={propertiesItem} useCustomRowFormat={true} customRowFormat={DefinitionItem} useGriddleStyles={false} showFilter={true} showSettings={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
 </script>

@@ -109,7 +109,7 @@ Sometimes you may want to display grid data in a format other than a grid but st
 </dl>
 
 <dl>
-  <dt>allowToggleCustom</dt>
+  <dt>enableToggleCustom</dt>
   <dd><strong>bool</strong> - whether or not the user should be able to toggle between custom format and grid format.</dd>
 </dl>
 
@@ -159,7 +159,7 @@ In some cases, it may be ideal to use Griddle but display a global format other 
 </dl>
 
 <dl>
-  <dt>allowToggleCustom</dt>
+  <dt>enableToggleCustom</dt>
   <dd><strong>bool</strong> - whether or not the user should be able to toggle between custom format and grid format.</dd>
 </dl>
 
