@@ -18,7 +18,7 @@ var SimulatedExternalComponent = React.createClass({
     },
     componentWillMount: function(){
         this.setState({
-            maxPages: Math.round(this.state.pretendServerData.length/this.state.externalResultsPerPage),
+            maxPages: Math.ceil(this.state.pretendServerData.length/this.state.externalResultsPerPage),
             "results": this.state.pretendServerData.slice(0,this.state.externalResultsPerPage)
         })
     },
@@ -58,7 +58,7 @@ var SimulatedExternalComponent = React.createClass({
         var sortedData = this.sortData(this.state.externalSortColumn, this.state.externalSortAscending, externalData);
 
         if(filter === ""){
-            this.setState(_.extend(sortedData, {maxPages: Math.round(sortedData.pretendServerData.length > this.state.externalResultsPerPage ? sortedData.pretendServerData.length/this.state.externalResultsPerPage : 1)}));
+            this.setState(_.extend(sortedData, {maxPages: Math.ceil(sortedData.pretendServerData.length > this.state.externalResultsPerPage ? sortedData.pretendServerData.length/this.state.externalResultsPerPage : 1)}));
 
             return;
         }
@@ -77,7 +77,7 @@ var SimulatedExternalComponent = React.createClass({
 
         this.setState({
             pretendServerData: filteredData,
-            maxPages: Math.round(filteredData.length > this.state.externalResultsPerPage ? filteredData.length/this.state.externalResultsPerPage : 1),
+            maxPages: Math.ceil(filteredData.length > this.state.externalResultsPerPage ? filteredData.length/this.state.externalResultsPerPage : 1),
             "results": filteredData.slice(0,this.state.externalResultsPerPage)
         });
     },
@@ -85,7 +85,7 @@ var SimulatedExternalComponent = React.createClass({
         this.setState({
             currentPage: 0,
             externalResultsPerPage: size,
-            maxPages: Math.round(this.state.pretendServerData.length > size ? this.state.pretendServerData.length/size : 1),
+            maxPages: Math.ceil(this.state.pretendServerData.length > size ? this.state.pretendServerData.length/size : 1),
             results: this.state.pretendServerData.slice(0,size)
         });
     },
