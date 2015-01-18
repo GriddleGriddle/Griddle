@@ -145,7 +145,7 @@ Components:
 
 <dl>
 <dt>sortAscendingComponent</dt>
-<dd><strong>object</strong> - The component or characters that are displayed in a column heading when the column data is sorted in ascending order. Default: ▴</dd>
+<dd><strong>object</strong> - The component or characters that are displayed in a column heading when the column data is sorted in ascending order. Default: ▲</dd>
 </dl>
 
 <dl>

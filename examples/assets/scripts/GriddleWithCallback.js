@@ -7,7 +7,7 @@
 		exports["GriddleWithCallback"] = factory(require("React"), require("_"));
 	else
 		root["GriddleWithCallback"] = factory(root["React"], root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_4__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54,11 +54,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(2);
+	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 	var Griddle = __webpack_require__(3);
-	var _ = __webpack_require__(4);
 
-	var GriddleWithCallback = React.createClass({displayName: 'GriddleWithCallback',
+	var GriddleWithCallback = React.createClass({displayName: "GriddleWithCallback",
 		getDefaultProps: function(){
 			return {
 				getExternalResults: null,
@@ -210,59 +210,52 @@ return /******/ (function(modules) { // webpackBootstrap
 			});
 	    },
 	    setFilter: function(filter){
-	        /*
-	          like everything else -- this is pretend code used to simulate something that we would do on the
-	          server-side (aka we would generally post the filter as well as other information used to populate
-	          the grid) and send back to the view (which would handle passing the data back to Griddle)
-	        */
-			var that = this;
+	      /*
+	        like everything else -- this is pretend code used to simulate something that we would do on the
+	        server-side (aka we would generally post the filter as well as other information used to populate
+	        the grid) and send back to the view (which would handle passing the data back to Griddle)
+	      */
+				var that = this;
 
-			var state = {
-				page: 0,
-				filter: filter
-			}
-
-			this.updateStateWithExternalResults(state, function(updatedState) {
-				//if filter is null or undefined reset the filter.
-				if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
-					updatedState.filter = filter;
-					updatedState.filteredResults = null;
+				var state = {
+					page: 0,
+					filter: filter
 				}
 
-				// Set the state.
-				that.setState(updatedState);
-			});
+				this.updateStateWithExternalResults(state, function(updatedState) {
+					//if filter is null or undefined reset the filter.
+					if (_.isUndefined(filter) || _.isNull(filter) || _.isEmpty(filter)){
+						updatedState.filter = filter;
+						updatedState.filteredResults = null;
+					}
+
+					// Set the state.
+					that.setState(updatedState);
+				});
 	    },
 	    setPageSize: function(size){
 				this.setPage(0, size);
 	    },
 	    render: function(){
-
-			if(this.state.isLoading){
-				var loadingResults = this.props.infiniteScroll ? this.state.results : [{"fake":"forLoading"}];
-				var maxPage = this.props.infiniteScroll ? this.state.page : this.state.max;
-
 				return React.createElement(Griddle, React.__spread({},  this.props, {useExternal: true, externalSetPage: this.setPage, 
-			        externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
-			        externalSetPageSize: this.setPageSize, externalMaxPage: maxPage, 
-			        externalCurrentPage: this.state.page, results: loadingResults, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-			        externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, 
-					useCustomFormat: "true", customFormat: this.props.loadingComponent}))
-			}
-
-			return React.createElement(Griddle, React.__spread({},  this.props, {useExternal: true, externalSetPage: this.setPage, 
-				externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
-				externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
-				externalCurrentPage: this.state.page, results: this.state.results, tableClassName: "table", resultsPerPage: this.state.pageSize, 
-				externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending}))
-	    }
+					externalChangeSort: this.changeSort, externalSetFilter: this.setFilter, 
+					externalSetPageSize: this.setPageSize, externalMaxPage: this.state.maxPage, 
+					externalCurrentPage: this.state.page, results: this.state.results, tableClassName: "table", resultsPerPage: this.state.pageSize, 
+					externalSortColumn: this.state.sortColumn, externalSortAscending: this.state.sortAscending, 
+					externalLoadingComponent: this.props.loadingComponent, externalIsLoading: this.state.isLoading}))
+		  }
 	});
 
 	module.exports = GriddleWithCallback;
 
 
 /***/ },
-/* 1 */,
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -281,16 +274,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(5);
-	var GridFilter = __webpack_require__(6);
-	var GridPagination = __webpack_require__(7);
-	var GridSettings = __webpack_require__(8);
-	var GridTitle = __webpack_require__(9);
-	var GridNoData = __webpack_require__(10);
-	var CustomRowFormatContainer = __webpack_require__(11);
-	var CustomPaginationContainer = __webpack_require__(12);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var GridTable = __webpack_require__(4);
+	var GridFilter = __webpack_require__(5);
+	var GridPagination = __webpack_require__(6);
+	var GridSettings = __webpack_require__(7);
+	var GridTitle = __webpack_require__(8);
+	var GridNoData = __webpack_require__(9);
+	var CustomRowFormatContainer = __webpack_require__(10);
+	var CustomPaginationContainer = __webpack_require__(11);
+	var _ = __webpack_require__(2);
 
 	var Griddle = React.createClass({displayName: 'Griddle',
 	    getDefaultProps: function() {
@@ -321,7 +314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "useCustomGridFormat": false,
 	            "useCustomPager": false,
 	            "useGriddleStyles": true,
-	            "usGriddleIcons": true,
+	            "useGriddleIcons": true,
 	            "customRowFormat": null,
 	            "customGridFormat": null,
 	            "customPager": {},
@@ -340,7 +333,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalCurrentPage": null,
 	            "externalSortColumn": null,
 	            "externalSortAscending": true,
-	            "infiniteScroll": null,
+	            "externalLoadingComponent": null,
+	            "externalIsLoading": false,
+	            "infiniteScroll": false,
 	            "bodyHeight": null,
 	            "infiniteScrollSpacerHeight": 50,
 	            "useFixedLayout": true,
@@ -355,7 +350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "nextClassName": "griddle-next",
 	            "previousClassName": "griddle-previous",
 	            /* icon components */
-	            "sortAscendingComponent": " ▴",
+	            "sortAscendingComponent": " ▲",
 	            "sortDescendingComponent": " ▼",
 	            "parentRowCollapsedComponent": "▶",
 	            "parentRowExpandedComponent": "▼",
@@ -693,7 +688,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        //figure out if we want to show the filter section
 	        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
-	        var settings = this.props.showSettings ? React.createElement("span", {className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser}, this.props.settingsText, this.props.settingsIconComponent) : "";
+	        var settings = this.props.showSettings ? React.createElement("button", {type: "button", className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser, style: this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}, this.props.settingsText, this.props.settingsIconComponent) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
 	        var topSection = "";
@@ -778,13 +773,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            resultContent = (React.createElement("div", {className: "griddle-body"}, React.createElement(GridTable, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, 
 	              useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout, columnMetadata: this.props.columnMetadata, 
 	              showPager: this.props.showPager, pagingContent: pagingContent, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, 
-	              infiniteScroll: this.isInfiniteScrollEnabled(), nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
+	              infiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
 	              sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, 
 	              sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
 	              parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName, 
 	              sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
 	              parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent, 
-	              bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, hasMorePages: hasMorePages})))
+	              bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent, 
+	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
 	        }
 
 
@@ -837,12 +833,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/** @jsx React.DOM */
 
 	/*
@@ -852,10 +842,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(9);
-	var GridRowContainer = __webpack_require__(14);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var GridTitle = __webpack_require__(8);
+	var GridRowContainer = __webpack_require__(12);
+	var _ = __webpack_require__(2);
 
 	var GridTable = React.createClass({displayName: 'GridTable',
 	  getDefaultProps: function(){
@@ -878,11 +868,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "sortDescendingClassName": "sort-descending",
 	      "parentRowCollapsedClassName": "parent-row",
 	      "parentRowExpandedClassName": "parent-row expanded",
-	      "sortAscendingComponent": " ▴",
-	      "sortDescendingComponent": " ▾",
+	      "sortAscendingComponent": " ▲",
+	      "sortDescendingComponent": " ▼",
 	      "parentRowCollapsedComponent": "▶",
 	      "parentRowExpandedComponent": "▼",
-	      "isLoading": false
+	      "externalLoadingComponent": null,
+	      "externalIsLoading": false,
+	      "enableSort": true
 	    }
 	  },
 	  componentDidMount: function() {
@@ -894,7 +886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.gridScroll();
 	  },
 	  gridScroll: function(){
-	    if (this.props.infiniteScroll && !this.props.isLoading) {
+	    if (this.props.infiniteScroll && !this.props.externalIsLoading) {
 	      // If the scroll height is greater than the current amount of rows displayed, update the page.
 	      var scrollable = this.refs.scrollable.getDOMNode();
 	      var scrollTop = scrollable.scrollTop
@@ -918,22 +910,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //figure out if we need to wrap the group in one tbody or many
 	    var anyHasChildren = false;
 
-	    var nodes = this.props.data.map(function(row, index){
-	        var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
+	    var nodes = null;
 
-	        //at least one item in the group has children.
-	        if (hasChildren) { anyHasChildren = hasChildren; }
+	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
+	    if (!this.props.externalIsLoading || this.props.infiniteScroll) {
+	      nodes = this.props.data.map(function(row, index){
+	          var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
-	        return (React.createElement(GridRowContainer, {useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, 
-	          sortAscendingClassName: that.props.sortAscendingClassName, sortDescendingClassName: that.props.sortDescendingClassName, 
-	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName, 
-	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent, 
-	          data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, 
-	          uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className}))
-	    });
+	          //at least one item in the group has children.
+	          if (hasChildren) { anyHasChildren = hasChildren; }
+
+	          return (React.createElement(GridRowContainer, {useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, 
+	            sortAscendingClassName: that.props.sortAscendingClassName, sortDescendingClassName: that.props.sortDescendingClassName, 
+	            parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName, 
+	            parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent, 
+	            data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, 
+	            uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className}))
+	      });
+	    }
 
 	    var gridStyle = null;
-
+	    var loadingContent = null;
 	    var tableStyle = {
 	      width: "100%"
 	    };
@@ -962,13 +959,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 
+	    // If we're currently loading, populate the loading content
+	    if (this.props.externalIsLoading) {
+	      var defaultLoadingStyle = null;
+	      var defaultColSpan = null;
+
+	      if (this.props.useGriddleStyles) {
+	        defaultLoadingStyle = {
+	          textAlign: "center",
+	          paddingBottom: "40px"
+	        };
+
+	        defaultColSpan = this.props.columns.length;
+	      }
+
+	      var loadingComponent = this.props.externalLoadingComponent ?
+	        (React.createElement(this.props.externalLoadingComponent, null)) :
+	        (React.createElement("div", null, "Loading..."));
+
+	      loadingContent = (React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", {style: defaultLoadingStyle, colSpan: defaultColSpan}, loadingComponent))));
+	    }
+
 	    //construct the table heading component
 	    var tableHeading = (this.props.showTableHeading ?
 	        React.createElement(GridTitle, {columns: this.props.columns, useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons, 
 	          changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, 
 	          sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
 	          sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
-	          columnMetadata: this.props.columnMetadata})
+	          columnMetadata: this.props.columnMetadata, enableSort: this.props.enableSort})
 	        : "");
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -994,28 +1012,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        )))
 	    }
 
-	    return this.props.useFixedHeader ?
-	        (
-	          React.createElement("div", null, 
-	            React.createElement("table", {className: this.props.className, style: (this.props.useGriddleStyles&&tableStyle)||null}, 
-	              tableHeading
-	            ), 
-	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
-	              React.createElement("table", {className: this.props.className}, 
-	                  nodes, 
-	                  pagingContent
+	    // If we have a fixed header, split into two tables.
+	    if (this.props.useFixedHeader){
+	      if (this.props.useGriddleStyles) {
+	        tableStyle.tableLayout = "fixed";
+	      }
+
+	      return React.createElement("div", null, 
+	              React.createElement("table", {className: this.props.className, style: (this.props.useGriddleStyles&&tableStyle)||null}, 
+	                tableHeading
+	              ), 
+	              React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
+	                React.createElement("table", {className: this.props.className, style: (this.props.useGriddleStyles&&tableStyle)||null}, 
+	                    nodes, 
+	                    loadingContent, 
+	                    pagingContent
+	                )
 	              )
-	            )
-	          )
-	        ) : (
-	            React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
+	            );
+	    }
+
+	    return  React.createElement("div", {ref: "scrollable", onScroll: this.gridScroll, style: gridStyle}, 
 	              React.createElement("table", {className: this.props.className, style: (this.props.useGriddleStyles&&tableStyle)||null}, 
 	                  tableHeading, 
 	                  nodes, 
+	                  loadingContent, 
 	                  pagingContent
 	              )
 	            )
-	        );
 	    }
 	});
 
@@ -1023,7 +1047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1035,7 +1059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
+	var React = __webpack_require__(1);
 
 	var GridFilter = React.createClass({displayName: 'GridFilter',
 	    getDefaultProps: function(){
@@ -1055,7 +1079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1067,8 +1091,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	//needs props maxPage, currentPage, nextFunction, prevFunction
 	var GridPagination = React.createClass({displayName: 'GridPagination',
@@ -1093,11 +1117,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var next = "";
 
 	        if(this.props.currentPage > 0){
-	            previous = React.createElement("span", {onClick: this.props.previous, style: this.props.useGriddleStyles ? {paddingLeft: "10px"} : null}, this.props.previousIconComponent, this.props.previousText)
+	            previous = React.createElement("button", {type: "button", onClick: this.props.previous, style: this.props.useGriddleStyles ? {"color": "#222", border: "none", background: "none", margin: "0 0 0 10px"} : null}, this.props.previousIconComponent, this.props.previousText)
 	        }
 
 	        if(this.props.currentPage !== (this.props.maxPage -1)){
-	            next = React.createElement("span", {onClick: this.props.next, style: this.props.useGriddleStyles ? {paddingRight: "10px"} : null}, this.props.nextText, this.props.nextIconComponent)
+	            next = React.createElement("button", {type: "button", onClick: this.props.next, style: this.props.useGriddleStyles ? {"color":"#222", border: "none", background: "none", margin: "0 10px 0 0"} : null}, this.props.nextText, this.props.nextIconComponent)
 	        }
 
 	        var leftStyle = null;
@@ -1105,15 +1129,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var rightStyle = null;
 
 	        if(this.props.useGriddleStyles === true){
-	            leftStyle = {
+	            var baseStyle = {
 	                "float": "left",
-	                width: "33%",
 	                minHeight: "1px",
 	                marginTop: "5px"
 	            };
 
-	            rightStyle = _.extend({textAlign:"right"}, leftStyle);
-	            middleStyle = _.extend({textAlign:"center"}, leftStyle);
+	            rightStyle = _.extend({textAlign:"right", width: "34%"}, baseStyle);
+	            middleStyle = _.extend({textAlign:"center", width: "33%"}, baseStyle);
+	            leftStyle = _.extend({ width: "33%"}, baseStyle)
 	        }
 
 	        var options = [];
@@ -1140,7 +1164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1152,8 +1176,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridSettings = React.createClass({displayName: 'GridSettings',
 	    getDefaultProps: function(){
@@ -1234,7 +1258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1246,8 +1270,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridTitle = React.createClass({displayName: 'GridTitle',
 	    getDefaultProps: function(){
@@ -1260,8 +1284,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	           "usGriddleIcons": true,
 	           "sortAscendingClassName": "sort-ascending",
 	           "sortDescendingClassName": "sort-descending",
-	           "sortAscendingComponent": " ▴",
-	           "sortDescendingComponent": " ▾"
+	           "sortAscendingComponent": " ▲",
+	           "sortDescendingComponent": " ▼",
+	           "enableSort": true
 	        }
 	    },
 	    sort: function(event){
@@ -1281,9 +1306,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                border: "0",
 	                borderBottom: "1px solid #DDD",
 	                color: "#222",
-	                padding: "5px"
+	                padding: "5px",
+	                cursor: that.props.enableSort ? "pointer" : "default"
 	              }
 	            }
+
 
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = that.props.sortAscendingClassName;
@@ -1321,7 +1348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1333,7 +1360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
+	var React = __webpack_require__(1);
 
 	var GridNoData = React.createClass({displayName: 'GridNoData',
 	    getDefaultProps: function(){
@@ -1354,7 +1381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1366,7 +1393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
+	var React = __webpack_require__(1);
 
 	var CustomRowFormatContainer = React.createClass({displayName: 'CustomRowFormatContainer',
 	  getDefaultProps: function(){
@@ -1402,7 +1429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1414,7 +1441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
+	var React = __webpack_require__(1);
 
 	var CustomPaginationContainer = React.createClass({displayName: 'CustomPaginationContainer',
 	  getDefaultProps: function(){
@@ -1442,8 +1469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */,
-/* 14 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1455,8 +1481,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var GridRow = __webpack_require__(15);
+	var React = __webpack_require__(1);
+	var GridRow = __webpack_require__(13);
 
 	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
 	    getDefaultProps: function(){
@@ -1522,7 +1548,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1534,8 +1560,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
-	var React = __webpack_require__(2);
-	var _ = __webpack_require__(4);
+	var React = __webpack_require__(1);
+	var _ = __webpack_require__(2);
 
 	var GridRow = React.createClass({displayName: 'GridRow',
 	    getDefaultProps: function(){

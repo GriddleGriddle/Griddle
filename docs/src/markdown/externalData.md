@@ -278,6 +278,10 @@ React.render(<SimulatedExternalComponent />, document.getElementById("griddle-ex
 
 Previous versions of Griddle had a built-in callback for obtaining external data. This has since been moved into its own component to help simplify the main Griddle component. The call definition is the same. 
 
+#####Important!#####
+
+<strong>GriddleWithCallback is in its own GitHub repository and npm package. To install GriddleWithCallback `npm install griddle-callback` and anywhere where it is used, `require GriddleWithCallback = require('griddle-callback');`</strong>
+
 #####Example:#####
 
 Lets assume we want to obtain Star Wars data like in the example above except using GriddleWithCallback instead of using the exernal results properties. We will start out by creating a callback method. The Griddle callback has access to `filterString, sortColumn, sortAscending, page, pageSize, callback` parameters.

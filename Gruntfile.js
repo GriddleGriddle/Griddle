@@ -87,7 +87,7 @@ module.exports = function(grunt) {
         files: [
           { expand: true, cwd: 'docs/old/', src: ['**'], dest: 'docs/html/', flatten: false},
           { expand: true, cwd: 'docs/assets/', src: ['**'], dest: 'docs/html/', flatten: false},
-          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js', 'examples/assets/scripts/swapi.min.js', 'examples/assets/scripts/freezeframe.min.js'], dest: 'docs/html/scripts', flatten: true}
+          { expand: true, src: ['examples/assets/scripts/testComponent.js', 'examples/assets/scripts/fakeData.js', 'examples/assets/scripts/swapi.min.js', 'examples/assets/scripts/freezeframe.min.js', 'examples/assets/scripts/GriddleWithCallback.js'], dest: 'docs/html/scripts', flatten: true}
         ]
       }
     },
@@ -95,9 +95,7 @@ module.exports = function(grunt) {
       default: {
         entry: {
           Griddle: ['./scripts/griddle.jsx'],
-          GriddleWithCallback: './scripts/griddleWithCallback.jsx',
-
-          },
+        },
         output: {
           path: __dirname,
           filename: 'build/[name].js',
@@ -122,7 +120,6 @@ module.exports = function(grunt) {
       docs: {
         entry: {
             Griddle: ['./scripts/griddle.jsx'],
-            GriddleWithCallback: './scripts/griddleWithCallback.jsx',
             ChartistGraph: ['./node_modules/react-chartist/index.js']
         },
         output: {
