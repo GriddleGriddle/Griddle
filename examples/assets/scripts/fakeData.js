@@ -8,13 +8,15 @@ var columnMeta = [
     "columnName": "id",
     "order": 1,
     "locked": false,
-    "visible": true
+    "visible": true,
+    "displayName": "ID"
   },
   {
     "columnName": "name",
     "order": 2,
     "locked": false,
-    "visible": true
+    "visible": true,
+    "displayName": "Name"
   },
   {
     "columnName": "city",
@@ -44,7 +46,8 @@ var columnMeta = [
     "columnName": "favoriteNumber",
     "order":  7,
     "locked": false,
-    "visible": true
+    "visible": true,
+    "displayName": "Favorite Number"
   }
 ];
 

@@ -48,7 +48,6 @@ var GridTitle = React.createClass({
               }
             }
 
-
             if(that.props.sortColumn == col && that.props.sortAscending){
                 columnSort = that.props.sortAscendingClassName;
                 sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;

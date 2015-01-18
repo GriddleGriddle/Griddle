@@ -6,6 +6,8 @@ Griddle comes with a number of customization options to help it fit with your pr
 
 <hr />
 
+###Column Metadata###
+
 ###Custom Columns###
 
 Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties.
