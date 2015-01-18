@@ -42,16 +42,16 @@ var OtherPager = React.createClass({
 
         return (
             <div className="row custom-pager">
-                <div className="col-xs-4">{previous}</div>
-                <div className="col-xs-4 center pages">
+                <div className="one column">{previous}</div>
+                <div className="ten columns">
                     {options}
                 </div>
-                <div className="col-xs-4 right">{next}</div>
+                <div className="one column">{next}</div>
             </div>
         )
     }
 });
 
 React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComponent={true}
-  customRowComponent={OtherComponent} useCustomPager="true" customPager={OtherPager} />, document.getElementById("custom-paging"));
+  customRowComponent={OtherComponent} useCustomPagerComponent={true} customPagerComponent={OtherPager} />, document.getElementById("custom-paging"));
 </script>

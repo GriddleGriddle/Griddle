@@ -188,15 +188,15 @@ var TestLineChart = React.createClass({
 
 ###Custom Paging Component###
 
-If you want to customize the paging component, just set the property 'useCustomPager' to true and pass in another component as property named 'customPager'. The example component below shows 11 buttons (5 previous, current, 5 next):
+If you want to customize the paging component, just set the property 'useCustomPagerComponent' to true and pass in another component as property named 'customPagerComponent'. The example component below shows 11 buttons (5 previous, current, 5 next):
 
 <dl>
-  <dt>useCustomPager</dt>
+  <dt>useCustomPagerComponent</dt>
   <dd><strong>bool</strong> - Use custom pagination component rather than default pager. default: false</dd>
 </dl>
 
 <dl>
-  <dt>customPager</dt>
+  <dt>customPagerComponent</dt>
   <dd><strong>object</strong> - The custom pagination component. default: {}</dd>
 </dl>
 
@@ -258,7 +258,7 @@ Then initialize your component as follows:
 
 ```
 <Griddle results={fakeData} tableClassName="table" useCustomRowComponent="true" 
-  customRowComponent={OtherComponent} useCustomPager="true" customPager={OtherPager} />
+  customRowComponent={OtherComponent} useCustomPagerComponent="true" customPagerComponent={OtherPager} />
 ```
 
 @@include('./customization/customPaging.html')

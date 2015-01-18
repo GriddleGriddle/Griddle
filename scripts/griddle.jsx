@@ -45,12 +45,12 @@ var Griddle = React.createClass({
             "showSettings": false,
             "useCustomRowComponent": false,
             "useCustomGridComponent": false,
-            "useCustomPager": false,
+            "useCustomPagerComponent": false,
             "useGriddleStyles": true,
             "useGriddleIcons": true,
             "customRowComponent": null,
             "customGridComponent": null,
-            "customPager": {},
+            "customPagerComponent": {},
             "enableToggleCustom":false,
             "noDataMessage":"There is no data to display.",
             "customNoDataComponent": null,
@@ -400,7 +400,7 @@ var Griddle = React.createClass({
     },
     isInfiniteScrollEnabled: function(){
       // If a custom pager is included, don't allow for infinite scrolling.
-      if (this.props.useCustomPager) {
+      if (this.props.useCustomPagerComponent) {
         return false;
       }
 
@@ -488,8 +488,8 @@ var Griddle = React.createClass({
         if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
             pagingContent = (
               <div className="griddle-footer">
-                  {this.props.useCustomPager ?
-                      <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPager={this.props.customPager}/> :
+                  {this.props.useCustomPagerComponent ?
+                      <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
                       <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
                   }
               </div>

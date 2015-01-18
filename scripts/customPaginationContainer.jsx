@@ -16,18 +16,18 @@ var CustomPaginationContainer = React.createClass({
       "nextText": "",
       "previousText": "",
       "currentPage": 0,
-      "customPager": {}
+      "customPagerComponent": {}
     }
   },
   render: function() {
     var that = this;
 
-    if (typeof that.props.customPager !== 'function'){
+    if (typeof that.props.customPagerComponent !== 'function'){
       console.log("Couldn't find valid template.");
       return (<div></div>);
     }
 
-    return (<that.props.customPager maxPage={this.props.maxPage} nextText={this.props.nextText} previousText={this.props.previousText} currentPage={this.props.currentPage} setPage={this.props.setPage} previous={this.props.previous} next={this.props.next} />);
+    return (<that.props.customPagerComponent maxPage={this.props.maxPage} nextText={this.props.nextText} previousText={this.props.previousText} currentPage={this.props.currentPage} setPage={this.props.setPage} previous={this.props.previous} next={this.props.next} />);
   }
 });
 
