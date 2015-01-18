@@ -141,20 +141,20 @@ From there, Griddle can be rendered with the useCustomRowComponent and customRow
 
 ###Custom Grid Format###
 
-In some cases, it may be ideal to use Griddle but display a global format other than a grid or series of rows. Assume we have an object containing temperature data for years and we want to display this data with a trend line chart. This is possible with a custom grid format component. To use custom grid formatting the **useCustomGridFormat** and **customGridFormat** properties need to be set.
+In some cases, it may be ideal to use Griddle but display a global format other than a grid or series of rows. Assume we have an object containing temperature data for years and we want to display this data with a trend line chart. This is possible with a custom grid format component. To use custom grid formatting the **useCustomGridComponent** and **customGridComponent** properties need to be set.
 
 <dl>
-  <dt>useCustomGridFormat</dt>
+  <dt>useCustomGridComponent</dt>
   <dd><strong>bool</strong> - determines if custom row formats are applied</dd>
 </dl>
 
 <dl>
-  <dt>customGridFormat</dt>
+  <dt>customGridComponent</dt>
   <dd><strong>Component</strong> - the component to render in place of a grid row. This component receives a property named <strong>data</strong></dd>
 </dl>
 
 <dl>
-  <dt>customGridFormatClassName</dt>
+  <dt>customGridComponentClassName</dt>
   <dd><strong>string</strong> - the CSS class name to apply to the format component.</dd>
 </dl>
 

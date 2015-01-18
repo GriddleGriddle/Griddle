@@ -114,12 +114,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "showFilter": false,
 	            "showSettings": false,
 	            "useCustomRowFormat": false,
-	            "useCustomGridFormat": false,
+	            "useCustomGridComponent": false,
 	            "useCustomPager": false,
 	            "useGriddleStyles": true,
 	            "usGriddleIcons": true,
 	            "customRowFormat": null,
-	            "customGridFormat": null,
+	            "customGridComponent": null,
 	            "customPager": {},
 	            "allowToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
@@ -216,7 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    toggleCustomFormat: function(){
 	        if(this.state.customFormatType === "grid"){
 	            this.setProps({
-	                useCustomGridFormat: !this.props.useCustomGridFormat
+	                useCustomGridComponent: !this.props.useCustomGridComponent
 	            });
 	        } else if(this.state.customFormatType === "row"){
 	            this.setProps({
@@ -348,7 +348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyCustom();
 	        this.setMaxPage();
 	        //don't like the magic strings
-	        if(this.props.useCustomGridFormat === true){
+	        if(this.props.useCustomGridComponent === true){
 	            this.setState({
 	                 customFormatType: "grid"
 	            });
@@ -393,14 +393,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    verifyCustom: function(){
-	        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
-	            console.error("useCustomGridFormat is set to true but no custom component was specified.")
+	        if(this.props.useCustomGridComponent === true && this.props.customGridComponent === null){
+	            console.error("useCustomGridComponent is set to true but no custom component was specified.")
 	        }
 	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
 	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
 	        }
-	        if(this.props.useCustomGridFormat === true && this.props.useCustomRowFormat === true){
-	            console.error("Cannot currently use both customGridFormat and customRowFormat.");
+	        if(this.props.useCustomGridComponent === true && this.props.useCustomRowFormat === true){
+	            console.error("Cannot currently use both customGridComponent and customRowFormat.");
 	        }
 	    },
 	    getDataForRender: function(data, cols, pageList){
@@ -488,7 +488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var headerTableClassName = this.props.tableClassName + " table-header";
 
 	        //figure out if we want to show the filter section
-	        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
+	        var filter = (this.props.showFilter && this.props.useCustomGridComponent === false) ? React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : "";
 	        var settings = this.props.showSettings ? React.createElement("span", {className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser}, this.props.settingsText, this.props.settingsIconComponent) : "";
 
 	        //if we have neither filter or settings don't need to render this stuff
@@ -553,7 +553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var hasMorePages = (currentPage + 1) < maxPage;
 
 	        // Grab the paging content if it's to be displayed
-	        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
+	        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
 	            pagingContent = (
 	              React.createElement("div", {className: "griddle-footer"}, 
 	                  this.props.useCustomPager ?
@@ -565,9 +565,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        //clean this stuff up so it's not if else all over the place. ugly if
-	        if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
 	            //this should send all the results it has
-	            resultContent = React.createElement(this.props.customGridFormat, {data: this.props.results, className: this.props.customGridFormatClassName})
+	            resultContent = React.createElement(this.props.customGridComponent, {data: this.props.results, className: this.props.customGridComponentClassName})
 	        } else if(this.props.useCustomRowFormat){
 	            resultContent = React.createElement("div", null, React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat, style: clearFix}), this.props.showPager&&pagingContent)
 	        } else {
@@ -588,8 +588,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, 
 	             settingsIconComponent: this.props.settingsIconComponent, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, 
-	             showSetPageSize: !this.props.useCustomGridFormat, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, 
-	             toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridFormat, 
+	             showSetPageSize: !this.props.useCustomGridComponent, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, 
+	             toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridComponent, 
 	             useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	        ) : "";
 

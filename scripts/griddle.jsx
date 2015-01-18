@@ -44,12 +44,12 @@ var Griddle = React.createClass({
             "showFilter": false,
             "showSettings": false,
             "useCustomRowComponent": false,
-            "useCustomGridFormat": false,
+            "useCustomGridComponent": false,
             "useCustomPager": false,
             "useGriddleStyles": true,
             "useGriddleIcons": true,
             "customRowComponent": null,
-            "customGridFormat": null,
+            "customGridComponent": null,
             "customPager": {},
             "enableToggleCustom":false,
             "noDataMessage":"There is no data to display.",
@@ -148,7 +148,7 @@ var Griddle = React.createClass({
     toggleCustomFormat: function(){
         if(this.state.customFormatType === "grid"){
             this.setProps({
-                useCustomGridFormat: !this.props.useCustomGridFormat
+                useCustomGridComponent: !this.props.useCustomGridComponent
             });
         } else if(this.state.customFormatType === "row"){
             this.setProps({
@@ -280,7 +280,7 @@ var Griddle = React.createClass({
         this.verifyCustom();
         this.setMaxPage();
         //don't like the magic strings
-        if(this.props.useCustomGridFormat === true){
+        if(this.props.useCustomGridComponent === true){
             this.setState({
                  customFormatType: "grid"
             });
@@ -325,14 +325,14 @@ var Griddle = React.createClass({
         }
     },
     verifyCustom: function(){
-        if(this.props.useCustomGridFormat === true && this.props.customGridFormat === null){
-            console.error("useCustomGridFormat is set to true but no custom component was specified.")
+        if(this.props.useCustomGridComponent === true && this.props.customGridComponent === null){
+            console.error("useCustomGridComponent is set to true but no custom component was specified.")
         }
         if (this.props.useCustomRowComponent === true && this.props.customRowComponent === null){
             console.error("useCustomRowComponent is set to true but no custom component was specified.")
         }
-        if(this.props.useCustomGridFormat === true && this.props.useCustomRowComponent === true){
-            console.error("Cannot currently use both customGridFormat and customRowComponent.");
+        if(this.props.useCustomGridComponent === true && this.props.useCustomRowComponent === true){
+            console.error("Cannot currently use both customGridComponent and customRowComponent.");
         }
     },
     getDataForRender: function(data, cols, pageList){
@@ -420,7 +420,7 @@ var Griddle = React.createClass({
         var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
-        var filter = (this.props.showFilter && this.props.useCustomGridFormat === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
+        var filter = (this.props.showFilter && this.props.useCustomGridComponent === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
         var settings = this.props.showSettings ? <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>{this.props.settingsText}{this.props.settingsIconComponent}</button> : "";
 
         //if we have neither filter or settings don't need to render this stuff
@@ -485,7 +485,7 @@ var Griddle = React.createClass({
         var hasMorePages = (currentPage + 1) < maxPage;
 
         // Grab the paging content if it's to be displayed
-        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridFormat) {
+        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
             pagingContent = (
               <div className="griddle-footer">
                   {this.props.useCustomPager ?
@@ -497,9 +497,9 @@ var Griddle = React.createClass({
         }
 
         //clean this stuff up so it's not if else all over the place. ugly if
-        if(this.props.useCustomGridFormat && this.props.customGridFormat !== null){
+        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
             //this should send all the results it has
-            resultContent = <this.props.customGridFormat data={this.props.results} className={this.props.customGridFormatClassName} />
+            resultContent = <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} />
         } else if(this.props.useCustomRowComponent){
             resultContent = <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta}
                 className={this.props.customRowComponentClassName} customComponent={this.props.customRowComponent}
@@ -523,8 +523,8 @@ var Griddle = React.createClass({
         var columnSelector = this.state.showColumnChooser ? (
             <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
              settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridFormat} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
-             toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowComponent || this.props.useCustomGridFormat}
+             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
+             toggleCustomFormat={this.toggleCustomFormat} useCustomFormat={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
              useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
 
