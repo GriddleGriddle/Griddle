@@ -20,9 +20,9 @@ var GridSettings = React.createClass({
             "maxRowsText": "",
             "resultsPerPage": 0,
             "enableToggleCustom": false,
-            "useCustomFormat": false,
+            "useCustomComponent": false,
             "useGriddleStyles": true,
-            "toggleCustomFormat": function(){}
+            "toggleCustomComponent": function(){}
         };
     },
     setPageSize: function(event){
@@ -42,8 +42,8 @@ var GridSettings = React.createClass({
         var that = this;
 
         var nodes = [];
-        //don't show column selector if we're on a custom format
-        if (that.props.useCustomFormat === false){
+        //don't show column selector if we're on a custom component
+        if (that.props.useCustomComponent === false){
             nodes = this.props.columns.map(function(col, index){
                 var checked = _.contains(that.props.selectedColumns, col);
                 //check column metadata -- if this one is locked make it disabled and don't put an onChange event
@@ -57,7 +57,7 @@ var GridSettings = React.createClass({
 
         var toggleCustom = that.props.enableToggleCustom ?
                 (<div className="form-group">
-                    <label htmlFor="maxRows"><input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} /> {this.props.enableCustomFormatText}</label>
+                    <label htmlFor="maxRows"><input type="checkbox" checked={this.props.useCustomComponent} onChange={this.props.toggleCustomComponent} /> {this.props.enableCustomFormatText}</label>
                 </div>)
                 : "";
 

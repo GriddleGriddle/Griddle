@@ -257,8 +257,8 @@ var OtherPager = React.createClass({
 Then initialize your component as follows:
 
 ```
-<Griddle results={fakeData} tableClassName="table" useCustomFormat="true" 
-  customFormat={OtherComponent} useCustomPager="true" customPager={OtherPager} />
+<Griddle results={fakeData} tableClassName="table" useCustomRowComponent="true" 
+  customRowComponent={OtherComponent} useCustomPager="true" customPager={OtherPager} />
 ```
 
 @@include('./customization/customPaging.html')

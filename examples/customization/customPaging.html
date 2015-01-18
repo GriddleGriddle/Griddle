@@ -52,6 +52,6 @@ var OtherPager = React.createClass({
     }
 });
 
-React.render(<Griddle results={fakeData} tableClassName="table" useCustomFormat="true" 
-  customFormat={OtherComponent} useCustomPager="true" customPager={OtherPager} />, document.getElementById("custom-paging"));
+React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComponent={true}
+  customRowComponent={OtherComponent} useCustomPager="true" customPager={OtherPager} />, document.getElementById("custom-paging"));
 </script>
