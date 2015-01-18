@@ -146,7 +146,7 @@ var propertiesItem = [
     "default": "false"
   },
   {
-    "property": "useCustomRowFormat",
+    "property": "useCustomRowComponent",
     "description": "Determines if a custom row format component is used",
     "type": "bool",
     "default": "false"
@@ -170,7 +170,7 @@ var propertiesItem = [
     "default": "true"
   },
   {
-    "property": "customRowFormat",
+    "property": "customRowComponent",
     "description": "The component that should be rendered for each data row.",
     "type": "React Component",
     "default": "null"
@@ -429,5 +429,5 @@ var DefinitionItem = React.createClass({
     )
   }
 })
-React.render(<Griddle results={propertiesItem} useCustomRowFormat={true} customRowFormat={DefinitionItem} useGriddleStyles={false} showFilter={true} showSettings={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
+React.render(<Griddle results={propertiesItem} useCustomRowComponent={true} customRowComponent={DefinitionItem} useGriddleStyles={false} showFilter={true} showSettings={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
 </script>

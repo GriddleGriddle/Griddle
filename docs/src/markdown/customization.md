@@ -91,20 +91,20 @@ React.render(<Griddle data={someData} columnMetdata={columnMeta} />,
 
 ###Custom Row Format###
 
-Sometimes you may want to display grid data in a format other than a grid but still have pagination, filtering, etc. This type of formatting can be accomplished with the custom row format properties. To use custom row formatting, the **useCustomRowFormat** and the **customRowFormat** properties will need to be set.
+Sometimes you may want to display grid data in a format other than a grid but still have pagination, filtering, etc. This type of formatting can be accomplished with the custom row format properties. To use custom row formatting, the **useCustomRowComponent** and the **customRowComponent** properties will need to be set.
 
 <dl>
-  <dt>useCustomRowFormat</dt>
+  <dt>useCustomRowComponent</dt>
   <dd><strong>bool</strong> - determines if custom row formats are applied</dd>
 </dl>
 
 <dl>
-  <dt>customRowFormat</dt>
+  <dt>customRowComponent</dt>
   <dd><strong>Component</strong> - the component to render in place of a grid row. This component receives a property named <strong>data</strong></dd>
 </dl>
 
 <dl>
-  <dt>customRowFormatClassName</dt>
+  <dt>customRowComponentClassName</dt>
   <dd><strong>string</strong> - the CSS class name to apply to the format component.</dd>
 </dl>
 
@@ -133,7 +133,7 @@ var OtherComponent = React.createClass({
 
 ```
 
-From there, Griddle can be rendered with the useCustomRowFormat and customRowFormat properties:
+From there, Griddle can be rendered with the useCustomRowComponent and customRowComponent properties:
 
 @@include('./customization/customRow.html')
 

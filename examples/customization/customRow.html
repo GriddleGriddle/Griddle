@@ -18,7 +18,7 @@ var OtherComponent = React.createClass({
 });
 
 React.render(
-  <Griddle results={fakeData} useCustomRowFormat={true} customRowFormat={OtherComponent} customRowFormatClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
+  <Griddle results={fakeData} useCustomRowComponent={true} customRowComponent={OtherComponent} customRowComponentClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
    document.getElementById('custom-row')
 );
 </script>
