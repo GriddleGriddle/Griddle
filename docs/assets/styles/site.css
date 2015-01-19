@@ -229,7 +229,7 @@ code.big{
 }
 
 .feature-row{
-	border-bottom: 1px solid #727272;
+	border-bottom: 1px solid #DDD;
 	margin-bottom: 20px;
 	padding-bottom: 20px;
 }
@@ -241,6 +241,18 @@ code.big{
 .feature-row .image-container{
 	background-color: #FFF;
 	border: 1px solid #B6B6B6;
+	width: 628px;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.hover{
+	width: 628px;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
 }
 
 .feature-row img{
