@@ -281,7 +281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridSettings = __webpack_require__(7);
 	var GridTitle = __webpack_require__(8);
 	var GridNoData = __webpack_require__(9);
-	var CustomRowFormatContainer = __webpack_require__(10);
+	var CustomRowComponentContainer = __webpack_require__(10);
 	var CustomPaginationContainer = __webpack_require__(11);
 	var _ = __webpack_require__(2);
 
@@ -296,7 +296,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "initialSortAscending": true,
 	            "gridClassName":"",
 	            "tableClassName":"",
-	            "customRowFormatClassName":"",
+	            "customRowComponentClassName":"",
 	            "settingsText": "Settings",
 	            "filterPlaceholderText": "Filter Results",
 	            "nextText": "Next",
@@ -310,15 +310,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "metadataColumns": [],
 	            "showFilter": false,
 	            "showSettings": false,
-	            "useCustomRowFormat": false,
+	            "useCustomRowComponent": false,
 	            "useCustomGridComponent": false,
-	            "useCustomPager": false,
+	            "useCustomPagerComponent": false,
 	            "useGriddleStyles": true,
 	            "useGriddleIcons": true,
-	            "customRowFormat": null,
+	            "customRowComponent": null,
 	            "customGridComponent": null,
-	            "customPager": {},
-	            "allowToggleCustom":false,
+	            "customPagerComponent": {},
+	            "enableToggleCustom":false,
 	            "noDataMessage":"There is no data to display.",
 	            "customNoDataComponent": null,
 	            "showTableHeading":true,
@@ -335,7 +335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalSortAscending": true,
 	            "externalLoadingComponent": null,
 	            "externalIsLoading": false,
-	            "infiniteScroll": false,
+	            "enableInfiniteScroll": false,
 	            "bodyHeight": null,
 	            "infiniteScrollSpacerHeight": 50,
 	            "useFixedLayout": true,
@@ -412,14 +412,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            showColumnChooser: !this.state.showColumnChooser
 	        });
 	    },
-	    toggleCustomFormat: function(){
-	        if(this.state.customFormatType === "grid"){
+	    toggleCustomComponent: function(){
+	        if(this.state.customComponentType === "grid"){
 	            this.setProps({
 	                useCustomGridComponent: !this.props.useCustomGridComponent
 	            });
-	        } else if(this.state.customFormatType === "row"){
+	        } else if(this.state.customComponentType === "row"){
 	            this.setProps({
-	                useCustomRowFormat: !this.props.useCustomRowFormat
+	                useCustomRowComponent: !this.props.useCustomRowComponent
 	            });
 	        }
 	    },
@@ -438,7 +438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var maxPage = this.getMaxPage(results);
 	        //re-render if we have new max page value
 	        if (this.state.maxPage !== maxPage){
-	          this.setState({ maxPage: maxPage, filteredColumns: this.props.columns });
+	          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.props.columns });
 	        }
 	    },
 	    setPage: function(number) {
@@ -549,11 +549,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //don't like the magic strings
 	        if(this.props.useCustomGridComponent === true){
 	            this.setState({
-	                 customFormatType: "grid"
+	                 customComponentType: "grid"
 	            });
-	        } else if(this.props.useCustomRowFormat === true){
+	        } else if(this.props.useCustomRowComponent === true){
 	            this.setState({
-	                customFormatType: "row"
+	                customComponentType: "row"
 	            });
 	        } else {
 	          this.setState({
@@ -595,11 +595,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(this.props.useCustomGridComponent === true && this.props.customGridComponent === null){
 	            console.error("useCustomGridComponent is set to true but no custom component was specified.")
 	        }
-	        if (this.props.useCustomRowFormat === true && this.props.customRowFormat === null){
-	            console.error("useCustomRowFormat is set to true but no custom component was specified.")
+	        if (this.props.useCustomRowComponent === true && this.props.customRowComponent === null){
+	            console.error("useCustomRowComponent is set to true but no custom component was specified.")
 	        }
-	        if(this.props.useCustomGridComponent === true && this.props.useCustomRowFormat === true){
-	            console.error("Cannot currently use both customGridComponent and customRowFormat.");
+	        if(this.props.useCustomGridComponent === true && this.props.useCustomRowComponent === true){
+	            console.error("Cannot currently use both customGridComponent and customRowComponent.");
 	        }
 	    },
 	    getDataForRender: function(data, cols, pageList){
@@ -667,12 +667,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    isInfiniteScrollEnabled: function(){
 	      // If a custom pager is included, don't allow for infinite scrolling.
-	      if (this.props.useCustomPager) {
+	      if (this.props.useCustomPagerComponent) {
 	        return false;
 	      }
 
 	      // Otherwise, send back the property.
-	      return this.props.infiniteScroll;
+	      return this.props.enableInfiniteScroll;
 	    },
 	    render: function() {
 	        var clearFix = {
@@ -755,8 +755,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
 	            pagingContent = (
 	              React.createElement("div", {className: "griddle-footer"}, 
-	                  this.props.useCustomPager ?
-	                      React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPager: this.props.customPager}) :
+	                  this.props.useCustomPagerComponent ?
+	                      React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPagerComponent: this.props.customPagerComponent}) :
 	                      React.createElement(GridPagination, {useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName, nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName, previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
 	                  
 	              )
@@ -767,13 +767,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
 	            //this should send all the results it has
 	            resultContent = React.createElement(this.props.customGridComponent, {data: this.props.results, className: this.props.customGridComponentClassName})
-	        } else if(this.props.useCustomRowFormat){
-	            resultContent = React.createElement("div", null, React.createElement(CustomRowFormatContainer, {data: data, columns: cols, metadataColumns: meta, className: this.props.customRowFormatClassName, customFormat: this.props.customRowFormat, style: clearFix}), this.props.showPager&&pagingContent)
+	        } else if(this.props.useCustomRowComponent){
+	            resultContent = React.createElement("div", null, React.createElement(CustomRowComponentContainer, {data: data, columns: cols, metadataColumns: meta, 
+	                className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent, 
+	                style: clearFix}), this.props.showPager&&pagingContent)
 	        } else {
 	            resultContent = (React.createElement("div", {className: "griddle-body"}, React.createElement(GridTable, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, 
 	              useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout, columnMetadata: this.props.columnMetadata, 
 	              showPager: this.props.showPager, pagingContent: pagingContent, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, 
-	              infiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
+	              enableInfiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
 	              sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, 
 	              sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
 	              parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName, 
@@ -788,16 +790,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var columnSelector = this.state.showColumnChooser ? (
 	            React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, 
 	             settingsIconComponent: this.props.settingsIconComponent, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, 
-	             showSetPageSize: !this.props.useCustomGridComponent, resultsPerPage: this.props.resultsPerPage, allowToggleCustom: this.props.allowToggleCustom, 
-	             toggleCustomFormat: this.toggleCustomFormat, useCustomFormat: this.props.useCustomRowFormat || this.props.useCustomGridComponent, 
+	             showSetPageSize: !this.props.useCustomGridComponent, resultsPerPage: this.props.resultsPerPage, enableToggleCustom: this.props.enableToggleCustom, 
+	             toggleCustomComponent: this.toggleCustomComponent, useCustomComponent: this.props.useCustomRowComponent || this.props.useCustomGridComponent, 
 	             useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	        ) : "";
 
 	        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
 	        //add custom to the class name so we can style it differently
-	        gridClassName += this.props.useCustomRowFormat ? " griddle-custom" : "";
+	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
-	        if (typeof results === 'undefined' || results.length === 0) {
+	        if (typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false) {
 	            var myReturn = null;
 	            if (this.props.customNoDataComponent != null) {
 	                myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoDataComponent, null)));
@@ -853,7 +855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "data": [],
 	      "metadataColumns": [],
 	      "className": "",
-	      "infiniteScroll": false,
+	      "enableInfiniteScroll": false,
 	      "nextPage": null,
 	      "hasMorePages": false,
 	      "useFixedHeader": false,
@@ -886,7 +888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.gridScroll();
 	  },
 	  gridScroll: function(){
-	    if (this.props.infiniteScroll && !this.props.externalIsLoading) {
+	    if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
 	      // If the scroll height is greater than the current amount of rows displayed, update the page.
 	      var scrollable = this.refs.scrollable.getDOMNode();
 	      var scrollTop = scrollable.scrollTop
@@ -913,7 +915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var nodes = null;
 
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
-	    if (!this.props.externalIsLoading || this.props.infiniteScroll) {
+	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
 	      nodes = this.props.data.map(function(row, index){
 	          var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
@@ -940,7 +942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var infiniteScrollSpacerRow = null;
-	    if (this.props.infiniteScroll) {
+	    if (this.props.enableInfiniteScroll) {
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
 	      gridStyle = {
 	        "position": "relative",
@@ -1188,10 +1190,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "settingsText": "",
 	            "maxRowsText": "",
 	            "resultsPerPage": 0,
-	            "allowToggleCustom": false,
-	            "useCustomFormat": false,
+	            "enableToggleCustom": false,
+	            "useCustomComponent": false,
 	            "useGriddleStyles": true,
-	            "toggleCustomFormat": function(){}
+	            "toggleCustomComponent": function(){}
 	        };
 	    },
 	    setPageSize: function(event){
@@ -1211,22 +1213,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this;
 
 	        var nodes = [];
-	        //don't show column selector if we're on a custom format
-	        if (that.props.useCustomFormat === false){
+	        //don't show column selector if we're on a custom component
+	        if (that.props.useCustomComponent === false){
 	            nodes = this.props.columns.map(function(col, index){
 	                var checked = _.contains(that.props.selectedColumns, col);
 	                //check column metadata -- if this one is locked make it disabled and don't put an onChange event
 	                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
-	                if(typeof meta !== "undefined" && meta != null && meta.locked){
-	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), col))
+	                var displayName = col; 
+
+	                if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+	                  displayName = meta.displayName;
 	                }
-	                return React.createElement("div", {className: "griddle-column-selection checkbox", style: that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), col))
+
+	                if(typeof meta !== "undefined" && meta != null && meta.locked){
+	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), displayName))
+	                } else if(typeof meta !== "undefined" && meta != null && typeof meta.visible !== "undefined" && meta.visible === false){
+	                    return null; 
+	                }
+	                return React.createElement("div", {className: "griddle-column-selection checkbox", style: that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), displayName))
 	            });
 	        }
 
-	        var toggleCustom = that.props.allowToggleCustom ?
+	        var toggleCustom = that.props.enableToggleCustom ?
 	                (React.createElement("div", {className: "form-group"}, 
-	                    React.createElement("label", {htmlFor: "maxRows"}, React.createElement("input", {type: "checkbox", checked: this.props.useCustomFormat, onChange: this.props.toggleCustomFormat}), " ", this.props.enableCustomFormatText)
+	                    React.createElement("label", {htmlFor: "maxRows"}, React.createElement("input", {type: "checkbox", checked: this.props.useCustomComponent, onChange: this.props.toggleCustomComponent}), " ", this.props.enableCustomFormatText)
 	                ))
 	                : "";
 
@@ -1311,7 +1321,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = that.props.sortAscendingClassName;
 	                sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
@@ -1395,25 +1404,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(1);
 
-	var CustomRowFormatContainer = React.createClass({displayName: 'CustomRowFormatContainer',
+	var CustomRowComponentContainer = React.createClass({displayName: 'CustomRowComponentContainer',
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
 	      "metadataColumns": [],
 	      "className": "",
-	      "customFormat": {}
+	      "customComponent": {}
 	    }
 	  },
 	  render: function() {
 	    var that = this;
 
-	    if (typeof that.props.customFormat !== 'function'){
+	    if (typeof that.props.customComponent !== 'function'){
 	      console.log("Couldn't find valid template.");
 	      return (React.createElement("div", {className: this.props.className}));
 	    }
 
 	    var nodes = this.props.data.map(function(row, index){
-	        return React.createElement(that.props.customFormat, {data: row, metadataColumns: that.props.metadataColumns, key: index})
+	        return React.createElement(that.props.customComponent, {data: row, metadataColumns: that.props.metadataColumns, key: index})
 	    });
 
 	    var footer = this.props.showPager&&this.props.pagingContent;
@@ -1425,7 +1434,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 
-	module.exports = CustomRowFormatContainer;
+	module.exports = CustomRowComponentContainer;
 
 
 /***/ },
@@ -1450,18 +1459,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "nextText": "",
 	      "previousText": "",
 	      "currentPage": 0,
-	      "customPager": {}
+	      "customPagerComponent": {}
 	    }
 	  },
 	  render: function() {
 	    var that = this;
 
-	    if (typeof that.props.customPager !== 'function'){
+	    if (typeof that.props.customPagerComponent !== 'function'){
 	      console.log("Couldn't find valid template.");
 	      return (React.createElement("div", null));
 	    }
 
-	    return (React.createElement(that.props.customPager, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	    return (React.createElement(that.props.customPagerComponent, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
 	  }
 	});
 
@@ -1504,10 +1513,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	           "showChildren":false
 	        }
 	    },
+	    componentWillReceiveProps: function(){
+	      this.setShowChildren(false);
+	    },
 	    toggleChildren: function(){
-	        this.setState({
-	            showChildren: this.state.showChildren === false
-	        });
+	      this.setShowChildren(this.state.showChildren === false);
+	    },
+	    setShowChildren: function(visible){
+	      this.setState({
+	        showChildren: visible 
+	      });
 	    },
 	    render: function(){
 	        var that = this;
