@@ -1,0 +1,47 @@
+<div id="grid-chart"></div>
+
+<script type="text/jsx">
+var data = [
+{
+  "January": 35,
+  "February": 40,
+  "March": 47,
+  "April": 52,
+  "May": 73,
+  "June": 75
+},
+{
+  "January": 21,
+  "February": 30,
+  "March": 46,
+  "April": 53,
+  "May": 66,
+  "June": 81
+},
+{
+  "January": 28,
+  "February": 28,
+  "March": 49,
+  "April": 49,
+  "May": 67,
+  "June": 80
+}
+];
+
+var TestLineChart = React.createClass({
+  render: function(){
+    var simpleLineChartData = {
+      labels: _.keys(this.props.data[0]),
+      series: []
+    };
+
+    _.each(this.props.data, function(item){
+      simpleLineChartData.series.push(_.values(item));
+    });
+    
+    return <ChartistGraph data={simpleLineChartData} type={'Line'} />
+  }
+});
+
+React.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table"/>, document.getElementById('grid-chart'));
+</script>

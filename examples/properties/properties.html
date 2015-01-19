@@ -1,0 +1,433 @@
+<style type="text/css">
+  dl{ margin-left: 0px;}
+</style>
+<div id="griddle-properties"></div>
+
+<script type="text/jsx">
+var propertiesItem = [
+  {
+    "property": "columns",
+    "description": "The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default",
+    "type": "array",
+    "default": "[]"
+  },
+  {
+    "property": "columnMetadata",
+    "description": "Behavior and properties for the columns within the grid",
+    "type": "array",
+    "default": "[]",
+    "children":[
+      {
+        "property": "columnName",
+        "description": "The name of the column that this metadata applies to.",
+        "type": "string",
+        "default": null
+      },
+      {
+        "property": "order",
+        "description": "The order that this column should appear regardless of how the columns object is defined.",
+        "type": "int",
+        "default": null
+      },
+      {
+        "property": "locked",
+        "description": "Determines whether or not the user can disable this column from the settings.",
+        "type": "bool",
+        "default": "false"
+      },
+      {
+        "property": "cssClassName",
+        "description" : "The css className that should be applied to this column.",
+        "type": "string",
+        "default": null
+      }
+    ]
+  },
+  {
+    "property": "results",
+    "description": "The data that should be displayed within the grid. This data needs to be an array of JSON objects.",
+    "type": "array",
+    "default": "[]"
+  },
+  {
+    "property": "resultsPerPage",
+    "description": "The number of results that should be displayed on each page. If 'getExternalResults' is defined, this value will be what's used as the 'pageSize' argument.",
+    "type": "int",
+    "default": "5"
+  },
+  {
+    "property": "initialSort",
+    "description": "The column that the grid should be sorted on initially. By default, this is an empty string so the data will be sorted as it's received",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "initialSortAscending",
+    "description": "The direction that the grid should be sorted on initially. By default, this is true.",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "gridClassName",
+    "description": "The CSS class name to apply to the griddle elements.",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "tableClassName",
+    "description" : "The CSS class name to apply to the table elements.",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "customFormatClassName",
+    "description": "The CSS class name to apply to the custom format wrapper.",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "settingsText",
+    "description": "The text value to use for toggling the settings area.",
+    "type": "string",
+    "default": "Settings"
+  },
+  {
+    "property": "filterPlaceholderText",
+    "description": "The text to be displayed as a placeholder in the filter text box.",
+    "type": "string",
+    "default": "Filter Results"
+  },
+  {
+    "property": "nextText",
+    "description": "The text on the button that moves to the next page of results.",
+    "type": "string",
+    "default": "Next"
+  },
+  {
+    "property": "previousText",
+    "description": "The text on the button that moves to the previous page of results.",
+    "type": "string",
+    "default": "Previous"
+  },
+  {
+    "property": "maxRowsText",
+    "description": "The text that appears in the Settings / Column chooser next to the select box for page size",
+    "type": "string",
+    "default": "Rows per page"
+  },
+  {
+    "property": "enableCustomFormatText",
+    "description": "The text that appears in the Settings / Column chooser next to the check box to enable custom formatting",
+    "type": "string",
+    "default": "Enable Custom Formatting"
+  },
+  {
+    "property": "childrenColumnName",
+    "description": "The name of the column that contains a list of child items for a given object.",
+    "type": "string",
+    "default": "children"
+  },
+  {
+    "property": "metadataColumns",
+    "description": "List of columns that should not be rendered.",
+    "type": "array",
+    "default": "[]"
+  },
+  {
+    "property": "showFilter",
+    "description": "Whether or not to display the \"Filter\" section of Griddle.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "showSettings",
+    "description": "Whether or not to display the \"Settings\" section of Griddle.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "useCustomRowComponent",
+    "description": "Determines if a custom row format component is used",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "useCustomGridComponent",
+    "description": "Determines if a custom grid format component is used",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "useCustomPagerComponent",
+    "description": "Determines if a custom pager component is used",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "useGriddleStyles",
+    "description": "Determines if the inline, default styles for Griddle are used. When disabled Griddle will render as a simple table (unless infinite turned on)",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "customRowComponent",
+    "description": "The component that should be rendered for each data row.",
+    "type": "React Component",
+    "default": "null"
+  },
+  {
+    "property": "customGridComponent",
+    "description": "The component that should be rendered instead of the overall grid.",
+    "type": "React Component",
+    "default": "null"
+  },
+  {
+    "property": "customPagerComponent",
+    "description": "The component that should be rendered instead of the default pagination component",
+    "type": "React Component",
+    "default": "{}"
+  },
+  {
+    "property": "enableToggleCustom",
+    "description": "Determines whether or not the option to toggle between custom component and default grid is available in the settings",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "noDataMessage",
+    "description": "The message to display when no data is available.",
+    "type": "string",
+    "default": "There is no data to display."
+  },
+  {
+    "property": "customNoDataComponent",
+    "description": "The component to display when there is no data available.",
+    "type": "React Component",
+    "default": "null"
+  },
+  {
+    "property": "showTableHeading",
+    "description": "Determines if the table heading should be displayed.",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "showPager",
+    "description": "Determines if the pagination controls should be displayed.",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "useFixedHeader",
+    "description": "Determines if the table header should stay in the same place while table data is scrolled.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "useExternal",
+    "description": "States that the data should be loaded externally rather than all at once.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "externalSetPage",
+    "description": "The method that will be called when the grid changes pages.",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "externalChangeSort",
+    "description": "The method that will be called when the column sort is changed.",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "externalSetFilter",
+    "description": "The method that will be called when the filter is changed.",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "externalSetPageSize",
+    "description": "The method that will be called when the page size is requested to change.",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "externalMaxPage",
+    "description": "The max page for the current data set.",
+    "type": "int",
+    "default": "null"
+  },
+  {
+    "property": "externalCurrentPage",
+    "description": "The page of data that is currently being displayed.",
+    "type": "int",
+    "default": "null"
+  },
+  {
+    "property": "externalSortColumn",
+    "description": "The column that is currently sorted.",
+    "type": "string",
+    "default": "null"
+  },
+  {
+    "property": "externalSortAscending",
+    "description": "Whether the data is sorted in ascending or descending order",
+    "type": "bool",
+    "default": "null"
+  },
+  {
+    "property": "externalLoadingComponent",
+    "description": "The component that should be displayed when the data is loading.",
+    "type": "React Component",
+    "default": "null"
+  },
+  {
+    "property": "externalIsLoading",
+    "description": "Whether or not the loading component should be displayed instead of grid data.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "enableInfiniteScroll",
+    "description": "Should infinite scrolling be enabled.",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "bodyHeight",
+    "description": "The height, in pixels, of the grid body.",
+    "type": "int",
+    "default": "false"
+  },
+  {
+    "property": "infiniteScrollSpacerHeight",
+    "description": "The height of a fake row to give the table body additional height if there are more rows that can be loaded when infinite scrolling is enabled.",
+    "type": "int",
+    "default": "50"
+  },
+  {
+    "property": "useFixedLayout",
+    "description": "Whether or not a fixed table layout should be used.",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "isSubGriddle",
+    "description": "Is the current grid a child of another Griddle component. (This should mainly be used for SubGrids by Griddle).",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "enableSort",
+    "description": "Determines if sorting is enabled.",
+    "type": "bool",
+    "default": "true"
+  },
+  {
+    "property": "sortAscendingClassName",
+    "description": "When sorted in ascending order, the CSS class name to apply to the th of the currently sorted column.",
+    "type": "string",
+    "default": "sort-ascending"
+  },
+  {
+    "property": "sortDescendingClassName",
+    "description": "When sorted in descending order, the CSS class name to apply to the th of the currently sorted column",
+    "type": "string",
+    "default": "sort-descending"
+  },
+  {
+    "property": "parentRowCollapsedClassName",
+    "description": "The CSS class that is applied to a row that contains child records when the records are not being displayed.",
+    "type": "string",
+    "default": "parent-row"
+  },
+  {
+    "property": "parentRowExpandedClassName",
+    "description": "The CSS class that is applied to a row that contains child records when the records are currently displayed.",
+    "type": "string",
+    "default": "parent-row expanded"
+  },
+  {
+    "property": "settingsToggleClassName",
+    "description": "The CSS class that is applied to the settings toggle button that is (by default) at the top right of Griddle.",
+    "type": "string",
+    "default": "settings"
+  },
+  {
+    "property": "nextClassName",
+    "description": "The CSS class name to apply to the pagination \"next\" control.",
+    "type": "string",
+    "default": "griddle-next"
+  },
+  {
+    "property": "previousClassName",
+    "description": "The CSS class name to apply to the pagination \"previous\" control.",
+    "type": "string",
+    "default": "griddle-previous"
+  },
+  {
+    "property": "sortAscendingComponent",
+    "description": "The component to display in a th element when the column is sorted in ascending order. This component will be to the right of the column heading text.",
+    "type": "string",
+    "default": " ▲"
+  },
+  {
+    "property": "sortDescendingComponent",
+    "description": "The component to display in a th element when the column is sorted in descending order. This component will be to the right of the column heading text.",
+    "type": "string",
+    "default": " ▼"
+  },
+  {
+    "property": "parentRowCollapsedComponent",
+    "description": "The component to the left of the first column of a grid row that contains child records when those records are not currently displayed.",
+    "type": "string",
+    "default": " ▶"
+  },
+  {
+    "property": "parentRowExpandedComponent",
+    "description": "The component to the left of the first column of a grid row that contains child records when those records are currently displayed.",
+    "type": "string",
+    "default": " ▼"
+  },
+  {
+    "property": "settingsIconComponent",
+    "description": "The component to display to the right of the \"Settings\" text.",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "nextIconComponent",
+    "description": "The component that should be displayed to the right of the \"Next\" text in the pagination component.",
+    "type": "string",
+    "default": ""
+  },
+  {
+    "property": "previousIconComponent",
+    "description": "The component that should be displayed to the left of the \"Previous\" text in the pagination component.",
+    "type": "string",
+    "default": ""
+  },
+];
+var DefinitionItem = React.createClass({
+  getDefaultProps: function() {
+    return { "data": {
+      "property": "",
+      "description":"",
+      "type": "",
+      "default": ""
+    }}
+  },
+  render: function(){
+    return (
+      <dl>
+        <dt>{this.props.data.property}</dt>
+        <dd><strong>{this.props.data.type}</strong> - {this.props.data.description} <span className="text-light-grey">Default: {this.props.data.default}</span>
+        </dd>
+      </dl>
+    )
+  }
+})
+React.render(<Griddle results={propertiesItem} useCustomRowComponent={true} customRowComponent={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
+</script>

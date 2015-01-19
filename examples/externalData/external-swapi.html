@@ -1,0 +1,72 @@
+<div id="griddle-external-swapi"></div>
+
+<script type="text/javascript" src="scripts/swapi.min.js"></script>
+
+<script type="text/jsx">
+var Loading = React.createClass({
+  getDefaultProps: function(){
+    return {
+      loadingText: "Loading"
+    }
+  },
+  render: function(){
+    return <div className="loading">{this.props.loadingText}</div>;
+  }
+});
+
+var ExternalSwapiComponent = React.createClass({
+    getInitialState: function(){
+      var initial = { "results": [],
+          "currentPage": 0,
+          "isLoading": false,
+          "maxPages": 0,
+          "externalResultsPerPage": 10,
+          "externalSortColumn":null,
+          "externalSortAscending":true,
+          "results": []
+      };
+
+      return initial;
+    },
+    componentWillMount: function(){
+    },
+    componentDidMount: function(){
+      this.getExternalData();
+    },
+    getExternalData: function(page){
+      var that = this;
+      page = page||1
+
+      this.setState({
+        isLoading: true
+      });
+
+      swapiModule.getStarships(page, function(data) {
+       that.setState({
+          results: data.results,
+          currentPage: page-1,
+          maxPages: Math.round(data.count/10),
+          isLoading: false
+        })
+      });
+    },
+    setPage: function(index){
+      //This should interact with the data source to get the page at the given index
+      index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+      this.getExternalData(index);
+    },
+    setPageSize: function(size){
+    },
+    render: function(){
+      //columns={["name", "city", "state", "country"]}
+      return <Griddle useExternal={true} externalSetPage={this.setPage} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]}
+        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
+        externalChangeSort={function(){}} externalSetFilter={function(){}}
+        externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} externalLoadingComponent={Loading} externalIsLoading={this.state.isLoading}/>
+    }
+});
+
+
+  React.render(<ExternalSwapiComponent />, document.getElementById("griddle-external-swapi"));
+</script>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>Griddle - React Grid Component</title>
+	<meta name="description" content="Griddle - React Grid component. ">
+	<meta name="author" content="Ryan Lanciaux">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/skeleton.css">
+	<link rel="stylesheet" href="styles/site.css">
+	<link rel="stylesheet" href="styles/chartist.css">
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+
+	<!-- Scripts
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="scripts/Griddle.js"></script>
+	<script src="scripts/GriddleWithCallback.js"></script>
+	<script src="scripts/fakeData.js"></script>
+	<script src="scripts/ChartistGraph.js"></script>
+</head>
+<body id="docs-page">
+  <header class="background-primary-dark border-bottom border-secondary">
+  	<div class="container">
+  		<div class="row">
+  			<div class="eight columns">
+          <a href="/"><img src="images/griddle.png" alt="Griddle"/></a>
+  			</div>
+	  		<div class="four columns right">
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=fork&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+            <br />
+          <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
+	  		</div>
+  		</div>
+  	</div>
+  </header>
+	<div class="container page-content">
+		<div class="row">
+			<div class="two columns">
+				<nav class="side">
+					<ul>
+						<li><a href="quickstart.html">Quickstart</a></li>
+						<li><a href="styling.html">Styling</a></li>
+						<li><a href="subgrids.html">Subgrids</a></li>
+						<li><a href="customization.html">Customization</a></li>
+						<li><a href="externalData.html">External Data</a></li>
+						<li><a href="infiniteScroll.html">Infinite Scrolling</a></li>
+						<li><a href="properties.html">Properties</a></li>
+						<li class="border-top border-lighter-grey"><a href="https://reactjsnews.com/isomorphic-javascript-with-react-node/">Isomorphic Rendering <small>(at ReactJS News)</small></a>
+					</ul>
+				</nav>
+			</div>
+			<div class="ten columns docs">
+				<%=content%>
+			</div>
+		</div>
+	</div>
+  <div class="order-primary content-section background-darker-grey text-light-grey" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="ten columns offset-by-two">
+          <p>Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/DynamicTyped/Griddle/graphs/contributors">the awesome contributors!</a></p>
+         	<small>
+        		&copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
+        	</small> 
+        	<br />
+          <small>
+						Example data has been generated with <a href="http://json-generator.com">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-58716212-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script> 
+</body>
+</html>

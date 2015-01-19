@@ -1,0 +1,24 @@
+<div id='custom-row'></div>
+
+
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var OtherComponent = React.createClass({
+  getDefaultProps: function(){
+    return { "data": {} };
+  },
+  render: function(){
+    return (<div className="custom-row-card">
+        <div className="name"><strong className="text-primary">{this.props.data.name}</strong><small className="text-primary-light">{this.props.data.company}</small></div>
+        <div>{this.props.data.city}</div>
+        <div>{this.props.data.state}, {this.props.data.country}</div>
+    </div>);
+  }
+});
+
+React.render(
+  <Griddle results={fakeData} useCustomRowComponent={true} customRowComponent={OtherComponent} customRowComponentClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
+   document.getElementById('custom-row')
+);
+</script>

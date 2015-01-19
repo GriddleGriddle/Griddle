@@ -1,0 +1,54 @@
+<div id="griddle-metadata"></div>
+
+<script type="text/jsx">
+  var exampleMetadata = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": false,
+    "displayName": "ID"
+  },
+  {
+    "columnName": "name",
+    "order": 9,
+    "locked": false,
+    "visible": true,
+    "displayName": "Employee Name"
+  },
+  {
+    "columnName": "city",
+    "order": 8,
+    "locked": false,
+  },
+  {
+    "columnName": "state",
+    "order": 7,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "country",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "company",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  4,
+    "locked": false,
+    "visible": true,
+    "displayName": "Favorite Number"
+  }
+];
+
+    React.render(
+        <Griddle results={fakeData} columnMetadata={exampleMetadata} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('griddle-metadata')
+    );
+</script>
