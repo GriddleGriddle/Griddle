@@ -1,0 +1,32 @@
+<div id="griddle-callback"></div>
+<script type="text/javascript" src="scripts/GriddleWithCallback.js"></script>
+<script type="text/jsx">
+var setDefault = function(original, value){
+	return typeof original === 'undefined' ? value : original;
+}
+
+var loadData = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+	page+=1;
+
+	swapiModule.getStarships(page, function(data){
+		callback({
+			results: data.results,
+			totalResults: data.count,
+			pageSize: pageSize
+		});	
+	});
+};
+
+var Loading = React.createClass({
+	getDefaultProps: function(){
+		return {
+			loadingText: "Loading"
+		}
+	},
+	render: function(){
+		return <div className="loading">{this.props.loadingText}</div>;
+	}
+});
+
+React.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback')); 
+</script>

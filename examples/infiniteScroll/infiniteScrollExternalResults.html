@@ -1,0 +1,87 @@
+<div id="griddle-external"></div>
+
+<script type="text/jsx">
+	var externalData = fakeData.slice(0, 53);
+
+	var setDefault = function(original, value){
+		return typeof original === 'undefined' ? value : original;
+	}
+
+	//this is a really ugly method for simulating a lot of the stuff that should be occuring on an API call or something of that nature
+	var fakeDataMethod = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+
+		//need some ECMA6
+		filterString = setDefault(filterString, null);
+		sortColumn = setDefault(sortColumn, null);
+		sortAscending = setDefault(sortAscending, null);
+		page = setDefault(page, 0);
+		pageSize = setDefault(pageSize, 5);
+		callback = setDefault(callback, null);
+		var initialIndex = page * pageSize;
+		var endIndex = initialIndex + pageSize;
+
+		setTimeout(function() {
+			var results = [],
+			sortedResults = null,
+			totalResults = 0;
+
+
+			//sort the results if sortColumnSet
+      if(sortColumn&&sortColumn !== ""){
+          sortedResults = _.sortBy(fakeData, function(item){
+              return item[sortColumn];
+          });
+
+          if(sortAscending === false){
+              sortedResults.reverse();
+          }
+      }
+
+			//filter the results if it's there
+			if (filterString&&filterString.length > 0) {
+				var filteredResults = _.filter(sortedResults||fakeData,
+			       function(item) {
+			            var arr = _.values(item);
+			            for(var i = 0; i < arr.length; i++){
+			               if ((arr[i]||"").toString().toLowerCase().indexOf(filterString.toLowerCase()) >= 0){
+			                return true;
+			               }
+			            }
+
+			            return false;
+			        });
+
+				results = filteredResults.slice(initialIndex, endIndex);
+				totalResults = filteredResults.length;
+
+			} else {
+				results = (sortedResults||fakeData).slice(initialIndex, endIndex);
+				totalResults = (sortedResults||fakeData).length;
+			}
+
+			callback({
+				results: results,
+				totalResults: totalResults,
+				pageSize: pageSize
+			});
+		}, 1000);
+	};
+
+	var Loading = React.createClass({
+		getDefaultProps: function(){
+			return {
+				loadingText: "Loading"
+			}
+		},
+		render: function(){
+			var loadingStyle = {
+				textAlign: "center",
+				paddingBottom: "40px"
+			};
+
+			return <div className="loading container" style={loadingStyle}>{this.props.loadingText}</div>;
+		}
+	});
+
+	React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
+</script>

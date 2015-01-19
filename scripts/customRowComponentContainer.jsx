@@ -9,33 +9,34 @@
 */
 var React = require('react');
 
-var CustomFormatContainer = React.createClass({
+var CustomRowComponentContainer = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
       "metadataColumns": [],
       "className": "",
-      "customFormat": {}
+      "customComponent": {}
     }
   },
   render: function() {
     var that = this;
 
-    if (typeof that.props.customFormat !== 'function'){
+    if (typeof that.props.customComponent !== 'function'){
       console.log("Couldn't find valid template.");
       return (<div className={this.props.className}></div>);
     }
 
     var nodes = this.props.data.map(function(row, index){
-        return <that.props.customFormat data={row} metadataColumns={that.props.metadataColumns} key={index}/>
+        return <that.props.customComponent data={row} metadataColumns={that.props.metadataColumns} key={index} />
     });
 
+    var footer = this.props.showPager&&this.props.pagingContent;
     return (
-      <div className={this.props.className}>
+      <div className={this.props.className} style={this.props.style}>
           {nodes}
       </div>
     );
   }
 });
 
-module.exports = CustomFormatContainer;
+module.exports = CustomRowComponentContainer;

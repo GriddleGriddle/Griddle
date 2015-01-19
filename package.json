@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.1.19",
+  "version": "0.2.0-beta2",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",
@@ -13,7 +13,8 @@
   "dependencies": {
     "react": "~0.12.0",
     "react-tools": "~0.12.0",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "react-chartist": "~0.2.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -22,9 +23,15 @@
     "grunt-jsxhint": "^0.4.0",
     "grunt-open": "^0.2.3",
     "grunt-react": "~0.10.0",
+    "grunt-markdown": "~0.6.1",
+    "grunt-include-replace": "~2.0.0",
     "jest-cli": "*",
     "jsx-loader": "~0.12.0",
-    "webpack": "~1.3.3-beta1"
+    "webpack": "~1.3.3-beta1",
+    "grunt-contrib-copy": "~0.7.0",
+    "webpack-dev-server": "~1.7.0",
+    "grunt-webpack": "~1.0.8",
+    "grunt-contrib-clean": "~0.6.0"
   },
   "scripts": {
     "test": "jest"

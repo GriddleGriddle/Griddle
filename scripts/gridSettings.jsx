@@ -19,9 +19,10 @@ var GridSettings = React.createClass({
             "settingsText": "",
             "maxRowsText": "",
             "resultsPerPage": 0,
-            "allowToggleCustom": false,
-            "useCustomFormat": false,
-            "toggleCustomFormat": function(){}
+            "enableToggleCustom": false,
+            "useCustomComponent": false,
+            "useGriddleStyles": true,
+            "toggleCustomComponent": function(){}
         };
     },
     setPageSize: function(event){
@@ -41,41 +42,52 @@ var GridSettings = React.createClass({
         var that = this;
 
         var nodes = [];
-        //don't show column selector if we're on a custom format
-        if (that.props.useCustomFormat === false){
+        //don't show column selector if we're on a custom component
+        if (that.props.useCustomComponent === false){
             nodes = this.props.columns.map(function(col, index){
                 var checked = _.contains(that.props.selectedColumns, col);
                 //check column metadata -- if this one is locked make it disabled and don't put an onChange event
                 var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
-                if(typeof meta !== "undefined" && meta != null && meta.locked){
-                    return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{col}</label></div>
+                var displayName = col; 
+
+                if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+                  displayName = meta.displayName;
                 }
-                return <div className="column checkbox"><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{col}</label></div>
+
+                if(typeof meta !== "undefined" && meta != null && meta.locked){
+                    return <div className="column checkbox"><label><input type="checkbox" disabled name="check" checked={checked}  data-name={col}/>{displayName}</label></div>
+                } else if(typeof meta !== "undefined" && meta != null && typeof meta.visible !== "undefined" && meta.visible === false){
+                    return null; 
+                }
+                return <div className="griddle-column-selection checkbox" style={that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null }><label><input type="checkbox" name="check" onChange={that.handleChange} checked={checked}  data-name={col}/>{displayName}</label></div>
             });
         }
 
-        var toggleCustom = that.props.allowToggleCustom ?   
+        var toggleCustom = that.props.enableToggleCustom ?
                 (<div className="form-group">
-                    <label htmlFor="maxRows">{this.props.enableCustomFormatText}:</label>
-                    <input type="checkbox" checked={this.props.useCustomFormat} onChange={this.props.toggleCustomFormat} />
+                    <label htmlFor="maxRows"><input type="checkbox" checked={this.props.useCustomComponent} onChange={this.props.toggleCustomComponent} /> {this.props.enableCustomFormatText}</label>
                 </div>)
                 : "";
 
-        return (<div className="griddle-settings panel">
-                <h5>{this.props.settingsText}</h5>
-                <div className="container-fluid griddle-columns">
-                    <div className="row">{nodes}</div>
+        var setPageSize = this.props.showSetPageSize ? (<div>
+                    <label htmlFor="maxRows">{this.props.maxRowsText}:
+                        <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </label>
+            </div>) : "";
+
+
+        return (<div className="griddle-settings" style={this.props.useGriddleStyles ? { backgroundColor: "#FFF", border: "1px solid #DDD", color: "#222", padding: "10px", marginBottom: "10px"} : null }>
+                <h6>{this.props.settingsText}</h6>
+                <div className="griddle-columns" style={this.props.useGriddleStyles ? { clear: "both", display: "table", width: "100%", borderBottom: "1px solid #EDEDED", marginBottom: "10px"} : null }>
+                    {nodes}
                 </div>
-                <div className="form-group">
-                    <label htmlFor="maxRows">{this.props.maxRowsText}:</label>
-                    <select onChange={this.setPageSize} value={this.props.resultsPerPage}>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
+                {setPageSize}
                 {toggleCustom}
             </div>);
     }
