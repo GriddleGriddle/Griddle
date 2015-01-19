@@ -5,6 +5,14 @@ __Please Note: Styling is similar to customization but is in its [own section](#
 Griddle comes with a number of customization options to help it fit with your project goals.
 
 <hr />
+###Default Columns###
+
+Use the `columns` property to set the default columns in a Griddle grid. Please [see the quickstart guide](quickstart.html#advanced) for an example.
+
+<dl>
+  <dt>columns</dt>
+  <dd><strong>array (of string)</strong> - The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default.</dd>
+</dl>
 
 ###Column Metadata###
 

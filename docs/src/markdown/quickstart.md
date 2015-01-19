@@ -43,21 +43,24 @@ var fakeData =  [
 ];
 ```
 
-From there, render a Griddle component through React.renderComponent or in the Render method of another component.
+From there, render a Griddle component through React.renderComponent or in the Render method of another component. 
 
 ```
 <Griddle results={fakeData} />
 ```
 
+
 @@include('./quickstart/basic.html')
 
+<a name="advanced"></a>
 ##More Advanced Example##
 For many applications, simple paging and sorting is not enough. Griddle comes equipped with filtering, initial columns and additional grid settings out of the box. To use these features, simply define the showProperties and showFilters properties on the Griddle component definition. Check out the full list of properties available to Griddle in the [prop documentation](properties.html).
 
 Using the same data as in the previous example, we can add filtering, grid settings and default columns by defining our component as follows:
 
 ```
-<Griddle results={fakeData} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>
+<Griddle results={fakeData} tableClassName="table" showFilter={true}
+ showSettings={true} columns={["name", "city", "state", "country"]}/>
 ```
 
 @@include('./quickstart/advanced.html')
