@@ -3,10 +3,22 @@
 <script type="text/javascript" src="scripts/swapi.min.js"></script>
 
 <script type="text/jsx">
+var Loading = React.createClass({
+  getDefaultProps: function(){
+    return {
+      loadingText: "Loading"
+    }
+  },
+  render: function(){
+    return <div className="loading">{this.props.loadingText}</div>;
+  }
+});
+
 var ExternalSwapiComponent = React.createClass({
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,
+          "isLoading": false,
           "maxPages": 0,
           "externalResultsPerPage": 10,
           "externalSortColumn":null,
@@ -25,11 +37,16 @@ var ExternalSwapiComponent = React.createClass({
       var that = this;
       page = page||1
 
+      this.setState({
+        isLoading: true
+      });
+
       swapiModule.getStarships(page, function(data) {
        that.setState({
           results: data.results,
           currentPage: page-1,
-          maxPages: Math.round(data.count/10)
+          maxPages: Math.round(data.count/10),
+          isLoading: false
         })
       });
     },
@@ -46,7 +63,7 @@ var ExternalSwapiComponent = React.createClass({
         externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
         externalChangeSort={function(){}} externalSetFilter={function(){}}
         externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
-        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} />
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} externalLoadingComponent={Loading} externalIsLoading={this.state.isLoading}/>
     }
 });
 

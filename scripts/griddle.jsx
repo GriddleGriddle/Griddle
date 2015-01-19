@@ -532,7 +532,7 @@ var Griddle = React.createClass({
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
-        if (typeof results === 'undefined' || results.length === 0) {
+        if (typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false) {
             var myReturn = null;
             if (this.props.customNoDataComponent != null) {
                 myReturn = (<div className={gridClassName}><this.props.customNoDataComponent /></div>);
