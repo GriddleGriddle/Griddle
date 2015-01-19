@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Griddle - React Grid Component</title>
+  <meta name="description" content="Griddle - React Grid component. ">
+  <meta name="author" content="Ryan Lanciaux">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+  <link rel="stylesheet" href="styles/normalize.css">
+  <link rel="stylesheet" href="styles/skeleton.css">
+  <link rel="stylesheet" href="styles/site.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+
+</head>
+<body>
+
+  <!-- Primary Page
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <header class="background-primary-dark border-bottom border-secondary">
+    <div class="container">
+      <div class="row">
+        <div class="eight columns">
+          <a href="/"><img src="images/griddle.png" alt="Griddle"/></a>
+        </div>
+        <div class="four columns right">
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=fork&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+            <br />
+          <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="background-primary text-light border-primary-dark border-bottom border-big content-section">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns center">
+          <h3>Griddle is a simple grid component for use with <a href="http://facebook.github.io/react/">React</a></h3>
+        </div>
+      </div>
+      <div id="grid-basic">
+
+      </div>
+      <div class="row center">
+        <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
+        <a href="https://github.com/dynamictyped/Griddle" class="button border-light text-light big">Download</a>
+      </div>
+      <div class="row center">
+        <h4 class="text-light text-primary-light">OR</h4>
+      </div>
+      <div class="row center">
+        <code class="big background-primary-light border-primary-dark text-primary-dark">npm install griddle-react --save</code>
+      </div>
+    </div>
+  </div>
+  <div class="border-dark-grey content-section border-bottom border-big" id="tldr">
+    <div class="container">
+      <div class="row">
+        <div class="four columns">
+          <h3 class="text-primary border-primary-light border-bottom">Configurable</h3>
+            <div class="text-section">
+            <p>
+              Griddle makes few assumptions about how your grid should be styled. By default Griddle renders as an HTML table with some light styling. Don't like the default styles? Rather display your grid data as a visualization? No problem, we've got you covered!
+          </p>
+          </div>
+        </div>
+        <div class="four columns">
+          <h3 class="text-primary border-primary-light border-bottom">Functional</h3>
+          <div class="text-section">
+            <p>
+              Out of the box, Griddle has sorting, filtering, paging, infinite scrolling, sub-grids and more. Even more functionality is on the way! Have a feature you'd love to see added? Add it to <a href="https://github.com/DynamicTyped/Griddle/wiki/Roadmap">the roadmap</a> (under Potential Updates)
+            </p>
+          </div>
+        </div>
+        <div class="four columns">
+          <h3 class="text-primary border-primary-light border-bottom">Fast</h3>
+          <div class="text-section">
+            <p>
+              Griddle is powered by React and its virtual DOM. By default, only the current page of the grid is rendered at any given time. Data can be loaded all at once or paged on the server. Whether you have several or hundreds of records, Griddle should render your data quickly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="features" class="text content-section background-lighter-grey border-primary-dark border-bottom border-big">
+    <div class="container">
+      <div class="row">
+        <div class="four columns">
+          <h2>TLDR Features</h2>
+        </div>
+        <div class="eight columns right text-light-grey">
+          <div class="hover">
+            Hover for Example
+          </div>
+        </div>
+      </div>
+      <div class="row feature-row">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Custom Formatting</h4>
+          <p>
+            Want to alternate your data between a grid and a visualization? No problem! Griddle can take optional custom components for the overall grid, row, column and more. <a href="customization.html">Learn more about customizing Griddle</a>.
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-grid-chart.gif" alt="Grid Format Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>
+      <div class="row feature-row">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Infinite Scrolling</h4>
+          <p>
+            Hate clicking on next / previous buttons? Enable infinite scrolling and get rid of them, forever! Infinite scrolling will work whether your data is loaded at once or continuously from the server! <a href="infiniteScroll.html">Read more about infinite scrolling</a>
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-infinite.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>      
+      <div class="row feature-row last">
+        <div class="four columns">
+          <h4 class="text-dark-grey">Custom Styling</h4>
+          <p>
+            Third-party components should work with your styles rather than force you into a specific styling structure or framework. Griddle comes with default inline styling, however, these styles can be turned off with a simple property change. When off, Griddle will render as a simple table that you can apply your styles to. <a href="styling.html">Read more about styling</a>
+          </p>
+        </div>
+        <div class="eight columns">
+          <div class="image-container">
+            <img src="images/custom-style.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
+          </div>
+        </div>
+      </div>       
+    </div>
+  </div>
+  <div class="order-primary text-primary-dark content-section background-primary-light border-dark-grey border-bottom border-big" id="quickstart">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <h2>Quickstart</h2>
+          <h4>From NPM</h4>
+          <p>
+            Griddle is in the npm repository as <a href="https://www.npmjs.org/package/griddle-react">griddle-react</a>. Simply install React and Griddle from npm:
+            <pre><code>npm install react --save
+npm install griddle-react --save</code></pre>
+          <p>
+            From there, require React and Griddle in your modules and you should be all set!
+          </p>
+          <pre><code>var React = require('react');
+var Griddle = require('griddle-react');</pre></code>
+          <p>Please take a look at a basic <a href="https://github.com/ryanlanciaux/griddle-gulp-test">gulp example</a> or a <a href="https://github.com/ryanlanciaux/griddle-webpack-test">webpack example</a> for more information.
+          </p>
+          <hr class="border-primary border-bottom"/>
+          <h4>From Source</h4>
+          <p>At the most basic level, using Griddle is as simple as wiring up an array of JSON objects as a property to the component. First off, include <a href="http://underscorejs.org/">Underscore</a>, <a href="http://facebook.github.io/react/">React</a> and <a href="http://www.github.com/dynamictyped/griddle">Griddle</a> before your React Code.</p>
+          <pre><code>&lt;script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"&gt;&lt;/script&gt;
+&lt;script src="//fb.me/react-0.10.0.js"&gt;&lt;/script&gt;
+&lt;script src="//fb.me/JSXTransformer-0.10.0.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="scripts/griddle.js"&gt;&lt;/script&gt;</code></pre>
+
+          <hr class="border-primary border-bottom"/>
+
+          <p>Define an array of JSON objects -- for our examples we have something that resembles the following:</p>
+          <pre><code>var fakeData =  [
+{
+  "January": 35,
+  "February": 20,
+  "March": 27,
+  "April": 32,
+  "May": 23,
+  "June": 42
+},
+...
+];</pre></code>
+
+          <p>From there, render a Griddle component through React.renderComponent or in the Render method of another component.</p>
+          <pre><code>&lt;Griddle results={fakeData}/&gt;</pre></code>
+          <p>While this example is pretty simple, there are a lot more advanced things you can do with Griddle with out much code. Check out the <a href="quickstart.html">documentation and examples</a> to see more of what can be accomplished.
+        </div>
+      </div>
+        <div class="row">
+          <div class="twelve columns center">
+            <a href="quickstart.html" class="button border-primary-dark text-primary-dark big">More Documentation</a>
+          </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="order-primary content-section background-darker-grey text-light-grey" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <h4>About</h4>
+          <p>
+            Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/DynamicTyped/Griddle/graphs/contributors">the awesome contributors!</a>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="six columns">
+          <small>
+            &copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
+          </small> 
+          <br />
+          <small>
+            Example data has been generated with <a href="http://json-generator.com">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence.
+          </small> 
+        </div>
+        <div class="six columns right">
+          <small>Epic pancake logo by <a href="https://www.behance.net/ryanstraube">Ryan Straube</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+
+  <!-- Griddle doesn't need jQuery at all -- just for the freezeframe library-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="scripts/freezeframe.min.js"></script>
+
+  <script src="scripts/Griddle.js"></script>
+  <script src="scripts/fakeData.js"></script>
+  <script type="text/jsx">
+  /** @jsx React.DOM */
+    React.render(
+        <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
+    );
+  </script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58716212-1', 'auto');
+  ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

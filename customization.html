@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>Griddle - React Grid Component</title>
+	<meta name="description" content="Griddle - React Grid component. ">
+	<meta name="author" content="Ryan Lanciaux">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/skeleton.css">
+	<link rel="stylesheet" href="styles/site.css">
+	<link rel="stylesheet" href="styles/chartist.css">
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+
+	<!-- Scripts
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="scripts/Griddle.js"></script>
+	<script src="scripts/GriddleWithCallback.js"></script>
+	<script src="scripts/fakeData.js"></script>
+	<script src="scripts/ChartistGraph.js"></script>
+</head>
+<body id="docs-page">
+  <header class="background-primary-dark border-bottom border-secondary">
+  	<div class="container">
+  		<div class="row">
+  			<div class="eight columns">
+          <a href="/"><img src="images/griddle.png" alt="Griddle"/></a>
+  			</div>
+	  		<div class="four columns right">
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=fork&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+            <br />
+          <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
+	  		</div>
+  		</div>
+  	</div>
+  </header>
+	<div class="container page-content">
+		<div class="row">
+			<div class="two columns">
+				<nav class="side">
+					<ul>
+						<li><a href="quickstart.html">Quickstart</a></li>
+						<li><a href="styling.html">Styling</a></li>
+						<li><a href="subgrids.html">Subgrids</a></li>
+						<li><a href="customization.html">Customization</a></li>
+						<li><a href="externalData.html">External Data</a></li>
+						<li><a href="infiniteScroll.html">Infinite Scrolling</a></li>
+						<li><a href="properties.html">Properties</a></li>
+						<li class="border-top border-lighter-grey"><a href="https://reactjsnews.com/isomorphic-javascript-with-react-node/">Isomorphic Rendering <small>(at ReactJS News)</small></a>
+					</ul>
+				</nav>
+			</div>
+			<div class="ten columns docs">
+				<h2 id="customization">Customization</h2>
+<p><strong>Please Note: Styling is similar to customization but is in its <a href="#">own section</a> for clarity.</strong></p>
+<p>Griddle comes with a number of customization options to help it fit with your project goals.</p>
+<p><hr /></p>
+<h3 id="default-columns">Default Columns</h3>
+<p>Use the <code>columns</code> property to set the default columns in a Griddle grid. Please <a href="quickstart.html#advanced">see the quickstart guide</a> for an example.</p>
+<dl>
+  <dt>columns</dt>
+  <dd><strong>array (of string)</strong> - The columns that should be displayed by default. The other columns can be chosen via the grid settings. If no columns are set, Griddle will display all columns by default.</dd>
+</dl>
+
+<h3 id="column-metadata">Column Metadata</h3>
+<p>The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the <code>columnMetadata</code> property is where this would be defined. </p>
+<p>The properties that the columnMetadata object can contain are as follows: </p>
+<dl>
+  <dt>columnName</dt>
+  <dd><strong>string (required)</strong> - this is the name of the column as it appears in the results passed into Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>order</dt>
+  <dd><strong>int</strong> - The order that this column should appear in Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>locked</dt>
+  <dd><strong>bool</strong> - Determines whether or not the user can disable this column from the settings.</dd>
+</dl>
+
+<dl>
+  <dt>cssClassName</dt>
+  <dd><strong>string</strong> - The css class name to apply to this column.</dd>
+</dl>
+
+<dl>
+  <dt>displayName</dt>
+  <dd><strong>string</strong> - The display name for the column. This is used when the name in the column heading and settings should be different from the data passed in to the Griddle component.</dd>
+</dl>
+<dl>
+  <dt>customComponent</dt>
+  <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a <code>TD</code> element. (more information below in the <a href="#customColumns">Custom Columns section</a>.)</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<p>Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read <code>Employee Name</code> instead of name. </p>
+<p>Our metadata object would look something like </p>
+<pre><code>  {
+    <span class="string">"columnName"</span>: <span class="string">"name"</span>,
+    <span class="string">"order"</span>: 9,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>,
+    <span class="string">"displayName"</span>: <span class="string">"Employee Name"</span>
+  },
+  {
+    <span class="string">"columnName"</span>: <span class="string">"city"</span>,
+    <span class="string">"order"</span>: 8,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>
+  },
+  {
+    <span class="string">"columnName"</span>: <span class="string">"state"</span>,
+    <span class="string">"order"</span>: 7,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>
+  },
+  {
+    <span class="string">"columnName"</span>: <span class="string">"country"</span>,
+    <span class="string">"order"</span>: 6,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>
+  },
+  {
+    <span class="string">"columnName"</span>: <span class="string">"company"</span>,
+    <span class="string">"order"</span>: 5,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>
+  },
+  {
+    <span class="string">"columnName"</span>: <span class="string">"favoriteNumber"</span>,
+    <span class="string">"order"</span>:  4,
+    <span class="string">"locked"</span>: <span class="literal">false</span>,
+    <span class="string">"visible"</span>: <span class="literal">true</span>,
+    <span class="string">"displayName"</span>: <span class="string">"Favorite Number"</span>
+  }</code></pre>
+<p>We would then load Griddle as follows: </p>
+<pre><code>React.render(
+  <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">columnMetadata</span>=<span class="value">{exampleMetadata}</span> <span class="attribute">showFilter</span>=<span class="value">{true}</span> 
+    <span class="attribute">showSettings</span>=<span class="value">{true}</span> <span class="attribute">columns</span>=<span class="value">{["name",</span> "<span class="attribute">city</span>", "<span class="attribute">state</span>", "<span class="attribute">country</span>"]}/&gt;</span>, 
+    document.getElementById('griddle-metadata')</span></code></pre>
+<div id="griddle-metadata"></div>
+
+<script type="text/jsx">
+  var exampleMetadata = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": false,
+    "displayName": "ID"
+  },
+  {
+    "columnName": "name",
+    "order": 9,
+    "locked": false,
+    "visible": true,
+    "displayName": "Employee Name"
+  },
+  {
+    "columnName": "city",
+    "order": 8,
+    "locked": false,
+  },
+  {
+    "columnName": "state",
+    "order": 7,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "country",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "company",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  4,
+    "locked": false,
+    "visible": true,
+    "displayName": "Favorite Number"
+  }
+];
+
+    React.render(
+        <Griddle results={fakeData} columnMetadata={exampleMetadata} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('griddle-metadata')
+    );
+</script>
+
+<p><a name="customColumns"></a></p>
+<h3 id="custom-columns">Custom Columns</h3>
+<p>Custom column components are defined in the <a href="#">Column Metadata object</a>. The components are passed <strong>data</strong> and <strong>rowData</strong> properties.</p>
+<dl>
+  <dt>data</dt>
+  <dd><strong>object</strong> - the data that would normally be rendered in the column.</dd>
+</dl>
+
+<dl>
+  <dt>rowData</dt>
+  <dd><strong>object</strong> - the data for all items in the same row</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<p>We are going to make the body of one of the columns a link. This link will use data from another column to determine the href.</p>
+<p>Assume we have the following data for our grid:</p>
+<pre><code>var someData =  [
+{
+  <span class="string">"id"</span>: <span class="number">0</span>,
+  <span class="string">"name"</span>: <span class="string">"Mayer Leonard"</span>,
+  <span class="string">"city"</span>: <span class="string">"Kapowsin"</span>,
+  <span class="string">"state"</span>: <span class="string">"Hawaii"</span>,
+  <span class="string">"country"</span>: <span class="string">"United Kingdom"</span>,
+  <span class="string">"company"</span>: <span class="string">"Ovolo"</span>,
+  <span class="string">"favoriteNumber"</span>: <span class="number">7</span>
+  },
+  {
+    <span class="string">"id"</span>: <span class="number">1</span>,
+    <span class="string">"name"</span>: <span class="string">"Koch Becker"</span>,
+    <span class="string">"city"</span>: <span class="string">"Johnsonburg"</span>,
+    <span class="string">"state"</span>: <span class="string">"New Jersey"</span>,
+    <span class="string">"country"</span>: <span class="string">"Madagascar"</span>,
+    <span class="string">"company"</span>: <span class="string">"Eventage"</span>,
+    <span class="string">"favoriteNumber"</span>: <span class="number">2</span>
+  },
+  <span class="keyword">...</span>
+];</code></pre>
+<p>We want the <strong>name</strong> column to be a link to <code>/speakers/state/name</code> (where state and name are pulled in from the data). We can define a customComponent to be rendered as follows:</p>
+<pre><code><span class="keyword">var</span> LinkComponent = React.createClass({
+  render: <span class="keyword">function</span>(){
+    url =<span class="string">"speakers/"</span> + <span class="keyword">this</span>.props.rowData.state + <span class="string">"/"</span> + <span class="keyword">this</span>.props.data;
+    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">{url}</span>&gt;</span>{this.props.data}<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+  }
+});</span></code></pre>
+<p>From there, we will set the customComponent value in the <strong>name</strong> columnMetadata object to this LinkComponent.</p>
+<pre><code>var columnMeta = [
+  {
+  <span class="keyword">...</span>
+  <span class="string">"columnName"</span>: <span class="string">"name"</span>,
+  <span class="string">"order"</span>: <span class="number">1</span>,
+  <span class="string">"locked"</span>: false,
+  <span class="string">"visible"</span>: true,
+  <span class="string">"customComponent"</span>: LinkComponent
+  },
+  <span class="keyword">...</span>
+];</code></pre>
+<p>Now, when Griddle is rendered with this columnMetadata, it should write the link as expected.</p>
+<pre><code>React.render(<span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">data</span>=<span class="value">{someData}</span> <span class="attribute">columnMetdata</span>=<span class="value">{columnMeta}</span> /&gt;</span>,
+   document.getElementById('something'));</span></code></pre>
+<div id="customLink"></div>
+
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var LinkComponent = React.createClass({
+  render: function(){
+    url ="#speakers/" + this.props.rowData.state + "/" + this.props.data;
+    return <a href={url}>{this.props.data}</a>
+  }
+});
+
+var customColumnMetadata = [
+{
+  "columnName": "id",
+  "order": 1,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "name",
+  "order": 2,
+  "locked": false,
+  "visible": true,
+  "customComponent": LinkComponent
+},
+{
+  "columnName": "city",
+  "order": 3,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "state",
+  "order": 4,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "country",
+  "order": 5,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "company",
+  "order": 6,
+  "locked": false,
+  "visible": true
+},
+{
+  "columnName": "favoriteNumber",
+  "order":  7,
+  "locked": false,
+  "visible": true
+}
+];
+
+React.render(
+<Griddle results={fakeData} columnMetadata={customColumnMetadata} columns={["name", "city", "state", "country"]}/>, document.getElementById('customLink')
+);
+</script>
+
+
+<hr />
+
+
+<h3 id="custom-row-format">Custom Row Format</h3>
+<p>Sometimes you may want to display grid data in a format other than a grid but still have pagination, filtering, etc. This type of formatting can be accomplished with the custom row format properties. To use custom row formatting, the <strong>useCustomRowComponent</strong> and the <strong>customRowComponent</strong> properties will need to be set.</p>
+<dl>
+  <dt>useCustomRowComponent</dt>
+  <dd><strong>bool</strong> - determines if custom row formats are applied</dd>
+</dl>
+
+<dl>
+  <dt>customRowComponent</dt>
+  <dd><strong>Component</strong> - the component to render in place of a grid row. This component receives a property named <strong>data</strong></dd>
+</dl>
+
+<dl>
+  <dt>customRowComponentClassName</dt>
+  <dd><strong>string</strong> - the CSS class name to apply to the format component.</dd>
+</dl>
+
+<dl>
+  <dt>enableToggleCustom</dt>
+  <dd><strong>bool</strong> - whether or not the user should be able to toggle between custom format and grid format.</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<p>We are going to render our grid as a series of cards, keeping the pagination and filtering from Griddle in tact. Assume we are using the same data in the custom column example. We will need to create a custom component as follows:</p>
+<pre><code><span class="keyword">var</span> OtherComponent = React.createClass({
+  getDefaultProps: <span class="keyword">function</span>(){
+    <span class="keyword">return</span> { <span class="string">"data"</span>: {} };
+  },
+  render: <span class="keyword">function</span>(){
+    <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"custom-row-card"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"name"</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span>&gt;</span>{this.props.data.name}<span class="tag">&lt;/<span class="title">strong</span>&gt;</span><span class="tag">&lt;<span class="title">small</span>&gt;</span>{this.props.data.company}<span class="tag">&lt;/<span class="title">small</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span>&gt;</span>{this.props.data.city}<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span>&gt;</span>{this.props.data.state}, {this.props.data.country}<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>);
+  }
+});</span></code></pre>
+<p>From there, Griddle can be rendered with the useCustomRowComponent and customRowComponent properties:</p>
+<div id='custom-row'></div>
+
+
+<script type="text/jsx">
+/** @jsx React.DOM */
+
+var OtherComponent = React.createClass({
+  getDefaultProps: function(){
+    return { "data": {} };
+  },
+  render: function(){
+    return (<div className="custom-row-card">
+        <div className="name"><strong className="text-primary">{this.props.data.name}</strong><small className="text-primary-light">{this.props.data.company}</small></div>
+        <div>{this.props.data.city}</div>
+        <div>{this.props.data.state}, {this.props.data.country}</div>
+    </div>);
+  }
+});
+
+React.render(
+  <Griddle results={fakeData} useCustomRowComponent={true} customRowComponent={OtherComponent} customRowComponentClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
+   document.getElementById('custom-row')
+);
+</script>
+
+
+<hr />
+
+<h3 id="custom-grid-format">Custom Grid Format</h3>
+<p>In some cases, it may be ideal to use Griddle but display a global format other than a grid or series of rows. Assume we have an object containing temperature data for years and we want to display this data with a trend line chart. This is possible with a custom grid format component. To use custom grid formatting the <strong>useCustomGridComponent</strong> and <strong>customGridComponent</strong> properties need to be set.</p>
+<dl>
+  <dt>useCustomGridComponent</dt>
+  <dd><strong>bool</strong> - determines if custom row formats are applied</dd>
+</dl>
+
+<dl>
+  <dt>customGridComponent</dt>
+  <dd><strong>Component</strong> - the component to render in place of a grid row. This component receives a property named <strong>data</strong></dd>
+</dl>
+
+<dl>
+  <dt>customGridComponentClassName</dt>
+  <dd><strong>string</strong> - the CSS class name to apply to the format component.</dd>
+</dl>
+
+<dl>
+  <dt>enableToggleCustom</dt>
+  <dd><strong>bool</strong> - whether or not the user should be able to toggle between custom format and grid format.</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<p>As stated above we are going to render a visualization of temperature data rather than a chart. To start off we need to create a visualization component that uses a data property to obtain its values (the following example uses the awesome <a href="http://gionkunz.github.io/chartist-js/">chartist library</a> and <a href="https://fraserxu.me/react-chartist/">accompanying react component</a>):</p>
+<pre><code><span class="title">var</span> <span class="type">TestLineChart</span> = <span class="type">React</span>.createClass({
+  render: function(){
+    var simpleLineChartData = {
+      labels: _.keys(this.props.<span class="typedef"><span class="keyword">data</span>[0]),</span>
+      series: []
+    };
+
+    _.each(this.props.<span class="typedef"><span class="keyword">data</span>, function<span class="container">(<span class="title">item</span>)</span><span class="container">{
+      <span class="title">simpleLineChartData</span>.<span class="title">series</span>.<span class="title">push</span>(<span class="title">_</span>.<span class="title">values</span>(<span class="title">item</span>));
+      }</span>);</span>
+      return &lt;<span class="type">ChartistGraph</span> <span class="typedef"><span class="keyword">data</span>=<span class="container">{<span class="title">simpleLineChartData</span>}</span> <span class="keyword">type</span>=<span class="container">{'<span class="type">Line</span>'}</span> /&gt;</span>
+  }
+});</code></pre>
+<div id="grid-chart"></div>
+
+<script type="text/jsx">
+var data = [
+{
+  "January": 35,
+  "February": 40,
+  "March": 47,
+  "April": 52,
+  "May": 73,
+  "June": 75
+},
+{
+  "January": 21,
+  "February": 30,
+  "March": 46,
+  "April": 53,
+  "May": 66,
+  "June": 81
+},
+{
+  "January": 28,
+  "February": 28,
+  "March": 49,
+  "April": 49,
+  "May": 67,
+  "June": 80
+}
+];
+
+var TestLineChart = React.createClass({
+  render: function(){
+    var simpleLineChartData = {
+      labels: _.keys(this.props.data[0]),
+      series: []
+    };
+
+    _.each(this.props.data, function(item){
+      simpleLineChartData.series.push(_.values(item));
+    });
+
+    return <ChartistGraph data={simpleLineChartData} type={'Line'} />
+  }
+});
+
+React.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table"/>, document.getElementById('grid-chart'));
+</script>
+
+
+<hr />
+
+<h3 id="custom-paging-component">Custom Paging Component</h3>
+<p>If you want to customize the paging component, just set the property &#39;useCustomPagerComponent&#39; to true and pass in another component as property named &#39;customPagerComponent&#39;. The example component below shows 11 buttons (5 previous, current, 5 next):</p>
+<dl>
+  <dt>useCustomPagerComponent</dt>
+  <dd><strong>bool</strong> - Use custom pagination component rather than default pager. default: false</dd>
+</dl>
+
+<dl>
+  <dt>customPagerComponent</dt>
+  <dd><strong>object</strong> - The custom pagination component. default: {}</dd>
+</dl>
+
+<h5 id="example">Example</h5>
+<pre><code class="lang-javascript"><span class="keyword">var</span> OtherPager = React.createClass({
+    getDefaultProps: <span class="keyword">function</span>(){
+        <span class="keyword">return</span>{
+            <span class="string">"maxPage"</span>: <span class="number">0</span>,
+            <span class="string">"nextText"</span>: <span class="string">""</span>,
+            <span class="string">"previousText"</span>: <span class="string">""</span>,
+            <span class="string">"currentPage"</span>: <span class="number">0</span>,
+        }
+    },
+    pageChange: <span class="keyword">function</span>(event){
+        <span class="keyword">this</span>.props.setPage(parseInt(event.target.getAttribute(<span class="string">"data-value"</span>)));
+    },
+    render: <span class="keyword">function</span>(){
+        <span class="keyword">var</span> previous = <span class="string">""</span>;
+        <span class="keyword">var</span> next = <span class="string">""</span>;
+
+        <span class="keyword">if</span>(<span class="keyword">this</span>.props.currentPage &gt; <span class="number">0</span>){
+            previous = <span class="xml"><span class="tag">&lt;<span class="title">span</span> <span class="attribute">onClick</span>=<span class="value">{this.props.previous}</span> <span class="attribute">className</span>=<span class="value">"previous"</span>&gt;</span><span class="tag">&lt;<span class="title">i</span> <span class="attribute">className</span>=<span class="value">"glyphicon glyphicon-arrow-left"</span>&gt;</span><span class="tag">&lt;/<span class="title">i</span>&gt;</span>{this.props.previousText}<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+        }
+
+        if(this.props.currentPage != (this.props.maxPage -1)){
+            next = <span class="tag">&lt;<span class="title">span</span> <span class="attribute">onClick</span>=<span class="value">{this.props.next}</span> <span class="attribute">className</span>=<span class="value">"next"</span>&gt;</span>{this.props.nextText}<span class="tag">&lt;<span class="title">i</span> <span class="attribute">className</span>=<span class="value">"glyphicon glyphicon-arrow-right"</span>&gt;</span><span class="tag">&lt;/<span class="title">i</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+        }
+
+        var options = [];
+
+      var startIndex = Math.max(this.props.currentPage - 5, 0);
+      var endIndex = Math.min(startIndex + 11, this.props.maxPage);
+
+      if (this.props.maxPage &gt;= 11 &amp;&amp; (endIndex - startIndex) <span class="tag">&lt;<span class="title">=</span> <span class="attribute">10</span>) {
+        <span class="attribute">startIndex</span> = <span class="attribute">endIndex</span> <span class="attribute">-</span> <span class="attribute">11</span>;
+      }
+
+        <span class="attribute">for</span>(<span class="attribute">var</span> <span class="attribute">i</span> = <span class="attribute">startIndex</span>; <span class="attribute">i</span> &lt; <span class="attribute">endIndex</span> ; <span class="attribute">i</span>++){
+          <span class="attribute">var</span> <span class="attribute">selected</span> = <span class="attribute">this.props.currentPage</span> =<span class="value">=</span> <span class="attribute">i</span> ? "<span class="attribute">current-page-selected</span>" <span class="attribute">:</span> "";
+            <span class="attribute">options.push</span>(&lt;<span class="attribute">button</span> <span class="attribute">className</span>=<span class="value">{selected}</span> <span class="attribute">data-value</span>=<span class="value">{i}</span> <span class="attribute">onClick</span>=<span class="value">{this.pageChange}</span>&gt;</span>{i + 1}<span class="tag">&lt;/<span class="title">button</span>&gt;</span>);
+        }
+
+        return (
+            <span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"row custom-pager"</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"col-xs-4"</span>&gt;</span>{previous}<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"col-xs-4 center pages"</span>&gt;</span>
+                    {options}
+                <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"col-xs-4 right"</span>&gt;</span>{next}<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        )
+    }
+});</span></code></pre>
+<p>Then initialize your component as follows:</p>
+<pre><code><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">tableClassName</span>=<span class="value">"table"</span> <span class="attribute">useCustomRowComponent</span>=<span class="value">"true"</span> 
+  <span class="attribute">customRowComponent</span>=<span class="value">{OtherComponent}</span> <span class="attribute">useCustomPagerComponent</span>=<span class="value">"true"</span> <span class="attribute">customPagerComponent</span>=<span class="value">{OtherPager}</span> /&gt;</span></code></pre>
+<div id="custom-paging"></div>
+
+
+<script type="text/jsx">
+var OtherPager = React.createClass({
+    getDefaultProps: function(){
+        return{
+            "maxPage": 0,
+            "nextText": "",
+            "previousText": "",
+            "currentPage": 0,
+        }
+    },
+    pageChange: function(event){
+        this.props.setPage(parseInt(event.target.getAttribute("data-value")));
+    },
+    render: function(){
+        var previous = "";
+        var next = "";
+
+        if(this.props.currentPage > 0){
+            previous = <span onClick={this.props.previous} className="previous"><i className="glyphicon glyphicon-arrow-left"></i>{this.props.previousText}</span>
+        }
+
+        if(this.props.currentPage != (this.props.maxPage -1)){
+            next = <span onClick={this.props.next} className="next">{this.props.nextText}<i className="glyphicon glyphicon-arrow-right"></i></span>
+        }
+
+        var options = [];
+
+      var startIndex = Math.max(this.props.currentPage - 5, 0);
+      var endIndex = Math.min(startIndex + 11, this.props.maxPage);
+
+      if (this.props.maxPage >= 11 && (endIndex - startIndex) <= 10) {
+        startIndex = endIndex - 11;
+      }
+
+        for(var i = startIndex; i < endIndex ; i++){
+          var selected = this.props.currentPage == i ? "current-page-selected" : "";
+            options.push(<button className={selected} data-value={i} onClick={this.pageChange}>{i + 1}</button>);
+        }
+
+        return (
+            <div className="row custom-pager">
+                <div className="one column">{previous}</div>
+                <div className="ten columns">
+                    {options}
+                </div>
+                <div className="one column">{next}</div>
+            </div>
+        )
+    }
+});
+
+React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComponent={true}
+  customRowComponent={OtherComponent} useCustomPagerComponent={true} customPagerComponent={OtherPager} />, document.getElementById("custom-paging"));
+</script>
+
+<hr />
+
+<h3 id="no-data">No Data</h3>
+<p>Griddle will, by default, show a message if there is no data in the result set. There are two ways that it can be customized though.</p>
+<h4 id="basic-nodata-message">Basic NoData message</h4>
+<p>The first way to customize what Griddle does when there is no data is setting the <code>noDataMessage</code> property.</p>
+<dl>
+  <dt>noDataMessage</dt>
+  <dd><strong>string</strong> - The message that will be displayed when there is no data</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<pre><code><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">noDataMessage</span>=<span class="value">{"No</span> <span class="attribute">data</span> <span class="attribute">could</span> <span class="attribute">be</span> <span class="attribute">found.</span>"} /&gt;</span></code></pre>
+<div id="griddle-nodata-basic"></div>
+
+<script type="text/jsx">
+    React.render(<Griddle noDataMessage={"No data could be found."} />, document.getElementById("griddle-nodata-basic"));
+</script>
+
+
+<hr />
+
+<h4 id="nodata-component">NoData Component</h4>
+<p>Outside of the NoData message, Griddle can take a <code>customNoDataComponent</code> that will be displayed when there are no records.</p>
+<dl>
+  <dt>customNoDataComponent</dt>
+  <dd><strong>object</strong> - The component that will be displayed when there is no data</dd>
+</dl>
+
+<h5 id="example-">Example:</h5>
+<pre><code><span class="keyword">var</span> NoDataComponent = React.createClass({
+    render: <span class="keyword">function</span>(){
+      <span class="keyword">return</span> (<span class="xml"><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">h1</span>&gt;</span>No data is available<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"http://www.google.com"</span>&gt;</span>You can google for more data<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+      );
+    }
+});
+
+React.render(<span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">customNoDataComponent</span>=<span class="value">{NoDataComponent}</span> /&gt;</span>, document.getElementById("some-id"));</span></code></pre>
+<div id="griddle-nodata-component"></div>
+
+<script type="text/jsx">
+  var NoDataComponent = React.createClass({
+    render: function(){
+      return (<div className="noDataComponent">
+        <h1>No data is available</h1>
+        <a href="http://www.google.com">You can google for more data</a>
+      </div>
+      );
+    }
+  });
+
+  React.render(<Griddle customNoDataComponent={NoDataComponent} />, document.getElementById("griddle-nodata-component"));
+</script>
+
+
+<hr />
+
+<h3 id="custom-icons">Custom Icons</h3>
+<p>Please see the <a href="styling.html">styling section</a> for custom icons.</p>
+
+			</div>
+		</div>
+	</div>
+  <div class="order-primary content-section background-darker-grey text-light-grey" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="ten columns offset-by-two">
+          <p>Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/DynamicTyped/Griddle/graphs/contributors">the awesome contributors!</a></p>
+         	<small>
+        		&copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
+        	</small> 
+        	<br />
+          <small>
+						Example data has been generated with <a href="http://json-generator.com">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-58716212-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script> 
+</body>
+</html>
