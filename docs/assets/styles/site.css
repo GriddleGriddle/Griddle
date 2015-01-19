@@ -59,6 +59,7 @@ dd{
 .border-accent { border-color: #03A9F4; border-width: 1px;}
 .border-dark-grey { border-color: #727272; border-width: 1px;}
 .border-light-grey { border-color: #B6B6B6; border-width: 1px;}
+.border-lighter-grey { border-color: #EDEDED; border-width: 1px;}
 .border-light { border-color: #FFF; }
 
 .border-big {
@@ -71,6 +72,13 @@ dd{
 	border-right: none;
 	border-top: none;
 	border-bottom-style: solid;
+}
+
+.border-top{
+	border-left: none;
+	border-right: none;
+	border-bottom: none; 
+	border-top-style: solid;
 }
 
 /* Skeleton overrides
@@ -258,3 +266,10 @@ code.big{
 	top: 3px;
 	right: 25px;
 }
+
+@media (min-width: 1280px) {
+  .container{
+  	max-width: 1280px; 
+  }
+}
+

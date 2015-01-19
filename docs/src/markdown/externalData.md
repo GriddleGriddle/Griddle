@@ -150,7 +150,8 @@ var ExternalSwapiComponent = React.createClass({
     },
     render: function(){
       //columns={["name", "city", "state", "country"]}
-      return <Griddle useExternal={true} externalSetPage={this.setPage} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]}
+      return <Griddle useExternal={true} externalSetPage={this.setPage} enableSort={false} 
+        columns={["name", "model", "manufacturer", "passengers"]}
         externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
         externalChangeSort={function(){}} externalSetFilter={function(){}}
         externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
