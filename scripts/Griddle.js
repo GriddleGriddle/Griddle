@@ -78,14 +78,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(5);
-	var GridFilter = __webpack_require__(6);
-	var GridPagination = __webpack_require__(7);
-	var GridSettings = __webpack_require__(8);
-	var GridTitle = __webpack_require__(9);
-	var GridNoData = __webpack_require__(10);
-	var CustomRowComponentContainer = __webpack_require__(11);
-	var CustomPaginationContainer = __webpack_require__(12);
+	var GridTable = __webpack_require__(6);
+	var GridFilter = __webpack_require__(7);
+	var GridPagination = __webpack_require__(8);
+	var GridSettings = __webpack_require__(9);
+	var GridTitle = __webpack_require__(10);
+	var GridNoData = __webpack_require__(11);
+	var CustomRowComponentContainer = __webpack_require__(12);
+	var CustomPaginationContainer = __webpack_require__(13);
 	var _ = __webpack_require__(4);
 
 	var Griddle = React.createClass({displayName: "Griddle",
@@ -641,7 +641,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ },
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -654,7 +655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(9);
+	var GridTitle = __webpack_require__(10);
 	var GridRowContainer = __webpack_require__(14);
 	var _ = __webpack_require__(4);
 
@@ -858,7 +859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -890,7 +891,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -975,7 +976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1077,7 +1078,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1166,7 +1167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1199,7 +1200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1247,7 +1248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
@@ -1287,7 +1288,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */,
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
