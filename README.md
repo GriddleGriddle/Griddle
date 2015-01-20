@@ -2,12 +2,6 @@ Griddle
 =======
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
-**GRIDDLE IS IN DEVELOPMENT**
-You are welcome to use Griddle, however, it's in the early stages of development. There are likely bugs and other issues that need to be cleaned up :)
-
-Please submit issues / pull requests for anything you run into.
-
 ----------
 
 Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [React](http://facebook.github.io/react/).
@@ -28,11 +22,41 @@ To run from source, type the following commands into a terminal:
 
 1. `npm install -g grunt-cli` if you don't have grunt.
 2. `npm install`
-3. `webpack` (Learn more about [webpack](http://webpack.github.io))
-4. `grunt`
-5. That's it!
+3. `grunt`
+4. That's it!
+
+----------
+
+Griddle is not yet version 1. There are likely some areas that will change and some issues that you may encounter. Please submit issues / pull requests for anything you run into.
+
+----------
 
 ###Changelog:###
+ 0.2.0
+
+1. __Styling__ - Griddle now renders as a single HTML table by default. Additionally, if you don't want to use Griddle's styles they can be turned off with a property `useGriddleStyles={false}`. [See more on styling](http://dynamictyped.github.io/Griddle/styling.html).
+1. __External Results__ - External data should now be passed in via props rather than a callback. The Griddle callback is still available for those that wish to use it but it's now in a separate module. [More on External Data](http://dynamictyped.github.io/Griddle/externalData.html)
+1. __Custom Components__ - In addition to swapping out the column or row with a custom component, it's now possible to switch out the entire grid with a custom component. For example, the data could initially be rendered as a chart. The data that makes up the chart could be displayed by clicking on settings and unchecking the `Enable Custom Formatting` option. [Customization docs](http://dynamictyped.github.io/Griddle/customization.html#custom-grid-format)
+1. __Infinite Scrolling__ - Infinite scrolling can be toggled instead of the default pagination. [View infinite scrolling docs](http://dynamictyped.github.io/Griddle/infiniteScroll.html)  
+1. __New Documentation Site__ - The documentation site is a bit more thorough and no longer a single page. [Check it out here](http://dynamictyped.github.io/Griddle)
+
+__Breaking Changes:__
+
+1. Updated the following properties:
+ - **useCustomFormat** changed to **useCustomRowComponent**
+ - **useCustomPager** changed to **useCustomPagerComponent**
+ - **customFormat** changed to **customRowComponent**
+ - **customPager** changed to **customPagerComponent**
+ - **customFormatClassName** changed to **customRowComponentClassName**
+ - **allowToggleCustom** to **enableToggleCustom**
+ - **customNoData** changed to **customNoDataComponent**
+ - *Significantly* changed **getExternalResults**. See the note below.
+2. The **getExternalResults** property and loading data from an external source has been updated quite a bit.
+ - Rather than exposing a single method to load data, a series of 'external' properties are available to pass data to Griddle.
+ - For those that wish to use a callback and to support implementations before v0.2.0 using **getExternalResults** method, the `GriddleWithCallback` component was created. For more on GriddleWithCallback, [view the documentation here.](http://dynamictyped.github.io/Griddle/externalData.html#griddle-with-callback)
+ - [Check out the entire external data documentation to read more.](http://dynamictyped.github.io/Griddle/externalData.html)
+
+
 0.1.19:
 
 1. Updated some of the documentation to note forthcoming changes to ExternalResults etc.
@@ -48,19 +72,3 @@ To run from source, type the following commands into a terminal:
 5. External Results fixes/enhancements
 6. Metadata enhancements
 
-###Breaking Changes:###
-From 0.1.19 - 0.2.0:
-1. Updated the following properties:
- - **useCustomFormat** changed to **useCustomRowComponent**
- - **useCustomPager** changed to **useCustomPagerComponent**
- - **customFormat** changed to **customRowComponent**
- - **customPager** changed to **customPagerComponent**
- - **customFormatClassName** changed to **customRowComponentClassName**
- - **allowToggleCustom** to **enableToggleCustom**
- - **customNoData** changed to **customNoDataComponent**
- - *Significantly* changed **getExternalResults**. See the note below.
-
-2. The **getExternalResults** property and loading data from an external source has been updated quite a bit.
- - Rather than exposing a single method to load data, a series of 'external_____' properties that allow the user to control what's Griddle's state have been created.
- - To support implementations before v0.2.0 using **getExternalResults** method, GriddleWithCallback was created. For more on GriddleWithCallback, [view the documentation here.]("http://dynamictyped.github.io/Griddle/externalData.html#griddle-with-callback")
- - [Check out the entire external data documentation to read more.]("http://dynamictyped.github.io/Griddle/externalData.html")
