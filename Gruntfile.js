@@ -183,6 +183,7 @@ module.exports = function(grunt) {
       'markdown',
       'clean:includes',
       'webpack:docs',
+      'webpack:default',
       'copy',
     ]);
   })
