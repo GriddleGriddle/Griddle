@@ -165,6 +165,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Example Site specific Styles
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+header img{
+	margin-top: 15px;
+}
 .content-section{
 	padding: 30px 0 30px 0;
 }
