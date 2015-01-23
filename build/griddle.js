@@ -1118,17 +1118,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var sortComponent = null;
 	            var titleStyles = null;
 
-	            if (that.props.useGriddleStyles){
-	              titleStyles = {
-	                backgroundColor: "#EDEDEF",
-	                border: "0",
-	                borderBottom: "1px solid #DDD",
-	                color: "#222",
-	                padding: "5px",
-	                cursor: that.props.enableSort ? "pointer" : "default"
-	              }
-	            }
-
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = that.props.sortAscendingClassName;
 	                sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
@@ -1140,6 +1129,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var displayName = col;
 	            if (that.props.columnMetadata != null){
 	              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
+	              var columnIsSortable = that.props.enableSort && (meta.sortable == null ? true : meta.sortable);
+
 	              //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
 	              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
 	              if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -1147,7 +1138,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-	            return (React.createElement("th", {onClick: that.sort, "data-title": col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent));
+	            if (that.props.useGriddleStyles){
+	              titleStyles = {
+	                backgroundColor: "#EDEDEF",
+	                border: "0",
+	                borderBottom: "1px solid #DDD",
+	                color: "#222",
+	                padding: "5px",
+	                cursor: columnIsSortable ? "pointer" : "default"
+	              }
+	            }
+
+	            return (React.createElement("th", {onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent));
 	        });
 
 

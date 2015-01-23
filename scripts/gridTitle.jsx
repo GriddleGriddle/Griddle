@@ -37,17 +37,6 @@ var GridTitle = React.createClass({
             var sortComponent = null;
             var titleStyles = null;
 
-            if (that.props.useGriddleStyles){
-              titleStyles = {
-                backgroundColor: "#EDEDEF",
-                border: "0",
-                borderBottom: "1px solid #DDD",
-                color: "#222",
-                padding: "5px",
-                cursor: that.props.enableSort ? "pointer" : "default"
-              }
-            }
-
             if(that.props.sortColumn == col && that.props.sortAscending){
                 columnSort = that.props.sortAscendingClassName;
                 sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
@@ -59,6 +48,8 @@ var GridTitle = React.createClass({
             var displayName = col;
             if (that.props.columnMetadata != null){
               var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
+              var columnIsSortable = that.props.enableSort && (meta.sortable == null ? true : meta.sortable);
+
               //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
               columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
               if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -66,7 +57,18 @@ var GridTitle = React.createClass({
               }
             }
 
-            return (<th onClick={that.sort} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+            if (that.props.useGriddleStyles){
+              titleStyles = {
+                backgroundColor: "#EDEDEF",
+                border: "0",
+                borderBottom: "1px solid #DDD",
+                color: "#222",
+                padding: "5px",
+                cursor: columnIsSortable ? "pointer" : "default"
+              }
+            }
+
+            return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
         });
 
 
