@@ -430,42 +430,57 @@ var Griddle = React.createClass({
             minHeight: "1px"
         };
     },
-    render: function() {
-        
+    getFilter: function(){
+     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
+        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : 
+        "");
+    },
+    getSettings: function(){
+        return (this.props.showSettings ? 
+            <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} 
+                style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>
+                    {this.props.settingsText}{this.props.settingsIconComponent}
+            </button> : 
+            "");
+    },
+    getTopSection: function(filter, settings){
+        if (this.props.showFilter === false && this.props.showSettings === false){
+            return "";
+        }
 
+        var filterStyles = null,
+            settingsStyles = null,
+            topContainerStyles = null;
+
+        if(this.props.useGriddleStyles){
+            filterStyles = this.getFilterStyles();
+            settingsStyles= this.getSettingsStyles();
+
+            topContainerStyles = this.getClearFixStyles();
+        }
+
+       return (
+        <div className="top-section" style={topContainerStyles}>
+            <div className="griddle-filter" style={filterStyles}>
+               {filter}
+            </div>
+            <div className="griddle-settings-toggle" style={settingsStyles}>
+                {settings}
+            </div>
+        </div>);
+    },
+    render: function() {
         var that = this,
-            results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
+        results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
 
         var headerTableClassName = this.props.tableClassName + " table-header";
 
         //figure out if we want to show the filter section
-        var filter = (this.props.showFilter && this.props.useCustomGridComponent === false) ? <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : "";
-        var settings = this.props.showSettings ? <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>{this.props.settingsText}{this.props.settingsIconComponent}</button> : "";
+        var filter = this.getFilter();
+        var settings = this.getSettings();
 
         //if we have neither filter or settings don't need to render this stuff
-        var topSection = "";
-        if (this.props.showFilter || this.props.showSettings){
-            var filterStyles = null,
-                settingsStyles = null,
-                topContainerStyles = null;
-
-            if(this.props.useGriddleStyles){
-                filterStyles = this.getFilterStyles();
-                settingsStyles= this.getSettingsStyles();
-
-                topContainerStyles = this.getClearFixStyles();
-            }
-
-           topSection = (
-            <div className="top-section" style={topContainerStyles}>
-                <div className="griddle-filter" style={filterStyles}>
-                   {filter}
-                </div>
-                <div className="griddle-settings-toggle" style={settingsStyles}>
-                    {settings}
-                </div>
-            </div>);
-        }
+        var topSection = this.getTopSection(filter, settings);
 
         var resultContent = "";
         var pagingContent = "";
@@ -480,7 +495,6 @@ var Griddle = React.createClass({
         if(meta.indexOf(this.props.childrenColumnName) < 0){
             meta.push(this.props.childrenColumnName);
         }
-
 
         // Grab the column keys from the first results
         keys = _.keys(_.omit(results[0], meta));
