@@ -41,7 +41,7 @@ describe('GridTitle', function() {
 
 	});
 
-	it('doesnt sort column that says no sort', function(){
+	it('doesnt sort column where sort is disabled', function(){
 		var newMeta = [  {
 	    "columnName": "one",
 	    "order": 2,
