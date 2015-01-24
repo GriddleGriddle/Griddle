@@ -532,6 +532,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	            )
 	        ));
 	    },
+	    getPagingSection: function(currentPage, maxPage){
+	        if ((this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) === false) {
+	            return "";
+	        }
+
+	        return (
+	          React.createElement("div", {className: "griddle-footer"}, 
+	              this.props.useCustomPagerComponent ?
+	                  React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPagerComponent: this.props.customPagerComponent}) :
+	                  React.createElement(GridPagination, {useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName, nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName, previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
+	              
+	          )
+	        );
+	    },
+	    getColumnSelectorSection: function(keys, cols){
+	        return this.state.showColumnChooser ? (
+	            React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, 
+	             settingsIconComponent: this.props.settingsIconComponent, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, 
+	             showSetPageSize: !this.props.useCustomGridComponent, resultsPerPage: this.props.resultsPerPage, enableToggleCustom: this.props.enableToggleCustom, 
+	             toggleCustomComponent: this.toggleCustomComponent, useCustomComponent: this.props.useCustomRowComponent || this.props.useCustomGridComponent, 
+	             useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
+	        ) : "";
+	    },
 	    render: function() {
 	        var that = this,
 	        results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -546,7 +569,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var topSection = this.getTopSection(filter, settings);
 
 	        var resultContent = "";
-	        var pagingContent = "";
 	        var keys = [];
 	        var cols = this.getColumns();
 
@@ -570,16 +592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var hasMorePages = (currentPage + 1) < maxPage;
 
 	        // Grab the paging content if it's to be displayed
-	        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
-	            pagingContent = (
-	              React.createElement("div", {className: "griddle-footer"}, 
-	                  this.props.useCustomPagerComponent ?
-	                      React.createElement(CustomPaginationContainer, {next: this.nextPage, previous: this.previousPage, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText, customPagerComponent: this.props.customPagerComponent}) :
-	                      React.createElement(GridPagination, {useGriddleStyles: this.props.useGriddleStyles, next: this.nextPage, previous: this.previousPage, nextClassName: this.props.nextClassName, nextIconComponent: this.props.nextIconComponent, previousClassName: this.props.previousClassName, previousIconComponent: this.props.previousIconComponent, currentPage: currentPage, maxPage: maxPage, setPage: this.setPage, nextText: this.props.nextText, previousText: this.props.previousText})
-	                  
-	              )
-	          );
-	        }
+	        var pagingContent = this.getPagingSection(currentPage, maxPage);
 
 	        //clean this stuff up so it's not if else all over the place. ugly if
 	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
@@ -588,7 +601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if(this.props.useCustomRowComponent){
 	            resultContent = React.createElement("div", null, React.createElement(CustomRowComponentContainer, {data: data, columns: cols, metadataColumns: meta, 
 	                className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent, 
-	                style: clearFix}), this.props.showPager&&pagingContent)
+	                style: this.getClearFixStyles()}), this.props.showPager&&pagingContent)
 	        } else {
 	            resultContent = (React.createElement("div", {className: "griddle-body"}, React.createElement(GridTable, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, 
 	              useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout, columnMetadata: this.props.columnMetadata, 
@@ -603,15 +616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
 	        }
 
-
-
-	        var columnSelector = this.state.showColumnChooser ? (
-	            React.createElement(GridSettings, {columns: keys, selectedColumns: cols, setColumns: this.setColumns, settingsText: this.props.settingsText, 
-	             settingsIconComponent: this.props.settingsIconComponent, maxRowsText: this.props.maxRowsText, setPageSize: this.setPageSize, 
-	             showSetPageSize: !this.props.useCustomGridComponent, resultsPerPage: this.props.resultsPerPage, enableToggleCustom: this.props.enableToggleCustom, 
-	             toggleCustomComponent: this.toggleCustomComponent, useCustomComponent: this.props.useCustomRowComponent || this.props.useCustomGridComponent, 
-	             useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
-	        ) : "";
+	        var columnSelector = this.getColumnSelectorSection(keys, cols);
 
 	        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
 	        //add custom to the class name so we can style it differently

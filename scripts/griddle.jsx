@@ -469,6 +469,29 @@ var Griddle = React.createClass({
             </div>
         </div>);
     },
+    getPagingSection: function(currentPage, maxPage){
+        if ((this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) === false) {
+            return "";
+        }
+
+        return (
+          <div className="griddle-footer">
+              {this.props.useCustomPagerComponent ?
+                  <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
+                  <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+              }
+          </div>
+        );
+    },
+    getColumnSelectorSection: function(keys, cols){
+        return this.state.showColumnChooser ? (
+            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
+             settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
+             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
+             toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
+             useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
+        ) : "";
+    },
     render: function() {
         var that = this,
         results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -483,7 +506,6 @@ var Griddle = React.createClass({
         var topSection = this.getTopSection(filter, settings);
 
         var resultContent = "";
-        var pagingContent = "";
         var keys = [];
         var cols = this.getColumns();
 
@@ -507,16 +529,7 @@ var Griddle = React.createClass({
         var hasMorePages = (currentPage + 1) < maxPage;
 
         // Grab the paging content if it's to be displayed
-        if (this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) {
-            pagingContent = (
-              <div className="griddle-footer">
-                  {this.props.useCustomPagerComponent ?
-                      <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
-                      <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
-                  }
-              </div>
-          );
-        }
+        var pagingContent = this.getPagingSection(currentPage, maxPage);
 
         //clean this stuff up so it's not if else all over the place. ugly if
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
@@ -525,7 +538,7 @@ var Griddle = React.createClass({
         } else if(this.props.useCustomRowComponent){
             resultContent = <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta}
                 className={this.props.customRowComponentClassName} customComponent={this.props.customRowComponent}
-                style={clearFix} />{this.props.showPager&&pagingContent}</div>
+                style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
         } else {
             resultContent = (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
               useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
@@ -540,15 +553,7 @@ var Griddle = React.createClass({
               externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
         }
 
-
-
-        var columnSelector = this.state.showColumnChooser ? (
-            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
-             settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
-             toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
-             useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
-        ) : "";
+        var columnSelector = this.getColumnSelectorSection(keys, cols);
 
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
