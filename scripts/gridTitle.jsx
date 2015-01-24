@@ -23,11 +23,24 @@ var GridTitle = React.createClass({
            "sortDescendingClassName": "sort-descending",
            "sortAscendingComponent": " ▲",
            "sortDescendingComponent": " ▼",
-           "enableSort": true
+           "enableSort": true,  
+           "changeSort": null
         }
     },
     sort: function(event){
         this.props.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
+    },
+    getMetadata: function(columnName, columnMetadata){
+      return columnMetadata !== null ? 
+         _.findWhere(columnMetadata, {columnName: columnName}) : 
+         null;
+    },
+    isSortable: function(enableSort, meta){
+      var metaIsValid = typeof meta !== "undefined" && meta !== null; 
+        
+      return metaIsValid ? (meta.hasOwnProperty("sortable") && (meta.sortable !== null)) ? 
+        enableSort && meta.sortable : 
+        enableSort : enableSort;
     },
     render: function(){
         var that = this;
@@ -46,15 +59,13 @@ var GridTitle = React.createClass({
             }
 
             var displayName = col;
-            if (that.props.columnMetadata != null){
-              var meta = _.findWhere(that.props.columnMetadata, {columnName: col})
-              var columnIsSortable = that.props.enableSort && (meta.sortable == null ? true : meta.sortable);
 
-              //the weird code is just saying add the space if there's text in columnSort otherwise just set to metaclassname
-              columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
-              if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
-                  displayName = meta.displayName;
-              }
+            var meta = that.getMetadata(col, that.props.columnMetadata); 
+            var columnIsSortable = that.isSortable(that.props.enableSort, meta); 
+
+            columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+            if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+                displayName = meta.displayName;
             }
 
             if (that.props.useGriddleStyles){
