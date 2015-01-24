@@ -555,6 +555,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	             useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata})
 	        ) : "";
 	    },
+	    getCustomGridSection: function(){
+	        return React.createElement(this.props.customGridComponent, {data: this.props.results, className: this.props.customGridComponentClassName})
+	    },
+	    getCustomRowSection: function(data, cols, meta, pagingContent){
+	        return React.createElement("div", null, React.createElement(CustomRowComponentContainer, {data: data, columns: cols, metadataColumns: meta, 
+	            className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent, 
+	            style: this.getClearFixStyles()}), this.props.showPager&&pagingContent)
+	    },
+	    getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
+	        return (React.createElement("div", {className: "griddle-body"}, React.createElement(GridTable, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, 
+	              useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout, columnMetadata: this.props.columnMetadata, 
+	              showPager: this.props.showPager, pagingContent: pagingContent, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, 
+	              enableInfiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
+	              sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, 
+	              sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
+	              parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName, 
+	              sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
+	              parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent, 
+	              bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent, 
+	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
+	    },
+	    getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
+	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
+	           return this.getCustomGridSection();
+	        } else if(this.props.useCustomRowComponent){
+	            return this.getCustomRowSection(data, cols, meta, pagingContent);
+	        } else {
+	            return this.getStandardGridSection(data, cols, meta, pagingContent, hasMorePages);
+	        }
+	    },
+	    getNoDataSection: function(gridClassName, topSection){
+	        debugger;
+	        var myReturn = null;
+	        if (this.props.customNoDataComponent != null) {
+	            myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoDataComponent, null)));
+
+	            return myReturn
+	        }
+
+	        myReturn = (React.createElement("div", {className: gridClassName}, 
+	                topSection, 
+	                React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
+	            ));
+	        return myReturn;
+	    },
+	    shouldShowNoDataSection: function(results){
+	        return typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false
+	    },
 	    render: function() {
 	        var that = this,
 	        results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -568,7 +616,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //if we have neither filter or settings don't need to render this stuff
 	        var topSection = this.getTopSection(filter, settings);
 
-	        var resultContent = "";
 	        var keys = [];
 	        var cols = this.getColumns();
 
@@ -594,27 +641,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Grab the paging content if it's to be displayed
 	        var pagingContent = this.getPagingSection(currentPage, maxPage);
 
-	        //clean this stuff up so it's not if else all over the place. ugly if
-	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
-	            //this should send all the results it has
-	            resultContent = React.createElement(this.props.customGridComponent, {data: this.props.results, className: this.props.customGridComponentClassName})
-	        } else if(this.props.useCustomRowComponent){
-	            resultContent = React.createElement("div", null, React.createElement(CustomRowComponentContainer, {data: data, columns: cols, metadataColumns: meta, 
-	                className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent, 
-	                style: this.getClearFixStyles()}), this.props.showPager&&pagingContent)
-	        } else {
-	            resultContent = (React.createElement("div", {className: "griddle-body"}, React.createElement(GridTable, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, 
-	              useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout, columnMetadata: this.props.columnMetadata, 
-	              showPager: this.props.showPager, pagingContent: pagingContent, data: data, columns: cols, metadataColumns: meta, className: this.props.tableClassName, 
-	              enableInfiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(), 
-	              sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader, 
-	              sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
-	              parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName, 
-	              sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
-	              parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent, 
-	              bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent, 
-	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
-	        }
+	        var resultContent = this.getContentSection(data, cols, meta, pagingContent, hasMorePages);
 
 	        var columnSelector = this.getColumnSelectorSection(keys, cols);
 
@@ -622,20 +649,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
-	        if (typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false) {
-	            var myReturn = null;
-	            if (this.props.customNoDataComponent != null) {
-	                myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoDataComponent, null)));
-
-	                return myReturn
-	            }
-
-	            myReturn = (React.createElement("div", {className: gridClassName}, 
-	                    topSection, 
-	                    React.createElement(GridNoData, {noDataMessage: this.props.noDataMessage})
-	                ));
-	            return myReturn;
-
+	        if (this.shouldShowNoDataSection(results)) {
+	            return this.getNoDataSection(gridClassName, topSection);
 	        }
 
 	        return (

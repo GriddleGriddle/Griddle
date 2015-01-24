@@ -492,6 +492,54 @@ var Griddle = React.createClass({
              useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
     },
+    getCustomGridSection: function(){
+        return <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} />
+    },
+    getCustomRowSection: function(data, cols, meta, pagingContent){
+        return <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta}
+            className={this.props.customRowComponentClassName} customComponent={this.props.customRowComponent}
+            style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
+    },
+    getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
+        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
+              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
+              showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
+              enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
+              sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
+              sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
+              parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
+              sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
+              parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
+              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
+              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
+    },
+    getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
+        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
+           return this.getCustomGridSection();
+        } else if(this.props.useCustomRowComponent){
+            return this.getCustomRowSection(data, cols, meta, pagingContent);
+        } else {
+            return this.getStandardGridSection(data, cols, meta, pagingContent, hasMorePages);
+        }
+    },
+    getNoDataSection: function(gridClassName, topSection){
+        debugger;
+        var myReturn = null;
+        if (this.props.customNoDataComponent != null) {
+            myReturn = (<div className={gridClassName}><this.props.customNoDataComponent /></div>);
+
+            return myReturn
+        }
+
+        myReturn = (<div className={gridClassName}>
+                {topSection}
+                <GridNoData noDataMessage={this.props.noDataMessage} />
+            </div>);
+        return myReturn;
+    },
+    shouldShowNoDataSection: function(results){
+        return typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false
+    },
     render: function() {
         var that = this,
         results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -505,7 +553,6 @@ var Griddle = React.createClass({
         //if we have neither filter or settings don't need to render this stuff
         var topSection = this.getTopSection(filter, settings);
 
-        var resultContent = "";
         var keys = [];
         var cols = this.getColumns();
 
@@ -531,27 +578,7 @@ var Griddle = React.createClass({
         // Grab the paging content if it's to be displayed
         var pagingContent = this.getPagingSection(currentPage, maxPage);
 
-        //clean this stuff up so it's not if else all over the place. ugly if
-        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
-            //this should send all the results it has
-            resultContent = <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} />
-        } else if(this.props.useCustomRowComponent){
-            resultContent = <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta}
-                className={this.props.customRowComponentClassName} customComponent={this.props.customRowComponent}
-                style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
-        } else {
-            resultContent = (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
-              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
-              showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
-              enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
-              sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
-              sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
-              parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
-              sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-              parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
-              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
-        }
+        var resultContent = this.getContentSection(data, cols, meta, pagingContent, hasMorePages);
 
         var columnSelector = this.getColumnSelectorSection(keys, cols);
 
@@ -559,20 +586,8 @@ var Griddle = React.createClass({
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
-        if (typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false) {
-            var myReturn = null;
-            if (this.props.customNoDataComponent != null) {
-                myReturn = (<div className={gridClassName}><this.props.customNoDataComponent /></div>);
-
-                return myReturn
-            }
-
-            myReturn = (<div className={gridClassName}>
-                    {topSection}
-                    <GridNoData noDataMessage={this.props.noDataMessage} />
-                </div>);
-            return myReturn;
-
+        if (this.shouldShowNoDataSection(results)) {
+            return this.getNoDataSection(gridClassName, topSection);
         }
 
         return (
