@@ -407,12 +407,31 @@ var Griddle = React.createClass({
       // Otherwise, send back the property.
       return this.props.enableInfiniteScroll;
     },
-    render: function() {
-        var clearFix = {
-                    clear: "both",
-                    display: "table",
-                    width: "100%"
+    getClearFixStyles: function(){
+        return {
+            clear: "both",
+            display: "table",
+            width: "100%"
         };
+    },
+    getSettingsStyles: function(){
+       return {
+            "float": "left",
+            width: "50%",
+            textAlign: "right"
+        }; 
+    },
+    getFilterStyles: function(){
+        return {
+            "float": "left",
+            width: "50%",
+            textAlign: "left",
+            color: "#222",
+            minHeight: "1px"
+        };
+    },
+    render: function() {
+        
 
         var that = this,
             results = this.getCurrentResults();  // Attempt to assign to the filtered results, if we have any.
@@ -431,21 +450,10 @@ var Griddle = React.createClass({
                 topContainerStyles = null;
 
             if(this.props.useGriddleStyles){
-                filterStyles = {
-                    "float": "left",
-                    width: "50%",
-                    textAlign: "left",
-                    color: "#222",
-                    minHeight: "1px"
-                };
+                filterStyles = this.getFilterStyles();
+                settingsStyles= this.getSettingsStyles();
 
-                settingsStyles= {
-                    "float": "left",
-                    width: "50%",
-                    textAlign: "right"
-                };
-
-                topContainerStyles = clearFix;
+                topContainerStyles = this.getClearFixStyles();
             }
 
            topSection = (
