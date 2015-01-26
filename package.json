@@ -12,6 +12,7 @@
   "main": "modules/griddle.jsx.js",
   "peerDependencies": {
     "react": "~0.12.x",
+    "react-tools": "~0.12.x"
     "underscore": "~1.6.0"
   },
   "devDependencies": {
