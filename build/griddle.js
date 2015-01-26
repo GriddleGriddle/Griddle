@@ -253,6 +253,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                that.setState(state);
 	        }
 	    },
+	    getMetadataColumns: function(){
+	        var meta = _.map(_.where(this.props.columnMetadata, {visible: false}), function(item){ return item.columnName});
+	        if(meta.indexOf(this.props.childrenColumnName) < 0){
+	           meta.push(this.props.childrenColumnName);
+	        }
+	        return meta.concat(this.props.metadataColumns); 
+	    },
 	    getColumns: function(){
 	        var that = this;
 	        var results = this.getCurrentResults();
@@ -260,21 +267,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //if we don't have any data don't mess with this
 	        if (results === undefined || results.length === 0){ return [];}
 
-	        var result = this.state.filteredColumns;
+	        var columns = this.state.filteredColumns;
+	        var meta = this.getMetadataColumns(); 
 
 	        //if we didn't set default or filter
-	        if (this.state.filteredColumns.length === 0){
-
-	            var meta = [].concat(this.props.metadataColumns);
-
-	            if(meta.indexOf(this.props.childrenColumnName) < 0){
-	                meta.push(this.props.childrenColumnName);
-	            }
-	            result =  _.keys(_.omit(results[0], meta));
+	        if (columns.length === 0){
+	            columns =  _.keys(_.omit(results[0], meta));
 	        }
 
+	        columns = _.difference(columns, meta); 
 
-	        result = _.sortBy(result, function(item){
+	        columns = _.sortBy(columns, function(item){
 	            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
 
 	            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
@@ -284,7 +287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return metaItem.order;
 	        });
 
-	        return result;
+	        return columns;
 	    },
 	    setColumns: function(columns){
 	        columns = _.isArray(columns) ? columns : [columns];
@@ -586,7 +589,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    getNoDataSection: function(gridClassName, topSection){
-	        debugger;
 	        var myReturn = null;
 	        if (this.props.customNoDataComponent != null) {
 	            myReturn = (React.createElement("div", {className: gridClassName}, React.createElement(this.props.customNoDataComponent, null)));
