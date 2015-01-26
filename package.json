@@ -31,7 +31,8 @@
     "grunt-contrib-copy": "~0.7.0",
     "webpack-dev-server": "~1.7.0",
     "grunt-webpack": "~1.0.8",
-    "grunt-contrib-clean": "~0.6.0"
+    "grunt-contrib-clean": "~0.6.0",
+    "underscore": "~1.6.0"
   },
   "scripts": {
     "test": "jest"
