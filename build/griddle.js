@@ -61,8 +61,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
 	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
@@ -687,13 +685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -904,13 +896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -936,13 +922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -1021,13 +1001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -1123,13 +1097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -1225,13 +1193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -1346,13 +1308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
@@ -1431,13 +1387,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */
-
 	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
