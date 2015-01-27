@@ -33,7 +33,7 @@ Griddle is not yet version 1. There are likely some areas that will change and s
 
 ###Changelog:###
  0.2.1 - 0.2.3
-- Tweaks surrounding dependencies.
+- Tweaks surrounding package.json dependencies.
 
 
  0.2.0
