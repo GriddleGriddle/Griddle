@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",
@@ -9,7 +9,7 @@
     "pagination",
     "sort"
   ],
-  "main": "build/griddle.js",
+  "main": "modules/griddle.jsx.js",
   "peerDependencies": {
     "react": "~0.12.x",
     "underscore": ">= 1.6.0 < 2"
