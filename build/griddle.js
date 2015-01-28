@@ -399,6 +399,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            console.error("Cannot currently use both customGridComponent and customRowComponent.");
 	        }
 	    },
+	    grabPath: function(obj, path) {
+	        var pathParts = path.split('.');
+	        var partCount = pathParts.length;
+	        for (var i = 0; i < partCount; i++) {
+	            if(_.isUndefined(obj) || !_.isObject(obj)) return undefined;
+	            obj = obj[pathParts[i]];
+	        }
+	        return obj;
+	    },
 	    getDataForRender: function(data, cols, pageList){
 	        var that = this;
 	            //get the correct page size
@@ -432,7 +441,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var transformedData = [];
 
 	        for(var i = 0; i<data.length; i++){
-	            var mappedData = _.pick(data[i], cols.concat(meta));
+	            var mappedData = _.map(cols.concat(meta), function(colPath) {
+	                return that.grabPath(data[i], colPath)
+	            }).filter(function (val) { return !_.isUndefined(val)});
 
 	            if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
 	                //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
