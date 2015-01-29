@@ -538,7 +538,8 @@ var Griddle = React.createClass({
         return myReturn;
     },
     shouldShowNoDataSection: function(results){
-        return typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false
+        return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
+            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
     },
     render: function() {
         var that = this,

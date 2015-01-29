@@ -79,7 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var CustomPaginationContainer = __webpack_require__(11);
 	var _ = __webpack_require__(3);
 
-	var Griddle = React.createClass({displayName: 'Griddle',
+	var Griddle = React.createClass({displayName: "Griddle",
 	    getDefaultProps: function() {
 	        return{
 	            "columns": [],
@@ -601,7 +601,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return myReturn;
 	    },
 	    shouldShowNoDataSection: function(results){
-	        return typeof results === 'undefined' || results.length === 0 && this.props.useExternal === false && this.props.externalIsLoading === false
+	        return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
+	            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
 	    },
 	    render: function() {
 	        var that = this,
@@ -693,7 +694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridRowContainer = __webpack_require__(12);
 	var _ = __webpack_require__(3);
 
-	var GridTable = React.createClass({displayName: 'GridTable',
+	var GridTable = React.createClass({displayName: "GridTable",
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
@@ -901,7 +902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var GridFilter = React.createClass({displayName: 'GridFilter',
+	var GridFilter = React.createClass({displayName: "GridFilter",
 	    getDefaultProps: function(){
 	      return {
 	        "placeholderText": ""
@@ -929,7 +930,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(3);
 
 	//needs props maxPage, currentPage, nextFunction, prevFunction
-	var GridPagination = React.createClass({displayName: 'GridPagination',
+	var GridPagination = React.createClass({displayName: "GridPagination",
 	    getDefaultProps: function(){
 	        return{
 	            "maxPage": 0,
@@ -1007,7 +1008,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 
-	var GridSettings = React.createClass({displayName: 'GridSettings',
+	var GridSettings = React.createClass({displayName: "GridSettings",
 	    getDefaultProps: function(){
 	        return {
 	            "columns": [],
@@ -1052,11 +1053,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 
 	                if(typeof meta !== "undefined" && meta != null && meta.locked){
-	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, 'data-name': col}), displayName))
+	                    return React.createElement("div", {className: "column checkbox"}, React.createElement("label", null, React.createElement("input", {type: "checkbox", disabled: true, name: "check", checked: checked, "data-name": col}), displayName))
 	                } else if(typeof meta !== "undefined" && meta != null && typeof meta.visible !== "undefined" && meta.visible === false){
 	                    return null; 
 	                }
-	                return React.createElement("div", {className: "griddle-column-selection checkbox", style: that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, 'data-name': col}), displayName))
+	                return React.createElement("div", {className: "griddle-column-selection checkbox", style: that.props.useGriddleStyles ? { "float": "left", width: "20%"} : null}, React.createElement("label", null, React.createElement("input", {type: "checkbox", name: "check", onChange: that.handleChange, checked: checked, "data-name": col}), displayName))
 	            });
 	        }
 
@@ -1103,7 +1104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 
-	var GridTitle = React.createClass({displayName: 'GridTitle',
+	var GridTitle = React.createClass({displayName: "GridTitle",
 	    getDefaultProps: function(){
 	        return {
 	           "columns":[],
@@ -1172,7 +1173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-	            return (React.createElement("th", {onClick: columnIsSortable ? that.sort : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent));
+	            return (React.createElement("th", {onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent));
 	        });
 
 
@@ -1198,7 +1199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var GridNoData = React.createClass({displayName: 'GridNoData',
+	var GridNoData = React.createClass({displayName: "GridNoData",
 	    getDefaultProps: function(){
 	        return {
 	            "noDataMessage": "No Data"
@@ -1231,7 +1232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var CustomRowComponentContainer = React.createClass({displayName: 'CustomRowComponentContainer',
+	var CustomRowComponentContainer = React.createClass({displayName: "CustomRowComponentContainer",
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
@@ -1279,7 +1280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 
-	var CustomPaginationContainer = React.createClass({displayName: 'CustomPaginationContainer',
+	var CustomPaginationContainer = React.createClass({displayName: "CustomPaginationContainer",
 	  getDefaultProps: function(){
 	    return{
 	      "maxPage": 0,
@@ -1314,7 +1315,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var GridRow = __webpack_require__(13);
 
-	var GridRowContainer = React.createClass({displayName: 'GridRowContainer',
+	var GridRowContainer = React.createClass({displayName: "GridRowContainer",
 	    getDefaultProps: function(){
 	      return {
 	        "useGriddleStyles": true,
@@ -1393,7 +1394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 
-	var GridRow = React.createClass({displayName: 'GridRow',
+	var GridRow = React.createClass({displayName: "GridRow",
 	    getDefaultProps: function(){
 	      return {
 	        "isChildRow": false,
