@@ -36,7 +36,9 @@ var GridRow = React.createClass({
             color: "#222"
           } : null;
 
-        var nodes = _.pairs(_.pick(this.props.data, this.props.columns)).map(function(col, index) {
+        var data = _.pairs(this.props.columns.length === 0 ? this.props.data : _.pick(this.props.data, this.props.columns))
+
+        var nodes = data.map(function(col, index) {
             var returnValue = null;
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
