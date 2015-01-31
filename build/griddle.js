@@ -71,13 +71,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(4);
-	var GridFilter = __webpack_require__(5);
-	var GridPagination = __webpack_require__(6);
-	var GridSettings = __webpack_require__(7);
-	var GridNoData = __webpack_require__(8);
-	var CustomRowComponentContainer = __webpack_require__(9);
-	var CustomPaginationContainer = __webpack_require__(10);
+	var GridTable = __webpack_require__(5);
+	var GridFilter = __webpack_require__(6);
+	var GridPagination = __webpack_require__(7);
+	var GridSettings = __webpack_require__(8);
+	var GridNoData = __webpack_require__(9);
+	var CustomRowComponentContainer = __webpack_require__(10);
+	var CustomPaginationContainer = __webpack_require__(11);
+	var ColumnProperties = __webpack_require__(4);
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({
@@ -253,44 +254,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    getMetadataColumns: function () {
-	        var meta = _.map(_.where(this.props.columnMetadata, { visible: false }), function (item) {
-	            return item.columnName;
-	        });
-	        if (meta.indexOf(this.props.childrenColumnName) < 0) {
-	            meta.push(this.props.childrenColumnName);
-	        }
-	        return meta.concat(this.props.metadataColumns);
+	        return ColumnProperties.getMetadataColumns(this.props.columnMetadata, this.props.childrenColumnName, this.props.metadataColumns);
 	    },
 	    getColumns: function () {
-	        var that = this;
-	        var results = this.getCurrentResults();
-
-	        //if we don't have any data don't mess with this
-	        if (results === undefined || results.length === 0) {
-	            return [];
-	        }
-
-	        var columns = this.state.filteredColumns;
-	        var meta = this.getMetadataColumns();
-
-	        //if we didn't set default or filter
-	        if (columns.length === 0) {
-	            columns = _.keys(_.omit(results[0], meta));
-	        }
-
-	        columns = _.difference(columns, meta);
-
-	        columns = _.sortBy(columns, function (item) {
-	            var metaItem = _.findWhere(that.props.columnMetadata, { columnName: item });
-
-	            if (typeof metaItem === "undefined" || metaItem === null || isNaN(metaItem.order)) {
-	                return 100;
-	            }
-
-	            return metaItem.order;
-	        });
-
-	        return columns;
+	        return ColumnProperties.getColumns(this.getCurrentResults(), this.state.filteredColumns, this.getMetadataColumns(), this.props.columnMetadata);
 	    },
 	    setColumns: function (columns) {
 	        columns = _.isArray(columns) ? columns : [columns];
@@ -711,12 +678,75 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+	var ColumnProperties = (function () {
+	  function ColumnProperties() {}
+
+	  _prototypeProperties(ColumnProperties, {
+	    getMetadataColumns: {
+	      value: function getMetadataColumns(columnMetadata, childrenColumnName, metadataColumns) {
+	        var meta = _.map(_.where(columnMetadata, { visible: false }), function (item) {
+	          return item.columnName;
+	        });
+	        if (meta.indexOf(childrenColumnName) < 0) {
+	          meta.push(childrenColumnName);
+	        }
+	        return meta.concat(metadataColumns);
+	      },
+	      writable: true,
+	      configurable: true
+	    },
+	    getColumns: {
+	      value: function getColumns(results, filteredColumns, metadataColumns, columnMetadata) {
+	        var ORDER_MAX = 100;
+
+	        //if we don't have any data don't mess with this
+	        if (results === undefined || results.length === 0) {
+	          return [];
+	        }
+
+	        //if we didn't set default or filter
+	        if (filteredColumns.length === 0) {
+	          filteredColumns = _.keys(_.omit(results[0], metadataColumns));
+	        }
+
+	        filteredColumns = _.difference(filteredColumns, metadataColumns);
+
+	        filteredColumns = _.sortBy(filteredColumns, function (item) {
+	          var metaItem = _.findWhere(columnMetadata, { columnName: item });
+
+	          if (typeof metaItem === "undefined" || metaItem === null || isNaN(metaItem.order)) {
+	            return ORDER_MAX;
+	          }
+
+	          return metaItem.order;
+	        });
+
+	        return filteredColumns;
+	      },
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+
+	  return ColumnProperties;
+	})();
+
+	module.exports = ColumnProperties;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
 	/*
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(11);
-	var GridRowContainer = __webpack_require__(12);
+	var GridTitle = __webpack_require__(12);
+	var GridRowContainer = __webpack_require__(13);
 	var _ = __webpack_require__(3);
 
 	var GridTable = React.createClass({
@@ -957,7 +987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTable;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -989,7 +1019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1098,7 +1128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1256,7 +1286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1287,7 +1317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1337,7 +1367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1379,7 +1409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1480,7 +1510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1489,7 +1519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRow = __webpack_require__(13);
+	var GridRow = __webpack_require__(14);
 
 	var GridRowContainer = React.createClass({
 	  displayName: "GridRowContainer",
@@ -1570,7 +1600,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridRowContainer;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

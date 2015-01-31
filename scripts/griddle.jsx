@@ -13,6 +13,7 @@ var GridSettings = require('./gridSettings.jsx');
 var GridNoData = require('./gridNoData.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
+var ColumnProperties = require('./columnProperties');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
@@ -188,40 +189,17 @@ var Griddle = React.createClass({
         }
     },
     getMetadataColumns: function(){
-        var meta = _.map(_.where(this.props.columnMetadata, {visible: false}), function(item){ return item.columnName});
-        if(meta.indexOf(this.props.childrenColumnName) < 0){
-           meta.push(this.props.childrenColumnName);
-        }
-        return meta.concat(this.props.metadataColumns); 
+        return ColumnProperties.getMetadataColumns(this.props.columnMetadata,
+            this.props.childrenColumnName,
+            this.props.metadataColumns);
     },
     getColumns: function(){
-        var that = this;
-        var results = this.getCurrentResults();
-
-        //if we don't have any data don't mess with this
-        if (results === undefined || results.length === 0){ return [];}
-
-        var columns = this.state.filteredColumns;
-        var meta = this.getMetadataColumns(); 
-
-        //if we didn't set default or filter
-        if (columns.length === 0){
-            columns =  _.keys(_.omit(results[0], meta));
-        }
-
-        columns = _.difference(columns, meta); 
-
-        columns = _.sortBy(columns, function(item){
-            var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
-
-            if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
-                return 100;
-            }
-
-            return metaItem.order;
-        });
-
-        return columns;
+        return ColumnProperties.getColumns(
+            this.getCurrentResults(),
+            this.state.filteredColumns, 
+            this.getMetadataColumns(), 
+            this.props.columnMetadata
+        );
     },
     setColumns: function(columns){
         columns = _.isArray(columns) ? columns : [columns];
