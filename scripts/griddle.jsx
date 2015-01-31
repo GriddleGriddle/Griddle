@@ -10,7 +10,6 @@ var GridTable = require('./gridTable.jsx');
 var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
-var GridTitle = require('./gridTitle.jsx');
 var GridNoData = require('./gridNoData.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
@@ -365,11 +364,10 @@ var Griddle = React.createClass({
         if (meta.indexOf(this.props.childrenColumnName) < 0){
             meta.push(this.props.childrenColumnName);
         }
-
         var transformedData = [];
 
         for(var i = 0; i<data.length; i++){
-            var mappedData = _.pick(data[i], cols.concat(meta));
+            var mappedData = data[i];
 
             if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
                 //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
@@ -380,7 +378,6 @@ var Griddle = React.createClass({
 
             transformedData.push(mappedData);
         }
-
         return transformedData;
     },
     //this is the current results

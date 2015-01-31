@@ -10,6 +10,7 @@ var GridTable = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
+      "columns": [],
       "metadataColumns": [],
       "className": "",
       "enableInfiniteScroll": false,
@@ -83,7 +84,7 @@ var GridTable = React.createClass({
             sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
+            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} columns={that.props.columns}
             uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
     }

@@ -10,6 +10,7 @@ var GridRowContainer = React.createClass({
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
+        "columns" : [],
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
@@ -41,19 +42,18 @@ var GridRowContainer = React.createClass({
         if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
         var arr = [];
 
-        arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
+        arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columns={this.props.columns} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
           hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
           parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
           parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}/>);
           var children = null;
 
         if(that.state.showChildren){
-
             children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
                 if(typeof row["children"] !== "undefined"){
                   return (<tr style={{paddingLeft: 5}}>
-                            <td colSpan={Object.keys(that.props.data).length - that.props.metadataColumns.length} className="griddle-parent" style={that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}>
-                              <Griddle isSubGriddle={true} results={[row]} tableClassName={that.props.tableClassName} parentRowExpandedClassName={that.props.parentRowExpandedClassName}
+                            <td colSpan={that.props.columns.length} className="griddle-parent" style={that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}>
+                              <Griddle isSubGriddle={true} results={[row]} columns={that.props.columns} tableClassName={that.props.tableClassName} parentRowExpandedClassName={that.props.parentRowExpandedClassName}
                                 parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
                                 showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}
                                 parentRowExpandedComponent={that.props.parentRowExpandedComponent}
@@ -62,7 +62,7 @@ var GridRowContainer = React.createClass({
                           </tr>);
                 }
 
-                return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+                return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columns={that.props.columns} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
             });
         }
 

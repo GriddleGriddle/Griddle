@@ -73,10 +73,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridFilter = __webpack_require__(5);
 	var GridPagination = __webpack_require__(6);
 	var GridSettings = __webpack_require__(7);
-	var GridTitle = __webpack_require__(8);
-	var GridNoData = __webpack_require__(9);
-	var CustomRowComponentContainer = __webpack_require__(10);
-	var CustomPaginationContainer = __webpack_require__(11);
+	var GridNoData = __webpack_require__(8);
+	var CustomRowComponentContainer = __webpack_require__(9);
+	var CustomPaginationContainer = __webpack_require__(10);
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({displayName: "Griddle",
@@ -428,11 +427,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (meta.indexOf(this.props.childrenColumnName) < 0){
 	            meta.push(this.props.childrenColumnName);
 	        }
-
 	        var transformedData = [];
 
 	        for(var i = 0; i<data.length; i++){
-	            var mappedData = _.pick(data[i], cols.concat(meta));
+	            var mappedData = data[i];
 
 	            if(typeof mappedData[that.props.childrenColumnName] !== "undefined" && mappedData[that.props.childrenColumnName].length > 0){
 	                //internally we're going to use children instead of whatever it is so we don't have to pass the custom name around
@@ -443,7 +441,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            transformedData.push(mappedData);
 	        }
-
 	        return transformedData;
 	    },
 	    //this is the current results
@@ -690,7 +687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(8);
+	var GridTitle = __webpack_require__(11);
 	var GridRowContainer = __webpack_require__(12);
 	var _ = __webpack_require__(3);
 
@@ -698,6 +695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getDefaultProps: function(){
 	    return{
 	      "data": [],
+	      "columns": [],
 	      "metadataColumns": [],
 	      "className": "",
 	      "enableInfiniteScroll": false,
@@ -771,7 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscendingClassName: that.props.sortAscendingClassName, sortDescendingClassName: that.props.sortDescendingClassName, 
 	            parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName, 
 	            parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent, 
-	            data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, 
+	            data: row, metadataColumns: that.props.metadataColumns, columnMetadata: that.props.columnMetadata, key: index, columns: that.props.columns, 
 	            uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className}))
 	      });
 	    }
@@ -1102,6 +1100,121 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
+
+	var GridNoData = React.createClass({displayName: "GridNoData",
+	    getDefaultProps: function(){
+	        return {
+	            "noDataMessage": "No Data"
+	        }
+	    },
+	    render: function(){
+	        var that = this;
+
+	        return(
+	            React.createElement("div", null, this.props.noDataMessage)
+	        );
+	    }
+	});
+
+	module.exports = GridNoData;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Griddle - Simple Grid Component for React
+	   https://github.com/DynamicTyped/Griddle
+	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
+
+	var CustomRowComponentContainer = React.createClass({displayName: "CustomRowComponentContainer",
+	  getDefaultProps: function(){
+	    return{
+	      "data": [],
+	      "metadataColumns": [],
+	      "className": "",
+	      "customComponent": {}
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+
+	    if (typeof that.props.customComponent !== 'function'){
+	      console.log("Couldn't find valid template.");
+	      return (React.createElement("div", {className: this.props.className}));
+	    }
+
+	    var nodes = this.props.data.map(function(row, index){
+	        return React.createElement(that.props.customComponent, {data: row, metadataColumns: that.props.metadataColumns, key: index})
+	    });
+
+	    var footer = this.props.showPager&&this.props.pagingContent;
+	    return (
+	      React.createElement("div", {className: this.props.className, style: this.props.style}, 
+	          nodes
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CustomRowComponentContainer;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Griddle - Simple Grid Component for React
+	   https://github.com/DynamicTyped/Griddle
+	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
+
+	var CustomPaginationContainer = React.createClass({displayName: "CustomPaginationContainer",
+	  getDefaultProps: function(){
+	    return{
+	      "maxPage": 0,
+	      "nextText": "",
+	      "previousText": "",
+	      "currentPage": 0,
+	      "customPagerComponent": {}
+	    }
+	  },
+	  render: function() {
+	    var that = this;
+
+	    if (typeof that.props.customPagerComponent !== 'function'){
+	      console.log("Couldn't find valid template.");
+	      return (React.createElement("div", null));
+	    }
+
+	    return (React.createElement(that.props.customPagerComponent, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
+	  }
+	});
+
+	module.exports = CustomPaginationContainer;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 
 	var GridTitle = React.createClass({displayName: "GridTitle",
@@ -1191,121 +1304,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-	*/
-	var React = __webpack_require__(2);
-
-	var GridNoData = React.createClass({displayName: "GridNoData",
-	    getDefaultProps: function(){
-	        return {
-	            "noDataMessage": "No Data"
-	        }
-	    },
-	    render: function(){
-	        var that = this;
-
-	        return(
-	            React.createElement("div", null, this.props.noDataMessage)
-	        );
-	    }
-	});
-
-	module.exports = GridNoData;
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-
-	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-	*/
-	var React = __webpack_require__(2);
-
-	var CustomRowComponentContainer = React.createClass({displayName: "CustomRowComponentContainer",
-	  getDefaultProps: function(){
-	    return{
-	      "data": [],
-	      "metadataColumns": [],
-	      "className": "",
-	      "customComponent": {}
-	    }
-	  },
-	  render: function() {
-	    var that = this;
-
-	    if (typeof that.props.customComponent !== 'function'){
-	      console.log("Couldn't find valid template.");
-	      return (React.createElement("div", {className: this.props.className}));
-	    }
-
-	    var nodes = this.props.data.map(function(row, index){
-	        return React.createElement(that.props.customComponent, {data: row, metadataColumns: that.props.metadataColumns, key: index})
-	    });
-
-	    var footer = this.props.showPager&&this.props.pagingContent;
-	    return (
-	      React.createElement("div", {className: this.props.className, style: this.props.style}, 
-	          nodes
-	      )
-	    );
-	  }
-	});
-
-	module.exports = CustomRowComponentContainer;
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-
-	/*
-	   Griddle - Simple Grid Component for React
-	   https://github.com/DynamicTyped/Griddle
-	   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-	*/
-	var React = __webpack_require__(2);
-
-	var CustomPaginationContainer = React.createClass({displayName: "CustomPaginationContainer",
-	  getDefaultProps: function(){
-	    return{
-	      "maxPage": 0,
-	      "nextText": "",
-	      "previousText": "",
-	      "currentPage": 0,
-	      "customPagerComponent": {}
-	    }
-	  },
-	  render: function() {
-	    var that = this;
-
-	    if (typeof that.props.customPagerComponent !== 'function'){
-	      console.log("Couldn't find valid template.");
-	      return (React.createElement("div", null));
-	    }
-
-	    return (React.createElement(that.props.customPagerComponent, {maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next}));
-	  }
-	});
-
-	module.exports = CustomPaginationContainer;
-
-
-/***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1321,6 +1319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "useGriddleStyles": true,
 	        "useGriddleIcons": true,
 	        "isSubGriddle": false,
+	        "columns" : [],
 	        "parentRowCollapsedClassName": "parent-row",
 	        "parentRowExpandedClassName": "parent-row expanded",
 	        "parentRowCollapsedComponent": "▶",
@@ -1352,19 +1351,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(typeof this.props.data === "undefined"){return (React.createElement("tbody", null));}
 	        var arr = [];
 
-	        arr.push(React.createElement(GridRow, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, data: this.props.data, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
+	        arr.push(React.createElement(GridRow, {useGriddleStyles: this.props.useGriddleStyles, isSubGriddle: this.props.isSubGriddle, data: this.props.data, columns: this.props.columns, columnMetadata: this.props.columnMetadata, metadataColumns: that.props.metadataColumns, 
 	          hasChildren: that.props.hasChildren, toggleChildren: that.toggleChildren, showChildren: that.state.showChildren, key: that.props.uniqueId, useGriddleIcons: that.props.useGriddleIcons, 
 	          parentRowExpandedClassName: this.props.parentRowExpandedClassName, parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, 
 	          parentRowExpandedComponent: this.props.parentRowExpandedComponent, parentRowCollapsedComponent: this.props.parentRowCollapsedComponent}));
 	          var children = null;
 
 	        if(that.state.showChildren){
-
 	            children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
 	                if(typeof row["children"] !== "undefined"){
 	                  return (React.createElement("tr", {style: {paddingLeft: 5}}, 
-	                            React.createElement("td", {colSpan: Object.keys(that.props.data).length - that.props.metadataColumns.length, className: "griddle-parent", style: that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}, 
-	                              React.createElement(Griddle, {isSubGriddle: true, results: [row], tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName, 
+	                            React.createElement("td", {colSpan: that.props.columns.length, className: "griddle-parent", style: that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}, 
+	                              React.createElement(Griddle, {isSubGriddle: true, results: [row], columns: that.props.columns, tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName, 
 	                                parentRowCollapsedClassName: that.props.parentRowCollapsedClassName, 
 	                                showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata, 
 	                                parentRowExpandedComponent: that.props.parentRowExpandedComponent, 
@@ -1373,7 +1371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                          ));
 	                }
 
-	                return React.createElement(GridRow, {useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
+	                return React.createElement(GridRow, {useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columns: that.props.columns, metadataColumns: that.props.metadataColumns, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row")})
 	            });
 	        }
 
@@ -1400,6 +1398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "isChildRow": false,
 	        "showChildren": false,
 	        "data": {},
+	        "columns" : [],
 	        "metadataColumns": [],
 	        "hasChildren": false,
 	        "columnMetadata": null,
@@ -1410,7 +1409,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "parentRowExpandedClassName": "parent-row expanded",
 	        "parentRowCollapsedComponent": "▶",
 	        "parentRowExpandedComponent": "▼"
-
 	      }
 	    },
 	    handleClick: function(){
@@ -1426,7 +1424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            color: "#222"
 	          } : null;
 
-	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+	        var nodes = _.pairs(_.pick(this.props.data, this.props.columns)).map(function(col, index) {
 	            var returnValue = null;
 	            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 

@@ -10,6 +10,7 @@ var GridRow = React.createClass({
         "isChildRow": false,
         "showChildren": false,
         "data": {},
+        "columns" : [],
         "metadataColumns": [],
         "hasChildren": false,
         "columnMetadata": null,
@@ -20,7 +21,6 @@ var GridRow = React.createClass({
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
         "parentRowExpandedComponent": "▼"
-
       }
     },
     handleClick: function(){
@@ -36,7 +36,7 @@ var GridRow = React.createClass({
             color: "#222"
           } : null;
 
-        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
+        var nodes = _.pairs(_.pick(this.props.data, this.props.columns)).map(function(col, index) {
             var returnValue = null;
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
