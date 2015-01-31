@@ -230,11 +230,11 @@ var Griddle = React.createClass({
         });
     },
     nextPage: function() {
-        currentPage = this.getCurrentPage();
+        var currentPage = this.getCurrentPage();
         if (currentPage < this.getCurrentMaxPage() - 1) { this.setPage(currentPage + 1); }
     },
     previousPage: function() {
-      currentPage = this.getCurrentPage();
+      var currentPage = this.getCurrentPage();
         if (currentPage > 0) { this.setPage(currentPage - 1); }
     },
     changeSort: function(sort){

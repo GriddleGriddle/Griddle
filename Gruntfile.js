@@ -1,4 +1,5 @@
 // jshint ignore: start
+
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -23,7 +24,7 @@ module.exports = function(grunt) {
         files: [
           {
             expand: true,
-            cwd: 'scripts/',
+            cwd: 'compiled/',
             src: ['**/*.jsx'],
             dest: 'modules/',
             ext: '.jsx.js'
@@ -80,7 +81,8 @@ module.exports = function(grunt) {
     },
     clean: {
       docs: [ "docs/html"],
-      includes: [ "docs/dist"]
+      includes: [ "docs/dist"],
+      compiled: ["compiled"]
     },
     copy: {
       docs: {
@@ -93,7 +95,7 @@ module.exports = function(grunt) {
     webpack: {
       default: {
         entry: {
-          Griddle: ['./scripts/griddle.jsx'],
+          Griddle: ['./compiled/griddle.jsx'],
         },
         output: {
           path: __dirname,
@@ -118,7 +120,7 @@ module.exports = function(grunt) {
       },
       docs: {
         entry: {
-            Griddle: ['./scripts/griddle.jsx'],
+            Griddle: ['./compiled/griddle.jsx'],
             ChartistGraph: ['./node_modules/react-chartist/index.js']
         },
         output: {
@@ -141,6 +143,19 @@ module.exports = function(grunt) {
           "underscore": "_",
           "Chartist": "chartist"
         }
+      }
+    },
+    "6to5": {
+      options: {
+        sourceMap: false
+      },
+      build: {
+        files: [{
+            expand: true,
+            cwd: 'scripts/',
+            src: ['**/*.js', '**/*.jsx'],
+            dest: 'compiled/'
+          }]
       }
     },
     watch: {
@@ -166,6 +181,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-include-replace');
+  grunt.loadNpmTasks('grunt-6to5'); 
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
@@ -182,10 +198,13 @@ module.exports = function(grunt) {
       'includereplace',
       'markdown',
       'clean:includes',
+      'clean:compiled',
+      '6to5',
       'webpack:docs',
       'webpack:default',
       'copy',
-      'react'
+      'react',
+      'clean:compiled'
     ]);
   })
 

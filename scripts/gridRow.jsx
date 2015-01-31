@@ -43,7 +43,7 @@ var GridRow = React.createClass({
             var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
 
             //todo: Make this not as ridiculous looking
-            firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
+            var firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
               <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{that.props.parentRowCollapsedComponent}</span> :
               index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useGriddleIcons ?
                 <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>{that.props.parentRowExpandedComponent}</span> : "";
