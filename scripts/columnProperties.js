@@ -1,29 +1,33 @@
 var _ = require('underscore'); 
 
 class ColumnProperties{
-  static getMetadataColumns(columnMetadata, childrenColumnName, metadataColumns){
-    var meta = _.map(_.where(columnMetadata, {visible: false}), function(item){ return item.columnName});
-      if(meta.indexOf(childrenColumnName) < 0){
-         meta.push(childrenColumnName);
-      }
-      return meta.concat(metadataColumns); 
+  constructor (allColumns, filteredColumns, childrenColumnName, columnMetadata, metadataColumns){
+    this.allColumns = allColumns,
+    this.filteredColumns = filteredColumns,
+    this.childrenColumnName = childrenColumnName,
+    this.columnMetadata = columnMetadata,
+    this.metadataColumns = metadataColumns
   }
 
-  static getColumns(results, filteredColumns, metadataColumns, columnMetadata){
+  getMetadataColumns(){
+    var meta = _.map(_.where(this.columnMetadata, {visible: false}), function(item){ return item.columnName});
+      if(meta.indexOf(this.childrenColumnName) < 0){
+         meta.push(this.childrenColumnName);
+      }
+      return meta.concat(this.metadataColumns); 
+  }
+
+
+  getColumns(){
     var ORDER_MAX = 100;
 
-    //if we don't have any data don't mess with this
-    if (results === undefined || results.length === 0){ return [];}
-
     //if we didn't set default or filter
-    if (filteredColumns.length === 0){
-        filteredColumns =  _.keys(_.omit(results[0], metadataColumns));
-    }
+    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns; 
 
-    filteredColumns = _.difference(filteredColumns, metadataColumns); 
+    filteredColumns = _.difference(filteredColumns, this.metadataColumns); 
 
-    filteredColumns = _.sortBy(filteredColumns, function(item){
-        var metaItem = _.findWhere(columnMetadata, {columnName: item});
+    filteredColumns = _.sortBy(filteredColumns, (item) => {
+        var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
 
         if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
             return ORDER_MAX;
@@ -31,7 +35,7 @@ class ColumnProperties{
 
         return metaItem.order;
     });
-
+    
     return filteredColumns;
   }
 }

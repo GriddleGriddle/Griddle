@@ -17,6 +17,7 @@ var ColumnProperties = require('./columnProperties');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
+    columnSettings: null, 
     getDefaultProps: function() {
         return{
             "columns": [],
@@ -169,7 +170,7 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage !== maxPage){
-          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.props.columns });
+          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.columnsSettings.filteredColumns });
         }
     },
     setPage: function(number) {
@@ -188,23 +189,11 @@ var Griddle = React.createClass({
                 that.setState(state);
         }
     },
-    getMetadataColumns: function(){
-        return ColumnProperties.getMetadataColumns(this.props.columnMetadata,
-            this.props.childrenColumnName,
-            this.props.metadataColumns);
-    },
-    getColumns: function(){
-        return ColumnProperties.getColumns(
-            this.getCurrentResults(),
-            this.state.filteredColumns, 
-            this.getMetadataColumns(), 
-            this.props.columnMetadata
-        );
-    },
     setColumns: function(columns){
-        columns = _.isArray(columns) ? columns : [columns];
+        this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
+         
         this.setState({
-            filteredColumns: columns
+            filteredColumns: this.columnSettings.filteredColumns
         });
     },
     nextPage: function() {
@@ -257,6 +246,15 @@ var Griddle = React.createClass({
         this.verifyExternal();
         this.verifyCustom();
         this.setMaxPage();
+
+        this.columnSettings = new ColumnProperties(
+            this.props.results.length > 0 ? _.keys(this.props.results[0]) : [],
+            this.props.columns,
+            this.props.childrenColumnName,
+            this.props.columnMetadata,
+            this.props.metadataColumns
+        );
+
         //don't like the magic strings
         if(this.props.useCustomGridComponent === true){
             this.setState({
@@ -268,7 +266,7 @@ var Griddle = React.createClass({
             });
         } else {
           this.setState({
-            filteredColumns: this.props.columns
+            filteredColumns: this.columnSettings.filteredColumns
           })
         }
 
@@ -338,10 +336,9 @@ var Griddle = React.createClass({
                   data = _.initial(rest, rest.length-this.props.resultsPerPage);
                 }
             }
-        var meta = [].concat(this.props.metadataColumns);
-        if (meta.indexOf(this.props.childrenColumnName) < 0){
-            meta.push(this.props.childrenColumnName);
-        }
+
+        var meta = this.columnSettings.getMetadataColumns; 
+
         var transformedData = [];
 
         for(var i = 0; i<data.length; i++){
@@ -530,16 +527,12 @@ var Griddle = React.createClass({
         var topSection = this.getTopSection(filter, settings);
 
         var keys = [];
-        var cols = this.getColumns();
+        var cols = this.columnSettings.getColumns();
 
         //figure out which columns are displayed and show only those
         var data = this.getDataForRender(results, cols, true);
 
-        //don't repeat this -- it's happening in getColumns and getDataForRender too...
-        var meta = this.props.metadataColumns;
-        if(meta.indexOf(this.props.childrenColumnName) < 0){
-            meta.push(this.props.childrenColumnName);
-        }
+        var meta = this.columnSettings.getMetadataColumns();
 
         // Grab the column keys from the first results
         keys = _.keys(_.omit(results[0], meta));
