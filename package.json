@@ -27,6 +27,7 @@
     "grunt-open": "^0.2.3",
     "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
+    "6to5-jest": "*",
     "jest-cli": "*",
     "jsx-loader": "~0.12.x",
     "react-chartist": "~0.2.1",
@@ -49,7 +50,9 @@
   },
   "jest": {
     "rootDir": "scripts",
-    "scriptPreprocessor": "../jest/preprocessor.js",
+    "scriptPreprocessor": "../node_modules/6to5-jest",
+    "testFileExtensions": ["es6", "js"],
+    "moduleFileExtensions": ["js", "json", "es6"],
     "unmockedModulePathPatterns": [
       "react"
     ]

@@ -1,3 +1,5 @@
+var _ = require('underscore'); 
+
 class ColumnProperties{
   static getMetadataColumns(columnMetadata, childrenColumnName, metadataColumns){
     var meta = _.map(_.where(columnMetadata, {visible: false}), function(item){ return item.columnName});
@@ -8,7 +10,7 @@ class ColumnProperties{
   }
 
   static getColumns(results, filteredColumns, metadataColumns, columnMetadata){
-    const ORDER_MAX = 100;
+    var ORDER_MAX = 100;
 
     //if we don't have any data don't mess with this
     if (results === undefined || results.length === 0){ return [];}
