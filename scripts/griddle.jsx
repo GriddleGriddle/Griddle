@@ -170,7 +170,7 @@ var Griddle = React.createClass({
         var maxPage = this.getMaxPage(results);
         //re-render if we have new max page value
         if (this.state.maxPage !== maxPage){
-          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.columnsSettings.filteredColumns });
+          this.setState({page: 0, maxPage: maxPage, filteredColumns: this.columnSettings.filteredColumns });
         }
     },
     setPage: function(number) {
@@ -245,7 +245,6 @@ var Griddle = React.createClass({
     componentWillMount: function() {
         this.verifyExternal();
         this.verifyCustom();
-        this.setMaxPage();
 
         this.columnSettings = new ColumnProperties(
             this.props.results.length > 0 ? _.keys(this.props.results[0]) : [],
@@ -254,6 +253,8 @@ var Griddle = React.createClass({
             this.props.columnMetadata,
             this.props.metadataColumns
         );
+
+        this.setMaxPage();
 
         //don't like the magic strings
         if(this.props.useCustomGridComponent === true){
@@ -474,9 +475,9 @@ var Griddle = React.createClass({
             style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
     },
     getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
-        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
-              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
-              showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
+        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} columnSettings={this.columnSettings} isSubGriddle={this.props.isSubGriddle}
+              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} 
+              showPager={this.props.showPager} pagingContent={pagingContent} data={data} className={this.props.tableClassName}
               enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
               sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
               sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}

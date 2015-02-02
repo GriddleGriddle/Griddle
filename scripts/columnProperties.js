@@ -1,12 +1,12 @@
 var _ = require('underscore'); 
 
 class ColumnProperties{
-  constructor (allColumns, filteredColumns, childrenColumnName, columnMetadata, metadataColumns){
-    this.allColumns = allColumns,
-    this.filteredColumns = filteredColumns,
-    this.childrenColumnName = childrenColumnName,
-    this.columnMetadata = columnMetadata,
-    this.metadataColumns = metadataColumns
+  constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
+    this.allColumns = allColumns;
+    this.filteredColumns = filteredColumns;
+    this.childrenColumnName = childrenColumnName;
+    this.columnMetadata = columnMetadata;
+    this.metadataColumns = metadataColumns;
   }
 
   getMetadataColumns(){
@@ -17,6 +17,26 @@ class ColumnProperties{
       return meta.concat(this.metadataColumns); 
   }
 
+  getVisibleColumnCount(){
+    return this.getColumns().length;
+  }
+
+  getColumnMetadataByName(name){
+    return _.findWhere(this.columnMetadata, {columnName: name}); 
+  }
+
+  hasColumnMetadata(){
+   return this.columnMetadata !== null && this.columnMetadata.length > 0  
+  }
+
+  isColumnSortable(name){
+    var meta = this.getColumnMetadataByName(name);
+
+    if(typeof meta === "undefined" || meta === null) 
+      return false; 
+
+    return meta.hasOwnProperty("sortable") ? meta.sortable : true; 
+  }
 
   getColumns(){
     var ORDER_MAX = 100;
@@ -35,7 +55,7 @@ class ColumnProperties{
 
         return metaItem.order;
     });
-    
+
     return filteredColumns;
   }
 }

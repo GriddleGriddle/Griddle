@@ -3,11 +3,12 @@
 */
 var React = require('react');
 var _ = require('underscore');
+var ColumnProperties = require('./columnProperties.js');
 
 var GridTitle = React.createClass({
     getDefaultProps: function(){
         return {
-           "columns":[],
+           "columnSettings" : new ColumnProperties(),
            "sortColumn": "",
            "sortAscending": true,
            "headerStyle": null,
@@ -24,11 +25,6 @@ var GridTitle = React.createClass({
     sort: function(event){
         this.props.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
     },
-    getMetadata: function(columnName, columnMetadata){
-      return columnMetadata !== null ? 
-         _.findWhere(columnMetadata, {columnName: columnName}) : 
-         null;
-    },
     isSortable: function(enableSort, meta){
       var metaIsValid = typeof meta !== "undefined" && meta !== null; 
         
@@ -39,7 +35,7 @@ var GridTitle = React.createClass({
     render: function(){
         var that = this;
 
-        var nodes = this.props.columns.map(function(col, index){
+        var nodes = this.props.columnSettings.getColumns().map(function(col, index){
             var columnSort = "";
             var sortComponent = null;
             var titleStyles = null;
@@ -54,8 +50,8 @@ var GridTitle = React.createClass({
 
             var displayName = col;
 
-            var meta = that.getMetadata(col, that.props.columnMetadata); 
-            var columnIsSortable = that.isSortable(that.props.enableSort, meta); 
+            var meta = that.props.columnSettings.getColumnMetadataByName(col); 
+            var columnIsSortable = that.props.columnSettings.isColumnSortable(col); 
 
             columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
             if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
