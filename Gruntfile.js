@@ -185,6 +185,7 @@ module.exports = function(grunt) {
       'webpack:docs',
       'webpack:default',
       'copy',
+      'react'
     ]);
   })
 

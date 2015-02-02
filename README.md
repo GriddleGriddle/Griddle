@@ -32,7 +32,10 @@ Griddle is not yet version 1. There are likely some areas that will change and s
 ----------
 
 ###Changelog:###
- 0.2.0
+0.2.1 - 0.2.3
+- Tweaks surrounding package.json dependencies.
+
+0.2.0
 
 1. __Styling__ - Griddle now renders as a single HTML table by default. Additionally, if you don't want to use Griddle's styles they can be turned off with a property `useGriddleStyles={false}`. [See more on styling](http://dynamictyped.github.io/Griddle/styling.html).
 1. __External Results__ - External data should now be passed in via props rather than a callback. The Griddle callback is still available for those that wish to use it but it's now in a separate module. [More on External Data](http://dynamictyped.github.io/Griddle/externalData.html)
@@ -71,4 +74,3 @@ __Breaking Changes:__
 4. Fixed an issue with filtering and external results
 5. External Results fixes/enhancements
 6. Metadata enhancements
-

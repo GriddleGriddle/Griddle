@@ -1,10 +1,4 @@
-﻿/** @jsx React.DOM */
-
 /*
-   Griddle - Simple Grid Component for React
-   https://github.com/DynamicTyped/Griddle
-   Copyright (c) 2014 Ryan Lanciaux | DynamicTyped
-
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
@@ -16,6 +10,7 @@ var GridTable = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
+      "columns": [],
       "metadataColumns": [],
       "className": "",
       "enableInfiniteScroll": false,
@@ -89,7 +84,7 @@ var GridTable = React.createClass({
             sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index}
+            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} columns={that.props.columns}
             uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
     }
