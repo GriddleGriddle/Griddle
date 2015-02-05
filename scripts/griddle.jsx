@@ -429,17 +429,29 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function(){
-     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
-        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : 
+     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
+        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> :
         "");
     },
     getSettings: function(){
-        return (this.props.showSettings ? 
-            <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} 
-                style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>
-                    {this.props.settingsText}{this.props.settingsIconComponent}
-            </button> : 
-            "");
+      var defaultStyles = {
+        background: "none",
+        border: "none",
+        padding: 0,
+        margin: 0,
+        fontSize: 14
+      };
+
+      return (this.props.showSettings ?
+        <button
+          type="button"
+          className={this.props.settingsToggleClassName}
+          onClick={this.toggleColumnChooser}
+          style={this.props.useGriddleStyles ? defaultStyles : null}
+        >
+          {this.props.settingsText}{this.props.settingsIconComponent}
+        </button> :
+        "");
     },
     getTopSection: function(filter, settings){
         if (this.props.showFilter === false && this.props.showSettings === false){
@@ -473,25 +485,40 @@ var Griddle = React.createClass({
         }
 
         return (
-          <div className="griddle-footer">
-              {this.props.useCustomPagerComponent ?
-                  <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
-                  <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
+            <div className="griddle-footer">
+                {this.props.useCustomPagerComponent ?
+                <CustomPaginationContainer
+                    {...this.props}
+                    next={this.nextPage}
+                    previous={this.previousPage}
+                    currentPage={currentPage}
+                    maxPage={maxPage}
+                    setPage={this.setPage}
+                /> :
+                <GridPagination
+                    {...this.props}
+                    next={this.nextPage}
+                    previous={this.previousPage}
+                    currentPage={currentPage}
+                    maxPage={maxPage}
+                    setPage={this.setPage}
+                />
               }
           </div>
         );
     },
     getColumnSelectorSection: function(keys, cols){
         return this.state.showColumnChooser ? (
-          <GridSettings
-            {...this.props}
-            columns={keys}
-            selectedColumns={cols}
-            setColumns={this.setColumns}
-            setPageSize={this.setPageSize}
-            showSetPageSize={!this.props.useCustomGridComponent}
-            toggleCustomComponent={this.toggleCustomComponent}
-            useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent} />
+            <GridSettings
+                {...this.props}
+                columns={keys}
+                selectedColumns={cols}
+                setColumns={this.setColumns}
+                setPageSize={this.setPageSize}
+                showSetPageSize={!this.props.useCustomGridComponent}
+                toggleCustomComponent={this.toggleCustomComponent}
+                useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
+            />
         ) : "";
     },
     getCustomGridSection: function(){
