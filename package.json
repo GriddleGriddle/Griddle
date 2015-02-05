@@ -41,7 +41,7 @@
     "webpack-dev-server": "~1.7.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/jest-cli/bin/jest.js"
   },
   "repository": {
     "type": "git",
