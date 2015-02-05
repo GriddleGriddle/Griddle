@@ -483,11 +483,15 @@ var Griddle = React.createClass({
     },
     getColumnSelectorSection: function(keys, cols){
         return this.state.showColumnChooser ? (
-            <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
-             settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
-             toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
-             useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
+          <GridSettings
+            {...this.props}
+            columns={keys}
+            selectedColumns={cols}
+            setColumns={this.setColumns}
+            setPageSize={this.setPageSize}
+            showSetPageSize={!this.props.useCustomGridComponent}
+            toggleCustomComponent={this.toggleCustomComponent}
+            useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent} />
         ) : "";
     },
     getCustomGridSection: function(){
@@ -499,17 +503,23 @@ var Griddle = React.createClass({
             style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
     },
     getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
-        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle}
-              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} columnMetadata={this.props.columnMetadata}
-              showPager={this.props.showPager} pagingContent={pagingContent} data={data} columns={cols} metadataColumns={meta} className={this.props.tableClassName}
-              enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
-              sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
-              sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
-              parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
-              sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-              parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
-              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
+      return (
+        <div className='griddle-body'>
+          <GridTable
+            {...this.props}
+            pagingContent={pagingContent}
+            data={data}
+            columns={cols}
+            metadataColumns={meta}
+            className={this.props.tableClassName}
+            enableInfiniteScroll={this.isInfiniteScrollEnabled()}
+            nextPage={this.nextPage}
+            changeSort={this.changeSort}
+            sortColumn={this.getCurrentSort()}
+            sortAscending={this.getCurrentSortAscending()}
+            hasMorePages={hasMorePages} />
+        </div>
+      );
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
