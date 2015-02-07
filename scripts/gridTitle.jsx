@@ -19,7 +19,7 @@ var GridTitle = React.createClass({
            "sortDescendingComponent": " ▼",
            "enableSort": true,
            "headerClassName": "",
-           "headerStyles": "",
+           "headerStyles": {},
            "changeSort": null
         }
     },
