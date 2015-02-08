@@ -499,9 +499,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function(){
-	     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
-	        React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : 
-	        "");
+	        if (this.props.showFilter && this.props.useCustomGridComponent === false) {
+	            return (
+	                React.createElement(GridFilter, {
+	                    className: this.props.filterClassName, 
+	                    changeFilter: this.setFilter, 
+	                    placeholderText: this.props.filterPlaceholderText})
+	            );
+	        }
+
+	        return '';
 	    },
 	    getSettings: function(){
 	        return (this.props.showSettings ? 
