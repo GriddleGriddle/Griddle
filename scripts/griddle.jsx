@@ -68,6 +68,8 @@ var Griddle = React.createClass({
             "externalIsLoading": false,
             "enableInfiniteScroll": false,
             "bodyHeight": null,
+            "paddingHeight": 5,
+            "rowHeight": 25,
             "infiniteScrollSpacerHeight": 50,
             "useFixedLayout": true,
             "isSubGriddle": false,
@@ -193,7 +195,7 @@ var Griddle = React.createClass({
         if(meta.indexOf(this.props.childrenColumnName) < 0){
            meta.push(this.props.childrenColumnName);
         }
-        return meta.concat(this.props.metadataColumns); 
+        return meta.concat(this.props.metadataColumns);
     },
     getColumns: function(){
         var that = this;
@@ -203,14 +205,14 @@ var Griddle = React.createClass({
         if (results === undefined || results.length === 0){ return [];}
 
         var columns = this.state.filteredColumns;
-        var meta = this.getMetadataColumns(); 
+        var meta = this.getMetadataColumns();
 
         //if we didn't set default or filter
         if (columns.length === 0){
             columns =  _.keys(_.omit(results[0], meta));
         }
 
-        columns = _.difference(columns, meta); 
+        columns = _.difference(columns, meta);
 
         columns = _.sortBy(columns, function(item){
             var metaItem = _.findWhere(that.props.columnMetadata, {columnName: item});
@@ -420,7 +422,7 @@ var Griddle = React.createClass({
             "float": "left",
             width: "50%",
             textAlign: "right"
-        }; 
+        };
     },
     getFilterStyles: function(){
         return {
@@ -432,16 +434,16 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function(){
-     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
-        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : 
+     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
+        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> :
         "");
     },
     getSettings: function(){
-        return (this.props.showSettings ? 
-            <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser} 
+        return (this.props.showSettings ?
+            <button type="button" className={this.props.settingsToggleClassName} onClick={this.toggleColumnChooser}
                 style={this.props.useGriddleStyles ? { background: "none", border: "none", padding: 0, margin: 0, fontSize: 14} : null}>
                     {this.props.settingsText}{this.props.settingsIconComponent}
-            </button> : 
+            </button> :
             "");
     },
     getTopSection: function(filter, settings){
@@ -511,7 +513,7 @@ var Griddle = React.createClass({
               parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
               sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
               parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
+              bodyHeight={this.props.bodyHeight} paddingHeight={this.props.paddingHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
               externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){

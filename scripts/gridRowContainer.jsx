@@ -10,6 +10,8 @@ var GridRowContainer = React.createClass({
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
+        "paddingHeight": null,
+        "rowHeight": null,
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
@@ -32,7 +34,7 @@ var GridRowContainer = React.createClass({
     },
     setShowChildren: function(visible){
       this.setState({
-        showChildren: visible 
+        showChildren: visible
       });
     },
     render: function(){
@@ -42,7 +44,7 @@ var GridRowContainer = React.createClass({
         var arr = [];
 
         arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnMetadata={this.props.columnMetadata} metadataColumns={that.props.metadataColumns}
-          hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
+          hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons} paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight}
           parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
           parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}/>);
           var children = null;
@@ -57,12 +59,13 @@ var GridRowContainer = React.createClass({
                                 parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
                                 showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}
                                 parentRowExpandedComponent={that.props.parentRowExpandedComponent}
-                                parentRowCollapsedComponent={that.props.parentRowCollapsedComponent} />
+                                parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+                                paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />
                             </td>
                           </tr>);
                 }
 
-                return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+                return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} metadataColumns={that.props.metadataColumns} isChildRow={true} columnMetadata={that.props.columnMetadata} paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} key={_.uniqueId("grid_row")}/>
             });
         }
 
