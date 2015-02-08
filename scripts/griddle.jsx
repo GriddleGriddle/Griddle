@@ -16,6 +16,10 @@ var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
+    propTypes: {
+        filterClassName: React.PropTypes.string,
+    },
+
     getDefaultProps: function() {
         return{
             "columns": [],
@@ -29,6 +33,7 @@ var Griddle = React.createClass({
             "customRowComponentClassName":"",
             "settingsText": "Settings",
             "filterPlaceholderText": "Filter Results",
+            "filterClassName": "row filter-container",
             "nextText": "Next",
             "previousText": "Previous",
             "maxRowsText": "Rows per page",
@@ -431,9 +436,16 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function(){
-     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
-        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> : 
-        "");
+        if (this.props.showFilter && this.props.useCustomGridComponent === false) {
+            return (
+                <GridFilter
+                    className={this.props.filterClassName}
+                    changeFilter={this.setFilter}
+                    placeholderText={this.props.filterPlaceholderText} />
+            );
+        }
+
+        return '';
     },
     getSettings: function(){
         return (this.props.showSettings ? 
