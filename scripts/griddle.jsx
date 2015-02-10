@@ -70,7 +70,7 @@ var Griddle = React.createClass({
             "bodyHeight": null,
             "paddingHeight": 5,
             "rowHeight": 25,
-            "infiniteScrollSpacerHeight": 50,
+            "infiniteScrollLoadTreshold": 50,
             "useFixedLayout": true,
             "isSubGriddle": false,
             "enableSort": true,
@@ -513,7 +513,7 @@ var Griddle = React.createClass({
               parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
               sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
               parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} paddingHeight={this.props.paddingHeight} rowHeight={this.props.rowHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
+              bodyHeight={this.props.bodyHeight} paddingHeight={this.props.paddingHeight} rowHeight={this.props.rowHeight} infiniteScrollLoadTreshold={this.props.infiniteScrollLoadTreshold} externalLoadingComponent={this.props.externalLoadingComponent}
               externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){

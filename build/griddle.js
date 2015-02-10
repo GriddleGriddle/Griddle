@@ -133,7 +133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "bodyHeight": null,
 	            "paddingHeight": 5,
 	            "rowHeight": 25,
-	            "infiniteScrollSpacerHeight": 50,
+	            "infiniteScrollLoadTreshold": 50,
 	            "useFixedLayout": true,
 	            "isSubGriddle": false,
 	            "enableSort": true,
@@ -576,7 +576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName, 
 	              sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
 	              parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent, 
-	              bodyHeight: this.props.bodyHeight, paddingHeight: this.props.paddingHeight, rowHeight: this.props.rowHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent, 
+	              bodyHeight: this.props.bodyHeight, paddingHeight: this.props.paddingHeight, rowHeight: this.props.rowHeight, infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold, externalLoadingComponent: this.props.externalLoadingComponent, 
 	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
 	    },
 	    getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
@@ -708,7 +708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "useFixedLayout": true,
 	      "paddingHeight": null,
 	      "rowHeight": null,
-	      "infiniteScrollSpacerHeight": null,
+	      "infiniteScrollLoadTreshold": null,
 	      "bodyHeight": null,
 	      "tableHeading": "",
 	      "useGriddleStyles": true,
@@ -766,12 +766,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
 	      // the spacer's height.
-	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight);
 
 	      // Make sure that we load results a little before reaching the bottom.
-	      var compareHeight = scrollHeightDiff * 0.8;
+	      var compareHeight = scrollHeightDiff * 0.7;
 
-	      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+	      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
 	        this.props.nextPage();
 	      }
 	    }

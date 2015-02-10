@@ -19,7 +19,7 @@ var GridTable = React.createClass({
       "useFixedLayout": true,
       "paddingHeight": null,
       "rowHeight": null,
-      "infiniteScrollSpacerHeight": null,
+      "infiniteScrollLoadTreshold": null,
       "bodyHeight": null,
       "tableHeading": "",
       "useGriddleStyles": true,
@@ -77,12 +77,12 @@ var GridTable = React.createClass({
 
       // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
       // the spacer's height.
-      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight);
 
       // Make sure that we load results a little before reaching the bottom.
-      var compareHeight = scrollHeightDiff * 0.8;
+      var compareHeight = scrollHeightDiff * 0.7;
 
-      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
         this.props.nextPage();
       }
     }
