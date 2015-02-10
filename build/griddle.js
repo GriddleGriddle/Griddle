@@ -766,10 +766,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
 	      // the spacer's height.
-	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight);
+	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollLoadTreshold;
 
 	      // Make sure that we load results a little before reaching the bottom.
-	      var compareHeight = scrollHeightDiff * 0.7;
+	      var compareHeight = scrollHeightDiff * 0.8;
 
 	      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
 	        this.props.nextPage();
@@ -829,8 +829,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (belowSpacerRow) {
 	        nodes.push(belowSpacerRow);
 	      }
-
-	      debugger;
 
 	      // Send back the nodes.
 	      return nodes;
@@ -1484,7 +1482,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function() {
 	        var that = this;
 	        var columnStyles = null;
-	        var divStyles = null;
 
 	        if (this.props.useGriddleStyles) {
 	          columnStyles = {
@@ -1495,7 +1492,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            borderTopColor: "#DDD",
 	            color: "#222"
 	          };
-	          divStyles = { "width": "100%", "height": "100%", "overflow":"hidden", "whiteSpace": "nowrap", "textOverflow": "ellipsis" };
 	        }
 
 	        var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
@@ -1514,10 +1510,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
 	              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : React.createElement(meta.customComponent, {data: col[1], rowData: that.props.data});
-	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.props.hasChildren && that.handleClick, className: meta.cssClassName, key: index, style: columnStyles}, React.createElement("div", {style: divStyles}, colData)));
+	              returnValue = (meta == null ? returnValue : React.createElement("td", {onClick: that.props.hasChildren && that.handleClick, className: meta.cssClassName, key: index, style: columnStyles}, colData));
 	            }
 
-	            return returnValue || (React.createElement("td", {onClick: that.props.hasChildren && that.handleClick, key: index, style: columnStyles}, firstColAppend, React.createElement("div", {style: divStyles}, col[1])));
+	            return returnValue || (React.createElement("td", {onClick: that.props.hasChildren && that.handleClick, key: index, style: columnStyles}, firstColAppend, col[1]));
 	        });
 
 	        //this is kind of hokey - make it better

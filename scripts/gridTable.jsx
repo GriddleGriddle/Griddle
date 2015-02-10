@@ -77,10 +77,10 @@ var GridTable = React.createClass({
 
       // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
       // the spacer's height.
-      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight);
+      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollLoadTreshold;
 
       // Make sure that we load results a little before reaching the bottom.
-      var compareHeight = scrollHeightDiff * 0.7;
+      var compareHeight = scrollHeightDiff * 0.8;
 
       if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
         this.props.nextPage();
@@ -140,8 +140,6 @@ var GridTable = React.createClass({
       if (belowSpacerRow) {
         nodes.push(belowSpacerRow);
       }
-
-      debugger;
 
       // Send back the nodes.
       return nodes;

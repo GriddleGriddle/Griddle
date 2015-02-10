@@ -31,7 +31,6 @@ var GridRow = React.createClass({
     render: function() {
         var that = this;
         var columnStyles = null;
-        var divStyles = null;
 
         if (this.props.useGriddleStyles) {
           columnStyles = {
@@ -42,7 +41,6 @@ var GridRow = React.createClass({
             borderTopColor: "#DDD",
             color: "#222"
           };
-          divStyles = { "width": "100%", "height": "100%", "overflow":"hidden", "whiteSpace": "nowrap", "textOverflow": "ellipsis" };
         }
 
         var nodes = _.pairs(_.omit(this.props.data, this.props.metadataColumns)).map(function(col, index) {
@@ -61,10 +59,10 @@ var GridRow = React.createClass({
 
             if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
               var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={that.props.hasChildren && that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}><div style={divStyles}>{colData}</div></td>);
+              returnValue = (meta == null ? returnValue : <td onClick={that.props.hasChildren && that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={that.props.hasChildren && that.handleClick} key={index} style={columnStyles}>{firstColAppend}<div style={divStyles}>{col[1]}</div></td>);
+            return returnValue || (<td onClick={that.props.hasChildren && that.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         //this is kind of hokey - make it better
