@@ -100,7 +100,7 @@ var GridTable = React.createClass({
       var belowSpacerRow = null;
 
       // If we have a row height specified, only render what's going to be visible.
-      if (this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
+      if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
         var adjustedHeight = that.getAdjustedRowHeight();
         var visibleRecordCount = Math.ceil(that.state.clientHeight / adjustedHeight);
 
@@ -140,6 +140,8 @@ var GridTable = React.createClass({
       if (belowSpacerRow) {
         nodes.push(belowSpacerRow);
       }
+
+      debugger;
 
       // Send back the nodes.
       return nodes;
