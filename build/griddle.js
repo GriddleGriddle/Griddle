@@ -79,6 +79,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({displayName: "Griddle",
+	    propTypes: {
+	        filterClassName: React.PropTypes.string,
+	    },
+
 	    getDefaultProps: function() {
 	        return{
 	            "columns": [],
@@ -92,6 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "customRowComponentClassName":"",
 	            "settingsText": "Settings",
 	            "filterPlaceholderText": "Filter Results",
+	            "filterClassName": "row filter-container",
 	            "nextText": "Next",
 	            "previousText": "Previous",
 	            "maxRowsText": "Rows per page",
@@ -494,9 +499,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function(){
-	     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ? 
-	        React.createElement(GridFilter, {changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText}) : 
-	        "");
+	        if (this.props.showFilter && this.props.useCustomGridComponent === false) {
+	            return (
+	                React.createElement(GridFilter, {
+	                    className: this.props.filterClassName, 
+	                    changeFilter: this.setFilter, 
+	                    placeholderText: this.props.filterPlaceholderText})
+	            );
+	        }
+
+	        return '';
 	    },
 	    getSettings: function(){
 	        return (this.props.showSettings ? 
@@ -903,16 +915,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 
 	var GridFilter = React.createClass({displayName: "GridFilter",
+	    propTypes: {
+	        className: React.PropTypes.string,
+	        placeholderText: React.PropTypes.string,
+	    },
+
 	    getDefaultProps: function(){
 	      return {
-	        "placeholderText": ""
+	        className: 'row filter-container',
+	        placeholderText: '',
 	      }
 	    },
 	    handleChange: function(event){
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function(){
-	        return React.createElement("div", {className: "row filter-container"}, React.createElement("input", {type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange}))
+	        return (
+	            React.createElement("div", {className: this.props.className}, 
+	                React.createElement("input", {
+	                    type: "text", 
+	                    name: "filter", 
+	                    placeholder: this.props.placeholderText, 
+	                    className: "form-control", 
+	                    onChange: this.handleChange})
+	            )
+	        );
 	    }
 	});
 

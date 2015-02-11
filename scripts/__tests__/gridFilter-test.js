@@ -6,24 +6,38 @@ var GridFilter = require('../gridFilter.jsx');
 var TestUtils = React.addons.TestUtils;
 
 describe('GridFilter', function(){
-	var filter; 
-	beforeEach(function(){
-	    filter = TestUtils.renderIntoDocument(<GridFilter />);
-	});
+    var filter;
 
-	it('calls change filter when clicked', function(){
-		var mock = jest.genMockFunction(); 
-		filter.props.changeFilter = mock;
+    beforeEach(function(){
+        filter = TestUtils.renderIntoDocument(<GridFilter />);
+    });
 
-		var someEvent = {
-			"target":{
-				"value":"hi"
-			}
-		};
+    it('has the proper default className applied', function () {
+        var component = TestUtils.findRenderedDOMComponentWithTag(filter, 'div');
+        expect(component.getDOMNode().className).toEqual('row filter-container');
+    });
 
-		var input = TestUtils.findRenderedDOMComponentWithTag(filter, 'input');		
-		React.addons.TestUtils.Simulate.change(input, someEvent);
+    it('allows setting of className', function () {
+        var filterWithClassName = TestUtils.renderIntoDocument(
+            <GridFilter className='my-custom-class' />
+        );
+        var component = TestUtils.findRenderedDOMComponentWithTag(filterWithClassName, 'div');
+        expect(component.getDOMNode().className).toEqual('my-custom-class');
+    });
 
-		expect(mock.mock.calls).toEqual([["hi"]]);
-	})
+    it('calls change filter when clicked', function(){
+        var mock = jest.genMockFunction();
+        filter.props.changeFilter = mock;
+
+        var someEvent = {
+            "target":{
+                "value":"hi"
+            }
+        };
+
+        var input = TestUtils.findRenderedDOMComponentWithTag(filter, 'input');
+        React.addons.TestUtils.Simulate.change(input, someEvent);
+
+        expect(mock.mock.calls).toEqual([["hi"]]);
+    })
 });
