@@ -11,7 +11,7 @@ var GridTable = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
-      "columnSettings": new ColumnProperties(),
+      "columnSettings": null,
       "className": "",
       "enableInfiniteScroll": false,
       "nextPage": null,
@@ -65,7 +65,13 @@ var GridTable = React.createClass({
       }
     }
   },
+  verifyProps: function(){
+    if(this.props.columnSettings === null){
+       console.error("gridTable: The columnSettings prop is null and it shouldn't be");
+    }
+  },
   render: function() {
+    this.verifyProps();
     var that = this;
     //figure out if we need to wrap the group in one tbody or many
     var anyHasChildren = false;

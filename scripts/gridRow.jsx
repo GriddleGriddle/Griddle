@@ -11,7 +11,7 @@ var GridRow = React.createClass({
         "isChildRow": false,
         "showChildren": false,
         "data": {},
-        "columnSettings": new ColumnProperties(),
+        "columnSettings": null,
         "hasChildren": false,
         "useGriddleStyles": true,
         "useGriddleIcons": true,
@@ -25,7 +25,13 @@ var GridRow = React.createClass({
     handleClick: function(){
       this.props.toggleChildren();
     },
+    verifyProps: function(){
+        if(this.props.columnSettings === null){
+           console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+        }
+    },
     render: function() {
+        this.verifyProps();
         var that = this;
         var columnStyles = this.props.useGriddleStyles ?
           {

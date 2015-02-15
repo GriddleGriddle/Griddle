@@ -797,7 +797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getDefaultProps: function () {
 	    return {
 	      data: [],
-	      columnSettings: new ColumnProperties(),
+	      columnSettings: null,
 	      className: "",
 	      enableInfiniteScroll: false,
 	      nextPage: null,
@@ -851,7 +851,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  },
+	  verifyProps: function () {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridTable: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
 	  render: function () {
+	    this.verifyProps();
 	    var that = this;
 	    //figure out if we need to wrap the group in one tbody or many
 	    var anyHasChildren = false;
@@ -1490,7 +1496,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return metaIsValid ? meta.hasOwnProperty("sortable") && meta.sortable !== null ? enableSort && meta.sortable : enableSort : enableSort;
 	    },
+	    verifyProps: function () {
+	        if (this.props.columnSettings === null) {
+	            console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+	        }
+	    },
 	    render: function () {
+	        this.verifyProps();
 	        var that = this;
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
@@ -1572,7 +1584,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      useGriddleStyles: true,
 	      useGriddleIcons: true,
 	      isSubGriddle: false,
-	      columnSettings: new ColumnProperties(),
+	      columnSettings: null,
 	      parentRowCollapsedClassName: "parent-row",
 	      parentRowExpandedClassName: "parent-row expanded",
 	      parentRowCollapsedComponent: "▶",
@@ -1596,7 +1608,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      showChildren: visible
 	    });
 	  },
+	  verifyProps: function () {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridRowContainer: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
 	  render: function () {
+	    this.verifyProps();
 	    var that = this;
 
 	    if (typeof this.props.data === "undefined") {
@@ -1662,7 +1680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      isChildRow: false,
 	      showChildren: false,
 	      data: {},
-	      columnSettings: new ColumnProperties(),
+	      columnSettings: null,
 	      hasChildren: false,
 	      useGriddleStyles: true,
 	      useGriddleIcons: true,
@@ -1676,8 +1694,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  handleClick: function () {
 	    this.props.toggleChildren();
 	  },
+	  verifyProps: function () {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
 	  render: function () {
 	    var _this = this;
+	    this.verifyProps();
 	    var that = this;
 	    var columnStyles = this.props.useGriddleStyles ? {
 	      padding: "5px",
