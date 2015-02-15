@@ -912,7 +912,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function(){
-	        return React.createElement("div", {className: "row filter-container"}, React.createElement("input", {type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange}))
+	        return React.createElement("div", {className: "filter-container"}, React.createElement("input", {type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange}))
 	    }
 	});
 
