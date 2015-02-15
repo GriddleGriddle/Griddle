@@ -380,6 +380,11 @@ The first way to customize what Griddle does when there is no data is setting th
   <dd><strong>string</strong> - The message that will be displayed when there is no data</dd>
 </dl>
 
+<dl>
+  <dt>noDataClassName</dt>
+  <dd><strong>string</strong> - The CSS class name to apply to the grid when no data is available <span class="text-light-grey">Default: griddle-nodata</span></dd>
+</dl>
+
 #####Example:#####
 
 ```
