@@ -52,6 +52,7 @@ var Griddle = React.createClass({
             "customPagerComponent": {},
             "enableToggleCustom":false,
             "noDataMessage":"There is no data to display.",
+            "noDataClassName": "griddle-nodata",
             "customNoDataComponent": null,
             "showTableHeading":true,
             "showPager":true,
@@ -81,6 +82,8 @@ var Griddle = React.createClass({
             "settingsToggleClassName": "settings",
             "nextClassName": "griddle-next",
             "previousClassName": "griddle-previous",
+            "headerClassName": "griddle-header",
+            "headerStyles": {},
             /* icon components */
             "sortAscendingComponent": " ▲",
             "sortDescendingComponent": " ▼",
@@ -557,6 +560,7 @@ var Griddle = React.createClass({
         gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
         if (this.shouldShowNoDataSection(results)) {
+            gridClassName += this.props.noDataClassName&&this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
             return this.getNoDataSection(gridClassName, topSection);
         }
 

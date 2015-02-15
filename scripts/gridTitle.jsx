@@ -18,7 +18,9 @@ var GridTitle = React.createClass({
            "sortDescendingClassName": "sort-descending",
            "sortAscendingComponent": " ▲",
            "sortDescendingComponent": " ▼",
-           "enableSort": true,  
+           "enableSort": true,
+           "headerClassName": "",
+           "headerStyles": {},
            "changeSort": null
         }
     },
@@ -75,7 +77,9 @@ var GridTitle = React.createClass({
 
         return(
             <thead>
-                <tr style={this.titleStyles}>
+                <tr
+                    className={this.props.headerClassName}
+                    style={this.props.headerStyles}>
                     {nodes}
                 </tr>
             </thead>

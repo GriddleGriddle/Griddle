@@ -118,6 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            customPagerComponent: {},
 	            enableToggleCustom: false,
 	            noDataMessage: "There is no data to display.",
+	            noDataClassName: "griddle-nodata",
 	            customNoDataComponent: null,
 	            showTableHeading: true,
 	            showPager: true,
@@ -147,6 +148,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            settingsToggleClassName: "settings",
 	            nextClassName: "griddle-next",
 	            previousClassName: "griddle-previous",
+	            headerClassName: "griddle-header",
+	            headerStyles: {},
 	            /* icon components */
 	            sortAscendingComponent: " ▲",
 	            sortDescendingComponent: " ▼",
@@ -636,6 +639,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
 	        if (this.shouldShowNoDataSection(results)) {
+	            gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
 	            return this.getNoDataSection(gridClassName, topSection);
 	        }
 
@@ -675,6 +679,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
 	var _ = __webpack_require__(3);
 
 	var ColumnProperties = (function () {
@@ -684,6 +690,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var childrenColumnName = arguments[2] === undefined ? "children" : arguments[2];
 	    var columnMetadata = arguments[3] === undefined ? [] : arguments[3];
 	    var metadataColumns = arguments[4] === undefined ? [] : arguments[4];
+	    _classCallCheck(this, ColumnProperties);
+
 	    this.allColumns = allColumns;
 	    this.filteredColumns = filteredColumns;
 	    this.childrenColumnName = childrenColumnName;
@@ -730,9 +738,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value: function isColumnSortable(name) {
 	        var meta = this.getColumnMetadataByName(name);
 
-	        if (typeof meta === "undefined" || meta === null) return false;
-
-	        return meta.hasOwnProperty("sortable") ? meta.sortable : true;
+	        if (typeof meta === "undefined" || meta === null) {
+	          return false;
+	        }return meta.hasOwnProperty("sortable") ? meta.sortable : true;
 	      },
 	      writable: true,
 	      configurable: true
@@ -1043,7 +1051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function () {
 	        return React.createElement(
 	            "div",
-	            { className: "row filter-container" },
+	            { className: "filter-container" },
 	            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange })
 	        );
 	    }
@@ -1469,6 +1477,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscendingComponent: " ▲",
 	            sortDescendingComponent: " ▼",
 	            enableSort: true,
+	            headerClassName: "",
+	            headerStyles: {},
 	            changeSort: null
 	        };
 	    },
@@ -1531,7 +1541,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            null,
 	            React.createElement(
 	                "tr",
-	                { style: this.titleStyles },
+	                {
+	                    className: this.props.headerClassName,
+	                    style: this.props.headerStyles },
 	                nodes
 	            )
 	        );

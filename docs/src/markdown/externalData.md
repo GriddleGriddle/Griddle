@@ -74,7 +74,7 @@ var ExternalComponent = React.createClass({
     sortData: function(sort, sortAscending, data){
 	},
 	//this changes whether data is sorted in ascending or descending order
-    changeSortDirection: function(sort, sortAscending){
+    changeSort: function(sort, sortAscending){
     },
     //this method handles the filtering of the data
     setFilter: function(filter){
