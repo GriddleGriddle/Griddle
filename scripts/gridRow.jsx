@@ -33,6 +33,7 @@ var GridRow = React.createClass({
     render: function() {
         this.verifyProps();
         var that = this;
+
         var columnStyles = this.props.useGriddleStyles ?
           {
             padding: "5px",
@@ -42,7 +43,6 @@ var GridRow = React.createClass({
           } : null;
 
         var data = _.pairs(_.pick(this.props.data, this.props.columnSettings.getColumns()))
-
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
@@ -75,7 +75,6 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-
         return (<tr className={className}>{nodes}</tr>);
     }
 });

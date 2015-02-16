@@ -176,7 +176,7 @@ describe('Griddle', function() {
   });
 
   it('displays all columns by default', function(){
-    var cols = grid.getColumns();
+    var cols = grid.columnSettings.getColumns();
     expect(7).toEqual(cols.length);
     expect(cols[0]).toEqual('id');
     expect(cols[1]).toEqual('name');
@@ -190,7 +190,7 @@ describe('Griddle', function() {
   it('shows only the specified columns', function(){
     var cols = ["id", "name", "city"];
     grid.setColumns(cols);
-    var cols2 = grid.getColumns();
+    var cols2 = grid.columnSettings.getColumns();
     expect(cols2.length).toEqual(cols.length);
     expect(cols2[0]).toEqual('id');
     expect(cols2[1]).toEqual('name');

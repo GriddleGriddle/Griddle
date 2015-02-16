@@ -375,6 +375,19 @@ var Griddle = React.createClass({
     getCurrentMaxPage: function(){
         return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
     },
+    //This takes the props relating to sort and puts them in one object
+    getSortObject: function(){
+        return { 
+            enableSort: this.props.enableSort,
+            changeSort: this.changeSort, 
+            sortColumn: this.getCurrentSort(),
+            sortAscending: this.getCurrentSortAscending(), 
+            sortAscendingClassName: this.props.sortAscendingClassName, 
+            sortDescendingClassName: this.props.sortDescendingClassName,
+            sortAscendingComponent: this.props.sortAscendingComponent,
+            sortDescendingComponent: this.props.sortDescendingComponent
+        }
+    },
     isInfiniteScrollEnabled: function(){
       // If a custom pager is included, don't allow for infinite scrolling.
       if (this.props.useCustomPagerComponent) {
@@ -478,17 +491,31 @@ var Griddle = React.createClass({
             style={this.getClearFixStyles()} />{this.props.showPager&&pagingContent}</div>
     },
     getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
-        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} columnSettings={this.columnSettings} isSubGriddle={this.props.isSubGriddle}
-              useGriddleIcons={this.props.useGriddleIcons} useFixedLayout={this.props.useFixedLayout} 
-              showPager={this.props.showPager} pagingContent={pagingContent} data={data} className={this.props.tableClassName}
-              enableInfiniteScroll={this.isInfiniteScrollEnabled()} enableSort={this.props.enableSort} nextPage={this.nextPage} changeSort={this.changeSort} sortColumn={this.getCurrentSort()}
-              sortAscending={this.getCurrentSortAscending()} showTableHeading={this.props.showTableHeading} useFixedHeader={this.props.useFixedHeader}
-              sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
-              parentRowCollapsedClassName={this.props.parentRowCollapsedClassName} parentRowExpandedClassName={this.props.parentRowExpandedClassName}
-              sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-              parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-              bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
-              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
+        var sortProperties = this.getSortObject();
+
+        return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles} 
+                columnSettings={this.columnSettings} 
+                sortSettings={sortProperties}
+                isSubGriddle={this.props.isSubGriddle}
+                useGriddleIcons={this.props.useGriddleIcons} 
+                useFixedLayout={this.props.useFixedLayout} 
+                showPager={this.props.showPager} 
+                pagingContent={pagingContent} 
+                data={data} 
+                className={this.props.tableClassName}
+                enableInfiniteScroll={this.isInfiniteScrollEnabled()}
+                nextPage={this.nextPage}
+                showTableHeading={this.props.showTableHeading}
+                useFixedHeader={this.props.useFixedHeader}
+                parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
+                parentRowExpandedClassName={this.props.parentRowExpandedClassName}
+                parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
+                parentRowExpandedComponent={this.props.parentRowExpandedComponent}
+                bodyHeight={this.props.bodyHeight}
+                infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight}
+                externalLoadingComponent={this.props.externalLoadingComponent}
+                externalIsLoading={this.props.externalIsLoading}
+                hasMorePages={hasMorePages} /></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){

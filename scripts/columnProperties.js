@@ -32,15 +32,15 @@ class ColumnProperties{
   isColumnSortable(name){
     var meta = this.getColumnMetadataByName(name);
 
+    //allow sort if meta isn't there
     if(typeof meta === "undefined" || meta === null) 
-      return false; 
+      return true; 
 
     return meta.hasOwnProperty("sortable") ? meta.sortable : true; 
   }
 
   getColumns(){
     var ORDER_MAX = 100;
-
     //if we didn't set default or filter
     var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns; 
 

@@ -8,35 +8,28 @@ var ColumnProperties = require('./columnProperties.js');
 var GridTitle = React.createClass({
     getDefaultProps: function(){
         return {
-           "columnSettings" : new ColumnProperties(),
-           "sortColumn": "",
-           "sortAscending": true,
+           "columnSettings" : null,
+           "sortSettings": null,
            "headerStyle": null,
            "useGriddleStyles": true,
-           "usGriddleIcons": true,
-           "sortAscendingClassName": "sort-ascending",
-           "sortDescendingClassName": "sort-descending",
-           "sortAscendingComponent": " ▲",
-           "sortDescendingComponent": " ▼",
-           "enableSort": true,
+           "useGriddleIcons": true,
            "headerClassName": "",
            "headerStyles": {},
-           "changeSort": null
         }
     },
-    sort: function(event){
-        this.props.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
+    componentWillMount: function(){
+      this.verifyProps(); 
     },
-    isSortable: function(enableSort, meta){
-      var metaIsValid = typeof meta !== "undefined" && meta !== null; 
-        
-      return metaIsValid ? (meta.hasOwnProperty("sortable") && (meta.sortable !== null)) ? 
-        enableSort && meta.sortable : 
-        enableSort : enableSort;
+    sort: function(event){
+        this.props.sortSettings.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
     },
     verifyProps: function(){
       if(this.props.columnSettings === null){
          console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+      }
+
+      if(this.props.sortSettings === null){
+          console.error("gridTitle: The sortSettings prop is null and it shouldn't be");       
       }
     },
     render: function(){
@@ -48,16 +41,15 @@ var GridTitle = React.createClass({
           var sortComponent = null;
           var titleStyles = null;
 
-          if(that.props.sortColumn == col && that.props.sortAscending){
-              columnSort = that.props.sortAscendingClassName;
-              sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
-          }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
-              columnSort += that.props.sortDescendingClassName;
-              sortComponent = that.props.useGriddleIcons && that.props.sortDescendingComponent;
+          if(that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending){
+              columnSort = that.props.sortSettings.sortAscendingClassName;
+              sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
+          }  else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false){
+              columnSort += that.props.sortSettings.sortDescendingClassName;
+              sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
           }
 
           var displayName = col;
-
           var meta = that.props.columnSettings.getColumnMetadataByName(col); 
           var columnIsSortable = that.props.columnSettings.isColumnSortable(col); 
 
@@ -76,7 +68,6 @@ var GridTitle = React.createClass({
               cursor: columnIsSortable ? "pointer" : "default"
             }
           }
-
           return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
       });
 

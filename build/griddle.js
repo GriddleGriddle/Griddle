@@ -441,6 +441,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getCurrentMaxPage: function () {
 	        return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
 	    },
+	    //This takes the props relating to sort and puts them in one object
+	    getSortObject: function () {
+	        return {
+	            enableSort: this.props.enableSort,
+	            changeSort: this.changeSort,
+	            sortColumn: this.getCurrentSort(),
+	            sortAscending: this.getCurrentSortAscending(),
+	            sortAscendingClassName: this.props.sortAscendingClassName,
+	            sortDescendingClassName: this.props.sortDescendingClassName,
+	            sortAscendingComponent: this.props.sortAscendingComponent,
+	            sortDescendingComponent: this.props.sortDescendingComponent
+	        };
+	    },
 	    isInfiniteScrollEnabled: function () {
 	        // If a custom pager is included, don't allow for infinite scrolling.
 	        if (this.props.useCustomPagerComponent) {
@@ -548,20 +561,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	    },
 	    getStandardGridSection: function (data, cols, meta, pagingContent, hasMorePages) {
+	        var sortProperties = this.getSortObject();
+
 	        return React.createElement(
 	            "div",
 	            { className: "griddle-body" },
-	            React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles, columnSettings: this.columnSettings, isSubGriddle: this.props.isSubGriddle,
-	                useGriddleIcons: this.props.useGriddleIcons, useFixedLayout: this.props.useFixedLayout,
-	                showPager: this.props.showPager, pagingContent: pagingContent, data: data, className: this.props.tableClassName,
-	                enableInfiniteScroll: this.isInfiniteScrollEnabled(), enableSort: this.props.enableSort, nextPage: this.nextPage, changeSort: this.changeSort, sortColumn: this.getCurrentSort(),
-	                sortAscending: this.getCurrentSortAscending(), showTableHeading: this.props.showTableHeading, useFixedHeader: this.props.useFixedHeader,
-	                sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName,
-	                parentRowCollapsedClassName: this.props.parentRowCollapsedClassName, parentRowExpandedClassName: this.props.parentRowExpandedClassName,
-	                sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent,
-	                parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent,
-	                bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent,
-	                externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages })
+	            React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
+	                columnSettings: this.columnSettings,
+	                sortSettings: sortProperties,
+	                isSubGriddle: this.props.isSubGriddle,
+	                useGriddleIcons: this.props.useGriddleIcons,
+	                useFixedLayout: this.props.useFixedLayout,
+	                showPager: this.props.showPager,
+	                pagingContent: pagingContent,
+	                data: data,
+	                className: this.props.tableClassName,
+	                enableInfiniteScroll: this.isInfiniteScrollEnabled(),
+	                nextPage: this.nextPage,
+	                showTableHeading: this.props.showTableHeading,
+	                useFixedHeader: this.props.useFixedHeader,
+	                parentRowCollapsedClassName: this.props.parentRowCollapsedClassName,
+	                parentRowExpandedClassName: this.props.parentRowExpandedClassName,
+	                parentRowCollapsedComponent: this.props.parentRowCollapsedComponent,
+	                parentRowExpandedComponent: this.props.parentRowExpandedComponent,
+	                bodyHeight: this.props.bodyHeight,
+	                infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight,
+	                externalLoadingComponent: this.props.externalLoadingComponent,
+	                externalIsLoading: this.props.externalIsLoading,
+	                hasMorePages: hasMorePages })
 	        );
 	    },
 	    getContentSection: function (data, cols, meta, pagingContent, hasMorePages) {
@@ -738,8 +765,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value: function isColumnSortable(name) {
 	        var meta = this.getColumnMetadataByName(name);
 
+	        //allow sort if meta isn't there
 	        if (typeof meta === "undefined" || meta === null) {
-	          return false;
+	          return true;
 	        }return meta.hasOwnProperty("sortable") ? meta.sortable : true;
 	      },
 	      writable: true,
@@ -749,7 +777,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value: function getColumns() {
 	        var _this = this;
 	        var ORDER_MAX = 100;
-
 	        //if we didn't set default or filter
 	        var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
@@ -798,6 +825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return {
 	      data: [],
 	      columnSettings: null,
+	      sortSettings: null,
 	      className: "",
 	      enableInfiniteScroll: false,
 	      nextPage: null,
@@ -810,18 +838,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      useGriddleStyles: true,
 	      useGriddleIcons: true,
 	      isSubGriddle: false,
-	      sortAscendingClassName: "sort-ascending",
-	      sortDescendingClassName: "sort-descending",
 	      parentRowCollapsedClassName: "parent-row",
 	      parentRowExpandedClassName: "parent-row expanded",
-	      sortAscendingComponent: " ▲",
-	      sortDescendingComponent: " ▼",
 	      parentRowCollapsedComponent: "▶",
 	      parentRowExpandedComponent: "▼",
 	      externalLoadingComponent: null,
-	      externalIsLoading: false,
-	      enableSort: true
-	    };
+	      externalIsLoading: false };
 	  },
 	  componentDidMount: function () {
 	    // After the initial render, see if we need to load additional pages.
@@ -875,7 +897,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
-	          sortAscendingClassName: that.props.sortAscendingClassName, sortDescendingClassName: that.props.sortDescendingClassName,
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
 	          data: row, key: index, columnSettings: that.props.columnSettings,
@@ -950,10 +971,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
-	      changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending,
-	      sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName,
-	      sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent,
-	      enableSort: this.props.enableSort, columnSettings: this.props.columnSettings }) : "";
+	      sortSettings: this.props.sortSettings,
+	      columnSettings: this.props.columnSettings }) : "";
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren) {
@@ -1472,33 +1491,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    displayName: "GridTitle",
 	    getDefaultProps: function () {
 	        return {
-	            columnSettings: new ColumnProperties(),
-	            sortColumn: "",
-	            sortAscending: true,
+	            columnSettings: null,
+	            sortSettings: null,
 	            headerStyle: null,
 	            useGriddleStyles: true,
-	            usGriddleIcons: true,
-	            sortAscendingClassName: "sort-ascending",
-	            sortDescendingClassName: "sort-descending",
-	            sortAscendingComponent: " ▲",
-	            sortDescendingComponent: " ▼",
-	            enableSort: true,
+	            useGriddleIcons: true,
 	            headerClassName: "",
-	            headerStyles: {},
-	            changeSort: null
-	        };
+	            headerStyles: {} };
+	    },
+	    componentWillMount: function () {
+	        this.verifyProps();
 	    },
 	    sort: function (event) {
-	        this.props.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
-	    },
-	    isSortable: function (enableSort, meta) {
-	        var metaIsValid = typeof meta !== "undefined" && meta !== null;
-
-	        return metaIsValid ? meta.hasOwnProperty("sortable") && meta.sortable !== null ? enableSort && meta.sortable : enableSort : enableSort;
+	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
 	    },
 	    verifyProps: function () {
 	        if (this.props.columnSettings === null) {
 	            console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+	        }
+
+	        if (this.props.sortSettings === null) {
+	            console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
 	        }
 	    },
 	    render: function () {
@@ -1510,16 +1523,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var sortComponent = null;
 	            var titleStyles = null;
 
-	            if (that.props.sortColumn == col && that.props.sortAscending) {
-	                columnSort = that.props.sortAscendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
-	            } else if (that.props.sortColumn == col && that.props.sortAscending === false) {
-	                columnSort += that.props.sortDescendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortDescendingComponent;
+	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
+	                columnSort = that.props.sortSettings.sortAscendingClassName;
+	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
+	            } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
+	                columnSort += that.props.sortSettings.sortDescendingClassName;
+	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
 	            }
 
 	            var displayName = col;
-
 	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
 	            var columnIsSortable = that.props.columnSettings.isColumnSortable(col);
 
@@ -1538,7 +1550,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    cursor: columnIsSortable ? "pointer" : "default"
 	                };
 	            }
-
 	            return React.createElement(
 	                "th",
 	                { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
@@ -1703,6 +1714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = this;
 	    this.verifyProps();
 	    var that = this;
+
 	    var columnStyles = this.props.useGriddleStyles ? {
 	      padding: "5px",
 	      backgroundColor: "#FFF",
@@ -1711,7 +1723,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } : null;
 
 	    var data = _.pairs(_.pick(this.props.data, this.props.columnSettings.getColumns()));
-
 	    var nodes = data.map(function (col, index) {
 	      var returnValue = null;
 	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
@@ -1758,7 +1769,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else if (that.props.hasChildren) {
 	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
 	    }
-
 	    return React.createElement(
 	      "tr",
 	      { className: className },
