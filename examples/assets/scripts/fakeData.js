@@ -9,16 +9,14 @@ var columnMeta = [
     "order": 1,
     "locked": false,
     "visible": true,
-    "displayName": "ID",
-    "sortable": false
+    "displayName": "ID"
   },
   {
     "columnName": "name",
     "order": 2,
     "locked": false,
     "visible": true,
-    "displayName": "Name",
-    "sortable": false
+    "displayName": "Name"
   },
   {
     "columnName": "city",
