@@ -16,6 +16,8 @@ var GridRow = React.createClass({
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
+        "paddingHeight": null,
+        "rowHeight": null,
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
@@ -33,14 +35,18 @@ var GridRow = React.createClass({
     render: function() {
         this.verifyProps();
         var that = this;
+        var columnStyles = null;
 
-        var columnStyles = this.props.useGriddleStyles ?
-          {
-            padding: "5px",
+        if (this.props.useGriddleStyles) {
+          columnStyles = {
+            margin: "0",
+            padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+            height: that.props.rowHeight? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
             backgroundColor: "#FFF",
             borderTopColor: "#DDD",
             color: "#222"
-          } : null;
+          };
+        }
 
         var data = _.pairs(_.pick(this.props.data, this.props.columnSettings.getColumns()))
         var nodes = data.map((col, index) => {
@@ -63,8 +69,7 @@ var GridRow = React.createClass({
               returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
-        });
+            return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);        });
 
         //this is kind of hokey - make it better
         var className = "standard-row";
