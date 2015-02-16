@@ -4,14 +4,15 @@
 var React = require('react');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
+var ColumnProperties = require('./columnProperties.js');
 var _ = require('underscore');
 
 var GridTable = React.createClass({
   getDefaultProps: function(){
     return{
       "data": [],
-      "columns": [],
-      "metadataColumns": [],
+      "columnSettings": null,
+      "sortSettings": null,
       "className": "",
       "enableInfiniteScroll": false,
       "nextPage": null,
@@ -24,17 +25,12 @@ var GridTable = React.createClass({
       "useGriddleStyles": true,
       "useGriddleIcons": true,
       "isSubGriddle": false,
-      "sortAscendingClassName": "sort-ascending",
-      "sortDescendingClassName": "sort-descending",
       "parentRowCollapsedClassName": "parent-row",
       "parentRowExpandedClassName": "parent-row expanded",
-      "sortAscendingComponent": " ▲",
-      "sortDescendingComponent": " ▼",
       "parentRowCollapsedComponent": "▶",
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
       "externalIsLoading": false,
-      "enableSort": true
     }
   },
   componentDidMount: function() {
@@ -65,7 +61,13 @@ var GridTable = React.createClass({
       }
     }
   },
+  verifyProps: function(){
+    if(this.props.columnSettings === null){
+       console.error("gridTable: The columnSettings prop is null and it shouldn't be");
+    }
+  },
   render: function() {
+    this.verifyProps();
     var that = this;
     //figure out if we need to wrap the group in one tbody or many
     var anyHasChildren = false;
@@ -81,10 +83,9 @@ var GridTable = React.createClass({
           if (hasChildren) { anyHasChildren = hasChildren; }
 
           return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
-            sortAscendingClassName={that.props.sortAscendingClassName} sortDescendingClassName={that.props.sortDescendingClassName}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-            data={row} metadataColumns={that.props.metadataColumns} columnMetadata={that.props.columnMetadata} key={index} columns={that.props.columns}
+            data={row} key={index} columnSettings={that.props.columnSettings}
             uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
     }
@@ -130,7 +131,7 @@ var GridTable = React.createClass({
           paddingBottom: "40px"
         };
 
-        defaultColSpan = this.props.columns.length;
+        defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
       }
 
       var loadingComponent = this.props.externalLoadingComponent ?
@@ -142,11 +143,9 @@ var GridTable = React.createClass({
 
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
-        <GridTitle columns={this.props.columns} useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
-          changeSort={this.props.changeSort} sortColumn={this.props.sortColumn} sortAscending={this.props.sortAscending}
-          sortAscendingClassName={this.props.sortAscendingClassName} sortDescendingClassName={this.props.sortDescendingClassName}
-          sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
-          columnMetadata={this.props.columnMetadata} enableSort={this.props.enableSort}/>
+        <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
+          sortSettings={this.props.sortSettings}
+          columnSettings={this.props.columnSettings}/>
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -164,9 +163,8 @@ var GridTable = React.createClass({
           color: "#222"
         }
         : null;
-
       pagingContent = (<tbody><tr>
-          <td colSpan={this.props.columns.length} style={pagingStyles} className="footer-container">
+          <td colSpan={this.props.columnSettings.getVisibleColumnCount()} style={pagingStyles} className="footer-container">
             {this.props.pagingContent}
           </td>
         </tr></tbody>)

@@ -3,6 +3,7 @@
 */
 var React = require('react');
 var _ = require('underscore');
+var ColumnProperties = require('./columnProperties.js');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
@@ -10,10 +11,8 @@ var GridRow = React.createClass({
         "isChildRow": false,
         "showChildren": false,
         "data": {},
-        "columns" : [],
-        "metadataColumns": [],
+        "columnSettings": null,
         "hasChildren": false,
-        "columnMetadata": null,
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
@@ -26,8 +25,15 @@ var GridRow = React.createClass({
     handleClick: function(){
       this.props.toggleChildren();
     },
+    verifyProps: function(){
+        if(this.props.columnSettings === null){
+           console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+        }
+    },
     render: function() {
+        this.verifyProps();
         var that = this;
+
         var columnStyles = this.props.useGriddleStyles ?
           {
             padding: "5px",
@@ -36,29 +42,28 @@ var GridRow = React.createClass({
             color: "#222"
           } : null;
 
-        var data = _.pairs(this.props.columns.length === 0 ? this.props.data : _.pick(this.props.data, this.props.columns))
-
-        var nodes = data.map(function(col, index) {
+        var data = _.pairs(_.pick(this.props.data, this.props.columnSettings.getColumns()))
+        var nodes = data.map((col, index) => {
             var returnValue = null;
-            var meta = _.findWhere(that.props.columnMetadata, {columnName: col[0]});
+            var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
 
             //todo: Make this not as ridiculous looking
-            firstColAppend = index === 0 && that.props.hasChildren && that.props.showChildren === false && that.props.useGriddleIcons ?
-              <span style={that.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{that.props.parentRowCollapsedComponent}</span> :
-              index === 0 && that.props.hasChildren && that.props.showChildren && that.props.useGriddleIcons ?
-                <span style={that.props.useGriddleStyles&&{fontSize: "10px"}}>{that.props.parentRowExpandedComponent}</span> : "";
+            var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
+              <span style={this.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{this.props.parentRowCollapsedComponent}</span> :
+              index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
+                <span style={this.props.useGriddleStyles&&{fontSize: "10px"}}>{this.props.parentRowExpandedComponent}</span> : "";
 
-            if(index === 0 && that.props.isChildRow && that.props.useGriddleStyles){
+            if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
               columnStyles = _.extend(columnStyles, {paddingLeft:10})
             }
 
 
-            if (that.props.columnMetadata !== null && that.props.columnMetadata.length > 0 && typeof meta !== "undefined"){
-              var colData = (typeof meta === 'undefined' || typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={that.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={that.props.hasChildren && that.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
+            if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined"){
+              var colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={this.props.data} />;
+              returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={that.props.hasChildren && that.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         //this is kind of hokey - make it better
@@ -70,7 +75,6 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-
         return (<tr className={className}>{nodes}</tr>);
     }
 });

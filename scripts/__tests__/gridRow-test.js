@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
 jest.dontMock('../gridRow.jsx');
+jest.dontMock('../columnProperties.js');
 
 var React = require('react/addons');
+var _ = require('underscore'); 
 var GridRow = require('../gridRow.jsx');
+var ColumnProperties = require('../columnProperties.js');
 var TestUtils = React.addons.TestUtils;
 
-describe('GridRow', function(){
-	var row, row2;
-	beforeEach(function(){
 	  fakeData = [
       {
         "id": 0,
@@ -174,11 +174,17 @@ describe('GridRow', function(){
 	    ]
 	  }];
 
-	  row = TestUtils.renderIntoDocument(<GridRow data={fakeData}/>);
-	  row2 = TestUtils.renderIntoDocument(<GridRow data={fakeSubgridData} hasChildren={true}/>);
-	});
-
+describe('GridRow', function(){
 	it('does not call toggleChildren if no child rows are specified', function(){
+   var columnSettings = new ColumnProperties(
+        _.keys(fakeData[0]),
+        [],
+        "children",
+        [],
+        []
+    );
+
+	  row = TestUtils.renderIntoDocument(<GridRow data={fakeData[0]} columnSettings={columnSettings}/>);
 		expect(TestUtils.isCompositeComponent(row)).toBe(true);
 		var mock = jest.genMockFunction();
 		row.props.toggleChildren = mock;
@@ -186,6 +192,7 @@ describe('GridRow', function(){
 		expect(mock.mock.calls.length).toEqual(0);
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row, 'tr');
 		expect(tr.length).not.toBe(null);
+
 		var td = TestUtils.scryRenderedDOMComponentsWithTag(tr, 'td');
 
 		expect(td.length).toBeGreaterThan(0);
@@ -198,6 +205,15 @@ describe('GridRow', function(){
 
 
 	it('calls toggleChildren if child rows are specified', function(){
+    var columnSettings = new ColumnProperties(
+        _.keys(fakeSubgridData[0]),
+        [],
+        "children",
+        [],
+        []
+    );
+
+	  row2 = TestUtils.renderIntoDocument(<GridRow data={fakeSubgridData[0]} hasChildren={true} columnSettings={columnSettings}/>);
 	  expect(TestUtils.isCompositeComponent(row2)).toBe(true);
 		var mock = jest.genMockFunction();
 		row2.props.toggleChildren = mock;
@@ -206,7 +222,7 @@ describe('GridRow', function(){
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row2, 'tr');
 		expect(tr.length).not.toBe(null);
 		var td = TestUtils.scryRenderedDOMComponentsWithTag(tr, 'td');
-
+		
 		expect(td.length).toBeGreaterThan(0);
 		var first = td[0];
 

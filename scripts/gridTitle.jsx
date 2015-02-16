@@ -3,91 +3,84 @@
 */
 var React = require('react');
 var _ = require('underscore');
+var ColumnProperties = require('./columnProperties.js');
 
 var GridTitle = React.createClass({
     getDefaultProps: function(){
         return {
-           "columns":[],
-           "sortColumn": "",
-           "sortAscending": true,
+           "columnSettings" : null,
+           "sortSettings": null,
            "headerStyle": null,
            "useGriddleStyles": true,
-           "usGriddleIcons": true,
-           "sortAscendingClassName": "sort-ascending",
-           "sortDescendingClassName": "sort-descending",
-           "sortAscendingComponent": " ▲",
-           "sortDescendingComponent": " ▼",
-           "enableSort": true,
+           "useGriddleIcons": true,
            "headerClassName": "",
            "headerStyles": {},
-           "changeSort": null
         }
     },
+    componentWillMount: function(){
+      this.verifyProps(); 
+    },
     sort: function(event){
-        this.props.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
+        this.props.sortSettings.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
     },
-    getMetadata: function(columnName, columnMetadata){
-      return columnMetadata !== null ? 
-         _.findWhere(columnMetadata, {columnName: columnName}) : 
-         null;
-    },
-    isSortable: function(enableSort, meta){
-      var metaIsValid = typeof meta !== "undefined" && meta !== null; 
-        
-      return metaIsValid ? (meta.hasOwnProperty("sortable") && (meta.sortable !== null)) ? 
-        enableSort && meta.sortable : 
-        enableSort : enableSort;
+    verifyProps: function(){
+      if(this.props.columnSettings === null){
+         console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+      }
+
+      if(this.props.sortSettings === null){
+          console.error("gridTitle: The sortSettings prop is null and it shouldn't be");       
+      }
     },
     render: function(){
-        var that = this;
+      this.verifyProps();
+      var that = this;
 
-        var nodes = this.props.columns.map(function(col, index){
-            var columnSort = "";
-            var sortComponent = null;
-            var titleStyles = null;
+      var nodes = this.props.columnSettings.getColumns().map(function(col, index){
+          var columnSort = "";
+          var sortComponent = null;
+          var titleStyles = null;
 
-            if(that.props.sortColumn == col && that.props.sortAscending){
-                columnSort = that.props.sortAscendingClassName;
-                sortComponent = that.props.useGriddleIcons && that.props.sortAscendingComponent;
-            }  else if (that.props.sortColumn == col && that.props.sortAscending === false){
-                columnSort += that.props.sortDescendingClassName;
-                sortComponent = that.props.useGriddleIcons && that.props.sortDescendingComponent;
+          if(that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending){
+              columnSort = that.props.sortSettings.sortAscendingClassName;
+              sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
+          }  else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false){
+              columnSort += that.props.sortSettings.sortDescendingClassName;
+              sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
+          }
+
+          var displayName = col;
+          var meta = that.props.columnSettings.getColumnMetadataByName(col); 
+          var columnIsSortable = that.props.columnSettings.isColumnSortable(col); 
+
+          columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
+          if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+              displayName = meta.displayName;
+          }
+
+          if (that.props.useGriddleStyles){
+            titleStyles = {
+              backgroundColor: "#EDEDEF",
+              border: "0",
+              borderBottom: "1px solid #DDD",
+              color: "#222",
+              padding: "5px",
+              cursor: columnIsSortable ? "pointer" : "default"
             }
-
-            var displayName = col;
-
-            var meta = that.getMetadata(col, that.props.columnMetadata); 
-            var columnIsSortable = that.isSortable(that.props.enableSort, meta); 
-
-            columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
-            if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
-                displayName = meta.displayName;
-            }
-
-            if (that.props.useGriddleStyles){
-              titleStyles = {
-                backgroundColor: "#EDEDEF",
-                border: "0",
-                borderBottom: "1px solid #DDD",
-                color: "#222",
-                padding: "5px",
-                cursor: columnIsSortable ? "pointer" : "default"
-              }
-            }
-
-            return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
-        });
+          }
+          return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+      });
 
 
-        return(
-            <thead>
-                <tr
-                    className={this.props.headerClassName}
-                    style={this.props.headerStyles}>
-                    {nodes}
-                </tr>
-            </thead>
-        );
+      return(
+          <thead>
+              <tr
+                  className={this.props.headerClassName}
+                  style={this.props.headerStyles}>
+                  {nodes}
+              </tr>
+          </thead>
+      );
     }
 });
 
