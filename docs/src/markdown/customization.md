@@ -182,7 +182,7 @@ var columnMeta = [
 Now, when Griddle is rendered with this columnMetadata, it should write the link as expected.
 
 ```
-React.render(<Griddle data={someData} columnMetdata={columnMeta} />,
+React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
    document.getElementById('something'));
 ```
 
