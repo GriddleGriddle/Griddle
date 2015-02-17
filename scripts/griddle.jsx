@@ -193,10 +193,10 @@ var Griddle = React.createClass({
         }
     },
     setColumns: function(columns){
-        this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
+       this.columnSettings.setColumns(columns); 
          
         this.setState({
-            filteredColumns: this.columnSettings.filteredColumns
+            filteredColumns: this.columnSettings.getColumns()
         });
     },
     nextPage: function() {
@@ -249,7 +249,7 @@ var Griddle = React.createClass({
         this.verifyExternal();
         this.verifyCustom();
 
-        this.columnSettings = new ColumnProperties(
+        this.columnSettings = ColumnProperties(
             this.props.results.length > 0 ? _.keys(this.props.results[0]) : [],
             this.props.columns,
             this.props.childrenColumnName,

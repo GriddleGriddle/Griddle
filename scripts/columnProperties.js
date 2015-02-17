@@ -1,36 +1,33 @@
 var _ = require('underscore'); 
 
-class ColumnProperties{
-  constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
-    this.allColumns = allColumns;
-    this.filteredColumns = filteredColumns;
-    this.childrenColumnName = childrenColumnName;
-    this.columnMetadata = columnMetadata;
-    this.metadataColumns = metadataColumns;
+var ColumnProperties = function(allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
+
+  var setColumns = function(columns){
+    filteredColumns = _.isArray(columns) ? columns : [columns];
   }
 
-  getMetadataColumns(){
-    var meta = _.map(_.where(this.columnMetadata, {visible: false}), function(item){ return item.columnName});
-      if(meta.indexOf(this.childrenColumnName) < 0){
-         meta.push(this.childrenColumnName);
+  var getMetadataColumns = function(){
+    var meta = _.map(_.where(columnMetadata, {visible: false}), function(item){ return item.columnName});
+      if(meta.indexOf(childrenColumnName) < 0){
+         meta.push(childrenColumnName);
       }
-      return meta.concat(this.metadataColumns); 
+      return meta.concat(metadataColumns); 
   }
 
-  getVisibleColumnCount(){
+  var getVisibleColumnCount = function(){
     return this.getColumns().length;
   }
 
-  getColumnMetadataByName(name){
-    return _.findWhere(this.columnMetadata, {columnName: name}); 
+  var getColumnMetadataByName = function(name){
+    return _.findWhere(columnMetadata, {columnName: name}); 
   }
 
-  hasColumnMetadata(){
-   return this.columnMetadata !== null && this.columnMetadata.length > 0  
+  var hasColumnMetadata = function(){
+   return columnMetadata !== null && columnMetadata.length > 0  
   }
 
-  isColumnSortable(name){
-    var meta = this.getColumnMetadataByName(name);
+  var isColumnSortable = function(name){
+    var meta = getColumnMetadataByName(name);
 
     //allow sort if meta isn't there
     if(typeof meta === "undefined" || meta === null) 
@@ -39,15 +36,15 @@ class ColumnProperties{
     return meta.hasOwnProperty("sortable") ? meta.sortable : true; 
   }
 
-  getColumns(){
+  var getColumns = function(){
     var ORDER_MAX = 100;
     //if we didn't set default or filter
-    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns; 
+    var columns = filteredColumns.length === 0 ? allColumns : filteredColumns; 
 
-    filteredColumns = _.difference(filteredColumns, this.metadataColumns); 
+    columns = _.difference(columns, metadataColumns); 
 
-    filteredColumns = _.sortBy(filteredColumns, (item) => {
-        var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
+    columns = _.sortBy(columns, (item) => {
+        var metaItem = _.findWhere(columnMetadata, {columnName: item});
 
         if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
             return ORDER_MAX;
@@ -56,8 +53,18 @@ class ColumnProperties{
         return metaItem.order;
     });
 
-    return filteredColumns;
+    return columns;
   }
+
+  return Object.freeze({
+    getMetadataColumns, 
+    getVisibleColumnCount,
+    getColumnMetadataByName,
+    hasColumnMetadata,
+    isColumnSortable,
+    getColumns,
+    setColumns
+  });
 }
 
 module.exports = ColumnProperties; 

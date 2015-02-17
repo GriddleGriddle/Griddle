@@ -176,7 +176,7 @@ var TestUtils = React.addons.TestUtils;
 
 describe('GridRow', function(){
 	it('does not call toggleChildren if no child rows are specified', function(){
-   var columnSettings = new ColumnProperties(
+   var columnSettings = ColumnProperties(
         _.keys(fakeData[0]),
         [],
         "children",
@@ -205,7 +205,7 @@ describe('GridRow', function(){
 
 
 	it('calls toggleChildren if child rows are specified', function(){
-    var columnSettings = new ColumnProperties(
+    var columnSettings = ColumnProperties(
         _.keys(fakeSubgridData[0]),
         [],
         "children",

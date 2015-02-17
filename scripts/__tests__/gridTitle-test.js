@@ -15,7 +15,7 @@ describe('GridTitle', function() {
 
 	beforeEach(function(){
 		columns = ["one", "two", "three"];
-		columnSettings = new ColumnProperties(columns, [], "children", [], []);
+		columnSettings = ColumnProperties(columns, [], "children", [], []);
     sortObject =  { 
         enableSort: true,
         changeSort: null, 
@@ -67,7 +67,7 @@ describe('GridTitle', function() {
 	    "displayName": "Name",
 	    "sortable" : false
 	  }];
-		var columnSettings2 = new ColumnProperties(columns, [], "children", newMeta, []);
+		var columnSettings2 = ColumnProperties(columns, [], "children", newMeta, []);
 
 		var title2 = TestUtils.renderIntoDocument(<GridTitle columns={columns} columnSettings={columnSettings2} sortSettings={sortObject}/>);
 
