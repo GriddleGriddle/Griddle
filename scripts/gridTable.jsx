@@ -77,7 +77,7 @@ var GridTable = React.createClass({
       var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollLoadTreshold;
 
       // Make sure that we load results a little before reaching the bottom.
-      var compareHeight = scrollHeightDiff * 0.8;
+      var compareHeight = scrollHeightDiff * 0.6;
 
       if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
         this.props.nextPage();

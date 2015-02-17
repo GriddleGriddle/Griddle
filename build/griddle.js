@@ -589,7 +589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                bodyHeight: this.props.bodyHeight,
 	                paddingHeight: this.props.paddingHeight,
 	                rowHeight: this.props.rowHeight,
-	                infiniteScrollLoadTreshold: this.props.infiniteScrollSpacerHeight,
+	                infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold,
 	                externalLoadingComponent: this.props.externalLoadingComponent,
 	                externalIsLoading: this.props.externalIsLoading,
 	                hasMorePages: hasMorePages })
@@ -891,7 +891,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollLoadTreshold;
 
 	      // Make sure that we load results a little before reaching the bottom.
-	      var compareHeight = scrollHeightDiff * 0.8;
+	      var compareHeight = scrollHeightDiff * 0.6;
 
 	      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
 	        this.props.nextPage();
@@ -909,6 +909,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getNodes: function () {
 	    this.verifyProps();
 	    var that = this;
+
+
+	    debugger;
+
 
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
