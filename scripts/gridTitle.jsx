@@ -20,7 +20,11 @@ var GridTitle = React.createClass({
            "enableSort": true,
            "headerClassName": "",
            "headerStyles": {},
-           "changeSort": null
+           "changeSort": null,
+           "enableColumnFilter": true,
+           "changeFilter" : null,
+           "columnFilters" : [],
+           "results" : []
         }
     },
     sort: function(event){
@@ -38,13 +42,26 @@ var GridTitle = React.createClass({
         enableSort && meta.sortable : 
         enableSort : enableSort;
     },
+    isFilterable: function(enableFilter, meta){
+      var metaIsValid = typeof meta !== "undefined" && meta !== null; 
+        
+      return metaIsValid ? (meta.hasOwnProperty("filterable") && (meta.filterable !== null)) ? 
+        enableFilter && meta.filterable : 
+        enableFilter : enableFilter;
+    },
+    getMetadataValue: function(defaultValue, propertyName, meta) {
+      return meta == null ? defaultValue : typeof(meta[propertyName]) !== "undefined" && meta[propertyName] != null ? meta[propertyName] : defaultValue;
+    },
+    filter: function(event) {
+      this.props.changeFilter(event.target.value, event.target.dataset.title);
+    },
     render: function(){
         var that = this;
-
         var nodes = this.props.columns.map(function(col, index){
             var columnSort = "";
             var sortComponent = null;
             var titleStyles = null;
+            var inputStyle = null;
 
             if(that.props.sortColumn == col && that.props.sortAscending){
                 columnSort = that.props.sortAscendingClassName;
@@ -58,6 +75,7 @@ var GridTitle = React.createClass({
 
             var meta = that.getMetadata(col, that.props.columnMetadata); 
             var columnIsSortable = that.isSortable(that.props.enableSort, meta); 
+            var columnIsFilterable = that.isFilterable(that.props.enableColumnFilter, meta);
 
             columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
             if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -75,7 +93,51 @@ var GridTitle = React.createClass({
               }
             }
 
-            return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+            if (that.props.useGriddleStyles){
+              inputStyle = {
+                width: "95%"
+              }
+            }
+            var filterComponent = "";
+            if (columnIsFilterable) {
+              var filterValue = "";
+              var filterType = "text";
+              var filterSortType = "string";
+
+              filterType = that.getMetadataValue(filterType, "filterType", meta).toLowerCase();
+              filterSortType = that.getMetadataValue(filterSortType, "filterSortType", meta).toLowerCase();
+
+              if (typeof that.props.columnFilters !== "undefined" && typeof that.props.columnFilters[col] !== "undefined" && that.props.columnFilters[col] != null) {
+                filterValue = that.props.columnFilters[col];
+              }
+
+              var uniqueData = [];  
+              if (filterType == "select") {
+                uniqueData = _.uniq(_.map(that.props.results, function(res) {return res[col];}));
+                if (filterSortType == "number") {
+                  uniqueData = _.sortBy(uniqueData, function (element) {
+                    return parseFloat(element);
+                  });
+                } else if (filterSortType != "none") {
+                  uniqueData = _.sortBy(uniqueData);
+                }
+
+                filterComponent = <div>
+                    <select onClick={function(event) {event.stopPropagation();}} onChange={that.filter} value={filterValue} data-title={col}>
+                        <option value=""></option>
+                        {uniqueData.map(function (point) {
+                            var key = point == null ? "null" : point;
+                            return <option value={point} key={key}>{point}</option>;
+                          })
+                        }
+                    </select>
+                  </div>;
+              } else {
+                filterComponent = <div><input style={inputStyle} onClick={function(event) {event.stopPropagation();}} onChange={that.filter} type="text" value={filterValue} data-title={col} /></div>;
+              }
+            }
+
+            return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}{filterComponent}</th>);
         });
 
 

@@ -39,6 +39,7 @@ var Griddle = React.createClass({
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
             "metadataColumns": [],
             "showFilter": false,
+            "showColumnFilter": false,
             "showSettings": false,
             "useCustomRowComponent": false,
             "useCustomGridComponent": false,
@@ -92,7 +93,11 @@ var Griddle = React.createClass({
         };
     },
     /* if we have a filter display the max page and results accordingly */
-    setFilter: function(filter) {
+    setFilter: function(filter, column) {
+      // this.props.columnFilters[event.target.dataset.title] = event.target.value;
+      // console.log(event.target.value);
+      // this.forceUpdate();
+
         if(this.props.useExternal) {
             this.props.externalSetFilter(filter);
             return;
@@ -101,20 +106,38 @@ var Griddle = React.createClass({
         var that = this,
         updatedState = {
             page: 0,
-            filter: filter
+            filter: this.state.filter,
+            columnFilters: this.state.columnFilters
         };
+
+        if (typeof column !== "undefined" && column !== null) {
+            updatedState.columnFilters[column] = filter;
+        } else {
+            updatedState.filter = filter;
+        }
 
         // Obtain the state results.
        updatedState.filteredResults = _.filter(this.props.results,
        function(item) {
             var arr = _.values(item);
+            var keys = Object.keys(item);
+            var generalMatchResult = (typeof updatedState.filter !== undefined && updatedState.filter !== null) ? false : true;
+            var columnMatchResult = true;
             for(var i = 0; i < arr.length; i++){
-               if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                return true;
-               }
+                var lowerCaseValue = (arr[i]||"").toString().toLowerCase();
+                if (lowerCaseValue.indexOf(updatedState.filter.toLowerCase()) >= 0){
+                    generalMatchResult = true;
+                }
+
+                var cFilter = updatedState.columnFilters[keys[i]];
+                if (typeof cFilter !== "undefined" && cFilter !== null) {
+                    if (lowerCaseValue.indexOf(cFilter.toLowerCase()) < 0) {
+                        columnMatchResult = false;
+                    }
+                }
             }
 
-            return false;
+            return (generalMatchResult && columnMatchResult);
         });
 
         // Update the max page.
@@ -128,6 +151,14 @@ var Griddle = React.createClass({
 
         // Set the state.
         that.setState(updatedState);
+    },
+    isColumnFilterActive: function() {
+        var that = this;
+        return this.props.showColumnFilter && (_.filter(_.keys(this.state.columnFilters),
+            function (column) {
+                var value = that.state.columnFilters[column];
+                return (typeof value !== "undefined" && value !== null && value != "");
+            }).length > 0);
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
@@ -198,7 +229,7 @@ var Griddle = React.createClass({
     },
     getColumns: function(){
         var that = this;
-        var results = this.getCurrentResults();
+        var results = this.props.results;//this.getCurrentResults();
 
         //if we don't have any data don't mess with this
         if (results === undefined || results.length === 0){ return [];}
@@ -272,7 +303,8 @@ var Griddle = React.createClass({
             filter: "",
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
-            showColumnChooser: false
+            showColumnChooser: false,
+            columnFilters: {}
         };
 
         return state;
@@ -511,7 +543,8 @@ var Griddle = React.createClass({
               sortAscendingComponent={this.props.sortAscendingComponent} sortDescendingComponent={this.props.sortDescendingComponent}
               parentRowCollapsedComponent={this.props.parentRowCollapsedComponent} parentRowExpandedComponent={this.props.parentRowExpandedComponent}
               bodyHeight={this.props.bodyHeight} infiniteScrollSpacerHeight={this.props.infiniteScrollSpacerHeight} externalLoadingComponent={this.props.externalLoadingComponent}
-              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} /></div>)
+              externalIsLoading={this.props.externalIsLoading} hasMorePages={hasMorePages} enableColumnFilter={this.props.showColumnFilter}
+              changeFilter={this.setFilter} columnFilters={this.state.columnFilters} results={this.props.results}/></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
@@ -537,8 +570,8 @@ var Griddle = React.createClass({
         return myReturn;
     },
     shouldShowNoDataSection: function(results){
-        return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
-            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
+        return (!this.isColumnFilterActive() && this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
+            (! this.isColumnFilterActive() && this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
     },
     render: function() {
         var that = this,

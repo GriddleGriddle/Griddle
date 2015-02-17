@@ -102,6 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
 	            "metadataColumns": [],
 	            "showFilter": false,
+	            "showColumnFilter": false,
 	            "showSettings": false,
 	            "useCustomRowComponent": false,
 	            "useCustomGridComponent": false,
@@ -155,7 +156,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
-	    setFilter: function(filter) {
+	    setFilter: function(filter, column) {
+	      // this.props.columnFilters[event.target.dataset.title] = event.target.value;
+	      // console.log(event.target.value);
+	      // this.forceUpdate();
+
 	        if(this.props.useExternal) {
 	            this.props.externalSetFilter(filter);
 	            return;
@@ -164,20 +169,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this,
 	        updatedState = {
 	            page: 0,
-	            filter: filter
+	            filter: this.state.filter,
+	            columnFilters: this.state.columnFilters
 	        };
+
+	        if (typeof column !== "undefined" && column !== null) {
+	            updatedState.columnFilters[column] = filter;
+	        } else {
+	            updatedState.filter = filter;
+	        }
 
 	        // Obtain the state results.
 	       updatedState.filteredResults = _.filter(this.props.results,
 	       function(item) {
 	            var arr = _.values(item);
+	            var keys = Object.keys(item);
+	            var generalMatchResult = (typeof updatedState.filter !== undefined && updatedState.filter !== null) ? false : true;
+	            var columnMatchResult = true;
 	            for(var i = 0; i < arr.length; i++){
-	               if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-	                return true;
-	               }
+	                var lowerCaseValue = (arr[i]||"").toString().toLowerCase();
+	                if (lowerCaseValue.indexOf(updatedState.filter.toLowerCase()) >= 0){
+	                    generalMatchResult = true;
+	                }
+
+	                var cFilter = updatedState.columnFilters[keys[i]];
+	                if (typeof cFilter !== "undefined" && cFilter !== null) {
+	                    if (lowerCaseValue.indexOf(cFilter.toLowerCase()) < 0) {
+	                        columnMatchResult = false;
+	                    }
+	                }
 	            }
 
-	            return false;
+	            return (generalMatchResult && columnMatchResult);
 	        });
 
 	        // Update the max page.
@@ -191,6 +214,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Set the state.
 	        that.setState(updatedState);
+	    },
+	    isColumnFilterActive: function() {
+	        var that = this;
+	        return this.props.showColumnFilter && (_.filter(_.keys(this.state.columnFilters),
+	            function (column) {
+	                var value = that.state.columnFilters[column];
+	                return (typeof value !== "undefined" && value !== null && value != "");
+	            }).length > 0);
 	    },
 	    setPageSize: function(size){
 	        if(this.props.useExternal) {
@@ -261,7 +292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getColumns: function(){
 	        var that = this;
-	        var results = this.getCurrentResults();
+	        var results = this.props.results;//this.getCurrentResults();
 
 	        //if we don't have any data don't mess with this
 	        if (results === undefined || results.length === 0){ return [];}
@@ -335,7 +366,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filter: "",
 	            sortColumn: this.props.initialSort,
 	            sortAscending: this.props.initialSortAscending,
-	            showColumnChooser: false
+	            showColumnChooser: false,
+	            columnFilters: {}
 	        };
 
 	        return state;
@@ -574,7 +606,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	              sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
 	              parentRowCollapsedComponent: this.props.parentRowCollapsedComponent, parentRowExpandedComponent: this.props.parentRowExpandedComponent, 
 	              bodyHeight: this.props.bodyHeight, infiniteScrollSpacerHeight: this.props.infiniteScrollSpacerHeight, externalLoadingComponent: this.props.externalLoadingComponent, 
-	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages})))
+	              externalIsLoading: this.props.externalIsLoading, hasMorePages: hasMorePages, enableColumnFilter: this.props.showColumnFilter, 
+	              changeFilter: this.setFilter, columnFilters: this.state.columnFilters, results: this.props.results})))
 	    },
 	    getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
 	        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
@@ -600,8 +633,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return myReturn;
 	    },
 	    shouldShowNoDataSection: function(results){
-	        return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
-	            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
+	        return (!this.isColumnFilterActive() && this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) || 
+	            (! this.isColumnFilterActive() && this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
 	    },
 	    render: function() {
 	        var that = this,
@@ -721,7 +754,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "parentRowExpandedComponent": "▼",
 	      "externalLoadingComponent": null,
 	      "externalIsLoading": false,
-	      "enableSort": true
+	      "enableSort": true,
+	      "results" : []
 	    }
 	  },
 	  componentDidMount: function() {
@@ -833,7 +867,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          changeSort: this.props.changeSort, sortColumn: this.props.sortColumn, sortAscending: this.props.sortAscending, 
 	          sortAscendingClassName: this.props.sortAscendingClassName, sortDescendingClassName: this.props.sortDescendingClassName, 
 	          sortAscendingComponent: this.props.sortAscendingComponent, sortDescendingComponent: this.props.sortDescendingComponent, 
-	          columnMetadata: this.props.columnMetadata, enableSort: this.props.enableSort})
+	          columnMetadata: this.props.columnMetadata, enableSort: this.props.enableSort, enableColumnFilter: this.props.enableColumnFilter, 
+	          changeFilter: this.props.changeFilter, columnFilters: this.props.columnFilters, results: this.props.results})
 	        : "");
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -1235,7 +1270,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	           "enableSort": true,
 	           "headerClassName": "",
 	           "headerStyles": {},
-	           "changeSort": null
+	           "changeSort": null,
+	           "enableColumnFilter": true,
+	           "changeFilter" : null,
+	           "columnFilters" : [],
+	           "results" : []
 	        }
 	    },
 	    sort: function(event){
@@ -1253,13 +1292,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        enableSort && meta.sortable : 
 	        enableSort : enableSort;
 	    },
+	    isFilterable: function(enableFilter, meta){
+	      var metaIsValid = typeof meta !== "undefined" && meta !== null; 
+	        
+	      return metaIsValid ? (meta.hasOwnProperty("filterable") && (meta.filterable !== null)) ? 
+	        enableFilter && meta.filterable : 
+	        enableFilter : enableFilter;
+	    },
+	    getMetadataValue: function(defaultValue, propertyName, meta) {
+	      return meta == null ? defaultValue : typeof(meta[propertyName]) !== "undefined" && meta[propertyName] != null ? meta[propertyName] : defaultValue;
+	    },
+	    filter: function(event) {
+	      this.props.changeFilter(event.target.value, event.target.dataset.title);
+	    },
 	    render: function(){
 	        var that = this;
-
 	        var nodes = this.props.columns.map(function(col, index){
 	            var columnSort = "";
 	            var sortComponent = null;
 	            var titleStyles = null;
+	            var inputStyle = null;
 
 	            if(that.props.sortColumn == col && that.props.sortAscending){
 	                columnSort = that.props.sortAscendingClassName;
@@ -1273,6 +1325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var meta = that.getMetadata(col, that.props.columnMetadata); 
 	            var columnIsSortable = that.isSortable(that.props.enableSort, meta); 
+	            var columnIsFilterable = that.isFilterable(that.props.enableColumnFilter, meta);
 
 	            columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
 	            if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -1290,7 +1343,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	              }
 	            }
 
-	            return (React.createElement("th", {onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent));
+	            if (that.props.useGriddleStyles){
+	              inputStyle = {
+	                width: "95%"
+	              }
+	            }
+	            var filterComponent = "";
+	            if (columnIsFilterable) {
+	              var filterValue = "";
+	              var filterType = "text";
+	              var filterSortType = "string";
+
+	              filterType = that.getMetadataValue(filterType, "filterType", meta).toLowerCase();
+	              filterSortType = that.getMetadataValue(filterSortType, "filterSortType", meta).toLowerCase();
+
+	              if (typeof that.props.columnFilters !== "undefined" && typeof that.props.columnFilters[col] !== "undefined" && that.props.columnFilters[col] != null) {
+	                filterValue = that.props.columnFilters[col];
+	              }
+
+	              var uniqueData = [];  
+	              if (filterType == "select") {
+	                uniqueData = _.uniq(_.map(that.props.results, function(res) {return res[col];}));
+	                if (filterSortType == "number") {
+	                  uniqueData = _.sortBy(uniqueData, function (element) {
+	                    return parseFloat(element);
+	                  });
+	                } else if (filterSortType != "none") {
+	                  uniqueData = _.sortBy(uniqueData);
+	                }
+
+	                filterComponent = React.createElement("div", null, 
+	                    React.createElement("select", {onClick: function(event) {event.stopPropagation();}, onChange: that.filter, value: filterValue, "data-title": col}, 
+	                        React.createElement("option", {value: ""}), 
+	                        uniqueData.map(function (point) {
+	                            var key = point == null ? "null" : point;
+	                            return React.createElement("option", {value: point, key: key}, point);
+	                          })
+	                        
+	                    )
+	                  );
+	              } else {
+	                filterComponent = React.createElement("div", null, React.createElement("input", {style: inputStyle, onClick: function(event) {event.stopPropagation();}, onChange: that.filter, type: "text", value: filterValue, "data-title": col}));
+	              }
+	            }
+
+	            return (React.createElement("th", {onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles}, displayName, sortComponent, filterComponent));
 	        });
 
 
