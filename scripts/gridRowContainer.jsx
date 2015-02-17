@@ -12,6 +12,8 @@ var GridRowContainer = React.createClass({
         "useGriddleIcons": true,
         "isSubGriddle": false,
         "columnSettings": null,
+        "paddingHeight": null,
+        "rowHeight": null,
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
@@ -33,14 +35,14 @@ var GridRowContainer = React.createClass({
     },
     setShowChildren: function(visible){
       this.setState({
-        showChildren: visible 
+        showChildren: visible
       });
     },
     verifyProps: function(){
         if(this.props.columnSettings === null){
            console.error("gridRowContainer: The columnSettings prop is null and it shouldn't be");
         }
-    },    
+    },
     render: function(){
       this.verifyProps();
       var that = this;
@@ -51,7 +53,8 @@ var GridRowContainer = React.createClass({
       arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnSettings={ this.props.columnSettings}
         hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
         parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
-        parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}/>);
+        parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
+        paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />);
         var children = null;
 
       if(that.state.showChildren){
@@ -63,7 +66,8 @@ var GridRowContainer = React.createClass({
                               parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
                               showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}
                               parentRowExpandedComponent={that.props.parentRowExpandedComponent}
-                              parentRowCollapsedComponent={that.props.parentRowCollapsedComponent} />
+                              parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+                                paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />
                           </td>
                         </tr>);
               }

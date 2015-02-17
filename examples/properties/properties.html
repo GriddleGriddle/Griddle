@@ -299,11 +299,23 @@ var propertiesItem = [
     "property": "bodyHeight",
     "description": "The height, in pixels, of the grid body.",
     "type": "int",
-    "default": "false"
+    "default": "null"
   },
   {
-    "property": "infiniteScrollSpacerHeight",
-    "description": "The height of a fake row to give the table body additional height if there are more rows that can be loaded when infinite scrolling is enabled.",
+    "property": "paddingHeight",
+    "description": "The height, in pixels, of the the top/bottom padding used inside of a row. Only used when 'useGriddleStyles' is true.",
+    "type": "int",
+    "default": "5"
+  },
+  {
+    "property": "rowHeight",
+    "description": "The minimum height, in pixels, of a row. Only used when 'useGriddleStyles' is true.",
+    "type": "int",
+    "default": "25"
+  },
+  {
+    "property": "infiniteScrollLoadTreshold",
+    "description": "The height, in pixels, used to trigger paging. Changing this property should be a pretty rare occurrence.",
     "type": "int",
     "default": "50"
   },

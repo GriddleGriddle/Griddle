@@ -14,8 +14,8 @@ If you're looking to display multiple pages of data without the need to click 'N
   <dd><strong>bool</strong> - Whether or not to have fixed column headers when scrolling, which is accomplished by having Griddle represented in two tables (with the headers in the first). As Griddle doesn't make many assumptions about much styling, this will ensure that the table headers will be displayed above the scrollable table body. Default: false</dd>
 </dl>
 <dl>
-  <dt>infiniteScrollSpacerHeight (Optional)</dt>
-  <dd><strong>int</strong> - The height, in pixels, of an extra row used to trigger paging. Changing this property should be a pretty rare occurrence. Default: 50</dd>
+  <dt>infiniteScrollLoadTreshold (Optional)</dt>
+  <dd><strong>int</strong> - The height, in pixels, used to trigger paging. Changing this property should be a pretty rare occurrence. Default: 50</dd>
 </dl>
 
 

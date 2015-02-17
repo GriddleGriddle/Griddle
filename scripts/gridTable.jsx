@@ -19,7 +19,9 @@ var GridTable = React.createClass({
       "hasMorePages": false,
       "useFixedHeader": false,
       "useFixedLayout": true,
-      "infiniteScrollSpacerHeight": null,
+      "paddingHeight": null,
+      "rowHeight": null,
+      "infiniteScrollLoadTreshold": null,
       "bodyHeight": null,
       "tableHeading": "",
       "useGriddleStyles": true,
@@ -32,6 +34,13 @@ var GridTable = React.createClass({
       "externalLoadingComponent": null,
       "externalIsLoading": false,
     }
+  },
+  getInitialState: function(){
+      return {
+         scrollTop: 0,
+         scrollHeight: this.props.bodyHeight,
+         clientHeight: this.props.bodyHeight
+      }
   },
   componentDidMount: function() {
     // After the initial render, see if we need to load additional pages.
@@ -49,14 +58,28 @@ var GridTable = React.createClass({
       var scrollHeight = scrollable.scrollHeight;
       var clientHeight = scrollable.clientHeight;
 
+      // If the scroll position changed and the difference is greater than a row height
+      if (this.props.rowHeight !== null &&
+          this.state.scrollTop !== scrollTop &&
+          Math.abs(this.state.scrollTop - scrollTop) >= this.getAdjustedRowHeight()) {
+        var newState = {
+          scrollTop : scrollTop,
+          scrollHeight: scrollHeight,
+          clientHeight: clientHeight
+        };
+
+        // Set the state to the new state
+        this.setState(newState);
+      }
+
       // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
       // the spacer's height.
-      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollSpacerHeight;
+      var scrollHeightDiff = scrollHeight - (scrollTop + clientHeight) - this.props.infiniteScrollLoadTreshold;
 
       // Make sure that we load results a little before reaching the bottom.
-      var compareHeight = scrollHeightDiff * 0.8;
+      var compareHeight = scrollHeightDiff * 0.6;
 
-      if (compareHeight <= this.props.infiniteScrollSpacerHeight) {
+      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
         this.props.nextPage();
       }
     }
@@ -66,17 +89,40 @@ var GridTable = React.createClass({
        console.error("gridTable: The columnSettings prop is null and it shouldn't be");
     }
   },
-  render: function() {
+  getAdjustedRowHeight: function() {
+    return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
+  },
+  getNodes: function() {
     this.verifyProps();
     var that = this;
-    //figure out if we need to wrap the group in one tbody or many
-    var anyHasChildren = false;
-
-    var nodes = null;
 
     // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
     if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
-      nodes = this.props.data.map(function(row, index){
+      var nodeData = that.props.data;
+      var aboveSpacerRow = null;
+      var belowSpacerRow = null;
+
+      // If we have a row height specified, only render what's going to be visible.
+      if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
+        var adjustedHeight = that.getAdjustedRowHeight();
+        var visibleRecordCount = Math.ceil(that.state.clientHeight / adjustedHeight);
+
+        // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
+        var displayStart = Math.max(0, Math.floor(that.state.scrollTop / adjustedHeight) - visibleRecordCount * 0.25);
+        var displayEnd = Math.min(displayStart + visibleRecordCount * 1.25, this.props.data.length - 1);
+
+        // Split the amount of nodes.
+        nodeData = nodeData.slice(displayStart, displayEnd);
+
+        // Set the above and below nodes.
+        var aboveSpacerRowStyle = { height: (displayStart * adjustedHeight) + "px" };
+        aboveSpacerRow = (<tr style={aboveSpacerRowStyle}></tr>);
+        var belowSpacerRowStyle = { height: ((this.props.data.length - displayEnd) * adjustedHeight) + "px" };
+        belowSpacerRow = (<tr style={belowSpacerRowStyle}></tr>);
+      }
+
+      var nodes = nodeData.map(function(row, index){
+          var propIndex = that.props.data.indexOf(row);
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
           //at least one item in the group has children.
@@ -85,10 +131,31 @@ var GridTable = React.createClass({
           return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-            data={row} key={index} columnSettings={that.props.columnSettings}
+            data={row} key={propIndex} columnSettings={that.props.columnSettings} paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight}
             uniqueId={_.uniqueId("grid_row") } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
+
+      // Add the spacer rows for nodes we're not rendering.
+      if (aboveSpacerRow) {
+        nodes.unshift(aboveSpacerRow);
+      }
+      if (belowSpacerRow) {
+        nodes.push(belowSpacerRow);
+      }
+
+      // Send back the nodes.
+      return nodes;
+    } else {
+      return null;
     }
+  },
+  render: function() {
+    var that = this;
+    //figure out if we need to wrap the group in one tbody or many
+    var anyHasChildren = false;
+
+    // Grab the nodes to render
+    var nodes = this.getNodes();
 
     var gridStyle = null;
     var loadingContent = null;
@@ -100,7 +167,6 @@ var GridTable = React.createClass({
       tableStyle.tableLayout = "fixed";
     }
 
-    var infiniteScrollSpacerRow = null;
     if (this.props.enableInfiniteScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
@@ -109,15 +175,6 @@ var GridTable = React.createClass({
         "height": this.props.bodyHeight + "px",
         "width": "100%"
       };
-
-      // Only add the spacer row if the height is defined.
-      if (this.props.infiniteScrollSpacerHeight && this.props.hasMorePages) {
-        var spacerStyle = {
-          "height": this.props.infiniteScrollSpacerHeight + "px"
-        };
-
-        infiniteScrollSpacerRow = <tr style={spacerStyle}></tr>;
-      }
     }
 
     // If we're currently loading, populate the loading content
@@ -150,7 +207,7 @@ var GridTable = React.createClass({
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
-      nodes = <tbody>{nodes}{infiniteScrollSpacerRow}</tbody>
+      nodes = <tbody>{nodes}</tbody>
     }
 
     var pagingContent = "";
