@@ -165,10 +165,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function (filter, column) {
-	        // this.props.columnFilters[event.target.dataset.title] = event.target.value;
-	        // console.log(event.target.value);
-	        // this.forceUpdate();
-
 	        if (this.props.useExternal) {
 	            this.props.externalSetFilter(filter);
 	            return;
@@ -352,8 +348,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillMount: function () {
 	        this.verifyExternal();
 	        this.verifyCustom();
+	        var that = this;
+	        var columnMetadataValues = {};
 
-	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? _.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
+	        // If we're to display the column filter
+	        if (this.props.showColumnFilter) {
+	            this.props.columnMetadata.map(function (col, index) {
+	                // If the column is filterable and it's a select list, we need to fill the list of possible items.
+	                if (typeof col !== "undefined" && typeof col.filterable !== "undefined" && col.filterable === true && col.filterType === "select") {
+	                    // Fill the possible values.
+	                    columnMetadataValues[col.columnName] = _.uniq(_.map(that.props.results, function (res) {
+	                        return res[col.columnName];
+	                    }));
+	                }
+	            });
+	        }
+
+	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? _.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns, this.props.showColumnFilter, columnMetadataValues);
 
 	        this.setMaxPage();
 
@@ -624,9 +635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                externalLoadingComponent: this.props.externalLoadingComponent,
 	                externalIsLoading: this.props.externalIsLoading,
 	                hasMorePages: hasMorePages,
-
 	                changeFilter: this.setFilter,
-	                enableColumnFilter: this.props.showColumnFilter,
 	                columnFilters: this.state.columnFilters })
 	        );
 	    },
@@ -756,6 +765,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var childrenColumnName = arguments[2] === undefined ? "children" : arguments[2];
 	    var columnMetadata = arguments[3] === undefined ? [] : arguments[3];
 	    var metadataColumns = arguments[4] === undefined ? [] : arguments[4];
+	    var enableColumnFilter = arguments[5] === undefined ? false : arguments[5];
+	    var columnMetadataValues = arguments[6] === undefined ? {} : arguments[6];
 	    _classCallCheck(this, ColumnProperties);
 
 	    this.allColumns = allColumns;
@@ -763,6 +774,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.childrenColumnName = childrenColumnName;
 	    this.columnMetadata = columnMetadata;
 	    this.metadataColumns = metadataColumns;
+	    this.enableColumnFilter = enableColumnFilter;
+	    this.columnMetadataValues = columnMetadataValues;
 	  }
 
 	  _prototypeProperties(ColumnProperties, null, {
@@ -793,9 +806,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      writable: true,
 	      configurable: true
 	    },
+	    getColumnValuesByName: {
+	      value: function getColumnValuesByName(name) {
+	        return typeof this.columnMetadataValues[name] !== "undefined" ? this.columnMetadataValues[name] : [];
+	      },
+	      writable: true,
+	      configurable: true
+	    },
 	    hasColumnMetadata: {
 	      value: function hasColumnMetadata() {
 	        return this.columnMetadata !== null && this.columnMetadata.length > 0;
+	      },
+	      writable: true,
+	      configurable: true
+	    },
+	    hasColumnFilterEnabled: {
+	      value: function hasColumnFilterEnabled() {
+	        return this.enableColumnFilter;
 	      },
 	      writable: true,
 	      configurable: true
@@ -886,7 +913,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      externalLoadingComponent: null,
 	      externalIsLoading: false,
 	      enableSort: true,
-	      enableColumnFilter: false,
 	      changeFilter: null,
 	      columnFilters: []
 	    };
@@ -1070,7 +1096,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
-	      sortSettings: this.props.sortSettings, columnSettings: this.props.columnSettings, enableColumnFilter: this.props.enableColumnFilter,
+	      sortSettings: this.props.sortSettings, columnSettings: this.props.columnSettings,
 	      changeFilter: this.props.changeFilter, columnFilters: this.props.columnFilters }) : "";
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -1597,7 +1623,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      headerClassName: "",
 	      headerStyles: {},
 	      changeSort: null,
-	      enableColumnFilter: false,
 	      changeFilter: null,
 	      columnFilters: []
 	    };
@@ -1649,7 +1674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var displayName = col;
 	      var meta = that.props.columnSettings.getColumnMetadataByName(col);
 	      var columnIsSortable = that.props.columnSettings.isColumnSortable(col);
-	      var columnIsFilterable = that.isFilterable(that.props.enableColumnFilter, meta);
+	      var columnIsFilterable = that.isFilterable(that.props.columnSettings.hasColumnFilterEnabled(), meta);
 
 	      columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + meta.cssClassName;
 	      if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -1686,9 +1711,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var uniqueData = [];
 	        if (filterType == "select") {
-	          uniqueData = _.uniq(_.map(that.props.results, function (res) {
-	            return res[col];
-	          }));
+	          debugger;
+	          uniqueData = that.props.columnSettings.getColumnValuesByName(col);
 	          if (filterSortType == "number") {
 	            uniqueData = _.sortBy(uniqueData, function (element) {
 	              return parseFloat(element);

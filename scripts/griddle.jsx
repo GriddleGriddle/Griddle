@@ -99,10 +99,6 @@ var Griddle = React.createClass({
     },
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter, column) {
-      // this.props.columnFilters[event.target.dataset.title] = event.target.value;
-      // console.log(event.target.value);
-      // this.forceUpdate();
-
         if(this.props.useExternal) {
             this.props.externalSetFilter(filter);
             return;
@@ -281,13 +277,28 @@ var Griddle = React.createClass({
     componentWillMount: function() {
         this.verifyExternal();
         this.verifyCustom();
+        var that = this;
+        var columnMetadataValues = {};
+
+        // If we're to display the column filter
+        if (this.props.showColumnFilter) {
+          this.props.columnMetadata.map(function(col, index){
+            // If the column is filterable and it's a select list, we need to fill the list of possible items.
+            if (typeof col !== 'undefined' && typeof col.filterable !== 'undefined' && col.filterable === true && col.filterType === 'select') {
+              // Fill the possible values.
+              columnMetadataValues[col.columnName] = _.uniq(_.map(that.props.results, function(res) {return res[col.columnName];}));
+            }
+          });
+        }
 
         this.columnSettings = new ColumnProperties(
             this.props.results.length > 0 ? _.keys(this.props.results[0]) : [],
             this.props.columns,
             this.props.childrenColumnName,
             this.props.columnMetadata,
-            this.props.metadataColumns
+            this.props.metadataColumns,
+            this.props.showColumnFilter,
+            columnMetadataValues
         );
 
         this.setMaxPage();
@@ -551,9 +562,7 @@ var Griddle = React.createClass({
                 externalLoadingComponent={this.props.externalLoadingComponent}
                 externalIsLoading={this.props.externalIsLoading}
                 hasMorePages={hasMorePages}
-
                 changeFilter={this.setFilter}
-                enableColumnFilter={this.props.showColumnFilter}
                 columnFilters={this.state.columnFilters}/></div>)
 
     },

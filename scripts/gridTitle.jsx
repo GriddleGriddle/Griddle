@@ -16,7 +16,6 @@ var GridTitle = React.createClass({
            "headerClassName": "",
            "headerStyles": {},
            "changeSort": null,
-           "enableColumnFilter": false,
            "changeFilter" : null,
            "columnFilters" : []
         }
@@ -70,7 +69,7 @@ var GridTitle = React.createClass({
         var displayName = col;
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var columnIsSortable = that.props.columnSettings.isColumnSortable(col);
-        var columnIsFilterable = that.isFilterable(that.props.enableColumnFilter, meta);
+        var columnIsFilterable = that.isFilterable(that.props.columnSettings.hasColumnFilterEnabled(), meta);
 
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + meta.cssClassName;
         if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
@@ -107,7 +106,8 @@ var GridTitle = React.createClass({
 
           var uniqueData = [];
           if (filterType == "select") {
-            uniqueData = _.uniq(_.map(that.props.results, function(res) {return res[col];}));
+            debugger;
+            uniqueData = that.props.columnSettings.getColumnValuesByName(col);
             if (filterSortType == "number") {
               uniqueData = _.sortBy(uniqueData, function (element) {
                 return parseFloat(element);

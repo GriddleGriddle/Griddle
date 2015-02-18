@@ -34,7 +34,6 @@ var GridTable = React.createClass({
       "externalLoadingComponent": null,
       "externalIsLoading": false,
       "enableSort": true,
-      "enableColumnFilter": false,
       "changeFilter": null,
       "columnFilters": []
     }
@@ -205,7 +204,7 @@ var GridTable = React.createClass({
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
-          sortSettings={this.props.sortSettings} columnSettings={this.props.columnSettings} enableColumnFilter={this.props.enableColumnFilter}
+          sortSettings={this.props.sortSettings} columnSettings={this.props.columnSettings}
           changeFilter={this.props.changeFilter} columnFilters={this.props.columnFilters} />
         : "");
 
