@@ -48,6 +48,18 @@ The properties that the columnMetadata object can contain are as follows:
   <dt>customComponent</dt>
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
 </dl>
+<dl>
+  <dt>filterable</dt>
+  <dd><strong>bool</strong> - Determines if the column should present a search area on the header if `showColumnFilter` is enabled.</dd>
+</dl>
+<dl>
+  <dt>filterType</dt>
+  <dd><strong>string</strong> - Type of per column search element. Options: text, select. Default: text</dd>
+</dl>
+<dl>
+  <dt>filterSortType</dt>
+  <dd><strong>string</strong> - Type of sort to use for sortable search elements (such as select). Options: none, number, string. Default: string</dd>
+</dl>
 
 #####Example:#####
 

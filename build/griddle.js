@@ -107,6 +107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
 	            metadataColumns: [],
 	            showFilter: false,
+	            showColumnFilter: false,
 	            showSettings: false,
 	            useCustomRowComponent: false,
 	            useCustomGridComponent: false,
@@ -163,7 +164,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    /* if we have a filter display the max page and results accordingly */
-	    setFilter: function (filter) {
+	    setFilter: function (filter, column) {
+	        // this.props.columnFilters[event.target.dataset.title] = event.target.value;
+	        // console.log(event.target.value);
+	        // this.forceUpdate();
+
 	        if (this.props.useExternal) {
 	            this.props.externalSetFilter(filter);
 	            return;
@@ -172,19 +177,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var that = this,
 	            updatedState = {
 	            page: 0,
-	            filter: filter
+	            filter: this.state.filter,
+	            columnFilters: this.state.columnFilters
 	        };
+
+	        if (typeof column !== "undefined" && column !== null) {
+	            updatedState.columnFilters[column] = filter;
+	        } else {
+	            updatedState.filter = filter;
+	        }
 
 	        // Obtain the state results.
 	        updatedState.filteredResults = _.filter(this.props.results, function (item) {
 	            var arr = _.values(item);
+	            var keys = Object.keys(item);
+	            var generalMatchResult = typeof updatedState.filter !== undefined && updatedState.filter !== null ? false : true;
+	            var columnMatchResult = true;
 	            for (var i = 0; i < arr.length; i++) {
-	                if ((arr[i] || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
-	                    return true;
+	                var lowerCaseValue = (arr[i] || "").toString().toLowerCase();
+	                if (lowerCaseValue.indexOf(updatedState.filter.toLowerCase()) >= 0) {
+	                    generalMatchResult = true;
+	                }
+
+	                var columnFilter = updatedState.columnFilters[keys[i]];
+	                if (typeof columnFilter !== "undefined" && columnFilter !== null) {
+	                    if (lowerCaseValue.indexOf(columnFilter.toLowerCase()) < 0) {
+	                        columnMatchResult = false;
+	                    }
 	                }
 	            }
 
-	            return false;
+	            return generalMatchResult && columnMatchResult;
 	        });
 
 	        // Update the max page.
@@ -198,6 +221,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Set the state.
 	        that.setState(updatedState);
+	    },
+	    isColumnFilterActive: function () {
+	        var that = this;
+	        return this.props.showColumnFilter && _.filter(_.keys(this.state.columnFilters), function (column) {
+	            var value = that.state.columnFilters[column];
+	            return typeof value !== "undefined" && value !== null && value != "";
+	        }).length > 0;
 	    },
 	    setPageSize: function (size) {
 	        if (this.props.useExternal) {
@@ -313,7 +343,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filter: "",
 	            sortColumn: this.props.initialSort,
 	            sortAscending: this.props.initialSortAscending,
-	            showColumnChooser: false
+	            showColumnChooser: false,
+	            columnFilters: {}
 	        };
 
 	        return state;
@@ -592,7 +623,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold,
 	                externalLoadingComponent: this.props.externalLoadingComponent,
 	                externalIsLoading: this.props.externalIsLoading,
-	                hasMorePages: hasMorePages })
+	                hasMorePages: hasMorePages,
+
+	                changeFilter: this.setFilter,
+	                enableColumnFilter: this.props.showColumnFilter,
+	                columnFilters: this.state.columnFilters })
 	        );
 	    },
 	    getContentSection: function (data, cols, meta, pagingContent, hasMorePages) {
@@ -625,7 +660,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return myReturn;
 	    },
 	    shouldShowNoDataSection: function (results) {
-	        return this.props.useExternal === false && (typeof results === "undefined" || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
+	        return !this.isColumnFilterActive() && this.props.useExternal === false && (typeof results === "undefined" || results.length === 0) || !this.isColumnFilterActive() && this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
 	    },
 	    render: function () {
 	        var that = this,
@@ -849,7 +884,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      parentRowCollapsedComponent: "▶",
 	      parentRowExpandedComponent: "▼",
 	      externalLoadingComponent: null,
-	      externalIsLoading: false };
+	      externalIsLoading: false,
+	      enableSort: true,
+	      enableColumnFilter: false,
+	      changeFilter: null,
+	      columnFilters: []
+	    };
 	  },
 	  getInitialState: function () {
 	    return {
@@ -909,10 +949,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getNodes: function () {
 	    this.verifyProps();
 	    var that = this;
-
-
-	    debugger;
-
 
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
@@ -1034,8 +1070,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
-	      sortSettings: this.props.sortSettings,
-	      columnSettings: this.props.columnSettings }) : "";
+	      sortSettings: this.props.sortSettings, columnSettings: this.props.columnSettings, enableColumnFilter: this.props.enableColumnFilter,
+	      changeFilter: this.props.changeFilter, columnFilters: this.props.columnFilters }) : "";
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren) {
@@ -1550,89 +1586,168 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnProperties = __webpack_require__(4);
 
 	var GridTitle = React.createClass({
-	    displayName: "GridTitle",
-	    getDefaultProps: function () {
-	        return {
-	            columnSettings: null,
-	            sortSettings: null,
-	            headerStyle: null,
-	            useGriddleStyles: true,
-	            useGriddleIcons: true,
-	            headerClassName: "",
-	            headerStyles: {} };
-	    },
-	    componentWillMount: function () {
-	        this.verifyProps();
-	    },
-	    sort: function (event) {
-	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
-	    },
-	    verifyProps: function () {
-	        if (this.props.columnSettings === null) {
-	            console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+	  displayName: "GridTitle",
+	  getDefaultProps: function () {
+	    return {
+	      columnSettings: null,
+	      sortSettings: null,
+	      headerStyle: null,
+	      useGriddleStyles: true,
+	      useGriddleIcons: true,
+	      headerClassName: "",
+	      headerStyles: {},
+	      changeSort: null,
+	      enableColumnFilter: false,
+	      changeFilter: null,
+	      columnFilters: []
+	    };
+	  },
+	  componentWillMount: function () {
+	    this.verifyProps();
+	  },
+	  sort: function (event) {
+	    this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+	  },
+	  verifyProps: function () {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
+	    }
+
+	    if (this.props.sortSettings === null) {
+	      console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
+	    }
+	  },
+	  isFilterable: function (enableFilter, meta) {
+	    var metaIsValid = typeof meta !== "undefined" && meta !== null;
+
+	    return metaIsValid ? meta.hasOwnProperty("filterable") && meta.filterable !== null ? enableFilter && meta.filterable : enableFilter : enableFilter;
+	  },
+	  getMetadataValue: function (defaultValue, propertyName, meta) {
+	    return meta == null ? defaultValue : typeof meta[propertyName] !== "undefined" && meta[propertyName] != null ? meta[propertyName] : defaultValue;
+	  },
+	  filter: function (event) {
+	    this.props.changeFilter(event.target.value, event.target.dataset.title);
+	  },
+	  render: function () {
+	    this.verifyProps();
+	    var that = this;
+
+	    var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
+	      var columnSort = "";
+	      var sortComponent = null;
+	      var titleStyles = null;
+	      var inputStyle = null;
+
+	      if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
+	        columnSort = that.props.sortSettings.sortAscendingClassName;
+	        sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
+	      } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
+	        columnSort += that.props.sortSettings.sortDescendingClassName;
+	        sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
+	      }
+
+	      var displayName = col;
+	      var meta = that.props.columnSettings.getColumnMetadataByName(col);
+	      var columnIsSortable = that.props.columnSettings.isColumnSortable(col);
+	      var columnIsFilterable = that.isFilterable(that.props.enableColumnFilter, meta);
+
+	      columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + meta.cssClassName;
+	      if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
+	        displayName = meta.displayName;
+	      }
+
+	      if (that.props.useGriddleStyles) {
+	        titleStyles = {
+	          backgroundColor: "#EDEDEF",
+	          border: "0",
+	          borderBottom: "1px solid #DDD",
+	          color: "#222",
+	          padding: "5px",
+	          cursor: columnIsSortable ? "pointer" : "default"
+	        };
+
+	        inputStyle = {
+	          width: "95%"
+	        };
+	      }
+
+	      var filterComponent = "";
+	      if (columnIsFilterable) {
+	        var filterValue = "";
+	        var filterType = "text";
+	        var filterSortType = "string";
+
+	        filterType = that.getMetadataValue(filterType, "filterType", meta).toLowerCase();
+	        filterSortType = that.getMetadataValue(filterSortType, "filterSortType", meta).toLowerCase();
+
+	        if (typeof that.props.columnFilters !== "undefined" && typeof that.props.columnFilters[col] !== "undefined" && that.props.columnFilters[col] != null) {
+	          filterValue = that.props.columnFilters[col];
 	        }
 
-	        if (this.props.sortSettings === null) {
-	            console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
-	        }
-	    },
-	    render: function () {
-	        this.verifyProps();
-	        var that = this;
+	        var uniqueData = [];
+	        if (filterType == "select") {
+	          uniqueData = _.uniq(_.map(that.props.results, function (res) {
+	            return res[col];
+	          }));
+	          if (filterSortType == "number") {
+	            uniqueData = _.sortBy(uniqueData, function (element) {
+	              return parseFloat(element);
+	            });
+	          } else if (filterSortType != "none") {
+	            uniqueData = _.sortBy(uniqueData);
+	          }
 
-	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
-	            var columnSort = "";
-	            var sortComponent = null;
-	            var titleStyles = null;
-
-	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
-	                columnSort = that.props.sortSettings.sortAscendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
-	            } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
-	                columnSort += that.props.sortSettings.sortDescendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
-	            }
-
-	            var displayName = col;
-	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
-	            var columnIsSortable = that.props.columnSettings.isColumnSortable(col);
-
-	            columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + meta.cssClassName;
-	            if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {
-	                displayName = meta.displayName;
-	            }
-
-	            if (that.props.useGriddleStyles) {
-	                titleStyles = {
-	                    backgroundColor: "#EDEDEF",
-	                    border: "0",
-	                    borderBottom: "1px solid #DDD",
-	                    color: "#222",
-	                    padding: "5px",
-	                    cursor: columnIsSortable ? "pointer" : "default"
-	                };
-	            }
-	            return React.createElement(
-	                "th",
-	                { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
-	                displayName,
-	                sortComponent
-	            );
-	        });
-
-
-	        return React.createElement(
-	            "thead",
+	          filterComponent = React.createElement(
+	            "div",
 	            null,
 	            React.createElement(
-	                "tr",
-	                {
-	                    className: this.props.headerClassName,
-	                    style: this.props.headerStyles },
-	                nodes
+	              "select",
+	              { onClick: function (event) {
+	                  event.stopPropagation();
+	                }, onChange: that.filter, value: filterValue, "data-title": col },
+	              React.createElement("option", { value: "" }),
+	              uniqueData.map(function (point) {
+	                var key = point == null ? "null" : point;
+	                return React.createElement(
+	                  "option",
+	                  { value: point, key: key },
+	                  point
+	                );
+	              })
 	            )
-	        );
-	    }
+	          );
+	        } else {
+	          filterComponent = React.createElement(
+	            "div",
+	            null,
+	            React.createElement("input", { style: inputStyle, onClick: function (event) {
+	                event.stopPropagation();
+	              }, onChange: that.filter, type: "text", value: filterValue, "data-title": col })
+	          );
+	        }
+	      }
+
+	      return React.createElement(
+	        "th",
+	        { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
+	        displayName,
+	        sortComponent,
+	        filterComponent
+	      );
+	    });
+
+	    return React.createElement(
+	      "thead",
+	      null,
+	      React.createElement(
+	        "tr",
+	        {
+	          className: this.props.headerClassName,
+	          style: this.props.headerStyles },
+	        nodes
+	      )
+	    );
+	  }
 	});
 
 	module.exports = GridTitle;

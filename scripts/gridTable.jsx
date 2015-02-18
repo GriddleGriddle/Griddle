@@ -33,6 +33,10 @@ var GridTable = React.createClass({
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
       "externalIsLoading": false,
+      "enableSort": true,
+      "enableColumnFilter": false,
+      "changeFilter": null,
+      "columnFilters": []
     }
   },
   getInitialState: function(){
@@ -201,8 +205,8 @@ var GridTable = React.createClass({
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
-          sortSettings={this.props.sortSettings}
-          columnSettings={this.props.columnSettings}/>
+          sortSettings={this.props.sortSettings} columnSettings={this.props.columnSettings} enableColumnFilter={this.props.enableColumnFilter}
+          changeFilter={this.props.changeFilter} columnFilters={this.props.columnFilters} />
         : "");
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
