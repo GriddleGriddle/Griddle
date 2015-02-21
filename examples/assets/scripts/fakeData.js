@@ -16,13 +16,15 @@ var columnMeta = [
     "order": 2,
     "locked": false,
     "visible": true,
-    "displayName": "Name"
+    "displayName": "Name",
+    "width": 100
   },
   {
     "columnName": "city",
     "order": 3,
     "locked": false,
-    "visible": true
+    "visible": true,
+    "width": "500"
   },
   {
     "columnName": "state",

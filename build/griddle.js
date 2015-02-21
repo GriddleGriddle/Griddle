@@ -139,7 +139,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            paddingHeight: 5,
 	            rowHeight: 25,
 	            infiniteScrollLoadTreshold: 50,
-	            useFixedLayout: true,
+	            useFixedLayout: false,
 	            isSubGriddle: false,
 	            enableSort: true,
 	            /* css class names */
@@ -909,10 +909,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getNodes: function () {
 	    this.verifyProps();
 	    var that = this;
-
-
-	    debugger;
-
 
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
@@ -1811,16 +1807,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _this.props.parentRowExpandedComponent
 	      ) : "";
 
+	      var thisStyle = columnStyles;
+
 	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
-	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
+	        thisStyle = _.extend({ paddingLeft: 10 }, columnStyles);
 	      }
 
+	      if (typeof meta !== "undefined" && meta.hasOwnProperty("width")) {
+	        thisStyle = _.extend({ width: meta.width }, columnStyles);
+	      }
 
 	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
 	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: _this.props.data });
 	        returnValue = meta == null ? returnValue : React.createElement(
 	          "td",
-	          { onClick: _this.props.hasChildren && _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+	          { onClick: _this.props.hasChildren && _this.handleClick, className: meta.cssClassName, key: index, style: thisStyle },
 	          colData
 	        );
 	      }

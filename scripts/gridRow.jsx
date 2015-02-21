@@ -59,14 +59,19 @@ var GridRow = React.createClass({
               index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
                 <span style={this.props.useGriddleStyles&&{fontSize: "10px"}}>{this.props.parentRowExpandedComponent}</span> : "";
 
+            var thisStyle = columnStyles; 
+
             if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
-              columnStyles = _.extend(columnStyles, {paddingLeft:10})
+              thisStyle = _.extend({paddingLeft:10}, columnStyles)
             }
 
+            if(typeof meta !== 'undefined' && meta.hasOwnProperty('width')){
+                thisStyle = _.extend({width: meta.width}, columnStyles);
+            }
 
             if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined"){
               var colData = (typeof meta.customComponent === 'undefined' || meta.customComponent === null) ? col[1] : <meta.customComponent data={col[1]} rowData={this.props.data} />;
-              returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
+              returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={thisStyle}>{colData}</td>);
             }
 
             return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);        });

@@ -73,7 +73,7 @@ var Griddle = React.createClass({
             "paddingHeight": 5,
             "rowHeight": 25,
             "infiniteScrollLoadTreshold": 50,
-            "useFixedLayout": true,
+            "useFixedLayout": false,
             "isSubGriddle": false,
             "enableSort": true,
             /* css class names */
