@@ -182,7 +182,7 @@ var columnMeta = [
 Now, when Griddle is rendered with this columnMetadata, it should write the link as expected.
 
 ```
-React.render(<Griddle data={someData} columnMetdata={columnMeta} />,
+React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
    document.getElementById('something'));
 ```
 
@@ -378,6 +378,11 @@ The first way to customize what Griddle does when there is no data is setting th
 <dl>
   <dt>noDataMessage</dt>
   <dd><strong>string</strong> - The message that will be displayed when there is no data</dd>
+</dl>
+
+<dl>
+  <dt>noDataClassName</dt>
+  <dd><strong>string</strong> - The CSS class name to apply to the grid when no data is available <span class="text-light-grey">Default: griddle-nodata</span></dd>
 </dl>
 
 #####Example:#####

@@ -13,7 +13,7 @@ var GridFilter = React.createClass({
         this.props.changeFilter(event.target.value);
     },
     render: function(){
-        return <div className="row filter-container"><input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} /></div>
+        return <div className="filter-container"><input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} /></div>
     }
 });
 
