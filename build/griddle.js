@@ -327,8 +327,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.setState(state);
 	    },
+	    calculateColumnMetadataValues: function (columnMetadata, results) {
+	        var columnMetadataValues = {};
+
+	        columnMetadata.map(function (col, index) {
+	            // If the column is filterable and it's a select list, we need to fill the list of possible items.
+	            if (typeof col !== "undefined" && typeof col.filterable !== "undefined" && col.filterable === true && col.filterType === "select") {
+	                // Fill the possible values.
+	                columnMetadataValues[col.columnName] = _.uniq(_.map(results, function (res) {
+	                    return res[col.columnName];
+	                }));
+	            }
+	        });
+
+	        return columnMetadataValues;
+	    },
 	    componentWillReceiveProps: function (nextProps) {
 	        this.setMaxPage(nextProps.results);
+	        if (nextProps.showColumnFilter) {
+	            this.columnSettings.columnMetadataValues = this.calculateColumnMetadataValues(nextProps.columnMetadata, nextProps.results);
+	        }
 	    },
 	    getInitialState: function () {
 	        var state = {
@@ -353,15 +371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // If we're to display the column filter
 	        if (this.props.showColumnFilter) {
-	            this.props.columnMetadata.map(function (col, index) {
-	                // If the column is filterable and it's a select list, we need to fill the list of possible items.
-	                if (typeof col !== "undefined" && typeof col.filterable !== "undefined" && col.filterable === true && col.filterType === "select") {
-	                    // Fill the possible values.
-	                    columnMetadataValues[col.columnName] = _.uniq(_.map(that.props.results, function (res) {
-	                        return res[col.columnName];
-	                    }));
-	                }
-	            });
+	            columnMetadataValues = this.calculateColumnMetadataValues(this.props.columnMetadata, this.props.results);
 	        }
 
 	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? _.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns, this.props.showColumnFilter, columnMetadataValues);
@@ -1711,7 +1721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var uniqueData = [];
 	        if (filterType == "select") {
-	          debugger;
 	          uniqueData = that.props.columnSettings.getColumnValuesByName(col);
 	          if (filterSortType == "number") {
 	            uniqueData = _.sortBy(uniqueData, function (element) {
