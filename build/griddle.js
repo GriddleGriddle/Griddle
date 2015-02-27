@@ -1875,7 +1875,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	    }
 
-	    var data = _.pairs(_.pick(this.props.data, this.props.columnSettings.getColumns()));
+	    var columns = this.props.columnSettings.getColumns();
+
+	    // make sure that all the columns we need have default empty values
+	    // otherwise they will get clipped
+	    var defaults = _.object(columns, []);
+
+	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	    var dataView = Object.create(this.props.data);
+
+	    _.defaults(dataView, defaults);
+
+	    var data = _.pairs(_.pick(dataView, columns));
+
 	    var nodes = data.map(function (col, index) {
 	      var returnValue = null;
 	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
