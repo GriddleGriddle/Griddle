@@ -74,8 +74,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridTable = __webpack_require__(5);
 	var GridFilter = __webpack_require__(6);
 	var GridPagination = __webpack_require__(7);
-	var GridSettings = __webpack_require__(9);
-	var GridNoData = __webpack_require__(8);
+	var GridSettings = __webpack_require__(8);
+	var GridNoData = __webpack_require__(9);
 	var CustomRowComponentContainer = __webpack_require__(10);
 	var CustomPaginationContainer = __webpack_require__(11);
 	var ColumnProperties = __webpack_require__(4);
@@ -1261,37 +1261,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-
-	var GridNoData = React.createClass({
-	    displayName: "GridNoData",
-	    getDefaultProps: function () {
-	        return {
-	            noDataMessage: "No Data"
-	        };
-	    },
-	    render: function () {
-	        var that = this;
-
-	        return React.createElement(
-	            "div",
-	            null,
-	            this.props.noDataMessage
-	        );
-	    }
-	});
-
-	module.exports = GridNoData;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	/*
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
-	*/
-	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 
 	var GridSettings = React.createClass({
@@ -1439,6 +1408,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	module.exports = GridSettings;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	/*
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
+
+	var GridNoData = React.createClass({
+	    displayName: "GridNoData",
+	    getDefaultProps: function () {
+	        return {
+	            noDataMessage: "No Data"
+	        };
+	    },
+	    render: function () {
+	        var that = this;
+
+	        return React.createElement(
+	            "div",
+	            null,
+	            this.props.noDataMessage
+	        );
+	    }
+	});
+
+	module.exports = GridNoData;
 
 /***/ },
 /* 10 */
@@ -1825,7 +1825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView });
+	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
 	        returnValue = meta == null ? returnValue : React.createElement(
 	          "td",
 	          { onClick: _this.props.hasChildren && _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
