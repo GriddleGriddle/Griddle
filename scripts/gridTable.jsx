@@ -125,9 +125,6 @@ var GridTable = React.createClass({
           var propIndex = that.props.data.indexOf(row);
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
 
-          //at least one item in the group has children.
-          if (hasChildren) { anyHasChildren = hasChildren; }
-
           return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
