@@ -14,14 +14,17 @@ var GridNoData = require('./gridNoData.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var ColumnProperties = require('./columnProperties');
+var RowProperties = require('./rowProperties');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
     columnSettings: null,
+    rowSettings: null,
     getDefaultProps: function() {
         return{
             "columns": [],
             "columnMetadata": [],
+            "rowMetadata": [],
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
             "initialSort": "",
@@ -257,6 +260,10 @@ var Griddle = React.createClass({
             this.props.childrenColumnName,
             this.props.columnMetadata,
             this.props.metadataColumns
+        );
+
+        this.rowSettings = new RowProperties(
+            this.props.rowMetadata
         );
 
         this.setMaxPage();
@@ -497,6 +504,7 @@ var Griddle = React.createClass({
 
         return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles}
                 columnSettings={this.columnSettings}
+                rowSettings = {this.rowSettings}
                 sortSettings={sortProperties}
                 isSubGriddle={this.props.isSubGriddle}
                 useGriddleIcons={this.props.useGriddleIcons}

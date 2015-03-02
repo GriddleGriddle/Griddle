@@ -71,23 +71,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(5);
-	var GridFilter = __webpack_require__(6);
-	var GridPagination = __webpack_require__(7);
-	var GridSettings = __webpack_require__(8);
-	var GridNoData = __webpack_require__(9);
-	var CustomRowComponentContainer = __webpack_require__(10);
-	var CustomPaginationContainer = __webpack_require__(11);
+	var GridTable = __webpack_require__(6);
+	var GridFilter = __webpack_require__(7);
+	var GridPagination = __webpack_require__(8);
+	var GridSettings = __webpack_require__(9);
+	var GridNoData = __webpack_require__(10);
+	var CustomRowComponentContainer = __webpack_require__(11);
+	var CustomPaginationContainer = __webpack_require__(12);
 	var ColumnProperties = __webpack_require__(4);
+	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({
 	    displayName: "Griddle",
 	    columnSettings: null,
+	    rowSettings: null,
 	    getDefaultProps: function () {
 	        return {
 	            columns: [],
 	            columnMetadata: [],
+	            rowMetadata: [],
 	            resultsPerPage: 5,
 	            results: [], // Used if all results are already loaded.
 	            initialSort: "",
@@ -323,6 +326,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyCustom();
 
 	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? _.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
+
+	        this.rowSettings = new RowProperties(this.props.rowMetadata);
 
 	        this.setMaxPage();
 
@@ -570,6 +575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            { className: "griddle-body" },
 	            React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
 	                columnSettings: this.columnSettings,
+	                rowSettings: this.rowSettings,
 	                sortSettings: sortProperties,
 	                isSubGriddle: this.props.isSubGriddle,
 	                useGriddleIcons: this.props.useGriddleIcons,
@@ -814,12 +820,54 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+	var _ = __webpack_require__(3);
+
+	var RowProperties = (function () {
+	  function RowProperties() {
+	    var rowMetadata = arguments[0] === undefined ? [] : arguments[0];
+	    _classCallCheck(this, RowProperties);
+
+	    this.rowMetadata = rowMetadata;
+	  }
+
+	  _prototypeProperties(RowProperties, null, {
+	    getRowMetadataByName: {
+	      value: function getRowMetadataByName(name) {
+	        return _.findWhere(this.rowMetadata, { rowName: name });
+	      },
+	      writable: true,
+	      configurable: true
+	    },
+	    hasRowMetadata: {
+	      value: function hasRowMetadata() {
+	        return this.rowMetadata !== null && this.rowMetadata.length > 0;
+	      },
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+
+	  return RowProperties;
+	})();
+
+	module.exports = RowProperties;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
 	/*
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(12);
-	var GridRowContainer = __webpack_require__(13);
+	var GridTitle = __webpack_require__(13);
+	var GridRowContainer = __webpack_require__(14);
 	var ColumnProperties = __webpack_require__(4);
 	var _ = __webpack_require__(3);
 
@@ -829,6 +877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return {
 	      data: [],
 	      columnSettings: null,
+	      rowSettings: null,
 	      sortSettings: null,
 	      className: "",
 	      enableInfiniteScroll: false,
@@ -910,10 +959,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.verifyProps();
 	    var that = this;
 
-
-	    debugger;
-
-
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
 	      var nodeData = that.props.data;
@@ -942,6 +987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var nodes = nodeData.map(function (row, index) {
 	        var propIndex = that.props.data.indexOf(row);
 	        var hasChildren = typeof row.children !== "undefined" && row.children.length > 0;
+	        var uniqueId = that.props.rowSettings && _.isArray(that.props.rowSettings.rowMetadata) ? row[that.props.rowSettings.rowMetadata[0].key] : _.uniqueId("grid_row");
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -951,8 +997,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	          data: row, key: propIndex, columnSettings: that.props.columnSettings, paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight,
-	          uniqueId: _.uniqueId("grid_row"), hasChildren: hasChildren, tableClassName: that.props.className });
+	          data: row, key: propIndex, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	          rowHeight: that.props.rowHeight, uniqueId: uniqueId, hasChildren: hasChildren, tableClassName: that.props.className });
 	      });
 
 	      // Add the spacer rows for nodes we're not rendering.
@@ -1115,7 +1161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTable;
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1147,7 +1193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1256,7 +1302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1414,7 +1460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1445,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1495,7 +1541,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1537,7 +1583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1638,7 +1684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1647,7 +1693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridRow = __webpack_require__(14);
+	var GridRow = __webpack_require__(15);
 	var ColumnProperties = __webpack_require__(4);
 
 	var GridRowContainer = React.createClass({
@@ -1738,7 +1784,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridRowContainer;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
