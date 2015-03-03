@@ -5,6 +5,7 @@ var React = require('react');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
+var RowProperties = require('./rowProperties.js');
 var _ = require('underscore');
 
 var GridTable = React.createClass({
@@ -89,6 +90,9 @@ var GridTable = React.createClass({
     if(this.props.columnSettings === null){
        console.error("gridTable: The columnSettings prop is null and it shouldn't be");
     }
+    if(this.props.rowSettings === null){
+       console.error("gridTable: The rowSettings prop is null and it shouldn't be");
+    }
   },
   getAdjustedRowHeight: function() {
     return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
@@ -105,6 +109,7 @@ var GridTable = React.createClass({
       var nodeData = that.props.data;
       var aboveSpacerRow = null;
       var belowSpacerRow = null;
+      var usingDefault = false;
 
       // If we have a row height specified, only render what's going to be visible.
       if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
@@ -127,7 +132,7 @@ var GridTable = React.createClass({
 
       var nodes = nodeData.map(function(row, index){
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId = that.props.rowSettings.getRowId(row, that.props.data.indexOf(row));
+          var uniqueId = that.props.rowSettings.getRowKey(row);
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }

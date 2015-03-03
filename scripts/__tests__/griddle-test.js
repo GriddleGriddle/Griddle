@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../columnProperties.js'); 
+jest.dontMock('../rowProperties.js'); 
 
 var React = require('react/addons');
 var Griddle = require('../griddle.jsx');

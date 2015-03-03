@@ -835,9 +835,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _prototypeProperties(RowProperties, null, {
-	    getRowMetadataByName: {
-	      value: function getRowMetadataByName(name) {
-	        return _.findWhere(this.rowMetadata, { rowName: name });
+	    getRowKey: {
+	      value: function getRowKey(row) {
+	        var uniqueId;
+
+	        if (this.hasRowMetadataKey()) {
+	          uniqueId = row[this.rowMetadata.key];
+	        } else {
+	          uniqueId = _.uniqueId("grid_row");
+	        }
+
+	        //todo: add error handling
+
+	        return uniqueId;
+	      },
+	      writable: true,
+	      configurable: true
+	    },
+	    hasRowMetadataKey: {
+	      value: function hasRowMetadataKey() {
+	        return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
 	      },
 	      writable: true,
 	      configurable: true
@@ -845,18 +862,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    hasRowMetadata: {
 	      value: function hasRowMetadata() {
 	        return this.rowMetadata !== null;
-	      },
-	      writable: true,
-	      configurable: true
-	    },
-	    getRowId: {
-	      value: function getRowId(row, backupId) {
-	        if (this.hasRowMetadata() && this.rowMetadata.key) {
-	          return row[this.rowMetadata.key];
-	        } else {
-	          console.warn("No row 'key' specified; a generated unique id will be used for each table row (which negatively impacts performance).");
-	          return _.uniqueId("grid_row");
-	        };
 	      },
 	      writable: true,
 	      configurable: true
@@ -881,6 +886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridTitle = __webpack_require__(13);
 	var GridRowContainer = __webpack_require__(14);
 	var ColumnProperties = __webpack_require__(4);
+	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
 
 	var GridTable = React.createClass({
@@ -963,6 +969,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.props.columnSettings === null) {
 	      console.error("gridTable: The columnSettings prop is null and it shouldn't be");
 	    }
+	    if (this.props.rowSettings === null) {
+	      console.error("gridTable: The rowSettings prop is null and it shouldn't be");
+	    }
 	  },
 	  getAdjustedRowHeight: function () {
 	    return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
@@ -979,6 +988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var nodeData = that.props.data;
 	      var aboveSpacerRow = null;
 	      var belowSpacerRow = null;
+	      var usingDefault = false;
 
 	      // If we have a row height specified, only render what's going to be visible.
 	      if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
@@ -1001,7 +1011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var nodes = nodeData.map(function (row, index) {
 	        var hasChildren = typeof row.children !== "undefined" && row.children.length > 0;
-	        var uniqueId = that.props.rowSettings.getRowId(row, that.props.data.indexOf(row));
+	        var uniqueId = that.props.rowSettings.getRowKey(row);
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -1793,7 +1803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          );
 	        }
 
-	        return React.createElement(GridRow, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnMetadata, key: that.props.rowSettings.getRowId(row) });
+	        return React.createElement(GridRow, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnMetadata, key: that.props.rowSettings.getRowKey(row) });
 	      });
 	    }
 

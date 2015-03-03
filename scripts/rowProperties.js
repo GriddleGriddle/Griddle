@@ -5,21 +5,27 @@ class RowProperties{
     this.rowMetadata = rowMetadata;
   }
 
-  getRowMetadataByName(name){
-    return _.findWhere(this.rowMetadata, {rowName: name});
+  getRowKey(row) {
+    var uniqueId;
+
+    if(this.hasRowMetadataKey()){
+      uniqueId = row[this.rowMetadata.key];
+    }
+    else{
+      uniqueId = _.uniqueId("grid_row");
+    }
+
+    //todo: add error handling
+
+  	return uniqueId;
+  }
+
+  hasRowMetadataKey(){
+   return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
   }
 
   hasRowMetadata(){
-    return this.rowMetadata !== null;
-  }
-
-  getRowId(row, backupId){
-    if(this.hasRowMetadata() && this.rowMetadata.key) {
-      return row[this.rowMetadata.key];
-    } else {
-      console.warn("No row 'key' specified; a generated unique id will be used for each table row (which negatively impacts performance).");
-      return _.uniqueId("grid_row")
-    };
+   return this.rowMetadata !== null;
   }
 }
 
