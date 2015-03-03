@@ -128,7 +128,7 @@ var GridTable = React.createClass({
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
           var uniqueId; 
 
-          if(that.props.rowSettings && that.props.rowSettings.hasRowMetadataKey()){
+          if(typeof that.props.rowSettings === "RowProperties" && that.props.rowSettings.hasRowMetadataKey()){
             uniqueId = row[that.props.rowSettings.rowMetadata.key];
           }
           else{
