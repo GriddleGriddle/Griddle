@@ -102,6 +102,7 @@ var GridTable = React.createClass({
       var nodeData = that.props.data;
       var aboveSpacerRow = null;
       var belowSpacerRow = null;
+      var usingDefault = false;
 
       // If we have a row height specified, only render what's going to be visible.
       if (this.props.enableInfiniteScroll && this.props.rowHeight !== null && this.refs.scrollable !== undefined) {
@@ -125,8 +126,15 @@ var GridTable = React.createClass({
       var nodes = nodeData.map(function(row, index){
           var propIndex = that.props.data.indexOf(row);
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId = that.props.rowSettings && that.props.rowSettings.rowMetadata && that.props.rowSettings.rowMetadata.key ? 
-            row[that.props.rowSettings.rowMetadata.key] : _.uniqueId("grid_row");
+          var uniqueId; 
+
+          if(that.props.rowSettings && that.props.rowSettings.hasRowMetadataKey()){
+            uniqueId = row[that.props.rowSettings.rowMetadata.key];
+          }
+          else{
+            usingDefault = true;
+            uniqueId = _.uniqueId("grid_row");
+          }
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
@@ -137,6 +145,10 @@ var GridTable = React.createClass({
             data={row} key={propIndex} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight} 
             rowHeight={that.props.rowHeight} uniqueId={ uniqueId } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
+
+      if(usingDefault){
+        console.warn('Using default uniqueId. This could cause performance and reliability issues. Please provide a key column for best reults.');
+      }
 
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {

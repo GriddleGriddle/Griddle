@@ -5,12 +5,12 @@ class RowProperties{
     this.rowMetadata = rowMetadata;
   }
 
-  getRowMetadataByName(name){
-    return _.findWhere(this.rowMetadata, {rowName: name}); 
+  hasRowMetadataKey(){
+   return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;  
   }
 
   hasRowMetadata(){
-   return this.rowMetadata !== null && this.rowMetadata.length > 0  
+   return this.rowMetadata !== null;  
   }
 }
 
