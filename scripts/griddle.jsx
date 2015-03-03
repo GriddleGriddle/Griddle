@@ -24,7 +24,7 @@ var Griddle = React.createClass({
         return{
             "columns": [],
             "columnMetadata": [],
-            "rowMetadata": [],
+            "rowMetadata": null,
             "resultsPerPage":5,
             "results": [], // Used if all results are already loaded.
             "initialSort": "",

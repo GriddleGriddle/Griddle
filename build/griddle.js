@@ -90,7 +90,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            columns: [],
 	            columnMetadata: [],
-	            rowMetadata: [],
+	            rowMetadata: null,
 	            resultsPerPage: 5,
 	            results: [], // Used if all results are already loaded.
 	            initialSort: "",
@@ -828,7 +828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var RowProperties = (function () {
 	  function RowProperties() {
-	    var rowMetadata = arguments[0] === undefined ? [] : arguments[0];
+	    var rowMetadata = arguments[0] === undefined ? {} : arguments[0];
 	    _classCallCheck(this, RowProperties);
 
 	    this.rowMetadata = rowMetadata;
@@ -844,7 +844,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    hasRowMetadata: {
 	      value: function hasRowMetadata() {
-	        return this.rowMetadata !== null && this.rowMetadata.length > 0;
+	        return this.rowMetadata !== null;
+	      },
+	      writable: true,
+	      configurable: true
+	    },
+	    getRowId: {
+	      value: function getRowId(row, backupId) {
+	        if (this.hasRowMetadata() && this.rowMetadata.key) {
+	          return row[this.rowMetadata.key];
+	        } else {
+	          console.warn("No row 'key' specified; a generated unique id will be used for each table row (which negatively impacts performance).");
+	          return _.uniqueId("grid_row");
+	        };
 	      },
 	      writable: true,
 	      configurable: true
@@ -955,9 +967,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getAdjustedRowHeight: function () {
 	    return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
 	  },
-	  getNodes: function () {
+	  getNodeContent: function () {
 	    this.verifyProps();
 	    var that = this;
+
+	    //figure out if we need to wrap the group in one tbody or many
+	    var anyHasChildren = false;
 
 	    // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
 	    if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
@@ -979,15 +994,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Set the above and below nodes.
 	        var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
-	        aboveSpacerRow = React.createElement("tr", { style: aboveSpacerRowStyle });
+	        aboveSpacerRow = React.createElement("tr", { key: "above-" + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle });
 	        var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + "px" };
-	        belowSpacerRow = React.createElement("tr", { style: belowSpacerRowStyle });
+	        belowSpacerRow = React.createElement("tr", { key: "below-" + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
 	      }
 
 	      var nodes = nodeData.map(function (row, index) {
-	        var propIndex = that.props.data.indexOf(row);
 	        var hasChildren = typeof row.children !== "undefined" && row.children.length > 0;
-	        var uniqueId = that.props.rowSettings && that.props.rowSettings.rowMetadata && that.props.rowSettings.rowMetadata.key ? row[that.props.rowSettings.rowMetadata.key] : _.uniqueId("grid_row");
+	        var uniqueId = that.props.rowSettings.getRowId(row, that.props.data.indexOf(row));
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -997,8 +1011,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	          data: row, key: propIndex, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
-	          rowHeight: that.props.rowHeight, uniqueId: uniqueId, hasChildren: hasChildren, tableClassName: that.props.className });
+	          data: row, key: uniqueId + "-container", uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	          rowHeight: that.props.rowHeight, hasChildren: hasChildren, tableClassName: that.props.className });
 	      });
 
 	      // Add the spacer rows for nodes we're not rendering.
@@ -1010,18 +1024,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      // Send back the nodes.
-	      return nodes;
+	      return {
+	        nodes: nodes,
+	        anyHasChildren: anyHasChildren
+	      };
 	    } else {
 	      return null;
 	    }
 	  },
 	  render: function () {
 	    var that = this;
-	    //figure out if we need to wrap the group in one tbody or many
+	    var nodes = [];
+
+	    // for if we need to wrap the group in one tbody or many
 	    var anyHasChildren = false;
 
 	    // Grab the nodes to render
-	    var nodes = this.getNodes();
+	    var nodeContent = this.getNodeContent();
+	    if (nodeContent) {
+	      nodes = nodeContent.nodes;
+	      anyHasChildren = nodeContent.anyHasChildren;
+	    }
 
 	    var gridStyle = null;
 	    var loadingContent = null;
@@ -1770,7 +1793,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          );
 	        }
 
-	        return React.createElement(GridRow, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnMetadata, key: _.uniqueId("grid_row") });
+	        return React.createElement(GridRow, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnMetadata, key: that.props.rowSettings.getRowId(row) });
 	      });
 	    }
 

@@ -68,12 +68,12 @@ var GridRowContainer = React.createClass({
                               showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}
                               parentRowExpandedComponent={that.props.parentRowExpandedComponent}
                               parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-                                paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />
+                              paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />
                           </td>
                         </tr>);
               }
 
-              return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={_.uniqueId("grid_row")}/>
+              return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowId(row)}/>
           });
       }
 
