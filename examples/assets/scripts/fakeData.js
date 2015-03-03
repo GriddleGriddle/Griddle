@@ -51,6 +51,11 @@ var columnMeta = [
   }
 ];
 
+var rowMeta = 
+{
+  "key": "id"
+};
+
 var propertyGridMeta = [
   {
     "columnName": "property",

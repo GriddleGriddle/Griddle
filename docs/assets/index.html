@@ -252,7 +252,7 @@ var Griddle = require('griddle-react');</pre></code>
   <script type="text/jsx">
   /** @jsx React.DOM */
     React.render(
-        <Griddle results={fakeData} columnMetadata={columnMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
+        <Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>
   <script>
