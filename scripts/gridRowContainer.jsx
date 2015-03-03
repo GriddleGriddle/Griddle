@@ -12,6 +12,7 @@ var GridRowContainer = React.createClass({
         "useGriddleIcons": true,
         "isSubGriddle": false,
         "columnSettings": null,
+        "rowSettings": null,
         "paddingHeight": null,
         "rowHeight": null,
         "parentRowCollapsedClassName": "parent-row",

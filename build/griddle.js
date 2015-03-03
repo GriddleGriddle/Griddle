@@ -987,7 +987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var nodes = nodeData.map(function (row, index) {
 	        var propIndex = that.props.data.indexOf(row);
 	        var hasChildren = typeof row.children !== "undefined" && row.children.length > 0;
-	        var uniqueId = that.props.rowSettings && _.isArray(that.props.rowSettings.rowMetadata) ? row[that.props.rowSettings.rowMetadata[0].key] : _.uniqueId("grid_row");
+	        var uniqueId = that.props.rowSettings && that.props.rowSettings.rowMetadata && that.props.rowSettings.rowMetadata.key ? row[that.props.rowSettings.rowMetadata.key] : _.uniqueId("grid_row");
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -1704,6 +1704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      useGriddleIcons: true,
 	      isSubGriddle: false,
 	      columnSettings: null,
+	      rowSettings: null,
 	      paddingHeight: null,
 	      rowHeight: null,
 	      parentRowCollapsedClassName: "parent-row",
