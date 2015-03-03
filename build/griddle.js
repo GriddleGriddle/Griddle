@@ -835,6 +835,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _prototypeProperties(RowProperties, null, {
+	    getRowKey: {
+	      value: function getRowKey(row) {
+	        var uniqueId;
+
+	        if (this.hasRowMetadataKey()) {
+	          uniqueId = row[this.rowMetadata.key];
+	        } else {
+	          uniqueId = _.uniqueId("grid_row");
+	        }
+
+	        //todo: add error handling
+
+	        return uniqueId;
+	      },
+	      writable: true,
+	      configurable: true
+	    },
 	    hasRowMetadataKey: {
 	      value: function hasRowMetadataKey() {
 	        return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
@@ -869,6 +886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridTitle = __webpack_require__(13);
 	var GridRowContainer = __webpack_require__(14);
 	var ColumnProperties = __webpack_require__(4);
+	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
 
 	var GridTable = React.createClass({
@@ -951,6 +969,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.props.columnSettings === null) {
 	      console.error("gridTable: The columnSettings prop is null and it shouldn't be");
 	    }
+	    if (this.props.rowSettings === null) {
+	      console.error("gridTable: The rowSettings prop is null and it shouldn't be");
+	    }
 	  },
 	  getAdjustedRowHeight: function () {
 	    return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
@@ -988,14 +1009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var nodes = nodeData.map(function (row, index) {
 	        var propIndex = that.props.data.indexOf(row);
 	        var hasChildren = typeof row.children !== "undefined" && row.children.length > 0;
-	        var uniqueId;
-
-	        if (typeof that.props.rowSettings === "RowProperties" && that.props.rowSettings.hasRowMetadataKey()) {
-	          uniqueId = row[that.props.rowSettings.rowMetadata.key];
-	        } else {
-	          usingDefault = true;
-	          uniqueId = _.uniqueId("grid_row");
-	        }
+	        var uniqueId = that.props.rowSettings.getRowKey(row);
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -1008,10 +1022,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          data: row, key: propIndex, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
 	          rowHeight: that.props.rowHeight, uniqueId: uniqueId, hasChildren: hasChildren, tableClassName: that.props.className });
 	      });
-
-	      if (usingDefault) {
-	        console.warn("Using default uniqueId. This could cause performance and reliability issues. Please provide a key column for best reults.");
-	      }
 
 	      // Add the spacer rows for nodes we're not rendering.
 	      if (aboveSpacerRow) {

@@ -5,6 +5,7 @@ var React = require('react');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
+var RowProperties = require('./rowProperties.js');
 var _ = require('underscore');
 
 var GridTable = React.createClass({
@@ -89,6 +90,9 @@ var GridTable = React.createClass({
     if(this.props.columnSettings === null){
        console.error("gridTable: The columnSettings prop is null and it shouldn't be");
     }
+    if(this.props.rowSettings === null){
+       console.error("gridTable: The rowSettings prop is null and it shouldn't be");
+    }
   },
   getAdjustedRowHeight: function() {
     return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
@@ -126,15 +130,7 @@ var GridTable = React.createClass({
       var nodes = nodeData.map(function(row, index){
           var propIndex = that.props.data.indexOf(row);
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId; 
-
-          if(typeof that.props.rowSettings === "RowProperties" && that.props.rowSettings.hasRowMetadataKey()){
-            uniqueId = row[that.props.rowSettings.rowMetadata.key];
-          }
-          else{
-            usingDefault = true;
-            uniqueId = _.uniqueId("grid_row");
-          }
+          var uniqueId = that.props.rowSettings.getRowKey(row);
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
@@ -145,10 +141,6 @@ var GridTable = React.createClass({
             data={row} key={propIndex} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight} 
             rowHeight={that.props.rowHeight} uniqueId={ uniqueId } hasChildren={hasChildren} tableClassName={that.props.className}/>)
       });
-
-      if(usingDefault){
-        console.warn('Using default uniqueId. This could cause performance and reliability issues. Please provide a key column for best reults.');
-      }
 
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {
