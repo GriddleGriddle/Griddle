@@ -87,7 +87,6 @@ var Griddle = React.createClass({
             "settingsToggleClassName": "settings",
             "nextClassName": "griddle-next",
             "previousClassName": "griddle-previous",
-            "headerClassName": "griddle-header",
             "headerStyles": {},
             /* icon components */
             "sortAscendingComponent": " ▲",

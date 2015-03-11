@@ -24,6 +24,14 @@ class RowProperties{
    return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
   }
 
+  getBodyRowMetadataClass(){
+    return this.hasRowMetadata() && this.rowMetadata.bodyCssClassName !== null && this.rowMetadata.bodyCssClassName !== undefined ? this.rowMetadata.bodyCssClassName : null;
+  }
+
+  getHeaderRowMetadataClass(){
+    return this.hasRowMetadata() && this.rowMetadata.headerCssClassName !== null && this.rowMetadata.headerCssClassName !== undefined ? this.rowMetadata.headerCssClassName : null;
+  }
+
   hasRowMetadata(){
    return this.rowMetadata !== null;
   }

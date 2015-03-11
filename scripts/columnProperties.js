@@ -1,4 +1,8 @@
-var _ = require('underscore'); 
+var _ = require('underscore');
+
+var blah = function(){
+
+}
 
 class ColumnProperties{
   constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
@@ -14,7 +18,7 @@ class ColumnProperties{
       if(meta.indexOf(this.childrenColumnName) < 0){
          meta.push(this.childrenColumnName);
       }
-      return meta.concat(this.metadataColumns); 
+      return meta.concat(this.metadataColumns);
   }
 
   getVisibleColumnCount(){
@@ -22,29 +26,29 @@ class ColumnProperties{
   }
 
   getColumnMetadataByName(name){
-    return _.findWhere(this.columnMetadata, {columnName: name}); 
+    return _.findWhere(this.columnMetadata, {columnName: name});
   }
 
   hasColumnMetadata(){
-   return this.columnMetadata !== null && this.columnMetadata.length > 0  
+   return this.columnMetadata !== null && this.columnMetadata.length > 0
   }
 
-  isColumnSortable(name){
-    var meta = this.getColumnMetadataByName(name);
+  getMetadataColumnProperty(columnName, propertyName, defaultValue){
+    var meta = this.getColumnMetadataByName(columnName);
 
-    //allow sort if meta isn't there
-    if(typeof meta === "undefined" || meta === null) 
-      return true; 
+    //send back the default value if meta isn't there
+    if(typeof meta === "undefined" || meta === null)
+      return defaultValue;
 
-    return meta.hasOwnProperty("sortable") ? meta.sortable : true; 
+    return meta.hasOwnProperty(propertyName) ? meta[propertyName] : defaultValue;
   }
 
   getColumns(){
     var ORDER_MAX = 100;
     //if we didn't set default or filter
-    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns; 
+    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
-    filteredColumns = _.difference(filteredColumns, this.metadataColumns); 
+    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
 
     filteredColumns = _.sortBy(filteredColumns, (item) => {
         var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
@@ -60,4 +64,4 @@ class ColumnProperties{
   }
 }
 
-module.exports = ColumnProperties; 
+module.exports = ColumnProperties;

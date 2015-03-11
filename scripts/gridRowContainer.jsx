@@ -51,7 +51,7 @@ var GridRowContainer = React.createClass({
       if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
       var arr = [];
 
-      arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnSettings={ this.props.columnSettings}
+      arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnSettings={this.props.columnSettings} rowSettings={this.props.rowSettings}
         hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
         parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
         parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
