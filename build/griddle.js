@@ -1543,8 +1543,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	/** @jsx React.DOM */
-
 	/*
 	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
@@ -1592,8 +1590,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-
-	/** @jsx React.DOM */
 
 	/*
 	   Griddle - Simple Grid Component for React
@@ -1713,7 +1709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        //Get the row from the row settings.
-	        var className = that.props.rowSettings.getHeaderRowMetadataClass() || null;
+	        var className = that.props.rowSettings && that.props.rowSettings.getHeaderRowMetadataClass() || null;
 
 	        return React.createElement(
 	            "thead",
