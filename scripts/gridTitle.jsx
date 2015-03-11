@@ -71,7 +71,7 @@ var GridTitle = React.createClass({
       });
 
       //Get the row from the row settings.
-      var className = that.props.rowSettings.getHeaderRowMetadataClass() || null;
+      var className = that.props.rowSettings&&that.props.rowSettings.getHeaderRowMetadataClass() || null;
 
       return(
           <thead>

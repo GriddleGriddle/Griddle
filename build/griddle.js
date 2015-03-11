@@ -1941,7 +1941,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 
 	                //Get the row from the row settings.
-	                var className = that.props.rowSettings.getBodyRowMetadataClass() || "standard-row";
+	                var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass() || "standard-row";
 
 	                if (that.props.isChildRow) {
 	                        className = "child-row";
