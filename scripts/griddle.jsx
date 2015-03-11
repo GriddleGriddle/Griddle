@@ -583,6 +583,9 @@ var Griddle = React.createClass({
         // Grab the column keys from the first results
         keys = _.keys(_.omit(results[0], meta));
 
+        // sort keys by order
+        keys = this.columnSettings.orderColumns(keys);
+
         // Grab the current and max page values.
         var currentPage = this.getCurrentPage();
         var maxPage = this.getCurrentMaxPage();
