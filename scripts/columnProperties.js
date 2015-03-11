@@ -1,9 +1,5 @@
 var _ = require('underscore');
 
-var blah = function(){
-
-}
-
 class ColumnProperties{
   constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
     this.allColumns = allColumns;
