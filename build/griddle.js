@@ -1721,7 +1721,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var uniqueData = [];
 	        if (filterType == "select") {
-	          debugger;
 	          uniqueData = that.props.columnSettings.getColumnValuesByName(col);
 	          if (filterSortType == "number") {
 	            uniqueData = _.sortBy(uniqueData, function (element) {
