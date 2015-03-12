@@ -24,8 +24,15 @@ class RowProperties{
    return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
   }
 
-  getBodyRowMetadataClass(){
-    return this.hasRowMetadata() && this.rowMetadata.bodyCssClassName !== null && this.rowMetadata.bodyCssClassName !== undefined ? this.rowMetadata.bodyCssClassName : null;
+  getBodyRowMetadataClass(rowData){
+    if (this.hasRowMetadata() && this.rowMetadata.bodyCssClassName !== null && this.rowMetadata.bodyCssClassName !== undefined) {
+      if (typeof(this.rowMetadata.bodyCssClassName) === 'function') {
+        return this.rowMetadata.bodyCssClassName(rowData);
+      } else {
+        return this.rowMetadata.bodyCssClassName;
+      }
+    }
+    return null;
   }
 
   getHeaderRowMetadataClass(){
