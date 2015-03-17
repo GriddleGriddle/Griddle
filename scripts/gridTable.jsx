@@ -121,7 +121,7 @@ var GridTable = React.createClass({
         var displayEnd = Math.min(displayStart + visibleRecordCount * 1.25, this.props.data.length - 1);
 
         // Split the amount of nodes.
-        nodeData = nodeData.slice(displayStart, displayEnd);
+        nodeData = nodeData.slice(displayStart, displayEnd+1);
 
         // Set the above and below nodes.
         var aboveSpacerRowStyle = { height: (displayStart * adjustedHeight) + "px" };
