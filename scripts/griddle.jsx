@@ -327,8 +327,12 @@ var Griddle = React.createClass({
         var that = this;
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
+                var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
+                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
+                
                 data = _.sortBy(data, function(item){
-                    return item[that.state.sortColumn||that.props.initialSort];
+                    return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
+                        item[that.state.sortColumn||that.props.initialSort];
                 });
 
                 if(this.state.sortAscending === false){
