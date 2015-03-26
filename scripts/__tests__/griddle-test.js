@@ -486,9 +486,13 @@ describe('Griddle', function() {
     expect(console.error).toHaveBeenCalledWith("useCustomGridComponent is set to true but no custom component was specified."); 
   });
 
-  it('show display a warning if useCustomGridComponent and useCustomRowComponent are both true', function(){
-    var mock = jest.genMockFunction();
-    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridComponent={true} customGridComponent={mock} useCustomRowComponent={true} customRowComponent={mock} />)
+  it('should display a warning if useCustomGridComponent and useCustomRowComponent are both true', function(){
+    var mock = React.createClass({ render: function(){ return <h1>mock</h1>}});
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} 
+      useCustomGridComponent={true} customGridComponent={mock}
+      useCustomRowComponent={true} customRowComponent={mock} />)
+
+    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridComponent and customRowComponent."); 
   })
 
  it('should not show filter when useCustomGridComponent is true', function(){
