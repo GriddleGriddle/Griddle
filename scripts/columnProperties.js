@@ -39,22 +39,29 @@ class ColumnProperties{
     return meta.hasOwnProperty(propertyName) ? meta[propertyName] : defaultValue;
   }
 
-  getColumns(){
+  orderColumns(cols) {
     var ORDER_MAX = 100;
-    //if we didn't set default or filter
-    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
-    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
-
-    filteredColumns = _.sortBy(filteredColumns, (item) => {
+    var orderedColumns = _.sortBy(cols, (item) => {
         var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
 
         if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
             return ORDER_MAX;
         }
-
+        
         return metaItem.order;
     });
+
+    return orderedColumns;
+  }
+
+  getColumns(){
+    //if we didn't set default or filter
+    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
+
+    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
+
+    filteredColumns = this.orderColumns(filteredColumns);
 
     return filteredColumns;
   }
