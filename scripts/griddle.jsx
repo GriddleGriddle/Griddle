@@ -79,6 +79,7 @@ var Griddle = React.createClass({
             "useFixedLayout": true,
             "isSubGriddle": false,
             "enableSort": true,
+            "onRowClick": null,
             /* css class names */
             "sortAscendingClassName": "sort-ascending",
             "sortDescendingClassName": "sort-descending",
@@ -530,7 +531,8 @@ var Griddle = React.createClass({
                 infiniteScrollLoadTreshold={this.props.infiniteScrollLoadTreshold}
                 externalLoadingComponent={this.props.externalLoadingComponent}
                 externalIsLoading={this.props.externalIsLoading}
-                hasMorePages={hasMorePages} /></div>)
+                hasMorePages={hasMorePages}
+                onRowClick={this.props.onRowClick}/></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages){
         if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){

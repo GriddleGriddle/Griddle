@@ -537,8 +537,21 @@ it('should not show footer when useCustomGridComponent is true', function(){
   });
 
   it('throws error if useCustomGridComponent and useCustomRowComponent are both true', function(){
-    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridComponent={true} customGridComponent={CustomGridComponent} useCustomRowComponent={true} customRowComponent={CustomGridComponent} />); 
-    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridComponent and customRowComponent."); 
-    
-  })
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridComponent={true} customGridComponent={CustomGridComponent} useCustomRowComponent={true} customRowComponent={CustomGridComponent} />);
+    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridComponent and customRowComponent.");
+  });
+
+  it('should call the onRowClick callback when clicking a row', function () {
+    var clicked = false;
+    var onRowClick = function onRowClick(){
+      clicked = true;
+    };
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}
+                                                      gridClassName="test"
+                                                      resultsPerPage={1}
+                                                      onRowClick={onRowClick} />);
+    var cells = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'td');
+    TestUtils.Simulate.click(cells[0].getDOMNode());
+    expect(clicked).toEqual(true);
+  });
 });
