@@ -45,9 +45,9 @@
           <a href="index.html"><img src="images/griddle.png" alt="Griddle"/></a>
   			</div>
 	  		<div class="four columns right">
-          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=watch&count=true"
+          <iframe src="http://ghbtns.com/github-btn.html?user=GriddleGriddle&repo=Griddle&type=watch&count=true"
             allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
-          <iframe src="http://ghbtns.com/github-btn.html?user=DynamicTyped&repo=Griddle&type=fork&count=true"
+          <iframe src="http://ghbtns.com/github-btn.html?user=GriddleGriddle&repo=Griddle&type=fork&count=true"
             allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
             <br />
           <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
@@ -273,7 +273,7 @@
   <span class="keyword">...</span>
 ];</code></pre>
 <p>Now, when Griddle is rendered with this columnMetadata, it should write the link as expected.</p>
-<pre><code>React.render(<span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">data</span>=<span class="value">{someData}</span> <span class="attribute">columnMetdata</span>=<span class="value">{columnMeta}</span> /&gt;</span>,
+<pre><code>React.render(<span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">data</span>=<span class="value">{someData}</span> <span class="attribute">columnMetadata</span>=<span class="value">{columnMeta}</span> /&gt;</span>,
    document.getElementById('something'));</span></code></pre>
 <div id="customLink"></div>
 
@@ -629,6 +629,11 @@ React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComp
   <dd><strong>string</strong> - The message that will be displayed when there is no data</dd>
 </dl>
 
+<dl>
+  <dt>noDataClassName</dt>
+  <dd><strong>string</strong> - The CSS class name to apply to the grid when no data is available <span class="text-light-grey">Default: griddle-nodata</span></dd>
+</dl>
+
 <h5 id="example-">Example:</h5>
 <pre><code><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">noDataMessage</span>=<span class="value">{"No</span> <span class="attribute">data</span> <span class="attribute">could</span> <span class="attribute">be</span> <span class="attribute">found.</span>"} /&gt;</span></code></pre>
 <div id="griddle-nodata-basic"></div>
@@ -688,7 +693,7 @@ React.render(<span class="tag">&lt;<span class="title">Griddle</span> <span clas
     <div class="container">
       <div class="row">
         <div class="ten columns offset-by-two">
-          <p>Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/DynamicTyped/Griddle/graphs/contributors">the awesome contributors!</a></p>
+          <p>Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/GriddleGriddle/Griddle/graphs/contributors">the awesome contributors!</a></p>
          	<small>
         		&copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
         	</small> 
