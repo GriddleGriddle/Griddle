@@ -239,11 +239,11 @@ var GridTable = React.createClass({
           color: "#222"
         }
         : null;
-      pagingContent = (<tbody><tr>
+      pagingContent = (<tfoot><tr>
           <td colSpan={this.props.columnSettings.getVisibleColumnCount()} style={pagingStyles} className="footer-container">
             {this.props.pagingContent}
           </td>
-        </tr></tbody>)
+        </tr></tfoot>)
     }
 
     // If we have a fixed header, split into two tables.
