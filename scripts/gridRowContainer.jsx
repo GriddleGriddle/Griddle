@@ -18,7 +18,8 @@ var GridRowContainer = React.createClass({
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
-        "parentRowExpandedComponent": "▼"
+        "parentRowExpandedComponent": "▼",
+        "onRowClick": null
       };
     },
     getInitialState: function(){
@@ -55,7 +56,7 @@ var GridRowContainer = React.createClass({
         hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
         parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
         parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
-        paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />);
+        paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} onRowClick={that.props.onRowClick} />);
         var children = null;
 
       if(that.state.showChildren){
@@ -73,7 +74,7 @@ var GridRowContainer = React.createClass({
                         </tr>);
               }
 
-              return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowKey(row)}/>
+              return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
           });
       }
 

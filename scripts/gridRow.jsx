@@ -22,11 +22,16 @@ var GridRow = React.createClass({
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
-        "parentRowExpandedComponent": "▼"
+        "parentRowExpandedComponent": "▼",
+        "onRowClick": null
       }
     },
-    handleClick: function(){
-      this.props.toggleChildren();
+    handleClick: function(e){
+        if(this.props.onRowClick !== null && _.isFunction(this.props.onRowClick) ){
+            this.props.onRowClick(this, e);
+        }else if(this.props.hasChildren){
+            this.props.toggleChildren();
+        }
     },
     verifyProps: function(){
         if(this.props.columnSettings === null){
@@ -81,7 +86,7 @@ var GridRow = React.createClass({
               returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         //Get the row from the row settings.
