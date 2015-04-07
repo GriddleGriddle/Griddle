@@ -35,6 +35,7 @@ var GridTable = React.createClass({
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
       "externalIsLoading": false,
+      "onRowClick": null
     }
   },
   getInitialState: function(){
@@ -141,7 +142,7 @@ var GridTable = React.createClass({
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
             data={row} key={uniqueId + '-container'} uniqueId={uniqueId} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight}
-            rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className}/>)
+            rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
       });
 
       // Add the spacer rows for nodes we're not rendering.
