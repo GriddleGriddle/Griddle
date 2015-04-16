@@ -73,9 +73,9 @@ var GridRow = React.createClass({
 
             //todo: Make this not as ridiculous looking
             var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
-              <span style={this.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{this.props.parentRowCollapsedComponent}</span> :
+              <span style={this.props.useGriddleStyles ? {fontSize: "10px", marginRight:"5px"} : null}>{this.props.parentRowCollapsedComponent}</span> :
               index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
-                <span style={this.props.useGriddleStyles&&{fontSize: "10px"}}>{this.props.parentRowExpandedComponent}</span> : "";
+                <span style={this.props.useGriddleStyles ? {fontSize: "10px"} : null}>{this.props.parentRowExpandedComponent}</span> : "";
 
             if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
               columnStyles = _.extend(columnStyles, {paddingLeft:10})
