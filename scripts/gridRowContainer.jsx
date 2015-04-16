@@ -62,6 +62,7 @@ var GridRowContainer = React.createClass({
       if(that.state.showChildren){
           children =  that.props.hasChildren && this.props.data["children"].map(function(row, index){
               if(typeof row["children"] !== "undefined"){
+                var Griddle = require('./griddle.jsx');
                 return (<tr style={{paddingLeft: 5}}>
                           <td colSpan={that.props.columnSettings.getVisibleColumnCount()} className="griddle-parent" style={that.props.useGriddleStyles&&{border: "none", "padding": "0 0 0 5px"}}>
                             <Griddle isSubGriddle={true} results={[row]} columns={that.props.columnSettings.getColumns()} tableClassName={that.props.tableClassName} parentRowExpandedClassName={that.props.parentRowExpandedClassName}
