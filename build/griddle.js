@@ -306,6 +306,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    componentWillReceiveProps: function (nextProps) {
 	        this.setMaxPage(nextProps.results);
+
+	        if (nextProps.columns !== this.columnSettings.filteredColumns) {
+	            this.columnSettings.filteredColumns = nextProps.columns;
+	        }
 	    },
 	    getInitialState: function () {
 	        var state = {
@@ -1831,7 +1835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            { style: { paddingLeft: 5 } },
 	            React.createElement(
 	              "td",
-	              { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: "griddle-parent", style: that.props.useGriddleStyles && { border: "none", padding: "0 0 0 5px" } },
+	              { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: "griddle-parent", style: that.props.useGriddleStyles ? { border: "none", padding: "0 0 0 5px" } : null },
 	              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
 	                parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	                showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata,
@@ -1940,11 +1944,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //todo: Make this not as ridiculous looking
 	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
 	                "span",
-	                { style: _this.props.useGriddleStyles && { fontSize: "10px", marginRight: "5px" } },
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
 	                _this.props.parentRowCollapsedComponent
 	            ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
 	                "span",
-	                { style: _this.props.useGriddleStyles && { fontSize: "10px" } },
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
 	                _this.props.parentRowExpandedComponent
 	            ) : "";
 
