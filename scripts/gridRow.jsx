@@ -22,11 +22,16 @@ var GridRow = React.createClass({
         "parentRowCollapsedClassName": "parent-row",
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
-        "parentRowExpandedComponent": "▼"
+        "parentRowExpandedComponent": "▼",
+        "onRowClick": null
       }
     },
-    handleClick: function(){
-      this.props.toggleChildren();
+    handleClick: function(e){
+        if(this.props.onRowClick !== null && _.isFunction(this.props.onRowClick) ){
+            this.props.onRowClick(this, e);
+        }else if(this.props.hasChildren){
+            this.props.toggleChildren();
+        }
     },
     verifyProps: function(){
         if(this.props.columnSettings === null){
@@ -68,9 +73,9 @@ var GridRow = React.createClass({
 
             //todo: Make this not as ridiculous looking
             var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
-              <span style={this.props.useGriddleStyles&&{fontSize: "10px", marginRight:"5px"}}>{this.props.parentRowCollapsedComponent}</span> :
+              <span style={this.props.useGriddleStyles ? {fontSize: "10px", marginRight:"5px"} : null}>{this.props.parentRowCollapsedComponent}</span> :
               index === 0 && this.props.hasChildren && this.props.showChildren && this.props.useGriddleIcons ?
-                <span style={this.props.useGriddleStyles&&{fontSize: "10px"}}>{this.props.parentRowExpandedComponent}</span> : "";
+                <span style={this.props.useGriddleStyles ? {fontSize: "10px"} : null}>{this.props.parentRowExpandedComponent}</span> : "";
 
             if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
               columnStyles = _.extend(columnStyles, {paddingLeft:10})
@@ -81,7 +86,7 @@ var GridRow = React.createClass({
               returnValue = (meta == null ? returnValue : <td onClick={this.props.hasChildren && this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{colData}</td>);
             }
 
-            return returnValue || (<td onClick={this.props.hasChildren && this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         //Get the row from the row settings.

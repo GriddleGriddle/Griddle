@@ -421,6 +421,12 @@ var propertiesItem = [
     "type": "string",
     "default": ""
   },
+  {
+    "property": "onRowClick",
+    "description": "A function that should be called when a row has been clicked. The 'gridRow' and event will be passed in as arguments.",
+    "type": "function",
+    "default": "null"
+  }
 ];
 var DefinitionItem = React.createClass({
   getDefaultProps: function() {
