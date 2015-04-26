@@ -306,6 +306,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    componentWillReceiveProps: function (nextProps) {
 	        this.setMaxPage(nextProps.results);
+
+	        if (nextProps.columns !== this.columnSettings.filteredColumns) {
+	            this.columnSettings.filteredColumns = nextProps.columns;
+	        }
 	    },
 	    getInitialState: function () {
 	        var state = {
