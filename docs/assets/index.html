@@ -19,7 +19,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  
+
   <link rel="stylesheet" href="styles/normalize.css">
   <link rel="stylesheet" href="styles/skeleton.css">
   <link rel="stylesheet" href="styles/site.css">
@@ -251,8 +251,20 @@ var Griddle = require('griddle-react');</pre></code>
   <script src="scripts/fakeData.js"></script>
   <script type="text/jsx">
   /** @jsx React.DOM */
+    var CustomRow = React.createClass({
+      render: function(){
+        var cols = _.pairs(this.props.data).map(function(col, index){
+          return <td>{col[0]}</td>
+        });
+        return (
+          <tr>
+            {cols}
+          </tr>);
+      }
+    });
+
     React.render(
-        <Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
+        <Griddle results={fakeData} customTableRowComponent={CustomRow} useCustomTableRowComponent={true} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>
   <script>

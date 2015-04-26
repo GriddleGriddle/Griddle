@@ -2,7 +2,6 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var GridRow = require('./gridRow.jsx');
 var ColumnProperties = require('./columnProperties.js');
 
 var GridRowContainer = React.createClass({
@@ -48,11 +47,10 @@ var GridRowContainer = React.createClass({
     render: function(){
       this.verifyProps();
       var that = this;
-
       if(typeof this.props.data === "undefined"){return (<tbody></tbody>);}
       var arr = [];
 
-      arr.push(<GridRow useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnSettings={this.props.columnSettings} rowSettings={this.props.rowSettings}
+      arr.push(<this.props.rowSettings.rowComponent useGriddleStyles={this.props.useGriddleStyles} isSubGriddle={this.props.isSubGriddle} data={this.props.data} columnSettings={this.props.columnSettings} rowSettings={this.props.rowSettings}
         hasChildren={that.props.hasChildren} toggleChildren={that.toggleChildren} showChildren={that.state.showChildren} key={that.props.uniqueId} useGriddleIcons={that.props.useGriddleIcons}
         parentRowExpandedClassName={this.props.parentRowExpandedClassName} parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
         parentRowExpandedComponent={this.props.parentRowExpandedComponent} parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}

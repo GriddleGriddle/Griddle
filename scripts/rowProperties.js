@@ -1,8 +1,10 @@
 var _ = require('underscore');
 
 class RowProperties{
-  constructor (rowMetadata={}){
+  constructor (rowMetadata={}, rowComponent=null) {
     this.rowMetadata = rowMetadata;
+    this.rowComponent = rowComponent;
+    debugger;
   }
 
   getRowKey(row) {
