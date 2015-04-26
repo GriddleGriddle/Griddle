@@ -19,6 +19,13 @@ var RowProperties = require('./rowProperties');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
+    statics: {
+        GridTable: GridTable,
+        GridFilter: GridFilter,
+        GridPagination: GridPagination,
+        GridSettings: GridSettings,
+        GridRow: GridRow
+    },
     columnSettings: null,
     rowSettings: null,
     getDefaultProps: function() {

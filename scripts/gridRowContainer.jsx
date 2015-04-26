@@ -90,7 +90,7 @@ var GridRowContainer = React.createClass({
                         </tr>);
               }
 
-              return <GridRow useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
+              return <that.props.rowSettings.rowComponent useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
           });
       }
 
