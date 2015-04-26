@@ -266,12 +266,13 @@ var Griddle = React.createClass({
             this.props.columnMetadata,
             this.props.metadataColumns
         );
-        debugger;
+
         this.rowSettings = new RowProperties(
             this.props.rowMetadata,
             (this.props.useCustomTableRowComponent && this.props.customTableRowComponent) ?
                 this.props.customTableRowComponent :
-                GridRow
+                GridRow,
+            this.props.useCustomTableRowComponent
         );
 
         this.setMaxPage();

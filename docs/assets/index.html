@@ -254,7 +254,7 @@ var Griddle = require('griddle-react');</pre></code>
     var CustomRow = React.createClass({
       render: function(){
         var cols = _.pairs(this.props.data).map(function(col, index){
-          return <td>{col[0]}</td>
+          return <td><input type="text" defaultValue={col[1]} style={{width: "100%", height: "100%", color: "#CCC"}} /></td>
         });
         return (
           <tr>
@@ -264,7 +264,7 @@ var Griddle = require('griddle-react');</pre></code>
     });
 
     React.render(
-        <Griddle results={fakeData} customTableRowComponent={CustomRow} useCustomTableRowComponent={true} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
+        <Griddle results={fakeData} useCustomTableRowComponent={true} customTableRowComponent={CustomRow} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>
   <script>
