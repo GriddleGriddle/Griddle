@@ -24,12 +24,13 @@ var GridSettings = React.createClass({
         this.props.setPageSize(value);
     },
     handleChange: function(event){
-        if(event.target.checked === true && _.contains(this.props.selectedColumns, event.target.dataset.name) === false){
-            this.props.selectedColumns.push(event.target.dataset.name);
+        var columnName = event.target.dataset ? event.target.dataset.name : event.target.getAttribute('data-name');
+        if(event.target.checked === true && _.contains(this.props.selectedColumns, columnName) === false){
+            this.props.selectedColumns.push(columnName);
             this.props.setColumns(this.props.selectedColumns);
         } else {
             /* redraw with the selected columns minus the one just unchecked */
-            this.props.setColumns(_.without(this.props.selectedColumns, event.target.dataset.name));
+            this.props.setColumns(_.without(this.props.selectedColumns, columnName));
         }
     },
     render: function(){
