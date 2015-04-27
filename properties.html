@@ -29,8 +29,8 @@
 
 	<!-- Scripts
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/react.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.12.1/JSXTransformer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 	<script src="scripts/Griddle.js"></script>
 	<script src="scripts/GriddleWithCallback.js"></script>
@@ -496,6 +496,12 @@ var propertiesItem = [
     "type": "string",
     "default": ""
   },
+  {
+    "property": "onRowClick",
+    "description": "A function that should be called when a row has been clicked. The 'gridRow' and event will be passed in as arguments.",
+    "type": "function",
+    "default": "null"
+  }
 ];
 var DefinitionItem = React.createClass({
   getDefaultProps: function() {

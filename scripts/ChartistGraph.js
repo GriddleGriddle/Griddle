@@ -50,21 +50,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
 /***/ },
-/* 1 */
+
+/***/ 1:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
 	var React = __webpack_require__(2)
-	var Chartist = __webpack_require__(5)
+	var Chartist = __webpack_require__(15)
 
 	var ChartistGraph = React.createClass({
 
@@ -103,15 +105,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */
+
+/***/ 15:
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(root, factory) {
@@ -2395,5 +2397,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }
-/******/ ])
+
+/******/ })
 });
