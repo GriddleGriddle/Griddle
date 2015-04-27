@@ -11,6 +11,7 @@ var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridNoData = require('./gridNoData.jsx');
+var GridRow = require('./gridRow.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var ColumnProperties = require('./columnProperties');
@@ -18,6 +19,13 @@ var RowProperties = require('./rowProperties');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
+    statics: {
+        GridTable: GridTable,
+        GridFilter: GridFilter,
+        GridPagination: GridPagination,
+        GridSettings: GridSettings,
+        GridRow: GridRow
+    },
     columnSettings: null,
     rowSettings: null,
     getDefaultProps: function() {
@@ -267,7 +275,11 @@ var Griddle = React.createClass({
         );
 
         this.rowSettings = new RowProperties(
-            this.props.rowMetadata
+            this.props.rowMetadata,
+            (this.props.useCustomTableRowComponent && this.props.customTableRowComponent) ?
+                this.props.customTableRowComponent :
+                GridRow,
+            this.props.useCustomTableRowComponent
         );
 
         this.setMaxPage();
@@ -334,7 +346,7 @@ var Griddle = React.createClass({
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
                 var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
                 sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
-                
+
                 data = _.sortBy(data, function(item){
                     return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
                         item[that.state.sortColumn||that.props.initialSort];
