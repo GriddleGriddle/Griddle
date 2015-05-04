@@ -34,13 +34,16 @@ var GridRow = React.createClass({
             this.props.toggleChildren();
         }
     },
+    handleSelectionChange: function(e) {
+      //hack to get around warning that's not super useful in this case
+      return;
+    },
 	handleSelectClick: function(e) {
-
 		if(this.props.multipleSelectionSettings.isMultipleSelection) {
 			if(e.target.type === "checkbox") {
 				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
 			} else {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !React.findDOMNode(this.refs.selected).checked);
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked)
 			}
 		}
 	},
@@ -103,7 +106,15 @@ var GridRow = React.createClass({
 		if(nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
 			var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
 
-			nodes.unshift(<td style={columnStyles}><input type="checkbox" checked={this.props.multipleSelectionSettings.getIsRowChecked(dataView)} ref="selected" /></td>);
+			nodes.unshift(
+              <td key="selection" style={columnStyles}>
+                <input
+                    type="checkbox"
+                    checked={this.props.multipleSelectionSettings.getIsRowChecked(dataView)}
+                    onChange={this.handleSelectionChange}
+                    ref="selected" />
+              </td>
+            );
 		}
 
         //Get the row from the row settings.
