@@ -170,8 +170,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            parentRowExpandedComponent: "▼",
 	            settingsIconComponent: "",
 	            nextIconComponent: "",
-	            previousIconComponent: ""
+	            previousIconComponent: "",
+	            isMultipleSelection: false, //currently does not support subgrids
+	            selectedRowIds: [],
+	            uniqueIdentifier: "id"
 	        };
+	    },
+	    propTypes: {
+	        isMultipleSelection: React.PropTypes.bool,
+	        selectedRowIds: React.PropTypes.oneOfType([React.PropTypes.arrayOf(React.PropTypes.number), React.PropTypes.arrayOf(React.PropTypes.string)]),
+	        uniqueIdentifier: React.PropTypes.string
 	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function (filter) {
@@ -209,6 +217,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Set the state.
 	        that.setState(updatedState);
+
+	        this._resetSelectedRows();
 	    },
 	    setPageSize: function (size) {
 	        if (this.props.useExternal) {
@@ -269,6 +279,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            that.setState(state);
 	        }
+
+	        //When infinite scrolling is enabled, uncheck the "select all" checkbox, since more unchecked rows will be appended at the end
+	        if (this.props.enableInfiniteScroll) {
+	            this.setState({
+	                isSelectAllChecked: false
+	            });
+	        } else {
+	            //When the paging is done on the server, the previously selected rows on a certain page might not
+	            // coincide with the new rows on that exact page page, if moving back and forth. Better reset the selection
+	            this._resetSelectedRows();
+	        }
 	    },
 	    setColumns: function (columns) {
 	        this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
@@ -311,12 +332,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        this.setState(state);
+
+	        //When the sorting is done on the server, the previously selected rows might not correspond with the new ones.
+	        //Better reset the selection
+	        this._resetSelectedRows();
 	    },
 	    componentWillReceiveProps: function (nextProps) {
 	        this.setMaxPage(nextProps.results);
 
 	        if (nextProps.columns !== this.columnSettings.filteredColumns) {
 	            this.columnSettings.filteredColumns = nextProps.columns;
+	        }
+
+	        if (nextProps.selectedRowIds) {
+	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
+
+	            this.setState({
+	                isSelectAllChecked: this._getAreAllRowsChecked(nextProps.selectedRowIds, _.pluck(visibleRows, this.props.uniqueIdentifier)),
+	                selectedRowIds: nextProps.selectedRowIds
+	            });
 	        }
 	    },
 	    getInitialState: function () {
@@ -328,7 +362,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filter: "",
 	            sortColumn: this.props.initialSort,
 	            sortAscending: this.props.initialSortAscending,
-	            showColumnChooser: false
+	            showColumnChooser: false,
+	            isSelectAllChecked: false,
+	            selectedRowIds: this.props.selectedRowIds
 	        };
 
 	        return state;
@@ -476,6 +512,94 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortDescendingComponent: this.props.sortDescendingComponent
 	        };
 	    },
+	    _toggleSelectAll: function () {
+	        var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
+	            newIsSelectAllChecked = !this.state.isSelectAllChecked,
+	            newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
+
+	        _.each(visibleRows, function (row) {
+	            this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, newIsSelectAllChecked);
+	        }, this);
+
+	        this.setState({
+	            isSelectAllChecked: newIsSelectAllChecked,
+	            selectedRowIds: newSelectedRowIds
+	        });
+	    },
+	    _toggleSelectRow: function (row, isChecked) {
+	        var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
+	            newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
+
+	        this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, isChecked);
+
+	        this.setState({
+	            isSelectAllChecked: this._getAreAllRowsChecked(newSelectedRowIds, _.pluck(visibleRows, this.props.uniqueIdentifier)),
+	            selectedRowIds: newSelectedRowIds
+	        });
+	    },
+	    _updateSelectedRowIds: function (id, selectedRowIds, isChecked) {
+	        var isFound;
+
+	        if (isChecked) {
+	            isFound = _.find(selectedRowIds, function (item) {
+	                return id === item;
+	            });
+
+	            if (isFound === undefined) {
+	                selectedRowIds.push(id);
+	            }
+	        } else {
+	            selectedRowIds.splice(selectedRowIds.indexOf(id), 1);
+	        }
+	    },
+	    _getIsSelectAllChecked: function () {
+	        return this.state.isSelectAllChecked;
+	    },
+	    _getAreAllRowsChecked: function (selectedRowIds, visibleRowIds) {
+	        var i, isFound;
+
+	        if (selectedRowIds.length !== visibleRowIds.length) {
+	            return false;
+	        }
+
+	        for (i = 0; i < selectedRowIds.length; i++) {
+	            isFound = _.find(visibleRowIds, function (visibleRowId) {
+	                return selectedRowIds[i] === visibleRowId;
+	            });
+
+	            if (isFound === undefined) {
+	                return false;
+	            }
+	        }
+
+	        return true;
+	    },
+	    _getIsRowChecked: function (row) {
+	        return this.state.selectedRowIds.indexOf(row[this.props.uniqueIdentifier]) > -1 ? true : false;
+	    },
+	    getSelectedRowIds: function () {
+	        return this.state.selectedRowIds;
+	    },
+	    _resetSelectedRows: function () {
+	        this.setState({
+	            isSelectAllChecked: false,
+	            selectedRowIds: []
+	        });
+	    },
+	    //This takes the props relating to multiple selection and puts them in one object
+	    getMultipleSelectionObject: function () {
+	        return {
+	            isMultipleSelection: _.find(this.props.results, function (result) {
+	                return "children" in result;
+	            }) ? false : this.props.isMultipleSelection, //does not support subgrids
+	            toggleSelectAll: this._toggleSelectAll,
+	            getIsSelectAllChecked: this._getIsSelectAllChecked,
+
+	            toggleSelectRow: this._toggleSelectRow,
+	            getSelectedRowIds: this.getSelectedRowIds,
+	            getIsRowChecked: this._getIsRowChecked
+	        };
+	    },
 	    isInfiniteScrollEnabled: function () {
 	        // If a custom pager is included, don't allow for infinite scrolling.
 	        if (this.props.useCustomPagerComponent) {
@@ -584,6 +708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getStandardGridSection: function (data, cols, meta, pagingContent, hasMorePages) {
 	        var sortProperties = this.getSortObject();
+	        var multipleSelectionProperties = this.getMultipleSelectionObject();
 
 	        return React.createElement(
 	            "div",
@@ -592,6 +717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                columnSettings: this.columnSettings,
 	                rowSettings: this.rowSettings,
 	                sortSettings: sortProperties,
+	                multipleSelectionSettings: multipleSelectionProperties,
 	                isSubGriddle: this.props.isSubGriddle,
 	                useGriddleIcons: this.props.useGriddleIcons,
 	                useFixedLayout: this.props.useFixedLayout,
@@ -951,6 +1077,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      columnSettings: null,
 	      rowSettings: null,
 	      sortSettings: null,
+	      multipleSelectionSettings: null,
 	      className: "",
 	      enableInfiniteScroll: false,
 	      nextPage: null,
@@ -1078,6 +1205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
 	          data: row, key: uniqueId + "-container", uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	          multipleSelectionSettings: that.props.multipleSelectionSettings,
 	          rowHeight: that.props.rowHeight, hasChildren: hasChildren, tableClassName: that.props.className, onRowClick: that.props.onRowClick });
 	      });
 
@@ -1170,6 +1298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
 	      sortSettings: this.props.sortSettings,
+	      multipleSelectionSettings: this.props.multipleSelectionSettings,
 	      columnSettings: this.props.columnSettings,
 	      rowSettings: this.props.rowSettings }) : "";
 
@@ -1198,7 +1327,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          null,
 	          React.createElement(
 	            "td",
-	            { colSpan: this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: "footer-container" },
+	            { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: "footer-container" },
 	            this.props.pagingContent
 	          )
 	        )
@@ -1613,7 +1742,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            parentRowExpandedClassName: "parent-row expanded",
 	            parentRowCollapsedComponent: "▶",
 	            parentRowExpandedComponent: "▼",
-	            onRowClick: null
+	            onRowClick: null,
+	            multipleSelectionSettings: null
 	        };
 	    },
 	    handleClick: function (e) {
@@ -1621,6 +1751,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.props.onRowClick(this, e);
 	        } else if (this.props.hasChildren) {
 	            this.props.toggleChildren();
+	        }
+	    },
+	    handleSelectClick: function (e) {
+	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	            if (e.target.type === "checkbox") {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+	            } else {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !React.findDOMNode(this.refs.selected).checked);
+	            }
 	        }
 	    },
 	    verifyProps: function () {
@@ -1694,6 +1833,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            );
 	        });
 
+	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	            nodes.unshift(React.createElement(
+	                "td",
+	                { style: columnStyles },
+	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView), ref: "selected" })
+	            ));
+	        }
+
 	        //Get the row from the row settings.
 	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
 
@@ -1704,7 +1853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return React.createElement(
 	            "tr",
-	            { className: className },
+	            { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
 	            nodes
 	        );
 	    }
@@ -1820,6 +1969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            columnSettings: null,
 	            rowSettings: null,
 	            sortSettings: null,
+	            multipleSelectionSettings: null,
 	            headerStyle: null,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
@@ -1830,6 +1980,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    sort: function (event) {
 	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+	    },
+	    toggleSelectAll: function (event) {
+	        this.props.multipleSelectionSettings.toggleSelectAll();
 	    },
 	    verifyProps: function () {
 	        if (this.props.columnSettings === null) {
@@ -1843,11 +1996,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function () {
 	        this.verifyProps();
 	        var that = this;
+	        var titleStyles = null;
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
 	            var sortComponent = null;
-	            var titleStyles = null;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -1882,6 +2035,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                sortComponent
 	            );
 	        });
+
+	        if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
+	            nodes.unshift(React.createElement(
+	                "th",
+	                { onClick: this.toggleSelectAll, style: titleStyles },
+	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsSelectAllChecked() })
+	            ));
+	        }
 
 	        //Get the row from the row settings.
 	        var className = that.props.rowSettings && that.props.rowSettings.getHeaderRowMetadataClass() || null;
@@ -1929,7 +2090,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      parentRowExpandedClassName: "parent-row expanded",
 	      parentRowCollapsedComponent: "▶",
 	      parentRowExpandedComponent: "▼",
-	      onRowClick: null
+	      onRowClick: null,
+	      multipleSelectionSettings: null
 	    };
 	  },
 	  getInitialState: function () {
@@ -1982,7 +2144,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      parentRowCollapsedComponent: this.props.parentRowCollapsedComponent,
 	      paddingHeight: that.props.paddingHeight,
 	      rowHeight: that.props.rowHeight,
-	      onRowClick: that.props.onRowClick }));
+	      onRowClick: that.props.onRowClick,
+	      multipleSelectionSettings: this.props.multipleSelectionSettings }));
 
 	    var children = null;
 

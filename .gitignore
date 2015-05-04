@@ -30,3 +30,5 @@ docs/html
 
 # Users Environment Variables
 .lock-wscript
+
+.idea

@@ -18,7 +18,8 @@ var GridRowContainer = React.createClass({
         "parentRowExpandedClassName": "parent-row expanded",
         "parentRowCollapsedComponent": "▶",
         "parentRowExpandedComponent": "▼",
-        "onRowClick": null
+        "onRowClick": null,
+	    "multipleSelectionSettings": null
       };
     },
     getInitialState: function(){
@@ -70,7 +71,8 @@ var GridRowContainer = React.createClass({
         parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
         paddingHeight={that.props.paddingHeight}
         rowHeight={that.props.rowHeight}
-        onRowClick={that.props.onRowClick} />
+        onRowClick={that.props.onRowClick}
+	    multipleSelectionSettings={this.props.multipleSelectionSettings} />
       );
 
       var children = null;

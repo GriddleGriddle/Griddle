@@ -104,8 +104,19 @@ var Griddle = React.createClass({
             "parentRowExpandedComponent": "▼",
             "settingsIconComponent": "",
             "nextIconComponent": "",
-            "previousIconComponent":""
+            "previousIconComponent":"",
+			"isMultipleSelection": false, //currently does not support subgrids
+            "selectedRowIds": [],
+			"uniqueIdentifier": "id"
         };
+    },
+    propTypes: {
+        isMultipleSelection: React.PropTypes.bool,
+        selectedRowIds: React.PropTypes.oneOfType([
+            React.PropTypes.arrayOf(React.PropTypes.number),
+            React.PropTypes.arrayOf(React.PropTypes.string)
+        ]),
+        uniqueIdentifier: React.PropTypes.string
     },
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
@@ -144,6 +155,8 @@ var Griddle = React.createClass({
 
         // Set the state.
         that.setState(updatedState);
+
+		this._resetSelectedRows();
     },
     setPageSize: function(size){
         if(this.props.useExternal) {
@@ -204,6 +217,16 @@ var Griddle = React.createClass({
 
                 that.setState(state);
         }
+
+		//When infinite scrolling is enabled, uncheck the "select all" checkbox, since more unchecked rows will be appended at the end
+		if(this.props.enableInfiniteScroll) {
+			this.setState({
+				isSelectAllChecked: false
+			})
+		} else { //When the paging is done on the server, the previously selected rows on a certain page might not
+			// coincide with the new rows on that exact page page, if moving back and forth. Better reset the selection
+			this._resetSelectedRows();
+		}
     },
     setColumns: function(columns){
         this.columnSettings.filteredColumns = _.isArray(columns) ? columns : [columns];
@@ -240,12 +263,25 @@ var Griddle = React.createClass({
         }
 
         this.setState(state);
+
+		//When the sorting is done on the server, the previously selected rows might not correspond with the new ones.
+		//Better reset the selection
+		this._resetSelectedRows();
     },
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
 
         if(nextProps.columns !== this.columnSettings.filteredColumns){
             this.columnSettings.filteredColumns = nextProps.columns;
+        }
+
+        if(nextProps.selectedRowIds) {
+            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
+
+            this.setState({
+                isSelectAllChecked: this._getAreAllRowsChecked(nextProps.selectedRowIds, _.pluck(visibleRows, this.props.uniqueIdentifier)),
+                selectedRowIds: nextProps.selectedRowIds
+            });
         }
     },
     getInitialState: function() {
@@ -257,7 +293,9 @@ var Griddle = React.createClass({
             filter: "",
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
-            showColumnChooser: false
+            showColumnChooser: false,
+			isSelectAllChecked: false,
+			selectedRowIds: this.props.selectedRowIds
         };
 
         return state;
@@ -417,6 +455,101 @@ var Griddle = React.createClass({
             sortDescendingComponent: this.props.sortDescendingComponent
         }
     },
+	_toggleSelectAll: function () {
+
+		var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
+            newIsSelectAllChecked = !this.state.isSelectAllChecked,
+			newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
+
+		_.each(visibleRows, function (row) {
+            this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, newIsSelectAllChecked);
+		}, this);
+
+		this.setState({
+			isSelectAllChecked: newIsSelectAllChecked,
+			selectedRowIds: newSelectedRowIds
+		});
+	},
+	_toggleSelectRow: function (row, isChecked) {
+
+        var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
+            newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
+
+        this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, isChecked);
+
+		this.setState({
+			isSelectAllChecked: this._getAreAllRowsChecked(newSelectedRowIds, _.pluck(visibleRows, this.props.uniqueIdentifier)),
+            selectedRowIds: newSelectedRowIds
+		});
+	},
+    _updateSelectedRowIds: function (id, selectedRowIds, isChecked) {
+
+        var isFound;
+
+        if(isChecked) {
+            isFound = _.find(selectedRowIds, function (item) {
+                return id === item;
+            });
+
+            if(isFound === undefined) {
+                selectedRowIds.push(id);
+            }
+        } else {
+            selectedRowIds.splice(selectedRowIds.indexOf(id), 1);
+        }
+    },
+	_getIsSelectAllChecked: function () {
+
+		return this.state.isSelectAllChecked;
+	},
+    _getAreAllRowsChecked: function (selectedRowIds, visibleRowIds) {
+
+        var i, isFound;
+
+        if(selectedRowIds.length !== visibleRowIds.length) {
+            return false;
+        }
+
+        for(i = 0; i < selectedRowIds.length; i++) {
+            isFound = _.find(visibleRowIds, function (visibleRowId) {
+                return selectedRowIds[i] === visibleRowId;
+            });
+
+            if(isFound === undefined) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+    _getIsRowChecked: function (row) {
+
+        return this.state.selectedRowIds.indexOf(row[this.props.uniqueIdentifier]) > -1 ? true : false;
+    },
+	getSelectedRowIds: function () {
+
+		return this.state.selectedRowIds;
+	},
+	_resetSelectedRows: function () {
+
+		this.setState({
+			isSelectAllChecked: false,
+			selectedRowIds: []
+		})
+	},
+	//This takes the props relating to multiple selection and puts them in one object
+	getMultipleSelectionObject: function(){
+
+		return {
+			isMultipleSelection: _.find(this.props.results, function (result) { return 'children' in result}) ? false : this.props.isMultipleSelection, //does not support subgrids
+			toggleSelectAll: this._toggleSelectAll,
+			getIsSelectAllChecked: this._getIsSelectAllChecked,
+
+			toggleSelectRow: this._toggleSelectRow,
+			getSelectedRowIds: this.getSelectedRowIds,
+            getIsRowChecked: this._getIsRowChecked
+		}
+	},
     isInfiniteScrollEnabled: function(){
       // If a custom pager is included, don't allow for infinite scrolling.
       if (this.props.useCustomPagerComponent) {
@@ -521,11 +654,13 @@ var Griddle = React.createClass({
     },
     getStandardGridSection: function(data, cols, meta, pagingContent, hasMorePages){
         var sortProperties = this.getSortObject();
+		var multipleSelectionProperties = this.getMultipleSelectionObject();
 
         return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles}
                 columnSettings={this.columnSettings}
                 rowSettings = {this.rowSettings}
                 sortSettings={sortProperties}
+				multipleSelectionSettings={multipleSelectionProperties}
                 isSubGriddle={this.props.isSubGriddle}
                 useGriddleIcons={this.props.useGriddleIcons}
                 useFixedLayout={this.props.useFixedLayout}

@@ -11,6 +11,7 @@ var GridTitle = React.createClass({
            "columnSettings" : null,
            "rowSettings" : null,
            "sortSettings": null,
+		   "multipleSelectionSettings": null,
            "headerStyle": null,
            "useGriddleStyles": true,
            "useGriddleIcons": true,
@@ -23,6 +24,9 @@ var GridTitle = React.createClass({
     sort: function(event){
         this.props.sortSettings.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
     },
+	toggleSelectAll: function (event) {
+		this.props.multipleSelectionSettings.toggleSelectAll();
+	},
     verifyProps: function(){
       if(this.props.columnSettings === null){
          console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
@@ -35,11 +39,11 @@ var GridTitle = React.createClass({
     render: function(){
       this.verifyProps();
       var that = this;
+	  var titleStyles = null;
 
       var nodes = this.props.columnSettings.getColumns().map(function(col, index){
           var columnSort = "";
           var sortComponent = null;
-          var titleStyles = null;
 
           if(that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending){
               columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -69,6 +73,10 @@ var GridTitle = React.createClass({
 
           return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
       });
+
+	  if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
+		  nodes.unshift(<th onClick={this.toggleSelectAll} style={titleStyles}><input type="checkbox" checked={this.props.multipleSelectionSettings.getIsSelectAllChecked()} /></th>);
+	  }
 
       //Get the row from the row settings.
       var className = that.props.rowSettings&&that.props.rowSettings.getHeaderRowMetadataClass() || null;
