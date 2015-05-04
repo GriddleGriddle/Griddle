@@ -404,7 +404,7 @@ var Griddle = React.createClass({
                 } else {
                   //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
                   var rest = _.drop(data, currentPage * this.props.resultsPerPage);
-                  data = _.initial(rest, rest.length-this.props.resultsPerPage);
+                  data = (_.dropRight || _.initial)(rest, rest.length-this.props.resultsPerPage);
                 }
             }
 
