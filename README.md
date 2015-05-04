@@ -32,10 +32,16 @@ Griddle is not yet version 1. There are likely some areas that will change and s
 ----------
 ###Contributing:###
 
-Please feel free submit any bugs or suggestions as issues. If you are having problems getting up and running please post in the [Gitter chat](https://gitter.im/DynamicTyped/Griddle) and we'll try to help out. Pull requests are welcome but if you have an idea please post as an issue first to make sure everyone is on the same-page (and to help avoid duplicate work). If you are looking to help out but don't know where to start, please take a look at [approved issues that don't have anyone assigned](https://github.com/dynamictyped/griddle/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved+no%3Aassignee). 
+Please feel free submit any bugs or suggestions as issues. If you are having problems getting up and running please post in the [Gitter chat](https://gitter.im/DynamicTyped/Griddle) and we'll try to help out. Pull requests are welcome but if you have an idea please post as an issue first to make sure everyone is on the same-page (and to help avoid duplicate work). If you are looking to help out but don't know where to start, please take a look at [approved issues that don't have anyone assigned](https://github.com/dynamictyped/griddle/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved+no%3Aassignee).
 
 ----------
 ###Changelog:###
+
+0.2.13
+- Numerous bug fixes, additions.
+- Additional notes will be added soon.
+...
+
 0.2.1 - 0.2.3
 - Tweaks surrounding package.json dependencies.
 

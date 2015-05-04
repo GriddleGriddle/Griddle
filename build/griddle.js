@@ -1989,6 +1989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (that.state.showChildren) {
 	      children = that.props.hasChildren && this.props.data.children.map(function (row, index) {
 	        if (typeof row.children !== "undefined") {
+	          var Griddle = __webpack_require__(1);
 	          return React.createElement(
 	            "tr",
 	            { style: { paddingLeft: 5 } },
