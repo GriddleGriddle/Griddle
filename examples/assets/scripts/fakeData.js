@@ -108,7 +108,7 @@ var testData = [
     "country": "United Kingdom",
     "company": "Ovolo",
     "favoriteNumber": 7,
-    "date": (new Date(2000,9,22)).toString()
+    "date": (new Date(2000,9,22,8,59,0)).toString()
   },
   {
     "id": 1,
@@ -128,7 +128,7 @@ var testData = [
     "country": "Ukraine",
     "company": "Comtext",
     "favoriteNumber": 3,
-    "date": (new Date(2000,9,23)).toString()
+    "date": (new Date(2000,9,22,13,58,0)).toString()
   },
   {
     "id": 3,
@@ -158,7 +158,7 @@ var testData = [
     "country": "Virgin Islands (US)",
     "company": "Pawnagra",
     "favoriteNumber": 7,
-    "date": (new Date(2000,9,21)).toString()
+    "date": (new Date(2000,9,22,9,1,0)).toString()
   },
   {
     "id": 7,

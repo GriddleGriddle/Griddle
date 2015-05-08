@@ -345,47 +345,26 @@ var Griddle = React.createClass({
         var that = this;
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
-                var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                //var test = sortProperty[0].hasOwnProperty("sortType");
-                //sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
 
-                //check if column passed in exists and is defined in columnMetadata
-                if(sortProperty.length > 0) {
-                  if(sortProperty[0].hasOwnProperty("sortType")) {
-                      if(sortProperty[0].sortType.toLowerCase() == "date") {
+                var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
+
+                if(sortProperty[0].hasOwnProperty("sortType")) {
+                    if(sortProperty[0].sortType.toLowerCase() === "date") {
                         //call new sort functions here
                         data = SortHelper.sortDate(data,this.state.sortColumn,this.state.sortAscending);
                       }
-                      else if(sortProperty[0].sortType.toLowerCase() == "money"){
-
-                      }
                   }
                   else {
-                    data = _.sortBy(data,this.state.sortColumn);
-                    if(this.state.sortAscending === false){
+                    sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
+                    data = _.sortBy(data, function(item) {
+                            return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
+                            item[that.state.sortColumn||that.props.initialSort];
+                    });
+                    if(this.state.sortAscending === false) {
                         data.reverse();
                     }
                   }
                 }
-
-
-
-                /*data = _.sortBy(data, function(item){
-                    return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
-                        item[that.state.sortColumn||that.props.initialSort];
-                });*/
-              /*  data = _.sortBy(data,
-                  if(_.find(this.props.columnMetaData,this.state.sortColumn))
-                    alert("Test");
-                  else {
-                  function(item){
-                    return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
-                        item[that.state.sortColumn||that.props.initialSort];
-                      }
-                });*/
-
-
-            }
 
             var currentPage = this.getCurrentPage();
 
