@@ -11,7 +11,8 @@ describe('GridTitle', function() {
 	var title; 
 	var columns; 
 	var columnSettings; 
-	var sortObject; 
+	var sortObject;
+	var multipleSelectOptions;
 
 	beforeEach(function(){
 		columns = ["one", "two", "three"];
@@ -25,9 +26,18 @@ describe('GridTitle', function() {
         sortDescendingClassName: "",
         sortAscendingComponent: null,
         sortDescendingComponent: null
-    }
+    };
+    multipleSelectSettings = {
+			isMultipleSelection: false,
+			toggleSelectAll: function(){},
+			getIsSelectAllChecked: function(){},
 
-    title = TestUtils.renderIntoDocument(<GridTitle columns={columns} columnSettings={columnSettings} sortSettings={sortObject}/>);
+			toggleSelectRow: function(){},
+			getSelectedRowIds: function(){},
+      getIsRowChecked: function(){}
+		};
+
+    title = TestUtils.renderIntoDocument(<GridTitle columns={columns} columnSettings={columnSettings} sortSettings={sortObject} multipleSelectionSettings={multipleSelectSettings} />);
 	});
 
 	it('calls method when clicked', function(){
@@ -69,7 +79,7 @@ describe('GridTitle', function() {
 	  }];
 		var columnSettings2 = new ColumnProperties(columns, [], "children", newMeta, []);
 
-		var title2 = TestUtils.renderIntoDocument(<GridTitle columns={columns} columnSettings={columnSettings2} sortSettings={sortObject}/>);
+		var title2 = TestUtils.renderIntoDocument(<GridTitle columns={columns} columnSettings={columnSettings2} sortSettings={sortObject} multipleSelectionSettings={multipleSelectSettings} />);
 
 		var node = TestUtils.findRenderedDOMComponentWithTag(title2, 'thead');
 		var headings = TestUtils.scryRenderedDOMComponentsWithTag(node, 'th');

@@ -1,11 +1,13 @@
 /** @jsx React.DOM */
 jest.dontMock('../gridRow.jsx');
 jest.dontMock('../columnProperties.js');
+jest.dontMock('../rowProperties.js');
 
 var React = require('react/addons');
 var _ = require('underscore'); 
 var GridRow = require('../gridRow.jsx');
 var ColumnProperties = require('../columnProperties.js');
+var RowProperties = require('../rowProperties.js');
 var TestUtils = React.addons.TestUtils;
 
 	  fakeData = [
@@ -183,8 +185,18 @@ describe('GridRow', function(){
         [],
         []
     );
+   var rowSettings = new RowProperties();
+   var multipleSelectOptions =  {
+			isMultipleSelection: false,
+			toggleSelectAll: function(){},
+			getIsSelectAllChecked: function(){},
 
-	  row = TestUtils.renderIntoDocument(<GridRow data={fakeData[0]} columnSettings={columnSettings}/>);
+			toggleSelectRow: function(){},
+			getSelectedRowIds: function(){},
+      getIsRowChecked: function(){}
+		};
+
+	  row = TestUtils.renderIntoDocument(<GridRow data={fakeData[0]} columnSettings={columnSettings} rowSettings={rowSettings} multipleSelectionSettings={multipleSelectOptions} />);
 		expect(TestUtils.isCompositeComponent(row)).toBe(true);
 		var mock = jest.genMockFunction();
 		row.props.toggleChildren = mock;
@@ -212,8 +224,17 @@ describe('GridRow', function(){
         [],
         []
     );
+    var multipleSelectOptions =  {
+			isMultipleSelection: false,
+			toggleSelectAll: function(){},
+			getIsSelectAllChecked: function(){},
 
-	  row2 = TestUtils.renderIntoDocument(<GridRow data={fakeSubgridData[0]} hasChildren={true} columnSettings={columnSettings}/>);
+			toggleSelectRow: function(){},
+			getSelectedRowIds: function(){},
+      getIsRowChecked: function(){}
+		};
+
+	  row2 = TestUtils.renderIntoDocument(<GridRow data={fakeSubgridData[0]} hasChildren={true} columnSettings={columnSettings} multipleSelectionSettings={multipleSelectOptions}/>);
 	  expect(TestUtils.isCompositeComponent(row2)).toBe(true);
 		var mock = jest.genMockFunction();
 		row2.props.toggleChildren = mock;

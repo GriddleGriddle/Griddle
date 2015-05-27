@@ -16,6 +16,7 @@ var SomeCustomComponent = React.createClass({
 describe('Griddle', function() {
   var fakeData;
   var grid;
+  var multipleSelectOptions;
 
   var CustomGridComponent = React.createClass({
     getInitialProps: function(){

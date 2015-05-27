@@ -11,7 +11,7 @@ var GridTitle = React.createClass({
          "columnSettings" : null,
          "rowSettings" : null,
          "sortSettings": null,
-	   "multipleSelectionSettings": null,
+         "multipleSelectionSettings": null,
          "headerStyle": null,
          "useGriddleStyles": true,
          "useGriddleIcons": true,

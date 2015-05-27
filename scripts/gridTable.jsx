@@ -15,7 +15,7 @@ var GridTable = React.createClass({
       "columnSettings": null,
       "rowSettings": null,
       "sortSettings": null,
-	  "multipleSelectionSettings": null,
+      "multipleSelectionSettings": null,
       "className": "",
       "enableInfiniteScroll": false,
       "nextPage": null,
