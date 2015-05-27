@@ -458,8 +458,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
 	            } else {
 	                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-	                var rest = _.rest(data, currentPage * this.props.resultsPerPage);
-	                data = _.initial(rest, rest.length - this.props.resultsPerPage);
+	                var rest = _.drop(data, currentPage * this.props.resultsPerPage);
+	                data = (_.dropRight || _.initial)(rest, rest.length - this.props.resultsPerPage);
 	            }
 	        }
 
@@ -1722,141 +1722,150 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 	var ColumnProperties = __webpack_require__(4);
+	var powerPick = __webpack_require__(16);
 
 	var GridRow = React.createClass({
-	    displayName: "GridRow",
-	    getDefaultProps: function () {
-	        return {
-	            isChildRow: false,
-	            showChildren: false,
-	            data: {},
-	            columnSettings: null,
-	            rowSettings: null,
-	            hasChildren: false,
-	            useGriddleStyles: true,
-	            useGriddleIcons: true,
-	            isSubGriddle: false,
-	            paddingHeight: null,
-	            rowHeight: null,
-	            parentRowCollapsedClassName: "parent-row",
-	            parentRowExpandedClassName: "parent-row expanded",
-	            parentRowCollapsedComponent: "▶",
-	            parentRowExpandedComponent: "▼",
-	            onRowClick: null,
-	            multipleSelectionSettings: null
-	        };
-	    },
-	    handleClick: function (e) {
-	        if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
-	            this.props.onRowClick(this, e);
-	        } else if (this.props.hasChildren) {
-	            this.props.toggleChildren();
-	        }
-	    },
-	    handleSelectClick: function (e) {
-	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
-	            if (e.target.type === "checkbox") {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
-	            } else {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !React.findDOMNode(this.refs.selected).checked);
-	            }
-	        }
-	    },
-	    verifyProps: function () {
-	        if (this.props.columnSettings === null) {
-	            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
-	        }
-	    },
-	    render: function () {
-	        var _this = this;
-	        this.verifyProps();
-	        var that = this;
-	        var columnStyles = null;
-
-	        if (this.props.useGriddleStyles) {
-	            columnStyles = {
-	                margin: "0",
-	                padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
-	                height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
-	                backgroundColor: "#FFF",
-	                borderTopColor: "#DDD",
-	                color: "#222"
-	            };
-	        }
-
-	        var columns = this.props.columnSettings.getColumns();
-
-	        // make sure that all the columns we need have default empty values
-	        // otherwise they will get clipped
-	        var defaults = _.object(columns, []);
-
-	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	        var dataView = Object.create(this.props.data);
-
-	        _.defaults(dataView, defaults);
-
-	        var data = _.pairs(_.pick(dataView, columns));
-
-	        var nodes = data.map(function (col, index) {
-	            var returnValue = null;
-	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
-
-	            //todo: Make this not as ridiculous looking
-	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
-	                "span",
-	                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
-	                _this.props.parentRowCollapsedComponent
-	            ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
-	                "span",
-	                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
-	                _this.props.parentRowExpandedComponent
-	            ) : "";
-
-	            if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
-	                columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
-	            }
-
-	            if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	                var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	                returnValue = meta == null ? returnValue : React.createElement(
-	                    "td",
-	                    { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
-	                    colData
-	                );
-	            }
-
-	            return returnValue || React.createElement(
-	                "td",
-	                { onClick: _this.handleClick, key: index, style: columnStyles },
-	                firstColAppend,
-	                col[1]
-	            );
-	        });
-
-	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
-
-	            nodes.unshift(React.createElement(
-	                "td",
-	                { style: columnStyles },
-	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView), ref: "selected" })
-	            ));
-	        }
-
-	        //Get the row from the row settings.
-	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
-
-	        if (that.props.isChildRow) {
-	            className = "child-row";
-	        } else if (that.props.hasChildren) {
-	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
-	        }
-	        return React.createElement(
-	            "tr",
-	            { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
-	            nodes
-	        );
+	  displayName: "GridRow",
+	  getDefaultProps: function () {
+	    return {
+	      isChildRow: false,
+	      showChildren: false,
+	      data: {},
+	      columnSettings: null,
+	      rowSettings: null,
+	      hasChildren: false,
+	      useGriddleStyles: true,
+	      useGriddleIcons: true,
+	      isSubGriddle: false,
+	      paddingHeight: null,
+	      rowHeight: null,
+	      parentRowCollapsedClassName: "parent-row",
+	      parentRowExpandedClassName: "parent-row expanded",
+	      parentRowCollapsedComponent: "▶",
+	      parentRowExpandedComponent: "▼",
+	      onRowClick: null,
+	      multipleSelectionSettings: null
+	    };
+	  },
+	  handleClick: function (e) {
+	    if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
+	      this.props.onRowClick(this, e);
+	    } else if (this.props.hasChildren) {
+	      this.props.toggleChildren();
 	    }
+	  },
+	  handleSelectionChange: function (e) {
+	    //hack to get around warning that's not super useful in this case
+	    return;
+	  },
+	  handleSelectClick: function (e) {
+	    if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	      if (e.target.type === "checkbox") {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+	      } else {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked);
+	      }
+	    }
+	  },
+	  verifyProps: function () {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
+	  render: function () {
+	    var _this = this;
+	    this.verifyProps();
+	    var that = this;
+	    var columnStyles = null;
+
+	    if (this.props.useGriddleStyles) {
+	      columnStyles = {
+	        margin: "0",
+	        padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+	        height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
+	        backgroundColor: "#FFF",
+	        borderTopColor: "#DDD",
+	        color: "#222"
+	      };
+	    }
+
+	    var columns = this.props.columnSettings.getColumns();
+
+	    // make sure that all the columns we need have default empty values
+	    // otherwise they will get clipped
+	    var defaults = _.object(columns, []);
+
+	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	    var dataView = Object.create(this.props.data);
+
+	    _.defaults(dataView, defaults);
+
+	    var data = _.pairs(powerPick(dataView, columns));
+
+	    var nodes = data.map(function (col, index) {
+	      var returnValue = null;
+	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
+
+	      //todo: Make this not as ridiculous looking
+	      var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
+	        "span",
+	        { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
+	        _this.props.parentRowCollapsedComponent
+	      ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
+	        "span",
+	        { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
+	        _this.props.parentRowExpandedComponent
+	      ) : "";
+
+	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
+	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
+	      }
+
+	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
+	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	        returnValue = meta == null ? returnValue : React.createElement(
+	          "td",
+	          { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+	          colData
+	        );
+	      }
+
+	      return returnValue || React.createElement(
+	        "td",
+	        { onClick: _this.handleClick, key: index, style: columnStyles },
+	        firstColAppend,
+	        col[1]
+	      );
+	    });
+
+	    if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	      var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	      nodes.unshift(React.createElement(
+	        "td",
+	        { key: "selection", style: columnStyles },
+	        React.createElement("input", {
+	          type: "checkbox",
+	          checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
+	          onChange: this.handleSelectionChange,
+	          ref: "selected" })
+	      ));
+	    }
+
+	    //Get the row from the row settings.
+	    var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
+
+	    if (that.props.isChildRow) {
+	      className = "child-row";
+	    } else if (that.props.hasChildren) {
+	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+	    }
+	    return React.createElement(
+	      "tr",
+	      { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
+	      nodes
+	    );
+	  }
 	});
 
 	module.exports = GridRow;
@@ -1984,6 +1993,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    toggleSelectAll: function (event) {
 	        this.props.multipleSelectionSettings.toggleSelectAll();
 	    },
+	    handleSelectionChange: function (event) {
+	        //hack to get around warning message that's not helpful in this case
+	        return;
+	    },
 	    verifyProps: function () {
 	        if (this.props.columnSettings === null) {
 	            console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
@@ -2039,8 +2052,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
 	            nodes.unshift(React.createElement(
 	                "th",
-	                { onClick: this.toggleSelectAll, style: titleStyles },
-	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsSelectAllChecked() })
+	                { key: "selection", onClick: this.toggleSelectAll, style: titleStyles },
+	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })
 	            ));
 	        }
 
@@ -2182,6 +2195,78 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	module.exports = GridRowContainer;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _ = __webpack_require__(3);
+
+	// Credits: https://github.com/documentcloud/underscore-contrib
+	// Sub module: underscore.object.selectors
+	// License: MIT (https://github.com/documentcloud/underscore-contrib/blob/master/LICENSE)
+	// https://github.com/documentcloud/underscore-contrib/blob/master/underscore.object.selectors.js
+
+	// Will take a path like 'element[0][1].subElement["Hey!.What?"]["[hey]"]'
+	// and return ["element", "0", "1", "subElement", "Hey!.What?", "[hey]"]
+	function keysFromPath(path) {
+	  // from http://codereview.stackexchange.com/a/63010/8176
+	  /**
+	   * Repeatedly capture either:
+	   * - a bracketed expression, discarding optional matching quotes inside, or
+	   * - an unbracketed expression, delimited by a dot or a bracket.
+	   */
+	  var re = /\[("|')(.+)\1\]|([^.\[\]]+)/g;
+
+	  var elements = [];
+	  var result;
+	  while ((result = re.exec(path)) !== null) {
+	    elements.push(result[2] || result[3]);
+	  }
+	  return elements;
+	}
+
+	// Gets the value at any depth in a nested object based on the
+	// path described by the keys given. Keys may be given as an array
+	// or as a dot-separated string.
+	function getPath(obj, ks) {
+	  ks = typeof ks == "string" ? keysFromPath(ks) : ks;
+
+	  var i = -1,
+	      length = ks.length;
+
+	  // If the obj is null or undefined we have to break as
+	  // a TypeError will result trying to access any property
+	  // Otherwise keep incrementally access the next property in
+	  // ks until complete
+	  while (++i < length && obj != null) {
+	    obj = obj[ks[i]];
+	  }
+	  return i === length ? obj : void 0;
+	}
+
+
+	// Based on the origin underscore _.pick function
+	// Credit: https://github.com/jashkenas/underscore/blob/master/underscore.js
+	module.exports = function (object, keys) {
+	  var result = {},
+	      obj = object,
+	      iteratee;
+	  iteratee = function (key, obj) {
+	    return key in obj;
+	  };
+
+	  obj = Object(obj);
+
+	  for (var i = 0, length = keys.length; i < length; i++) {
+	    var key = keys[i];
+	    if (iteratee(key, obj)) result[key] = getPath(obj, key);
+	  }
+
+	  return result;
+	};
 
 /***/ }
 /******/ ])

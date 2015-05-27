@@ -93,7 +93,7 @@ module.exports = function(grunt) {
       },
       modules: {
         files: [
-          {expand: true, src: ['compiled/columnProperties.js', 'compiled/rowProperties.js'], dest: 'modules', flatten: true}
+          {expand: true, src: ['compiled/columnProperties.js', 'compiled/rowProperties.js', 'compiled/powerPick.js'], dest: 'modules', flatten: true}
         ]
       }
     },
