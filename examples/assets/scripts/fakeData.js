@@ -48,10 +48,18 @@ var columnMeta = [
     "locked": false,
     "visible": true,
     "displayName": "Favorite Number"
+  },
+  {
+    "columnName": "date",
+    "order":  8,
+    "locked": false,
+    "visible": true,
+    "displayName": "Date",
+    "sortType": "date"
   }
 ];
 
-var rowMeta = 
+var rowMeta =
 {
   "key": "id"
 };
@@ -89,7 +97,79 @@ var propertyGridMeta = [
     "cssClassName": "properties-default",
     "displayName": "Default"
   }
-]
+];
+
+var testData = [
+  {
+    "id": 0,
+    "name": "Mayer Leonard",
+    "city": "Kapowsin",
+    "state": "Hawaii",
+    "country": "United Kingdom",
+    "company": "Ovolo",
+    "favoriteNumber": 7,
+    "date": (new Date(2000,9,22,8,59,0)).toString()
+  },
+  {
+    "id": 1,
+    "name": "Koch Becker",
+    "city": "Johnsonburg",
+    "state": "New Jersey",
+    "country": "Madagascar",
+    "company": "Eventage",
+    "favoriteNumber": 2,
+    "date": (new Date(2015,4,3)).toString()
+  },
+  {
+    "id": 2,
+    "name": "Lowery Hopkins",
+    "city": "Blanco",
+    "state": "Arizona",
+    "country": "Ukraine",
+    "company": "Comtext",
+    "favoriteNumber": 3,
+    "date": (new Date(2000,9,22,13,58,0)).toString()
+  },
+  {
+    "id": 3,
+    "name": "Walters Mays",
+    "city": "Glendale",
+    "state": "Illinois",
+    "country": "New Zealand",
+    "company": "Corporana",
+    "favoriteNumber": 6,
+    "date": (new Date(2013,10,5)).toString()
+  },
+  {
+    "id": 4,
+    "name": "Shaw Lowe",
+    "city": "Coultervillle",
+    "state": "Wyoming",
+    "country": "Ecuador",
+    "company": "Isologica",
+    "favoriteNumber": 2,
+    "date": (new Date(2016,11,1)).toString()
+  },
+  {
+    "id": 5,
+    "name": "Ola Fernandez",
+    "city": "Deltaville",
+    "state": "Delaware",
+    "country": "Virgin Islands (US)",
+    "company": "Pawnagra",
+    "favoriteNumber": 7,
+    "date": (new Date(2000,9,22,9,1,0)).toString()
+  },
+  {
+    "id": 7,
+    "name": "Laverne Johnson",
+    "city": "Rosburg",
+    "state": "New Mexico",
+    "country": "Croatia",
+    "company": "Housedown",
+    "favoriteNumber": 9
+  }
+];
 
 var fakeData =  [
   {
@@ -99,7 +179,8 @@ var fakeData =  [
     "state": "Hawaii",
     "country": "United Kingdom",
     "company": "Ovolo",
-    "favoriteNumber": 7
+    "favoriteNumber": 7,
+    "date": (new Date(2015,04,04)).toString()
   },
   {
     "id": 1,
@@ -108,7 +189,8 @@ var fakeData =  [
     "state": "New Jersey",
     "country": "Madagascar",
     "company": "Eventage",
-    "favoriteNumber": 2
+    "favoriteNumber": 2,
+    "date": (new Date(2015,04,03)).toString()
   },
   {
     "id": 2,
@@ -144,7 +226,8 @@ var fakeData =  [
     "state": "Delaware",
     "country": "Virgin Islands (US)",
     "company": "Pawnagra",
-    "favoriteNumber": 7
+    "favoriteNumber": 7,
+    "date": (new Date(2015,01,01)).toString()
   },
   {
     "id": 6,

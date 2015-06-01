@@ -17,6 +17,7 @@ var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var ColumnProperties = require('./columnProperties');
 var RowProperties = require('./rowProperties');
 var _ = require('underscore');
+var SortHelper = require('./SortHelper.js');
 
 var Griddle = React.createClass({
     statics: {
@@ -382,18 +383,26 @@ var Griddle = React.createClass({
         var that = this;
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
+
                 var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
 
-                data = _.sortBy(data, function(item){
-                    return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
-                        item[that.state.sortColumn||that.props.initialSort];
-                });
-
-                if(this.state.sortAscending === false){
-                    data.reverse();
+                if(sortProperty[0].hasOwnProperty("sortType")) {
+                    if(sortProperty[0].sortType.toLowerCase() === "date") {
+                        //call new sort functions here
+                        data = SortHelper.sortDate(data,this.state.sortColumn,this.state.sortAscending);
+                      }
+                  }
+                  else {
+                    sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
+                    data = _.sortBy(data, function(item) {
+                            return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
+                            item[that.state.sortColumn||that.props.initialSort];
+                    });
+                    if(this.state.sortAscending === false) {
+                        data.reverse();
+                    }
+                  }
                 }
-            }
 
             var currentPage = this.getCurrentPage();
 
