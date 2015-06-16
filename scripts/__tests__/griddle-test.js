@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../columnProperties.js'); 
-jest.dontMock('../rowProperties.js'); 
+jest.dontMock('../rowProperties.js');
+jest.dontMock('../powerPick.js');
 
 var React = require('react/addons');
 var Griddle = require('../griddle.jsx');
@@ -544,7 +545,7 @@ it('should not show footer when useCustomGridComponent is true', function(){
 
   it('should call the onRowClick callback when clicking a row', function () {
     var clicked = false;
-    var onRowClick = function onRowClick(){
+    var onRowClick = function(){
       clicked = true;
     };
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}

@@ -2,6 +2,7 @@
 jest.dontMock('../gridRow.jsx');
 jest.dontMock('../columnProperties.js');
 jest.dontMock('../rowProperties.js');
+jest.dontMock('../powerPick.js');
 
 var React = require('react/addons');
 var _ = require('underscore'); 
