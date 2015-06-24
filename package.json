@@ -58,5 +58,8 @@
   "bugs": {
     "url": "https://github.com/GriddleGriddle/Griddle/issues"
   },
-  "homepage": "https://github.com/GriddleGriddle/Griddle"
+  "homepage": "https://github.com/GriddleGriddle/Griddle",
+  "dependencies": {
+    "rc-css-transition-group": "^2.1.4"
+  }
 }

@@ -2398,6 +2398,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
 	    }
 	  },
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	    return nextProps.data !== this.props.data;
+	  },
 	  render: function render() {
 	    var _this = this;
 
@@ -2423,6 +2426,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var defaults = _.object(columns, []);
 
 	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	    // using Object.create allows us to update the rowData without altering the original data.
+	    // We can use this info to detect only changed properties via getOwnProperties
 	    var dataView = Object.create(this.props.data);
 
 	    _.defaults(dataView, defaults);
@@ -2438,9 +2443,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
 	      }
 
-	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	        var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	        returnValue = meta == null ? returnValue : React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, colData);
+	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
+	        if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
+	          var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
+	        } else {
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, col[1]);
+	        }
 	      }
 
 	      return returnValue || React.createElement('td', { onClick: _this.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);

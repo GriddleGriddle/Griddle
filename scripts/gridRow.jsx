@@ -53,6 +53,9 @@ var GridRow = React.createClass({
            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
         }
     },
+    shouldComponentUpdate: function(nextProps, nextState) {
+      return nextProps.data !== this.props.data;
+    },
     render: function() {
         this.verifyProps();
         var that = this;
@@ -76,6 +79,8 @@ var GridRow = React.createClass({
         var defaults = _.object(columns, []);
 
         // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+        // using Object.create allows us to update the rowData without altering the original data.
+        // We can use this info to detect only changed properties via getOwnProperties
         var dataView = Object.create(this.props.data);
 
         _.defaults(dataView, defaults);
