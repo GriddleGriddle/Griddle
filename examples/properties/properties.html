@@ -426,7 +426,13 @@ var propertiesItem = [
     "description": "A function that should be called when a row has been clicked. The 'gridRow' and event will be passed in as arguments.",
     "type": "function",
     "default": "null"
-  }
+  },
+  {
+    "property": "transitionName",
+    "description": "A ReactCSSTransitionGroup transition name. This allows to animate newly added rows. See http://facebook.github.io/react/docs/animation.html for more info.",
+    "type": "string",
+    "default": "null"
+  }  
 ];
 var DefinitionItem = React.createClass({
   getDefaultProps: function() {

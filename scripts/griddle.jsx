@@ -107,7 +107,8 @@ var Griddle = React.createClass({
             "previousIconComponent":"",
 			"isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
-			"uniqueIdentifier": "id"
+			"uniqueIdentifier": "id",
+            "transitionName": null,
         };
     },
     propTypes: {
@@ -659,6 +660,7 @@ var Griddle = React.createClass({
         return (<div className='griddle-body'><GridTable useGriddleStyles={this.props.useGriddleStyles}
                 columnSettings={this.columnSettings}
                 rowSettings = {this.rowSettings}
+                transitionName={this.props.transitionName}
                 sortSettings={sortProperties}
 				multipleSelectionSettings={multipleSelectionProperties}
                 isSubGriddle={this.props.isSubGriddle}

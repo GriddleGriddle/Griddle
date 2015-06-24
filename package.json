@@ -51,11 +51,21 @@
   "jest": {
     "rootDir": "scripts",
     "scriptPreprocessor": "../node_modules/6to5-jest",
-    "testFileExtensions": ["es6", "js"],
-    "moduleFileExtensions": ["js", "json", "es6"],
+    "testFileExtensions": [
+      "es6",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
     "unmockedModulePathPatterns": [
       "react"
     ]
   },
-  "homepage": "https://github.com/DynamicTyped/Griddle"
+  "homepage": "https://github.com/DynamicTyped/Griddle",
+  "dependencies": {
+    "rc-css-transition-group": "^2.1.4"
+  }
 }
