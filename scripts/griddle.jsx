@@ -50,10 +50,10 @@ var filter_arr = (function() {
         var outputResults = results;
         _.forEach(filter, function(filterEntry) {
             if(!_.isEmpty(filterEntry)) {
-                if(_.isString(filterEntry)) {
-                    outputResults = filter_data(outputResults, filterEntry);
-                } else if (_.isPlainObject(filterEntry)){
+                if (_.isPlainObject(filterEntry)){
                     outputResults = filter_obj(outputResults, filterEntry);
+                } else {
+                    outputResults = filter_data(outputResults, filterEntry);
                 }
             }
         });
