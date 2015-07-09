@@ -100,6 +100,7 @@ var Griddle = React.createClass({
             /* icon components */
             "sortAscendingComponent": " ▲",
             "sortDescendingComponent": " ▼",
+            "sortDefaultComponent":null,
             "parentRowCollapsedComponent": "▶",
             "parentRowExpandedComponent": "▼",
             "settingsIconComponent": "",
