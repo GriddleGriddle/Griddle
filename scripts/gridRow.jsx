@@ -4,7 +4,7 @@
 var React = require('react');
 var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
-var powerPick = require('./powerPick.js');
+var deep = require('./deep.js');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
@@ -80,7 +80,7 @@ var GridRow = React.createClass({
 
         _.defaults(dataView, defaults);
 
-        var data = _.pairs(powerPick(dataView, columns));
+        var data = _.pairs(deep.pick(dataView, columns));
 
         var nodes = data.map((col, index) => {
             var returnValue = null;

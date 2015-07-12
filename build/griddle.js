@@ -71,16 +71,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(6);
-	var GridFilter = __webpack_require__(7);
-	var GridPagination = __webpack_require__(8);
-	var GridSettings = __webpack_require__(9);
-	var GridNoData = __webpack_require__(10);
-	var GridRow = __webpack_require__(11);
-	var CustomRowComponentContainer = __webpack_require__(12);
-	var CustomPaginationContainer = __webpack_require__(13);
+	var GridTable = __webpack_require__(7);
+	var GridFilter = __webpack_require__(8);
+	var GridPagination = __webpack_require__(9);
+	var GridSettings = __webpack_require__(10);
+	var GridNoData = __webpack_require__(11);
+	var GridRow = __webpack_require__(12);
+	var CustomRowComponentContainer = __webpack_require__(13);
+	var CustomPaginationContainer = __webpack_require__(14);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
+	var deep = __webpack_require__(6);
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({
@@ -196,9 +197,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Obtain the state results.
 	        updatedState.filteredResults = _.filter(this.props.results, function (item) {
-	            var arr = _.values(item);
+	            var arr = deep.keys(item);
 	            for (var i = 0; i < arr.length; i++) {
-	                if ((arr[i] || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
 	                    return true;
 	                }
 	            }
@@ -373,7 +374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyExternal();
 	        this.verifyCustom();
 
-	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? _.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
+	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
 
 	        this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
@@ -442,7 +443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortProperty = sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0].sortProperty || null;
 
 	            data = _.sortBy(data, function (item) {
-	                return sortProperty ? item[that.state.sortColumn || that.props.initialSort][sortProperty] : item[that.state.sortColumn || that.props.initialSort];
+	                return sortProperty ? deep.getAt(item, that.state.sortColumn || that.props.initialSort)[sortProperty] : deep.getAt(item, that.state.sortColumn || that.props.initialSort);
 	            });
 
 	            if (this.state.sortAscending === false) {
@@ -797,7 +798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var meta = this.columnSettings.getMetadataColumns();
 
 	        // Grab the column keys from the first results
-	        keys = _.keys(_.omit(results[0], meta));
+	        keys = deep.keys(_.omit(results[0], meta));
 
 	        // sort keys by order
 	        keys = this.columnSettings.orderColumns(keys);
@@ -1059,12 +1060,122 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _ = __webpack_require__(3);
+
+	// Credits: https://github.com/documentcloud/underscore-contrib
+	// Sub module: underscore.object.selectors
+	// License: MIT (https://github.com/documentcloud/underscore-contrib/blob/master/LICENSE)
+	// https://github.com/documentcloud/underscore-contrib/blob/master/underscore.object.selectors.js
+
+	// Will take a path like 'element[0][1].subElement["Hey!.What?"]["[hey]"]'
+	// and return ["element", "0", "1", "subElement", "Hey!.What?", "[hey]"]
+	function keysFromPath(path) {
+	  // from http://codereview.stackexchange.com/a/63010/8176
+	  /**
+	   * Repeatedly capture either:
+	   * - a bracketed expression, discarding optional matching quotes inside, or
+	   * - an unbracketed expression, delimited by a dot or a bracket.
+	   */
+	  var re = /\[("|')(.+)\1\]|([^.\[\]]+)/g;
+
+	  var elements = [];
+	  var result;
+	  while ((result = re.exec(path)) !== null) {
+	    elements.push(result[2] || result[3]);
+	  }
+	  return elements;
+	}
+
+	// Gets the value at any depth in a nested object based on the
+	// path described by the keys given. Keys may be given as an array
+	// or as a dot-separated string.
+	function getPath(obj, ks) {
+	  ks = typeof ks == "string" ? keysFromPath(ks) : ks;
+
+	  var i = -1,
+	      length = ks.length;
+
+	  // If the obj is null or undefined we have to break as
+	  // a TypeError will result trying to access any property
+	  // Otherwise keep incrementally access the next property in
+	  // ks until complete
+	  while (++i < length && obj != null) {
+	    obj = obj[ks[i]];
+	  }
+	  return i === length ? obj : void 0;
+	}
+
+	// Based on the origin underscore _.pick function
+	// Credit: https://github.com/jashkenas/underscore/blob/master/underscore.js
+	function powerPick(object, keys) {
+	  var result = {},
+	      obj = object,
+	      iteratee;
+	  iteratee = function (key, obj) {
+	    return key in obj;
+	  };
+
+	  obj = Object(obj);
+
+	  for (var i = 0, length = keys.length; i < length; i++) {
+	    var key = keys[i];
+	    if (iteratee(key, obj)) result[key] = getPath(obj, key);
+	  }
+
+	  return result;
+	}
+
+	// Gets all the keys for a flattened object structure.
+	// Doesn't flatten arrays.
+	// Input:
+	// {
+	//  a: {
+	//    x: 1,
+	//    y: 2
+	//  },
+	//  b: [3, 4],
+	//  c: 5
+	// }
+	// Output:
+	// [
+	//  "a.x",
+	//  "a.y",
+	//  "b",
+	//  "c"
+	// ]
+	function getKeys(obj, prefix) {
+	  var keys = [];
+
+	  _.each(obj, function (value, key) {
+	    var fullKey = prefix ? prefix + "." + key : key;
+	    if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
+	      keys.push(getKeys(obj[key], fullKey));
+	    } else {
+	      keys.push(fullKey);
+	    }
+	  });
+
+	  return keys;
+	}
+
+	module.exports = {
+	  pick: powerPick,
+	  getAt: getPath,
+	  keys: getKeys
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
 	/*
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(14);
-	var GridRowContainer = __webpack_require__(15);
+	var GridTitle = __webpack_require__(15);
+	var GridRowContainer = __webpack_require__(16);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
@@ -1380,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTable;
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1412,7 +1523,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1521,7 +1632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1680,7 +1791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1711,7 +1822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1722,156 +1833,156 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 	var ColumnProperties = __webpack_require__(4);
-	var powerPick = __webpack_require__(16);
+	var deep = __webpack_require__(6);
 
 	var GridRow = React.createClass({
-	  displayName: "GridRow",
-	  getDefaultProps: function () {
-	    return {
-	      isChildRow: false,
-	      showChildren: false,
-	      data: {},
-	      columnSettings: null,
-	      rowSettings: null,
-	      hasChildren: false,
-	      useGriddleStyles: true,
-	      useGriddleIcons: true,
-	      isSubGriddle: false,
-	      paddingHeight: null,
-	      rowHeight: null,
-	      parentRowCollapsedClassName: "parent-row",
-	      parentRowExpandedClassName: "parent-row expanded",
-	      parentRowCollapsedComponent: "▶",
-	      parentRowExpandedComponent: "▼",
-	      onRowClick: null,
-	      multipleSelectionSettings: null
-	    };
-	  },
-	  handleClick: function (e) {
-	    if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
-	      this.props.onRowClick(this, e);
-	    } else if (this.props.hasChildren) {
-	      this.props.toggleChildren();
-	    }
-	  },
-	  handleSelectionChange: function (e) {
-	    //hack to get around warning that's not super useful in this case
-	    return;
-	  },
-	  handleSelectClick: function (e) {
-	    if (this.props.multipleSelectionSettings.isMultipleSelection) {
-	      if (e.target.type === "checkbox") {
-	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
-	      } else {
-	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked);
-	      }
-	    }
-	  },
-	  verifyProps: function () {
-	    if (this.props.columnSettings === null) {
-	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
-	    }
-	  },
-	  render: function () {
-	    var _this = this;
-	    this.verifyProps();
-	    var that = this;
-	    var columnStyles = null;
+	    displayName: "GridRow",
+	    getDefaultProps: function () {
+	        return {
+	            isChildRow: false,
+	            showChildren: false,
+	            data: {},
+	            columnSettings: null,
+	            rowSettings: null,
+	            hasChildren: false,
+	            useGriddleStyles: true,
+	            useGriddleIcons: true,
+	            isSubGriddle: false,
+	            paddingHeight: null,
+	            rowHeight: null,
+	            parentRowCollapsedClassName: "parent-row",
+	            parentRowExpandedClassName: "parent-row expanded",
+	            parentRowCollapsedComponent: "▶",
+	            parentRowExpandedComponent: "▼",
+	            onRowClick: null,
+	            multipleSelectionSettings: null
+	        };
+	    },
+	    handleClick: function (e) {
+	        if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
+	            this.props.onRowClick(this, e);
+	        } else if (this.props.hasChildren) {
+	            this.props.toggleChildren();
+	        }
+	    },
+	    handleSelectionChange: function (e) {
+	        //hack to get around warning that's not super useful in this case
+	        return;
+	    },
+	    handleSelectClick: function (e) {
+	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	            if (e.target.type === "checkbox") {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+	            } else {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked);
+	            }
+	        }
+	    },
+	    verifyProps: function () {
+	        if (this.props.columnSettings === null) {
+	            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	        }
+	    },
+	    render: function () {
+	        var _this = this;
+	        this.verifyProps();
+	        var that = this;
+	        var columnStyles = null;
 
-	    if (this.props.useGriddleStyles) {
-	      columnStyles = {
-	        margin: "0",
-	        padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
-	        height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
-	        backgroundColor: "#FFF",
-	        borderTopColor: "#DDD",
-	        color: "#222"
-	      };
-	    }
+	        if (this.props.useGriddleStyles) {
+	            columnStyles = {
+	                margin: "0",
+	                padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+	                height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
+	                backgroundColor: "#FFF",
+	                borderTopColor: "#DDD",
+	                color: "#222"
+	            };
+	        }
 
-	    var columns = this.props.columnSettings.getColumns();
+	        var columns = this.props.columnSettings.getColumns();
 
-	    // make sure that all the columns we need have default empty values
-	    // otherwise they will get clipped
-	    var defaults = _.object(columns, []);
+	        // make sure that all the columns we need have default empty values
+	        // otherwise they will get clipped
+	        var defaults = _.object(columns, []);
 
-	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	    var dataView = Object.create(this.props.data);
+	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	        var dataView = Object.create(this.props.data);
 
-	    _.defaults(dataView, defaults);
+	        _.defaults(dataView, defaults);
 
-	    var data = _.pairs(powerPick(dataView, columns));
+	        var data = _.pairs(deep.pick(dataView, columns));
 
-	    var nodes = data.map(function (col, index) {
-	      var returnValue = null;
-	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
+	        var nodes = data.map(function (col, index) {
+	            var returnValue = null;
+	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
 
-	      //todo: Make this not as ridiculous looking
-	      var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
-	        "span",
-	        { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
-	        _this.props.parentRowCollapsedComponent
-	      ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
-	        "span",
-	        { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
-	        _this.props.parentRowExpandedComponent
-	      ) : "";
+	            //todo: Make this not as ridiculous looking
+	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
+	                "span",
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
+	                _this.props.parentRowCollapsedComponent
+	            ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
+	                "span",
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
+	                _this.props.parentRowExpandedComponent
+	            ) : "";
 
-	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
-	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
-	      }
+	            if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
+	                columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
+	            }
 
-	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	        returnValue = meta == null ? returnValue : React.createElement(
-	          "td",
-	          { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
-	          colData
+	            if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
+	                var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	                returnValue = meta == null ? returnValue : React.createElement(
+	                    "td",
+	                    { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+	                    colData
+	                );
+	            }
+
+	            return returnValue || React.createElement(
+	                "td",
+	                { onClick: _this.handleClick, key: index, style: columnStyles },
+	                firstColAppend,
+	                col[1]
+	            );
+	        });
+
+	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	            nodes.unshift(React.createElement(
+	                "td",
+	                { key: "selection", style: columnStyles },
+	                React.createElement("input", {
+	                    type: "checkbox",
+	                    checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
+	                    onChange: this.handleSelectionChange,
+	                    ref: "selected" })
+	            ));
+	        }
+
+	        //Get the row from the row settings.
+	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
+
+	        if (that.props.isChildRow) {
+	            className = "child-row";
+	        } else if (that.props.hasChildren) {
+	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+	        }
+	        return React.createElement(
+	            "tr",
+	            { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
+	            nodes
 	        );
-	      }
-
-	      return returnValue || React.createElement(
-	        "td",
-	        { onClick: _this.handleClick, key: index, style: columnStyles },
-	        firstColAppend,
-	        col[1]
-	      );
-	    });
-
-	    if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-	      var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
-
-	      nodes.unshift(React.createElement(
-	        "td",
-	        { key: "selection", style: columnStyles },
-	        React.createElement("input", {
-	          type: "checkbox",
-	          checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
-	          onChange: this.handleSelectionChange,
-	          ref: "selected" })
-	      ));
 	    }
-
-	    //Get the row from the row settings.
-	    var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
-
-	    if (that.props.isChildRow) {
-	      className = "child-row";
-	    } else if (that.props.hasChildren) {
-	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
-	    }
-	    return React.createElement(
-	      "tr",
-	      { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
-	      nodes
-	    );
-	  }
 	});
 
 	module.exports = GridRow;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1919,7 +2030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1959,7 +2070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2077,7 +2188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2195,78 +2306,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	module.exports = GridRowContainer;
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _ = __webpack_require__(3);
-
-	// Credits: https://github.com/documentcloud/underscore-contrib
-	// Sub module: underscore.object.selectors
-	// License: MIT (https://github.com/documentcloud/underscore-contrib/blob/master/LICENSE)
-	// https://github.com/documentcloud/underscore-contrib/blob/master/underscore.object.selectors.js
-
-	// Will take a path like 'element[0][1].subElement["Hey!.What?"]["[hey]"]'
-	// and return ["element", "0", "1", "subElement", "Hey!.What?", "[hey]"]
-	function keysFromPath(path) {
-	  // from http://codereview.stackexchange.com/a/63010/8176
-	  /**
-	   * Repeatedly capture either:
-	   * - a bracketed expression, discarding optional matching quotes inside, or
-	   * - an unbracketed expression, delimited by a dot or a bracket.
-	   */
-	  var re = /\[("|')(.+)\1\]|([^.\[\]]+)/g;
-
-	  var elements = [];
-	  var result;
-	  while ((result = re.exec(path)) !== null) {
-	    elements.push(result[2] || result[3]);
-	  }
-	  return elements;
-	}
-
-	// Gets the value at any depth in a nested object based on the
-	// path described by the keys given. Keys may be given as an array
-	// or as a dot-separated string.
-	function getPath(obj, ks) {
-	  ks = typeof ks == "string" ? keysFromPath(ks) : ks;
-
-	  var i = -1,
-	      length = ks.length;
-
-	  // If the obj is null or undefined we have to break as
-	  // a TypeError will result trying to access any property
-	  // Otherwise keep incrementally access the next property in
-	  // ks until complete
-	  while (++i < length && obj != null) {
-	    obj = obj[ks[i]];
-	  }
-	  return i === length ? obj : void 0;
-	}
-
-
-	// Based on the origin underscore _.pick function
-	// Credit: https://github.com/jashkenas/underscore/blob/master/underscore.js
-	module.exports = function (object, keys) {
-	  var result = {},
-	      obj = object,
-	      iteratee;
-	  iteratee = function (key, obj) {
-	    return key in obj;
-	  };
-
-	  obj = Object(obj);
-
-	  for (var i = 0, length = keys.length; i < length; i++) {
-	    var key = keys[i];
-	    if (iteratee(key, obj)) result[key] = getPath(obj, key);
-	  }
-
-	  return result;
-	};
 
 /***/ }
 /******/ ])
