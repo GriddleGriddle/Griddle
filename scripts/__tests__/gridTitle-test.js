@@ -48,6 +48,7 @@ describe('GridTitle', function() {
 
 		var node = TestUtils.findRenderedDOMComponentWithTag(title, 'thead');
 		var headings = TestUtils.scryRenderedDOMComponentsWithTag(node, 'th');
+		expect(headings.length).toEqual(3);
 		for(var i = 0, l = headings.length; i < l; i++) {
 			var heading = headings[i];
 			expect(heading.props.children[1]).toEqual(sortObject['sortDefaultComponent']);
