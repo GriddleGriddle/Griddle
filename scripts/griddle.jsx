@@ -16,6 +16,7 @@ var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var ColumnProperties = require('./columnProperties');
 var RowProperties = require('./rowProperties');
+var deep = require('./deep');
 var _ = require('underscore');
 
 var Griddle = React.createClass({
@@ -135,9 +136,9 @@ var Griddle = React.createClass({
         // Obtain the state results.
        updatedState.filteredResults = _.filter(this.props.results,
        function(item) {
-            var arr = _.values(item);
+            var arr = deep.keys(item);
             for(var i = 0; i < arr.length; i++){
-               if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+               if ((deep.getAt(item, arr[i])||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
                 return true;
                }
             }
@@ -276,6 +277,7 @@ var Griddle = React.createClass({
             this.columnSettings.filteredColumns = nextProps.columns;
         }
 
+
         if(nextProps.selectedRowIds) {
             var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
 
@@ -306,7 +308,7 @@ var Griddle = React.createClass({
         this.verifyCustom();
 
         this.columnSettings = new ColumnProperties(
-            this.props.results.length > 0 ? _.keys(this.props.results[0]) : [],
+            this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [],
             this.props.columns,
             this.props.childrenColumnName,
             this.props.columnMetadata,
@@ -384,11 +386,11 @@ var Griddle = React.createClass({
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
                 var sortProperty = _.where(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null
+                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null;
 
                 data = _.sortBy(data, function(item){
-                    return sortProperty ? item[that.state.sortColumn||that.props.initialSort][sortProperty] :
-                        item[that.state.sortColumn||that.props.initialSort];
+                    return sortProperty ? deep.getAt( item, that.state.sortColumn||that.props.initialSort )[sortProperty] :
+                        deep.getAt( item, that.state.sortColumn||that.props.initialSort );
                 });
 
                 if(this.state.sortAscending === false){
@@ -736,7 +738,7 @@ var Griddle = React.createClass({
         var meta = this.columnSettings.getMetadataColumns();
 
         // Grab the column keys from the first results
-        keys = _.keys(_.omit(results[0], meta));
+        keys = deep.keys(_.omit(results[0], meta));
 
         // sort keys by order
         keys = this.columnSettings.orderColumns(keys);
