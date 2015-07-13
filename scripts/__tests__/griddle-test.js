@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../columnProperties.js'); 
-jest.dontMock('../rowProperties.js'); 
+jest.dontMock('../rowProperties.js');
+jest.dontMock('../deep.js');
 
 var React = require('react/addons');
 var Griddle = require('../griddle.jsx');
@@ -34,8 +35,8 @@ describe('Griddle', function() {
       var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
       expect(thRow[0].getDOMNode().textContent).toBe("id");
       expect(thRow[1].getDOMNode().textContent).toBe("name");
-      expect(thRow[2].getDOMNode().textContent).toBe("city");
-      expect(thRow[3].getDOMNode().textContent).toBe("state");
+      expect(thRow[2].getDOMNode().textContent).toBe("address.city");
+      expect(thRow[3].getDOMNode().textContent).toBe("address.state");
       expect(thRow[4].getDOMNode().textContent).toBe("country");
       expect(thRow[5].getDOMNode().textContent).toBe("company");
       expect(thRow[6].getDOMNode().textContent).toBe("favoriteNumber");
@@ -66,8 +67,10 @@ describe('Griddle', function() {
       {
         "id": 0,
         "name": "Mayer Leonard",
-        "city": "Kapowsin",
-        "state": "Hawaii",
+        "address": {
+          "city": "Kapowsin",
+          "state": "Hawaii"
+        },
         "country": "United Kingdom",
         "company": "Ovolo",
         "favoriteNumber": 7
@@ -75,8 +78,10 @@ describe('Griddle', function() {
       {
         "id": 1,
         "name": "Koch Becker",
-        "city": "Johnsonburg",
-        "state": "New Jersey",
+        "address": {
+          "city": "Johnsonburg",
+          "state": "New Jersey"
+        },
         "country": "Madagascar",
         "company": "Eventage",
         "favoriteNumber": 2
@@ -87,8 +92,10 @@ describe('Griddle', function() {
       {
         "id": 0,
         "name": "Mayer Leonard",
-        "city": "Kapowsin",
-        "state": "Hawaii",
+        "address": {
+          "city": "Kapowsin",
+          "state": "Hawaii"
+        },
         "country": "United Kingdom",
         "company": "Ovolo",
         "favoriteNumber": 7
@@ -96,8 +103,10 @@ describe('Griddle', function() {
       {
         "id": 1,
         "name": "Koch Becker",
-        "city": "Johnsonburg",
-        "state": "New Jersey",
+        "address": {
+          "city": "Johnsonburg",
+          "state": "New Jersey"
+        },
         "country": "Madagascar",
         "company": "Eventage",
         "favoriteNumber": 2
@@ -182,21 +191,21 @@ describe('Griddle', function() {
     expect(7).toEqual(cols.length);
     expect(cols[0]).toEqual('id');
     expect(cols[1]).toEqual('name');
-    expect(cols[2]).toEqual('city');
-    expect(cols[3]).toEqual('state');
+    expect(cols[2]).toEqual('address.city');
+    expect(cols[3]).toEqual('address.state');
     expect(cols[4]).toEqual('country');
     expect(cols[5]).toEqual('company');
     expect(cols[6]).toEqual('favoriteNumber');
   });
 
   it('shows only the specified columns', function(){
-    var cols = ["id", "name", "city"];
+    var cols = ["id", "name", "address.city"];
     grid.setColumns(cols);
     var cols2 = grid.columnSettings.getColumns();
     expect(cols2.length).toEqual(cols.length);
     expect(cols2[0]).toEqual('id');
     expect(cols2[1]).toEqual('name');
-    expect(cols2[2]).toEqual('city');
+    expect(cols2[2]).toEqual('address.city');
   });
 
   it('sets next page correctly', function(){
@@ -234,16 +243,16 @@ describe('Griddle', function() {
 
   it('sets sort filter correctly', function(){
     expect(grid.state.sortColumn).toEqual("");
-    grid.changeSort("name");
-    expect(grid.state.sortColumn).toEqual("name");
+    grid.changeSort("address.state");
+    expect(grid.state.sortColumn).toEqual("address.state");
   });
 
   it('sets sort direction correctly', function(){
     expect(grid.state.sortColumn).toEqual("");
-    grid.changeSort("name");
-    expect(grid.state.sortColumn).toEqual("name");
+    grid.changeSort("address.state");
+    expect(grid.state.sortColumn).toEqual("address.state");
     expect(grid.state.sortAscending).toEqual(true);
-    grid.changeSort("name");
+    grid.changeSort("address.state");
     expect(grid.state.sortAscending).toEqual(false);
   });
 
@@ -544,7 +553,7 @@ it('should not show footer when useCustomGridComponent is true', function(){
 
   it('should call the onRowClick callback when clicking a row', function () {
     var clicked = false;
-    var onRowClick = function onRowClick(){
+    var onRowClick = function(){
       clicked = true;
     };
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}
