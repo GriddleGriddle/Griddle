@@ -101,6 +101,7 @@ var Griddle = React.createClass({
             /* icon components */
             "sortAscendingComponent": " ▲",
             "sortDescendingComponent": " ▼",
+            "sortDefaultComponent":null,
             "parentRowCollapsedComponent": "▶",
             "parentRowExpandedComponent": "▼",
             "settingsIconComponent": "",
@@ -454,7 +455,8 @@ var Griddle = React.createClass({
             sortAscendingClassName: this.props.sortAscendingClassName,
             sortDescendingClassName: this.props.sortDescendingClassName,
             sortAscendingComponent: this.props.sortAscendingComponent,
-            sortDescendingComponent: this.props.sortDescendingComponent
+            sortDescendingComponent: this.props.sortDescendingComponent,
+            sortDefaultComponent: this.props.sortDefaultComponent
         }
     },
 	_toggleSelectAll: function () {
