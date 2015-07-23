@@ -190,6 +190,33 @@ React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
 
 <hr />
 
+###Row Metadata###
+
+<dl>
+  <dt>bodyCssClassName</dt>
+  <dd><strong>function or string</strong> - If you supply a string, that class is applied to all rows. If you supply a function, the rows data is supplied to that function as the first argument and you are expected to return the css class name. This is useful if you want to style a row based on the rows data.</dd>
+</dl>
+
+#####Example:#####
+
+```javascript
+	  var rowMetaData = {
+		"bodyCssClassName": function(rowData) {
+		  if (rowData.action === "added") {
+			    return "green-row";
+		  } else if (rowData.action === "removed") {
+			    return "red-row";
+		  } else if (rowData.action === "transfer") {
+			    return "blue-row";
+		  }
+	  };
+	  
+	  return (
+		    <div className="griddle-container">
+		        <Griddle results={this.state.rows} rowMetadata={rowMetaData} />
+		    </div>
+	  )
+```
 
 ###Custom Row Format###
 
