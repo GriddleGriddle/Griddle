@@ -200,22 +200,24 @@ React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
 #####Example:#####
 
 ```javascript
-	  var rowMetaData = {
-		"bodyCssClassName": function(rowData) {
-		  if (rowData.action === "added") {
-			    return "green-row";
-		  } else if (rowData.action === "removed") {
-			    return "red-row";
-		  } else if (rowData.action === "transfer") {
-			    return "blue-row";
-		  }
-	  };
+var rowMetaData = {
+    "bodyCssClassName": function(rowData) {
+        if (rowData.action === "added") {
+            return "green-row";
+        } else if (rowData.action === "removed") {
+            return "red-row";
+        } else if (rowData.action === "transfer") {
+            return "blue-row";
+        }
+        return "default-row";
+    }
+};
 	  
-	  return (
-		    <div className="griddle-container">
-		        <Griddle results={this.state.rows} rowMetadata={rowMetaData} />
-		    </div>
-	  )
+return (
+    <div className="griddle-container">
+        <Griddle results={this.state.rows} rowMetadata={rowMetaData} />
+    </div>
+)
 ```
 
 ###Custom Row Format###
