@@ -200,7 +200,7 @@ React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
 #####Example:#####
 
 ```javascript
-var rowMetaData = {
+var rowMetadata = {
     "bodyCssClassName": function(rowData) {
         if (rowData.action === "added") {
             return "green-row";
@@ -215,7 +215,7 @@ var rowMetaData = {
 	  
 return (
     <div className="griddle-container">
-        <Griddle results={this.state.rows} rowMetadata={rowMetaData} />
+        <Griddle results={this.state.rows} rowMetadata={rowMetadata} />
     </div>
 )
 ```
