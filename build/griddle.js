@@ -63,6 +63,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	/*
 	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
@@ -98,6 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getDefaultProps: function () {
 	        return {
 	            columns: [],
+	            gridMetadata: null,
 	            columnMetadata: [],
 	            rowMetadata: null,
 	            resultsPerPage: 5,
@@ -167,6 +170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /* icon components */
 	            sortAscendingComponent: " ▲",
 	            sortDescendingComponent: " ▼",
+	            sortDefaultComponent: null,
 	            parentRowCollapsedComponent: "▶",
 	            parentRowExpandedComponent: "▼",
 	            settingsIconComponent: "",
@@ -345,6 +349,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.columnSettings.filteredColumns = nextProps.columns;
 	        }
 
+
 	        if (nextProps.selectedRowIds) {
 	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
 
@@ -510,7 +515,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscendingClassName: this.props.sortAscendingClassName,
 	            sortDescendingClassName: this.props.sortDescendingClassName,
 	            sortAscendingComponent: this.props.sortAscendingComponent,
-	            sortDescendingComponent: this.props.sortDescendingComponent
+	            sortDescendingComponent: this.props.sortDescendingComponent,
+	            sortDefaultComponent: this.props.sortDefaultComponent
 	        };
 	    },
 	    _toggleSelectAll: function () {
@@ -695,7 +701,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata }) : "";
 	    },
 	    getCustomGridSection: function () {
-	        return React.createElement(this.props.customGridComponent, { data: this.props.results, className: this.props.customGridComponentClassName });
+	        return React.createElement(this.props.customGridComponent, _extends({ data: this.props.results, className: this.props.customGridComponentClassName }, this.props.gridMetadata));
 	    },
 	    getCustomRowSection: function (data, cols, meta, pagingContent) {
 	        return React.createElement(
@@ -1149,7 +1155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _.each(obj, function (value, key) {
 	    var fullKey = prefix ? prefix + "." + key : key;
 	    if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
-	      keys.push(getKeys(obj[key], fullKey));
+	      keys = keys.concat(getKeys(value, fullKey));
 	    } else {
 	      keys.push(fullKey);
 	    }
@@ -2124,7 +2130,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
-	            var sortComponent = null;
+	            var sortComponent = that.props.sortSettings.sortDefaultComponent;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
