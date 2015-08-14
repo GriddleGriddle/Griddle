@@ -14,6 +14,7 @@ var GridNoData = require('./gridNoData.jsx');
 var GridRow = require('./gridRow.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
+var CustomFilterContainer = require('./customFilterContainer.jsx');
 var ColumnProperties = require('./columnProperties');
 var RowProperties = require('./rowProperties');
 var deep = require('./deep');
@@ -602,7 +603,9 @@ var Griddle = React.createClass({
     },
     getFilter: function(){
      return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
-        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> :
+        ( this.props.useCustomFilterComponent ?
+         <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} /> :
+         <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} />) :
         "");
     },
     getSettings: function(){

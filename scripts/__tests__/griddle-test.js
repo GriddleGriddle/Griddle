@@ -569,6 +569,26 @@ describe('Griddle', function() {
   expect(rows.length).toEqual(1);
  });
 
+ it('should not show the default filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useCustomFilterComponent={true}
+    showFilter={true}
+    customFilterComponent={SomeCustomComponent} />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
+  expect(rows.length).toEqual(0);
+ });
+ it('should render the custom filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+     useCustomFilterComponent={true}
+     showFilter={true}
+     customFilterComponent={SomeCustomComponent} />);
+
+   var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+
+   expect(rows.length).toEqual(1);
+ });
+
 it('should not show footer when useCustomGridComponent is true', function(){
   var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" useCustomGridComponent={true} customGridComponent={CustomGridComponent} />);
 
