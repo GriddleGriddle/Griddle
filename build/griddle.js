@@ -79,6 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridRow = __webpack_require__(12);
 	var CustomRowComponentContainer = __webpack_require__(13);
 	var CustomPaginationContainer = __webpack_require__(14);
+	var CustomFilterContainer = __webpack_require__(15);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var deep = __webpack_require__(6);
@@ -123,11 +124,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            useCustomRowComponent: false,
 	            useCustomGridComponent: false,
 	            useCustomPagerComponent: false,
+	            useCustomFilterer: false,
+	            useCustomFilterComponent: false,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
 	            customRowComponent: null,
 	            customGridComponent: null,
 	            customPagerComponent: {},
+	            customFilterComponent: null,
+	            customFilterer: null,
 	            enableToggleCustom: false,
 	            noDataMessage: "There is no data to display.",
 	            noDataClassName: "griddle-nodata",
@@ -167,6 +172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /* icon components */
 	            sortAscendingComponent: " ▲",
 	            sortDescendingComponent: " ▼",
+	            sortDefaultComponent: null,
 	            parentRowCollapsedComponent: "▶",
 	            parentRowExpandedComponent: "▼",
 	            settingsIconComponent: "",
@@ -182,6 +188,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        selectedRowIds: React.PropTypes.oneOfType([React.PropTypes.arrayOf(React.PropTypes.number), React.PropTypes.arrayOf(React.PropTypes.string)]),
 	        uniqueIdentifier: React.PropTypes.string
 	    },
+	    defaultFilter: function (results, filter) {
+	        return _.filter(results, function (item) {
+	            var arr = deep.keys(item);
+	            for (var i = 0; i < arr.length; i++) {
+	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        });
+	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function (filter) {
 	        if (this.props.useExternal) {
@@ -196,16 +213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        // Obtain the state results.
-	        updatedState.filteredResults = _.filter(this.props.results, function (item) {
-	            var arr = deep.keys(item);
-	            for (var i = 0; i < arr.length; i++) {
-	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
-	                    return true;
-	                }
-	            }
-
-	            return false;
-	        });
+	        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
 
 	        // Update the max page.
 	        updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -345,6 +353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.columnSettings.filteredColumns = nextProps.columns;
 	        }
 
+
 	        if (nextProps.selectedRowIds) {
 	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
 
@@ -434,6 +443,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.props.useCustomGridComponent === true && this.props.useCustomRowComponent === true) {
 	            console.error("Cannot currently use both customGridComponent and customRowComponent.");
 	        }
+	        if (this.props.useCustomFilterer === true && this.props.customFilterer === null) {
+	            console.error("useCustomFilterer is set to true but no custom filter function was specified.");
+	        }
+	        if (this.props.useCustomFilterComponent === true && this.props.customFilterComponent === null) {
+	            console.error("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
+	        }
 	    },
 	    getDataForRender: function (data, cols, pageList) {
 	        var that = this;
@@ -510,7 +525,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscendingClassName: this.props.sortAscendingClassName,
 	            sortDescendingClassName: this.props.sortDescendingClassName,
 	            sortAscendingComponent: this.props.sortAscendingComponent,
-	            sortDescendingComponent: this.props.sortDescendingComponent
+	            sortDescendingComponent: this.props.sortDescendingComponent,
+	            sortDefaultComponent: this.props.sortDefaultComponent
 	        };
 	    },
 	    _toggleSelectAll: function () {
@@ -634,7 +650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function () {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function () {
 	        return this.props.showSettings ? React.createElement(
@@ -1149,7 +1165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _.each(obj, function (value, key) {
 	    var fullKey = prefix ? prefix + "." + key : key;
 	    if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
-	      keys.push(getKeys(obj[key], fullKey));
+	      keys = keys.concat(getKeys(value, fullKey));
 	    } else {
 	      keys.push(fullKey);
 	    }
@@ -1174,8 +1190,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(15);
-	var GridRowContainer = __webpack_require__(16);
+	var GridTitle = __webpack_require__(16);
+	var GridRowContainer = __webpack_require__(17);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
@@ -2079,6 +2095,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
+
+	var CustomFilterContainer = React.createClass({
+	  displayName: "CustomFilterContainer",
+	  getDefaultProps: function () {
+	    return {
+	      placeholderText: ""
+	    };
+	  },
+	  handleChange: function (event) {
+	    this.props.changeFilter(event.target.value);
+	  },
+	  render: function () {
+	    var that = this;
+
+	    if (typeof that.props.customFilterComponent !== "function") {
+	      console.log("Couldn't find valid template.");
+	      return React.createElement("div", null);
+	    }
+
+	    return React.createElement(that.props.customFilterComponent, {
+	      placeholderText: this.props.placeholderText });
+	  }
+	});
+
+	module.exports = CustomFilterContainer;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	/*
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
 	var ColumnProperties = __webpack_require__(4);
 
@@ -2124,7 +2176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
-	            var sortComponent = null;
+	            var sortComponent = that.props.sortSettings.sortDefaultComponent;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -2188,7 +2240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
