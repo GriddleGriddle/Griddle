@@ -650,7 +650,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function () {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function () {
 	        return this.props.showSettings ? React.createElement(
@@ -2103,9 +2103,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      placeholderText: ""
 	    };
 	  },
-	  handleChange: function (event) {
-	    this.props.changeFilter(event.target.value);
-	  },
 	  render: function () {
 	    var that = this;
 
@@ -2115,6 +2112,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return React.createElement(that.props.customFilterComponent, {
+	      changeFilter: this.props.changeFilter,
+	      results: this.props.results,
 	      placeholderText: this.props.placeholderText });
 	  }
 	});

@@ -9,9 +9,6 @@ var CustomFilterContainer = React.createClass({
       "placeholderText": ""
     }
   },
-  handleChange: function(event){
-      this.props.changeFilter(event.target.value);
-  },
   render: function(){
       var that = this;
 
@@ -21,6 +18,8 @@ var CustomFilterContainer = React.createClass({
       }
 
       return <that.props.customFilterComponent
+        changeFilter={this.props.changeFilter}
+        results={this.props.results}
         placeholderText={this.props.placeholderText} />;
   }
 });

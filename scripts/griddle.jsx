@@ -604,7 +604,7 @@ var Griddle = React.createClass({
     getFilter: function(){
      return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
         ( this.props.useCustomFilterComponent ?
-         <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} /> :
+         <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} results={this.props.results} /> :
          <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} />) :
         "");
     },
