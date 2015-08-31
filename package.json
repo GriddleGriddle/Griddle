@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/DynamicTyped/Griddle.git"
+    "url": "git://github.com/GriddleGriddle/Griddle.git"
   },
   "author": "Ryan Lanciaux",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DynamicTyped/Griddle/issues"
+    "url": "https://github.com/GriddleGriddle/Griddle/issues"
   },
   "jest": {
     "rootDir": "scripts",
@@ -57,5 +57,5 @@
       "react"
     ]
   },
-  "homepage": "https://github.com/DynamicTyped/Griddle"
+  "homepage": "https://github.com/GriddleGriddle/Griddle"
 }
