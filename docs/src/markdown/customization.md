@@ -18,7 +18,7 @@ Use the `columns` property to set the default columns in a Griddle grid. Please 
 
 The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the `columnMetadata` property is where this would be defined. 
 
-The properties that the columnMetadata object can contain are as follows: 
+Griddle parses and evaluates the following columnMetadata object properties:
 
 <dl>
   <dt>columnName</dt>
@@ -48,6 +48,10 @@ The properties that the columnMetadata object can contain are as follows:
   <dt>customComponent</dt>
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
 </dl>
+
+However, you are also able to pass other properties in as columnMetadata. 
+
+[columnMetadata can be accessed on the `metadata` property of a Custom Column component.](#custom-columns)
 
 #####Example:#####
 
@@ -110,7 +114,7 @@ React.render(
 <a name="customColumns"></a>
 ###Custom Columns###
 
-Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties.
+Custom column components are defined in the [Column Metadata object](#). The components are passed **data**, **rowData**, **metadata** properties.
 
 <dl>
   <dt>data</dt>
@@ -120,6 +124,11 @@ Custom column components are defined in the [Column Metadata object](#). The com
 <dl>
   <dt>rowData</dt>
   <dd><strong>object</strong> - the data for all items in the same row</dd>
+</dl>
+
+<dl>
+  <dt>metadata</dt>
+  <dd><strong>object</strong> - The columnMetadata object</dd>
 </dl>
 
 #####Example:#####
