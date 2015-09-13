@@ -53,7 +53,15 @@ function powerPick (object, keys) {
 
   for (var i = 0, length = keys.length; i < length; i++) {
     var key = keys[i];
-    if (iteratee(key, obj)) result[key] = getPath(obj, key);
+    if (iteratee(key, obj)) {
+      // Try to see if there is a property with . in it
+      // if not use getPath to get the value at key
+      if (typeof key === 'string' && obj[key] !== undefined) {
+        result[key] = obj[key];
+      } else {
+        result[key] = getPath(obj, key);
+      }
+    }
   }
 
   return result;
