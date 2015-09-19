@@ -145,7 +145,8 @@ var Griddle = React.createClass({
 
             return false;
         });
-
+        // Update the results(rows) per page.
+        updatedState.resultsPerPage = this.props.resultsPerPage;
         // Update the max page.
         updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
 
@@ -165,10 +166,18 @@ var Griddle = React.createClass({
             this.props.externalSetPageSize(size);
             return;
         }
+        if (this.state.size !== size) {
+          var totalResults = this.getCurrentResults().length;
+          var maxPage = Math.ceil(totalResults / size);
 
-        //make this better.
-        this.props.resultsPerPage = size;
-        this.setMaxPage();
+          var updatedState = {
+            resultsPerPage: size,
+            maxPage: maxPage
+          };
+
+          //make this better.
+          this.setState(updatedState);
+        }
     },
     toggleColumnChooser: function(){
         this.setState({
@@ -194,7 +203,7 @@ var Griddle = React.createClass({
         if (!totalResults) {
           totalResults = (results||this.getCurrentResults()).length;
         }
-        var maxPage = Math.ceil(totalResults / this.props.resultsPerPage);
+        var maxPage = Math.ceil(totalResults / this.state.resultsPerPage);
         return maxPage;
     },
     setMaxPage: function(results){
@@ -211,7 +220,7 @@ var Griddle = React.createClass({
         }
 
         //check page size and move the filteredResults to pageSize * pageNumber
-        if (number * this.props.resultsPerPage <= this.props.resultsPerPage * this.state.maxPage) {
+        if (number * this.state.resultsPerPage <= this.state.resultsPerPage * this.state.maxPage) {
             var that = this,
                 state = {
                     page: number
@@ -289,6 +298,7 @@ var Griddle = React.createClass({
     },
     getInitialState: function() {
         var state =  {
+            resultsPerPage: 5,
             maxPage: 0,
             page: 0,
             filteredResults: null,
@@ -400,14 +410,14 @@ var Griddle = React.createClass({
 
             var currentPage = this.getCurrentPage();
 
-            if (!this.props.useExternal && pageList && (this.props.resultsPerPage * (currentPage+1) <= this.props.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
+            if (!this.props.useExternal && pageList && (this.state.resultsPerPage * (currentPage+1) <= this.state.resultsPerPage * this.state.maxPage) && (currentPage >= 0)) {
                 if (this.isInfiniteScrollEnabled()) {
                   // If we're doing infinite scroll, grab all results up to the current page.
-                  data = _.first(data, (currentPage + 1) * this.props.resultsPerPage);
+                  data = _.first(data, (currentPage + 1) * this.state.resultsPerPage);
                 } else {
                   //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-                  var rest = _.drop(data, currentPage * this.props.resultsPerPage);
-                  data = (_.dropRight || _.initial)(rest, rest.length-this.props.resultsPerPage);
+                  var rest = _.drop(data, currentPage * this.state.resultsPerPage);
+                  data = (_.dropRight || _.initial)(rest, rest.length-this.state.resultsPerPage);
                 }
             }
 
@@ -643,7 +653,7 @@ var Griddle = React.createClass({
         return this.state.showColumnChooser ? (
             <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
              settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.props.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
+             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.state.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
              toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
              useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
