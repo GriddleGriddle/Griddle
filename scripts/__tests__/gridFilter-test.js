@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 jest.dontMock('../gridFilter.jsx');
 
 var React = require('react/addons');

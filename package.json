@@ -15,8 +15,10 @@
     "underscore": ">= 1.6.0 < 2"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-jest": "^5.3.0",
     "grunt": "^0.4.5",
-    "grunt-6to5": "^3.0.0",
+    "grunt-babel": "^5.0.2",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "~0.7.0",
@@ -27,8 +29,7 @@
     "grunt-open": "^0.2.3",
     "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
-    "6to5-jest": "*",
-    "jest-cli": "~0.4.19",
+    "jest-cli": "*",
     "jsx-loader": "~0.12.x",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",
@@ -50,9 +51,16 @@
   },
   "jest": {
     "rootDir": "scripts",
-    "scriptPreprocessor": "../node_modules/6to5-jest",
-    "testFileExtensions": ["es6", "js"],
-    "moduleFileExtensions": ["js", "json", "es6"],
+    "scriptPreprocessor": "../node_modules/babel-jest",
+    "testFileExtensions": [
+      "es6",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
     "unmockedModulePathPatterns": [
       "react"
     ]
