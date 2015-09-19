@@ -5,24 +5,25 @@ var GridPagination = require('../gridPagination.jsx');
 var TestUtils = React.addons.TestUtils;
 
 describe('GridPagination', function(){
-	var pagination; 
-	beforeEach(function(){
-	    pagination = TestUtils.renderIntoDocument(<GridPagination />);
-	});
+  var pagination;
 
-	it('calls change filter when clicked', function(){
-		var mock = jest.genMockFunction(); 
-		pagination.props.setPage = mock;
+  beforeEach(function(){
+    pagination = TestUtils.renderIntoDocument(<GridPagination />);
+  });
 
-		var someEvent = {
-			"target":{
-				"value":3
-			}
-		};
+  it('calls change filter when clicked', function(){
+    var mock = jest.genMockFunction();
+    pagination.props.setPage = mock;
 
-		var input = TestUtils.findRenderedDOMComponentWithTag(pagination, 'select');		
-		React.addons.TestUtils.Simulate.change(input, someEvent);
+    var someEvent = {
+      'target':{
+        'value':3
+      }
+    };
 
-		expect(mock.mock.calls).toEqual([[2]]);
-	})
+    var input = TestUtils.findRenderedDOMComponentWithTag(pagination, 'select');
+    React.addons.TestUtils.Simulate.change(input, someEvent);
+
+    expect(mock.mock.calls).toEqual([[2]]);
+  });
 });

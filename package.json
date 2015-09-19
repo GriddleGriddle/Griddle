@@ -17,6 +17,7 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-jest": "^5.3.0",
+    "eslint-plugin-react": "^3.4.2",
     "grunt": "^0.4.5",
     "grunt-babel": "^5.0.2",
     "grunt-contrib-clean": "~0.6.0",
@@ -29,7 +30,7 @@
     "grunt-open": "^0.2.3",
     "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
-    "jest-cli": "*",
+    "jest-cli": "~0.4.19",
     "jsx-loader": "~0.12.x",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",

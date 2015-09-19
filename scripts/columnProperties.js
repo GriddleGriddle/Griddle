@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
 class ColumnProperties{
-  constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
+  constructor (allColumns = [], filteredColumns=[], childrenColumnName='children', columnMetadata=[], metadataColumns=[]){
     this.allColumns = allColumns;
     this.filteredColumns = filteredColumns;
     this.childrenColumnName = childrenColumnName;
@@ -10,11 +10,11 @@ class ColumnProperties{
   }
 
   getMetadataColumns(){
-    var meta = _.map(_.where(this.columnMetadata, {visible: false}), function(item){ return item.columnName});
-      if(meta.indexOf(this.childrenColumnName) < 0){
-         meta.push(this.childrenColumnName);
-      }
-      return meta.concat(this.metadataColumns);
+    var meta = _.map(_.where(this.columnMetadata, {visible: false}), function(item){ return item.columnName;});
+    if(meta.indexOf(this.childrenColumnName) < 0){
+      meta.push(this.childrenColumnName);
+    }
+    return meta.concat(this.metadataColumns);
   }
 
   getVisibleColumnCount(){
@@ -26,14 +26,14 @@ class ColumnProperties{
   }
 
   hasColumnMetadata(){
-   return this.columnMetadata !== null && this.columnMetadata.length > 0
+    return this.columnMetadata !== null && this.columnMetadata.length > 0;
   }
 
   getMetadataColumnProperty(columnName, propertyName, defaultValue){
     var meta = this.getColumnMetadataByName(columnName);
 
-    //send back the default value if meta isn't there
-    if(typeof meta === "undefined" || meta === null)
+  //send back the default value if meta isn't there
+    if(typeof meta === 'undefined' || meta === null)
       return defaultValue;
 
     return meta.hasOwnProperty(propertyName) ? meta[propertyName] : defaultValue;
@@ -43,13 +43,13 @@ class ColumnProperties{
     var ORDER_MAX = 100;
 
     var orderedColumns = _.sortBy(cols, (item) => {
-        var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
+      var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
 
-        if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
-            return ORDER_MAX;
-        }
-        
-        return metaItem.order;
+      if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
+        return ORDER_MAX;
+      }
+
+      return metaItem.order;
     });
 
     return orderedColumns;

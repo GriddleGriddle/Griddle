@@ -5,25 +5,26 @@ var GridSettings = require('../gridSettings.jsx');
 var TestUtils = React.addons.TestUtils;
 
 describe('GridSettings', function() {
-	var settings;
+  var settings;
+  var columns;
 
-	beforeEach(function(){
-		columns = ["one", "two", "three"];
-	    settings = TestUtils.renderIntoDocument(<GridSettings columns={columns} />);
-	});
+  beforeEach(function(){
+    columns = ['one', 'two', 'three'];
+    settings = TestUtils.renderIntoDocument(<GridSettings columns={columns} />);
+  });
 
-	it('calls method when page sizing', function(){
-		var mock = jest.genMockFunction();
+  it('calls method when page sizing', function(){
+    var mock = jest.genMockFunction();
 
-		settings.props.setPageSize = mock; 
+    settings.props.setPageSize = mock;
 
-		var someEvent = {
-			"target":{
-				"value":3
-			}
-		};
+    var someEvent = {
+      'target':{
+        'value':3
+      }
+    };
 
-		settings.setPageSize(someEvent); 
-		expect(mock.mock.calls).toEqual([[3]]);
-	});
+    settings.setPageSize(someEvent);
+    expect(mock.mock.calls).toEqual([[3]]);
+  });
 });

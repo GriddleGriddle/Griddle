@@ -5,24 +5,25 @@ var GridFilter = require('../gridFilter.jsx');
 var TestUtils = React.addons.TestUtils;
 
 describe('GridFilter', function(){
-	var filter; 
-	beforeEach(function(){
-	    filter = TestUtils.renderIntoDocument(<GridFilter />);
-	});
+  var filter;
 
-	it('calls change filter when clicked', function(){
-		var mock = jest.genMockFunction(); 
-		filter.props.changeFilter = mock;
+  beforeEach(function(){
+    filter = TestUtils.renderIntoDocument(<GridFilter />);
+  });
 
-		var someEvent = {
-			"target":{
-				"value":"hi"
-			}
-		};
+  it('calls change filter when clicked', function(){
+    var mock = jest.genMockFunction();
+    filter.props.changeFilter = mock;
 
-		var input = TestUtils.findRenderedDOMComponentWithTag(filter, 'input');		
-		React.addons.TestUtils.Simulate.change(input, someEvent);
+    var someEvent = {
+      'target':{
+        'value':'hi'
+      }
+    };
 
-		expect(mock.mock.calls).toEqual([["hi"]]);
-	})
+    var input = TestUtils.findRenderedDOMComponentWithTag(filter, 'input');
+    React.addons.TestUtils.Simulate.change(input, someEvent);
+
+    expect(mock.mock.calls).toEqual([['hi']]);
+  });
 });
