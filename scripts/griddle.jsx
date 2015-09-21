@@ -298,7 +298,7 @@ var Griddle = React.createClass({
     },
     getInitialState: function() {
         var state =  {
-            resultsPerPage: 5,
+            resultsPerPage: this.props.resultsPerPage || 5,
             maxPage: 0,
             page: 0,
             filteredResults: null,
