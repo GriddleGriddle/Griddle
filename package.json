@@ -28,7 +28,7 @@
     "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
     "6to5-jest": "*",
-    "jest-cli": "*",
+    "jest-cli": "~0.4.19",
     "jsx-loader": "~0.12.x",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",
