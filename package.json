@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",
@@ -28,7 +28,7 @@
     "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
     "6to5-jest": "*",
-    "jest-cli": "*",
+    "jest-cli": "~0.4.19",
     "jsx-loader": "~0.12.x",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",
@@ -41,12 +41,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/DynamicTyped/Griddle.git"
+    "url": "git://github.com/GriddleGriddle/Griddle.git"
   },
   "author": "Ryan Lanciaux",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DynamicTyped/Griddle/issues"
+    "url": "https://github.com/GriddleGriddle/Griddle/issues"
   },
   "jest": {
     "rootDir": "scripts",
@@ -57,5 +57,5 @@
       "react"
     ]
   },
-  "homepage": "https://github.com/DynamicTyped/Griddle"
+  "homepage": "https://github.com/GriddleGriddle/Griddle"
 }
