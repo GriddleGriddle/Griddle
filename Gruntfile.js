@@ -150,7 +150,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    "6to5": {
+    "babel": {
       options: {
         sourceMap: false
       },
@@ -186,7 +186,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-include-replace');
-  grunt.loadNpmTasks('grunt-6to5'); 
+  grunt.loadNpmTasks('grunt-babel'); 
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
@@ -204,7 +204,7 @@ module.exports = function(grunt) {
       'markdown',
       'clean:includes',
       'clean:compiled',
-      '6to5',
+      'babel',
       'webpack:docs',
       'webpack:default',
       'copy',

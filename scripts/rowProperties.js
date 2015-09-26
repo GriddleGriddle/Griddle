@@ -14,16 +14,16 @@ class RowProperties{
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      uniqueId = _.uniqueId("grid_row");
+      uniqueId = _.uniqueId('grid_row');
     }
 
     //todo: add error handling
 
-  	return uniqueId;
+    return uniqueId;
   }
 
   hasRowMetadataKey(){
-   return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
+    return this.hasRowMetadata() && this.rowMetadata.key !== null && this.rowMetadata.key !== undefined;
   }
 
   getBodyRowMetadataClass(rowData){
@@ -42,7 +42,7 @@ class RowProperties{
   }
 
   hasRowMetadata(){
-   return this.rowMetadata !== null;
+    return this.rowMetadata !== null;
   }
 }
 

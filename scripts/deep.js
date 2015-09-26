@@ -1,5 +1,5 @@
 
-  var _ = require('underscore');
+var _ = require('underscore');
 
 // Credits: https://github.com/documentcloud/underscore-contrib
 // Sub module: underscore.object.selectors
@@ -9,12 +9,12 @@
 // Will take a path like 'element[0][1].subElement["Hey!.What?"]["[hey]"]'
 // and return ["element", "0", "1", "subElement", "Hey!.What?", "[hey]"]
 function keysFromPath(path) {
-  // from http://codereview.stackexchange.com/a/63010/8176
-  /**
-   * Repeatedly capture either:
-   * - a bracketed expression, discarding optional matching quotes inside, or
-   * - an unbracketed expression, delimited by a dot or a bracket.
-   */
+// from http://codereview.stackexchange.com/a/63010/8176
+/**
+ * Repeatedly capture either:
+ * - a bracketed expression, discarding optional matching quotes inside, or
+ * - an unbracketed expression, delimited by a dot or a bracket.
+ */
   var re = /\[("|')(.+)\1\]|([^.\[\]]+)/g;
 
   var elements = [];
@@ -29,14 +29,14 @@ function keysFromPath(path) {
 // path described by the keys given. Keys may be given as an array
 // or as a dot-separated string.
 function getPath (obj, ks) {
-  ks = typeof ks == "string" ? keysFromPath(ks) : ks;
+  ks = typeof ks == 'string' ? keysFromPath(ks) : ks;
 
   var i = -1, length = ks.length;
 
-  // If the obj is null or undefined we have to break as
-  // a TypeError will result trying to access any property
-  // Otherwise keep incrementally access the next property in
-  // ks until complete
+// If the obj is null or undefined we have to break as
+// a TypeError will result trying to access any property
+// Otherwise keep incrementally access the next property in
+// ks until complete
   while (++i < length && obj != null) {
     obj = obj[ks[i]];
   }
@@ -81,7 +81,7 @@ function getKeys (obj, prefix) {
   var keys = [];
 
   _.each( obj, function(value, key) {
-    var fullKey = prefix ? prefix + "." + key : key;
+    var fullKey = prefix ? prefix + '.' + key : key;
     if(_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
       keys = keys.concat( getKeys(value, fullKey) );
     } else {

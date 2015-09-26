@@ -4,18 +4,17 @@
 var React = require('react');
 
 var GridNoData = React.createClass({
-    getDefaultProps: function(){
-        return {
-            "noDataMessage": "No Data"
-        }
-    },
-    render: function(){
-        var that = this;
+  getDefaultProps: function(){
+    return {
+      'noDataMessage': 'No Data'
+    };
+  },
 
-        return(
-            <div>{this.props.noDataMessage}</div>
-        );
-    }
+  render: function(){
+    return(
+      <div>{this.props.noDataMessage}</div>
+    );
+  }
 });
 
 module.exports = GridNoData;
