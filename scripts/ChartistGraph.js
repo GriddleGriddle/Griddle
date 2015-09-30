@@ -66,7 +66,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict'
 
 	var React = __webpack_require__(2)
-	var Chartist = __webpack_require__(15)
+	var Chartist = __webpack_require__(16)
 
 	var ChartistGraph = React.createClass({
 
@@ -113,7 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 
-/***/ 15:
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	(function(root, factory) {

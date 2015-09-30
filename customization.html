@@ -85,7 +85,7 @@
 
 <h3 id="column-metadata">Column Metadata</h3>
 <p>The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the <code>columnMetadata</code> property is where this would be defined. </p>
-<p>The properties that the columnMetadata object can contain are as follows: </p>
+<p>Griddle parses and evaluates the following columnMetadata object properties:</p>
 <dl>
   <dt>columnName</dt>
   <dd><strong>string (required)</strong> - this is the name of the column as it appears in the results passed into Griddle.</dd>
@@ -115,6 +115,8 @@
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a <code>TD</code> element. (more information below in the <a href="#customColumns">Custom Columns section</a>.)</dd>
 </dl>
 
+<p>However, you are also able to pass other properties in as columnMetadata. </p>
+<p><a href="#custom-columns">columnMetadata can be accessed on the <code>metadata</code> property of a Custom Column component.</a></p>
 <h5 id="example-">Example:</h5>
 <p>Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read <code>Employee Name</code> instead of name. </p>
 <p>Our metadata object would look something like </p>
@@ -218,7 +220,7 @@
 
 <p><a name="customColumns"></a></p>
 <h3 id="custom-columns">Custom Columns</h3>
-<p>Custom column components are defined in the <a href="#">Column Metadata object</a>. The components are passed <strong>data</strong> and <strong>rowData</strong> properties.</p>
+<p>Custom column components are defined in the <a href="#">Column Metadata object</a>. The components are passed <strong>data</strong>, <strong>rowData</strong>, <strong>metadata</strong> properties.</p>
 <dl>
   <dt>data</dt>
   <dd><strong>object</strong> - the data that would normally be rendered in the column.</dd>
@@ -227,6 +229,11 @@
 <dl>
   <dt>rowData</dt>
   <dd><strong>object</strong> - the data for all items in the same row</dd>
+</dl>
+
+<dl>
+  <dt>metadata</dt>
+  <dd><strong>object</strong> - The columnMetadata object</dd>
 </dl>
 
 <h5 id="example-">Example:</h5>
@@ -341,7 +348,31 @@ React.render(
 
 <hr />
 
+<h3 id="row-metadata">Row Metadata</h3>
+<dl>
+  <dt>bodyCssClassName</dt>
+  <dd><strong>function or string</strong> - If you supply a string, that class is applied to all rows. If you supply a function, the rows data is supplied to that function as the first argument and you are expected to return the css class name. This is useful if you want to style a row based on the rows data.</dd>
+</dl>
 
+<h5 id="example-">Example:</h5>
+<pre><code class="lang-javascript"><span class="keyword">var</span> rowMetadata = {
+    <span class="string">"bodyCssClassName"</span>: <span class="keyword">function</span>(rowData) {
+        <span class="keyword">if</span> (rowData.action === <span class="string">"added"</span>) {
+            <span class="keyword">return</span> <span class="string">"green-row"</span>;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (rowData.action === <span class="string">"removed"</span>) {
+            <span class="keyword">return</span> <span class="string">"red-row"</span>;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (rowData.action === <span class="string">"transfer"</span>) {
+            <span class="keyword">return</span> <span class="string">"blue-row"</span>;
+        }
+        <span class="keyword">return</span> <span class="string">"default-row"</span>;
+    }
+};
+
+<span class="keyword">return</span> (
+    <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"griddle-container"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{this.state.rows}</span> <span class="attribute">rowMetadata</span>=<span class="value">{rowMetadata}</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+)</span></code></pre>
 <h3 id="custom-row-format">Custom Row Format</h3>
 <p>Sometimes you may want to display grid data in a format other than a grid but still have pagination, filtering, etc. This type of formatting can be accomplished with the custom row format properties. To use custom row formatting, the <strong>useCustomRowComponent</strong> and the <strong>customRowComponent</strong> properties will need to be set.</p>
 <dl>
