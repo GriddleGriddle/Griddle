@@ -20,6 +20,7 @@ var CustomFilterContainer = React.createClass({
       return <that.props.customFilterComponent
         changeFilter={this.props.changeFilter}
         results={this.props.results}
+        currentResults={this.props.currentResults}
         placeholderText={this.props.placeholderText} />;
   }
 });
