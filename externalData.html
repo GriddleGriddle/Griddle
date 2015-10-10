@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- Basic Page Needs
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta charset="utf-8">
+	<title>Griddle - React Grid Component</title>
+	<meta name="description" content="Griddle - React Grid component. ">
+	<meta name="author" content="Ryan Lanciaux">
+
+	<!-- Mobile Specific Metas
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+	<!-- CSS
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/skeleton.css">
+	<link rel="stylesheet" href="styles/site.css">
+	<link rel="stylesheet" href="styles/chartist.css">
+	<!-- Favicon
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+
+	<!-- Scripts
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="scripts/Griddle.js"></script>
+	<script src="scripts/GriddleWithCallback.js"></script>
+	<script src="scripts/fakeData.js"></script>
+	<script src="scripts/ChartistGraph.js"></script>
+</head>
+<body id="docs-page">
+  <header class="background-primary-dark border-bottom border-secondary">
+  	<div class="container">
+  		<div class="row">
+  			<div class="eight columns">
+          <a href="index.html"><img src="images/griddle.png" alt="Griddle"/></a>
+  			</div>
+	  		<div class="four columns right">
+          <iframe src="http://ghbtns.com/github-btn.html?user=GriddleGriddle&repo=Griddle&type=watch&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+          <iframe src="http://ghbtns.com/github-btn.html?user=GriddleGriddle&repo=Griddle&type=fork&count=true"
+            allowtransparency="true" frameborder="0" scrolling="0" width="90" height="20"></iframe>
+            <br />
+          <a href="quickstart.html" class="button border-light text-light big">Documentation</a>
+	  		</div>
+  		</div>
+  	</div>
+  </header>
+	<div class="container page-content">
+		<div class="row">
+			<div class="two columns">
+				<nav class="side">
+					<ul>
+						<li><a href="quickstart.html">Quickstart</a></li>
+						<li><a href="styling.html">Styling</a></li>
+						<li><a href="subgrids.html">Subgrids</a></li>
+						<li><a href="customization.html">Customization</a></li>
+						<li><a href="externalData.html">External Data</a></li>
+						<li><a href="infiniteScroll.html">Infinite Scrolling</a></li>
+						<li><a href="properties.html">Properties</a></li>
+						<li class="border-top border-lighter-grey"><a href="https://reactjsnews.com/isomorphic-javascript-with-react-node/">Isomorphic Rendering <small>(at ReactJS News)</small></a>
+					</ul>
+				</nav>
+			</div>
+			<div class="ten columns docs">
+				<h2 id="external-data">External Data</h2>
+<p>Often times it is not practical to load all of a grid&#39;s data in one request. Griddle supports loading external data through creation of a wrapper component or writing a callback function (the wrapper component is the recommended route). </p>
+<h4 id="wrapper-component-recommended-">Wrapper Component (recommended)</h4>
+<p>Griddle comes with a handful of properties that must be set when working with external data.</p>
+<dl>
+    <dt>useExternal</dt>
+    <dd><strong>bool</strong> - Griddle will run expecting results to be coming from an external source. This affects paging, filtering, sorting, etc. (i.e. Griddle will not sort the local data set but will tell the wrapper component to get the sorted data from the source). Default: false
+</dl>
+
+<dl>
+    <dt>externalSetPage</dt>
+    <dd><strong>function</strong> - The function that will be used to set the page. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalChangeSort</dt>
+    <dd><strong>function</strong> - The function that will be used to change the sort. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalSetFilter</dt>
+    <dd><strong>function</strong> - The function that will be used to change the filter. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalSetPageSize</dt>
+    <dd><strong>function</strong> - The function that will be used to change the number of results per page. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalMaxPage</dt>
+    <dd><strong>int</strong> - The max number of pages that can be displayed for the result-set. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalCurrentPage</dt>
+    <dd><strong>int</strong> - The page that is currently displayed from the result-set. Default: null</dd>
+</dl>
+<dl>
+    <dt>externalSortColumn</dt>
+    <dd><strong>string</strong> - The column name that determines the sort of the result-set Default: null</dd>
+</dl>
+<dl>
+    <dt>externalSortAscending</dt>
+    <dd><strong>bool</strong> - Specifies the sort direction for the current sort column. Default: true</dd>
+</dl>
+
+<hr />
+
+<h5 id="example-wrapper-component">Example Wrapper Component</h5>
+<p>Below is a skeleton wrapper component for dealing with external results in Griddle. This wrapper does not need to be used but it could serve as a decent starting point. </p>
+<pre><code><span class="keyword">var</span> ExternalComponent = React.createClass({
+    getInitialState: <span class="keyword">function</span>(){
+      <span class="keyword">var</span> initial = { <span class="string">"results"</span>: [],
+          <span class="string">"currentPage"</span>: <span class="number">0</span>,
+          <span class="string">"maxPages"</span>: <span class="number">0</span>,
+          <span class="string">"externalResultsPerPage"</span>: <span class="number">5</span>,
+          <span class="string">"externalSortColumn"</span>:<span class="literal">null</span>,
+          <span class="string">"externalSortAscending"</span>:<span class="literal">true</span>
+      };
+
+      <span class="keyword">return</span> initial;
+    },
+    <span class="comment">//general lifecycle methods</span>
+    componentWillMount: <span class="keyword">function</span>(){
+    },
+    componentDidMount: <span class="keyword">function</span>(){
+    },
+    <span class="comment">//what page is currently viewed</span>
+    setPage: <span class="keyword">function</span>(index){
+    },
+    <span class="comment">//this will handle how the data is sorted</span>
+    sortData: <span class="keyword">function</span>(sort, sortAscending, data){
+    },
+    <span class="comment">//this changes whether data is sorted in ascending or descending order</span>
+    changeSort: <span class="keyword">function</span>(sort, sortAscending){
+    },
+    <span class="comment">//this method handles the filtering of the data</span>
+    setFilter: <span class="keyword">function</span>(filter){
+    },
+    <span class="comment">//this method handles determining the page size</span>
+    setPageSize: <span class="keyword">function</span>(size){
+    },
+    render: <span class="keyword">function</span>(){
+      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">useExternal</span>=<span class="value">{true}</span> <span class="attribute">externalSetPage</span>=<span class="value">{this.setPage}</span>
+        <span class="attribute">externalChangeSort</span>=<span class="value">{this.changeSort}</span> <span class="attribute">externalSetFilter</span>=<span class="value">{this.setFilter}</span>
+        <span class="attribute">externalSetPageSize</span>=<span class="value">{this.setPageSize}</span> <span class="attribute">externalMaxPage</span>=<span class="value">{this.state.maxPages}</span>
+        <span class="attribute">externalCurrentPage</span>=<span class="value">{this.state.currentPage}</span> <span class="attribute">results</span>=<span class="value">{this.state.results}</span> 
+        <span class="attribute">resultsPerPage</span>=<span class="value">{this.state.externalResultsPerPage}</span> 
+        <span class="attribute">externalSortColumn</span>=<span class="value">{this.state.externalSortColumn}</span> 
+        <span class="attribute">externalSortAscending</span>=<span class="value">{this.state.externalSortAscending}</span>
+        <span class="attribute">showFilter</span>=<span class="value">{true}</span> <span class="attribute">showSettings</span>=<span class="value">{true}</span> /&gt;</span>
+    }
+});</span></code></pre>
+<hr />
+
+<h5 id="external-api-example-">External API Example:</h5>
+<p>The following example uses the <a href="http://swapi.co/">Star Wars API</a> and the <a href="https://github.com/cfjedimaster/SWAPI-Wrapper">SWAPI-Wrapper</a>. </p>
+<p>First off, the skeleton wrapper was modified to include a get external data method. </p>
+<pre><code class="lang-javascript">getExternalData: <span class="keyword">function</span>(page){
+  <span class="keyword">var</span> that = <span class="keyword">this</span>;
+  page = page||<span class="number">1</span>
+
+  swapiModule.getStarships(page, <span class="keyword">function</span>(data) {
+   that.setState({
+      results: data.results,
+      currentPage: page-<span class="number">1</span>,
+      maxPages: Math.round(data.count/<span class="number">10</span>)
+    })
+  });
+}</code></pre>
+<p>The component was then modified to use getExternalData method for changing the pages and obtaining the initial data. Notice that filtering, sorting, etc are not enabled on this example (the next example has all of these options turned on). </p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> ExternalSwapiComponent = React.createClass({
+    getInitialState: <span class="keyword">function</span>(){
+      <span class="keyword">var</span> initial = { <span class="string">"results"</span>: [],
+          <span class="string">"currentPage"</span>: <span class="number">0</span>,
+          <span class="string">"maxPages"</span>: <span class="number">0</span>,
+          <span class="string">"externalResultsPerPage"</span>: <span class="number">10</span>,
+          <span class="string">"externalSortColumn"</span>:<span class="literal">null</span>,
+          <span class="string">"externalSortAscending"</span>:<span class="literal">true</span>,
+          <span class="string">"results"</span>: []
+      };
+
+      <span class="keyword">return</span> initial;
+    },
+    componentWillMount: <span class="keyword">function</span>(){
+    },
+    componentDidMount: <span class="keyword">function</span>(){
+      <span class="keyword">this</span>.getExternalData();
+    },
+    getExternalData: <span class="keyword">function</span>(page){
+         ...
+    },
+    setPage: <span class="keyword">function</span>(index){
+      <span class="comment">//This should interact with the data source to get the page at the given index</span>
+      index = index &gt; <span class="keyword">this</span>.state.maxPages ? <span class="keyword">this</span>.state.maxPages : index &lt; <span class="number">1</span> ? <span class="number">1</span> : index + <span class="number">1</span>;
+      <span class="keyword">this</span>.getExternalData(index);
+    },
+    setPageSize: <span class="keyword">function</span>(size){
+    },
+    render: <span class="keyword">function</span>(){
+      <span class="comment">//columns={["name", "city", "state", "country"]}</span>
+      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">useExternal</span>=<span class="value">{true}</span> <span class="attribute">externalSetPage</span>=<span class="value">{this.setPage}</span> <span class="attribute">enableSort</span>=<span class="value">{false}</span> 
+        <span class="attribute">columns</span>=<span class="value">{["name",</span> "<span class="attribute">model</span>", "<span class="attribute">manufacturer</span>", "<span class="attribute">passengers</span>"]}
+        <span class="attribute">externalSetPageSize</span>=<span class="value">{this.setPageSize}</span> <span class="attribute">externalMaxPage</span>=<span class="value">{this.state.maxPages}</span>
+        <span class="attribute">externalChangeSort</span>=<span class="value">{function(){}}</span> <span class="attribute">externalSetFilter</span>=<span class="value">{function(){}}</span>
+        <span class="attribute">externalCurrentPage</span>=<span class="value">{this.state.currentPage}</span> <span class="attribute">results</span>=<span class="value">{this.state.results}</span> <span class="attribute">tableClassName</span>=<span class="value">"table"</span> <span class="attribute">resultsPerPage</span>=<span class="value">{this.state.externalResultsPerPage}</span>
+        <span class="attribute">externalSortColumn</span>=<span class="value">{this.state.externalSortColumn}</span> <span class="attribute">externalSortAscending</span>=<span class="value">{this.state.externalSortAscending}</span> /&gt;</span>
+    }
+});</span></code></pre>
+<div id="griddle-external-swapi"></div>
+
+<script type="text/javascript" src="scripts/swapi.min.js"></script>
+
+<script type="text/jsx">
+var Loading = React.createClass({
+  getDefaultProps: function(){
+    return {
+      loadingText: "Loading"
+    }
+  },
+  render: function(){
+    return <div className="loading">{this.props.loadingText}</div>;
+  }
+});
+
+var ExternalSwapiComponent = React.createClass({
+    getInitialState: function(){
+      var initial = { "results": [],
+          "currentPage": 0,
+          "isLoading": false,
+          "maxPages": 0,
+          "externalResultsPerPage": 10,
+          "externalSortColumn":null,
+          "externalSortAscending":true,
+          "results": []
+      };
+
+      return initial;
+    },
+    componentWillMount: function(){
+    },
+    componentDidMount: function(){
+      this.getExternalData();
+    },
+    getExternalData: function(page){
+      var that = this;
+      page = page||1
+
+      this.setState({
+        isLoading: true
+      });
+
+      swapiModule.getStarships(page, function(data) {
+       that.setState({
+          results: data.results,
+          currentPage: page-1,
+          maxPages: Math.round(data.count/10),
+          isLoading: false
+        })
+      });
+    },
+    setPage: function(index){
+      //This should interact with the data source to get the page at the given index
+      index = index > this.state.maxPages ? this.state.maxPages : index < 1 ? 1 : index + 1;
+      this.getExternalData(index);
+    },
+    setPageSize: function(size){
+    },
+    render: function(){
+      //columns={["name", "city", "state", "country"]}
+      return <Griddle useExternal={true} externalSetPage={this.setPage} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]}
+        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
+        externalChangeSort={function(){}} externalSetFilter={function(){}}
+        externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} externalLoadingComponent={Loading} externalIsLoading={this.state.isLoading}/>
+    }
+});
+
+
+  React.render(<ExternalSwapiComponent />, document.getElementById("griddle-external-swapi"));
+</script>
+
+
+<hr />
+
+<h5 id="simulated-external-results-example-">Simulated External Results Example:</h5>
+<p>The following example is using the skeleton template above and simulating what loading results externally could look like (while still using the example data that has been used through-out the Griddle documentation). </p>
+<p>Please keep in mind that a good deal of this code is to simulate the type of actions that would generally take place on a server (or wherever the data is coming from) -- most of the time the functions should deal with passing data back and forth to the source of the data (e.g. an API).</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> externalData = fakeData.slice(<span class="number">0</span>, <span class="number">53</span>);
+
+<span class="keyword">var</span> SimulatedExternalComponent = React.createClass({
+    getInitialState: <span class="keyword">function</span>(){
+      <span class="keyword">var</span> initial = { <span class="string">"results"</span>: [],
+          <span class="string">"currentPage"</span>: <span class="number">0</span>,
+          <span class="string">"maxPages"</span>: <span class="number">0</span>,
+          <span class="string">"externalResultsPerPage"</span>: <span class="number">5</span>,
+          <span class="string">"externalSortColumn"</span>:<span class="literal">null</span>,
+          <span class="string">"externalSortAscending"</span>:<span class="literal">true</span>,
+          <span class="string">"pretendServerData"</span>: externalData
+      };
+
+      <span class="keyword">return</span> initial;
+    },
+    componentWillMount: <span class="keyword">function</span>(){
+        <span class="keyword">this</span>.setState({
+            maxPages: Math.round(<span class="keyword">this</span>.state.pretendServerData.length/<span class="keyword">this</span>.state.externalResultsPerPage),
+            <span class="string">"results"</span>: <span class="keyword">this</span>.state.pretendServerData.slice(<span class="number">0</span>,<span class="keyword">this</span>.state.externalResultsPerPage)
+        })
+    },
+    setPage: <span class="keyword">function</span>(index){
+      <span class="comment">//This should interact with the data source to get the page at the given index</span>
+      <span class="keyword">var</span> number = index === <span class="number">0</span> ? <span class="number">0</span> : index * <span class="keyword">this</span>.state.externalResultsPerPage;
+      <span class="keyword">this</span>.setState(
+        {
+          <span class="string">"results"</span>: <span class="keyword">this</span>.state.pretendServerData.slice(number, number+<span class="number">5</span>&gt;<span class="keyword">this</span>.state.pretendServerData.length ? <span class="keyword">this</span>.state.pretendServerData.length : number+<span class="keyword">this</span>.state.externalResultsPerPage),
+          <span class="string">"currentPage"</span>: index
+        });
+    },
+    sortData: <span class="keyword">function</span>(sort, sortAscending, data){
+      <span class="comment">//sorting should generally happen wherever the data is coming from </span>
+      sortedData = _.sortBy(data, <span class="keyword">function</span>(item){
+        <span class="keyword">return</span> item[sort];
+      });
+
+      <span class="keyword">if</span>(sortAscending === <span class="literal">false</span>){
+        sortedData.reverse();
+      }
+      <span class="keyword">return</span> {
+        <span class="string">"currentPage"</span>: <span class="number">0</span>,
+        <span class="string">"externalSortColumn"</span>: sort,
+        <span class="string">"externalSortAscending"</span>: sortAscending,
+        <span class="string">"pretendServerData"</span>: sortedData,
+        <span class="string">"results"</span>: sortedData.slice(<span class="number">0</span>,<span class="keyword">this</span>.state.externalResultsPerPage)
+      };
+    },
+    changeSort: <span class="keyword">function</span>(sort, sortAscending){
+      <span class="comment">//this should change the sort for the given column</span>
+      <span class="keyword">this</span>.setState(<span class="keyword">this</span>.sortData(sort, sortAscending, <span class="keyword">this</span>.state.pretendServerData));
+    },
+    setFilter: <span class="keyword">function</span>(filter){
+        <span class="comment">//filtering should generally occur on the server (or wherever) </span>
+        <span class="comment">//this is a lot of code for what should normally just be a method that is used to pass data back and forth</span>
+        <span class="keyword">var</span> sortedData = <span class="keyword">this</span>.sortData(<span class="keyword">this</span>.state.externalSortColumn, <span class="keyword">this</span>.state.externalSortAscending, externalData);
+
+        <span class="keyword">if</span>(filter === <span class="string">""</span>){
+            <span class="keyword">this</span>.setState(_.extend(sortedData, {maxPages: Math.round(sortedData.pretendServerData.length &gt; <span class="keyword">this</span>.state.externalResultsPerPage ? sortedData.pretendServerData.length/<span class="keyword">this</span>.state.externalResultsPerPage : <span class="number">1</span>)}));
+
+            <span class="keyword">return</span>;
+        }
+
+        <span class="keyword">var</span> filteredData = _.filter(sortedData.pretendServerData,
+            <span class="keyword">function</span>(item) {
+                <span class="keyword">var</span> arr = _.values(item);
+                <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.length; i++){
+                   <span class="keyword">if</span> ((arr[i]||<span class="string">""</span>).toString().toLowerCase().indexOf(filter.toLowerCase()) &gt;= <span class="number">0</span>){
+                    <span class="keyword">return</span> <span class="literal">true</span>;
+                   }
+                }
+
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            });
+
+        <span class="keyword">this</span>.setState({
+            pretendServerData: filteredData,
+            maxPages: Math.round(filteredData.length &gt; <span class="keyword">this</span>.state.externalResultsPerPage ? filteredData.length/<span class="keyword">this</span>.state.externalResultsPerPage : <span class="number">1</span>),
+            <span class="string">"results"</span>: filteredData.slice(<span class="number">0</span>,<span class="keyword">this</span>.state.externalResultsPerPage)
+        });
+    },
+    setPageSize: <span class="keyword">function</span>(size){
+        <span class="keyword">this</span>.setState({
+            currentPage: <span class="number">0</span>,
+            externalResultsPerPage: size,
+            maxPages: Math.round(<span class="keyword">this</span>.state.pretendServerData.length &gt; size ? <span class="keyword">this</span>.state.pretendServerData.length/size : <span class="number">1</span>),
+            results: <span class="keyword">this</span>.state.pretendServerData.slice(<span class="number">0</span>,size)
+        });
+    },
+    render: <span class="keyword">function</span>(){
+      <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">useExternal</span>=<span class="value">{true}</span> <span class="attribute">externalSetPage</span>=<span class="value">{this.setPage}</span>
+        <span class="attribute">externalChangeSort</span>=<span class="value">{this.changeSort}</span> <span class="attribute">externalSetFilter</span>=<span class="value">{this.setFilter}</span>
+        <span class="attribute">externalSetPageSize</span>=<span class="value">{this.setPageSize}</span> <span class="attribute">externalMaxPage</span>=<span class="value">{this.state.maxPages}</span>
+        <span class="attribute">externalCurrentPage</span>=<span class="value">{this.state.currentPage}</span> <span class="attribute">results</span>=<span class="value">{this.state.results}</span> <span class="attribute">tableClassName</span>=<span class="value">"table"</span> <span class="attribute">resultsPerPage</span>=<span class="value">{this.state.externalResultsPerPage}</span>
+        <span class="attribute">externalSortColumn</span>=<span class="value">{this.state.externalSortColumn}</span> <span class="attribute">externalSortAscending</span>=<span class="value">{this.state.externalSortAscending}</span> <span class="attribute">showFilter</span>=<span class="value">{true}</span> <span class="attribute">showSettings</span>=<span class="value">{true}</span> /&gt;</span>
+    }
+});
+
+React.render(<span class="tag">&lt;<span class="title">SimulatedExternalComponent</span> /&gt;</span>, document.getElementById("griddle-external-simulated"));</span></code></pre>
+<div id="griddle-external-simulated"></div>
+
+<script type="text/jsx">
+var externalData = fakeData.slice(0, 53);
+
+var SimulatedExternalComponent = React.createClass({
+    getInitialState: function(){
+      var initial = { "results": [],
+          "currentPage": 0,
+          "maxPages": 0,
+          "externalResultsPerPage": 5,
+          "externalSortColumn":null,
+          "externalSortAscending":true,
+          "pretendServerData": externalData
+      };
+
+      return initial;
+    },
+    componentWillMount: function(){
+        this.setState({
+            maxPages: Math.ceil(this.state.pretendServerData.length/this.state.externalResultsPerPage),
+            "results": this.state.pretendServerData.slice(0,this.state.externalResultsPerPage)
+        })
+    },
+    setPage: function(index){
+      //This should interact with the data source to get the page at the given index
+      var number = index === 0 ? 0 : index * this.state.externalResultsPerPage;
+      this.setState(
+        {
+          "results": this.state.pretendServerData.slice(number, number+5>this.state.pretendServerData.length ? this.state.pretendServerData.length : number+this.state.externalResultsPerPage),
+          "currentPage": index
+        });
+    },
+    sortData: function(sort, sortAscending, data){
+      //sorting should generally happen wherever the data is coming from
+      sortedData = _.sortBy(data, function(item){
+        return item[sort];
+      });
+
+      if(sortAscending === false){
+        sortedData.reverse();
+      }
+      return {
+        "currentPage": 0,
+        "externalSortColumn": sort,
+        "externalSortAscending": sortAscending,
+        "pretendServerData": sortedData,
+        "results": sortedData.slice(0,this.state.externalResultsPerPage)
+      };
+    },
+    changeSort: function(sort, sortAscending){
+      //this should change the sort for the given column
+      this.setState(this.sortData(sort, sortAscending, this.state.pretendServerData));
+    },
+    setFilter: function(filter){
+        //filtering should generally occur on the server (or wherever) 
+        //this is a lot of code for what should normally just be a method that is used to pass data back and forth
+        var sortedData = this.sortData(this.state.externalSortColumn, this.state.externalSortAscending, externalData);
+
+        if(filter === ""){
+            this.setState(_.extend(sortedData, {maxPages: Math.ceil(sortedData.pretendServerData.length > this.state.externalResultsPerPage ? sortedData.pretendServerData.length/this.state.externalResultsPerPage : 1)}));
+
+            return;
+        }
+
+        var filteredData = _.filter(sortedData.pretendServerData,
+            function(item) {
+                var arr = _.values(item);
+                for(var i = 0; i < arr.length; i++){
+                   if ((arr[i]||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+                    return true;
+                   }
+                }
+
+                return false;
+            });
+
+        this.setState({
+            pretendServerData: filteredData,
+            maxPages: Math.ceil(filteredData.length > this.state.externalResultsPerPage ? filteredData.length/this.state.externalResultsPerPage : 1),
+            "results": filteredData.slice(0,this.state.externalResultsPerPage)
+        });
+    },
+    setPageSize: function(size){
+        this.setState({
+            currentPage: 0,
+            externalResultsPerPage: size,
+            maxPages: Math.ceil(this.state.pretendServerData.length > size ? this.state.pretendServerData.length/size : 1),
+            results: this.state.pretendServerData.slice(0,size)
+        });
+    },
+    render: function(){
+      return <Griddle useExternal={true} externalSetPage={this.setPage}
+        externalChangeSort={this.changeSort} externalSetFilter={this.setFilter}
+        externalSetPageSize={this.setPageSize} externalMaxPage={this.state.maxPages}
+        externalCurrentPage={this.state.currentPage} results={this.state.results} tableClassName="table" resultsPerPage={this.state.externalResultsPerPage}
+        externalSortColumn={this.state.externalSortColumn} externalSortAscending={this.state.externalSortAscending} showFilter={true} showSettings={true} />
+    }
+});
+
+React.render(<SimulatedExternalComponent />, document.getElementById("griddle-external-simulated"));
+</script>
+
+<hr />
+
+<h4 id="griddle-with-callback">Griddle With Callback</h4>
+<p>Previous versions of Griddle had a built-in callback for obtaining external data. This has since been moved into its own component to help simplify the main Griddle component. The call definition is the same. </p>
+<h5 id="important-">Important!</h5>
+<p><strong>GriddleWithCallback is in its own GitHub repository and npm package. To install GriddleWithCallback <code>npm install griddle-callback</code> and anywhere where it is used, <code>require GriddleWithCallback = require(&#39;griddle-callback&#39;);</code></strong></p>
+<h5 id="example-">Example:</h5>
+<p>Lets assume we want to obtain Star Wars data like in the example above except using GriddleWithCallback instead of using the exernal results properties. We will start out by creating a callback method. The Griddle callback has access to <code>filterString, sortColumn, sortAscending, page, pageSize, callback</code> parameters.</p>
+<p>For the example, our Callback looks like this: </p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> loadData = <span class="keyword">function</span>(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+    page+=<span class="number">1</span>;
+
+    swapiModule.getStarships(page, <span class="keyword">function</span>(data){
+        callback({
+            results: data.results,
+            totalResults: data.count,
+            pageSize: pageSize
+        });    
+    });
+};</code></pre>
+<p><div id="griddle-callback"></div></p>
+<script type="text/javascript" src="scripts/GriddleWithCallback.js"></script>
+<script type="text/jsx">
+var setDefault = function(original, value){
+    return typeof original === 'undefined' ? value : original;
+}
+
+var loadData = function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+    page+=1;
+
+    swapiModule.getStarships(page, function(data){
+        callback({
+            results: data.results,
+            totalResults: data.count,
+            pageSize: pageSize
+        });    
+    });
+};
+
+var Loading = React.createClass({
+    getDefaultProps: function(){
+        return {
+            loadingText: "Loading"
+        }
+    },
+    render: function(){
+        return <div className="loading">{this.props.loadingText}</div>;
+    }
+});
+
+React.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback')); 
+</script>
+			</div>
+		</div>
+	</div>
+  <div class="order-primary content-section background-darker-grey text-light-grey" id="about">
+    <div class="container">
+      <div class="row">
+        <div class="ten columns offset-by-two">
+          <p>Griddle is a project maintained by <a href="http://twitter.com/ryanlanciaux">Ryan Lanciaux</a> and <a href="http://www.twitter.com/joellanciaux">Joel Lanciaux</a> in collaboration with all of <a href="https://github.com/GriddleGriddle/Griddle/graphs/contributors">the awesome contributors!</a></p>
+         	<small>
+        		&copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
+        	</small> 
+        	<br />
+          <small>
+						Example data has been generated with <a href="http://json-generator.com">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-58716212-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script> 
+</body>
+</html>

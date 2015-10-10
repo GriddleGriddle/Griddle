@@ -1,0 +1,291 @@
+/* html elements */
+header{
+	padding: 10px 0px 10px 0px;
+}
+
+a, a:visited{
+	color: #03A9F4;
+	text-decoration: none;
+}
+
+hr{
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+dl{
+	margin-left: 20px;
+}
+
+dt{
+	font-weight: bold;
+	color: #512DA8;
+}
+
+dd{
+	margin-left: 0;
+	-webkit-margin-start: 0;
+	color: #555;
+}
+
+/* Colors
+---------------------------------  */
+/* lazily just mostly using http://www.materialpalette.com/deep-purple/light-blue */
+.background-primary { background-color: #673AB7; }
+.background-primary-dark { background-color: #512DA8; }
+.background-primary-light { background-color: #D1C4E9; }
+.background-accent { background-color: #03A9F4; }
+.background-darker-grey { background-color: #444; }
+.background-dark-grey { background-color: #727272; }
+.background-light-grey { background-color: #B6B6B6; }
+.background-lighter-grey { background-color: #EDEDED;}
+.background-light { background-color: #FFF; }
+
+/* text colors */
+.text { color: #212121; }
+.text-light { color: #FFF; }
+.text-primary { color: #673AB7; }
+.text-primary-dark { color: #512DA8; }
+.text-primary-light { color: #D1C4E9; }
+.text-accent { color: #03A9F4; }
+.text-dark-grey { color: #727272; }
+.text-light-grey {color: #B6B6B6; }
+
+/* Borders
+---------------------------------  */
+.border-primary { border-color: #673AB7; border-width: 1px;}
+.border-primary-dark { border-color: #512DA8; border-width: 1px;}
+.border-secondary { border-color: #804AE3; border-width: 1px;}
+.border-primary-light { border-color:#D1C4E9; border-width: 1px;}
+.border-accent { border-color: #03A9F4; border-width: 1px;}
+.border-dark-grey { border-color: #727272; border-width: 1px;}
+.border-light-grey { border-color: #B6B6B6; border-width: 1px;}
+.border-lighter-grey { border-color: #EDEDED; border-width: 1px;}
+.border-light { border-color: #FFF; }
+
+.border-big {
+	border-bottom-width:3px;
+	border-bottom-style: solid;
+}
+
+.border-bottom {
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	border-bottom-style: solid;
+}
+
+.border-top{
+	border-left: none;
+	border-right: none;
+	border-bottom: none; 
+	border-top-style: solid;
+}
+
+/* Skeleton overrides
+---------------------------------  */
+.button.big{
+	height:50px;
+	font-size: 1.5rem;
+	padding-top:.5rem;
+}
+.button:visited{
+	color:#FFF;
+	border:#FFF;
+}
+
+.button.text-light:hover{
+	color: #D1C4E9;
+	border-color: #D1C4E9;
+}
+
+table{
+	margin-bottom: 0px;
+}
+
+p{
+	margin-bottom: 10px;
+}
+/* Headers
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+h1, h2, h3, h4, h5, h6 {
+	margin-bottom: 10px;
+}
+/* Alignment
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.right{
+	text-align: right;
+}
+
+.center{
+	text-align: center;
+}
+
+/* Griddle defaults for demo site -- mostly to override stuff in skeleton
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.griddle{
+	font-family: Arial, Helvetica, sans-serif;
+	margin-bottom: 20px;
+}
+
+.griddle .griddle {
+	margin: 0;
+}
+.griddle label {
+	font-weight: normal;
+}
+
+.griddle select{
+	padding: 0;
+    max-height: 20px;
+    margin: 0;
+}
+
+.griddle-container, .griddle-settings{
+	border-radius: 5px;
+}
+
+.griddle-settings input, .griddle-settings select{
+	margin: 0 5px 0 5px;
+}
+
+.griddle-settings-toggle button {
+	color: #FFF;
+	text-transform: none;
+}
+
+.griddle-next button, .griddle-previous button{
+	height: 18px;
+	padding: 0;
+	font-weight: normal;
+	text-transform: none;
+	font-size: 15px;
+	line-height: normal;
+}
+
+/* Example Site specific Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+header img{
+	margin-top: 15px;
+}
+.content-section{
+	padding: 30px 0 30px 0;
+}
+
+#tldr h3{
+	text-align: center;
+}
+
+#tldr .text-section{
+	height: 210px;
+}
+
+nav.side{
+	padding: 5px;	
+}
+
+nav.side li{
+	list-style-type: none;
+}
+
+nav.side li a, nav.side li a:visited{
+	color: #512DA8;
+}
+
+#about a{
+	color: #727272;
+}
+
+#about a:hover{
+	color: #525252;
+}
+
+code.big{
+	font-size: 18px;
+	padding:10px 30px 10px 30px;
+	margin-top: 20px;
+}
+
+/* Docs Pages specific styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.page-content{
+	margin-top: 20px;
+}
+.docs h1, .docs h2 {
+	color: #512DA8;
+}
+
+.docs h3, .docs h4 {
+	color: #673AB7;
+}
+
+.docs h5, .docs h6 {
+	color: #D1C4E9;
+}
+
+.docs .griddle h5, .docs .griddle h6{
+	color: #512DA8;
+}
+
+#docs-page button{
+	color: #222;
+}
+
+.feature-row{
+	border-bottom: 1px solid #DDD;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+}
+
+.feature-row.last{
+	border: none;
+}
+
+.feature-row .image-container{
+	background-color: #FFF;
+	border: 1px solid #B6B6B6;
+	width: 628px;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.hover{
+	width: 628px;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
+}
+
+.feature-row img{
+	max-width: 100%;
+}
+
+.feature-row figure{
+	margin: 0;
+}
+
+/* ugly styles for example */
+.custom-row-card{
+	float: left;
+	width: 33%;
+	margin-bottom: 2rem;
+}
+
+.custom-row-card .name{
+	position: relative;
+}
+
+.custom-row-card .name small{
+	position: absolute;
+	top: 3px;
+	right: 25px;
+}
+
+@media (min-width: 1280px) {
+  .container{
+  	max-width: 1280px; 
+  }
+}
+
