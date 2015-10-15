@@ -11,7 +11,7 @@
   ],
   "main": "modules/griddle.jsx.js",
   "peerDependencies": {
-    "react": ">=0.12.0",
+    "react": "^0.13.3",
     "underscore": ">= 1.6.0 < 2"
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "6to5-jest": "*",
     "jest-cli": "~0.4.19",
     "jsx-loader": "~0.12.x",
+    "react": "^0.13.3",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",
     "underscore": "~1.6.0",
