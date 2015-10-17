@@ -33,6 +33,7 @@ var Griddle = React.createClass({
     getDefaultProps: function() {
         return{
             "columns": [],
+            "gridMetadata": null,
             "columnMetadata": [],
             "rowMetadata": null,
             "resultsPerPage":5,
@@ -666,7 +667,7 @@ var Griddle = React.createClass({
         ) : "";
     },
     getCustomGridSection: function(){
-        return <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} />
+        return <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} {...this.props.gridMetadata} />
     },
     getCustomRowSection: function(data, cols, meta, pagingContent){
         return <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta}

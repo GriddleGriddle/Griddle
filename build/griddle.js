@@ -63,6 +63,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	/*
 	   Griddle - Simple Grid Component for React
 	   https://github.com/DynamicTyped/Griddle
@@ -99,6 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getDefaultProps: function () {
 	        return {
 	            columns: [],
+	            gridMetadata: null,
 	            columnMetadata: [],
 	            rowMetadata: null,
 	            resultsPerPage: 5,
@@ -711,7 +714,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            useGriddleStyles: this.props.useGriddleStyles, enableCustomFormatText: this.props.enableCustomFormatText, columnMetadata: this.props.columnMetadata }) : "";
 	    },
 	    getCustomGridSection: function () {
-	        return React.createElement(this.props.customGridComponent, { data: this.props.results, className: this.props.customGridComponentClassName });
+	        return React.createElement(this.props.customGridComponent, _extends({ data: this.props.results, className: this.props.customGridComponentClassName }, this.props.gridMetadata));
 	    },
 	    getCustomRowSection: function (data, cols, meta, pagingContent) {
 	        return React.createElement(
