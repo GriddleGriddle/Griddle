@@ -85,7 +85,7 @@ var GridRowContainer = React.createClass({
                           <td colSpan={that.props.columnSettings.getVisibleColumnCount()} className="griddle-parent" style={that.props.useGriddleStyles ? {border: "none", "padding": "0 0 0 5px"} : null}>
                             <Griddle isSubGriddle={true} results={[row]} columns={that.props.columnSettings.getColumns()} tableClassName={that.props.tableClassName} parentRowExpandedClassName={that.props.parentRowExpandedClassName}
                               parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
-                              showTableHeading={false} showPager={false} columnMetadata={that.props.columnMetadata}
+                              showTableHeading={false} showPager={false} columnMetadata={that.props.columnSettings.columnMetadata}
                               parentRowExpandedComponent={that.props.parentRowExpandedComponent}
                               parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
                               paddingHeight={that.props.paddingHeight} rowHeight={that.props.rowHeight} />
@@ -93,7 +93,7 @@ var GridRowContainer = React.createClass({
                         </tr>);
               }
 
-              return <that.props.rowSettings.rowComponent useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
+              return <that.props.rowSettings.rowComponent useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnSettings.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
           });
       }
 
