@@ -122,9 +122,9 @@ var Griddle = React.createClass({
         uniqueIdentifier: React.PropTypes.string
     },
     /* if we have a filter display the max page and results accordingly */
-    setFilter: function(filter) {
+    setFilter: function(filter, newResults) {
         if(this.props.useExternal) {
-            this.props.externalSetFilter(filter);
+            this.props.externalSetFilter(filter, newResults);
             return;
         }
 
@@ -135,7 +135,7 @@ var Griddle = React.createClass({
         };
 
         // Obtain the state results.
-       updatedState.filteredResults = _.filter(this.props.results,
+       updatedState.filteredResults = _.filter(newResults || this.props.results,
        function(item) {
             var arr = deep.keys(item);
             for(var i = 0; i < arr.length; i++){
@@ -286,6 +286,10 @@ var Griddle = React.createClass({
                 isSelectAllChecked: this._getAreAllRowsChecked(nextProps.selectedRowIds, _.pluck(visibleRows, this.props.uniqueIdentifier)),
                 selectedRowIds: nextProps.selectedRowIds
             });
+        }
+
+        if(this.props.results !== nextProps.results) {
+          this.setFilter(this.state.filter, nextProps.results);
         }
     },
     getInitialState: function() {
