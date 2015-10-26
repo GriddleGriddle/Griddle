@@ -14,6 +14,7 @@ var GridNoData = require('./gridNoData.jsx');
 var GridRow = require('./gridRow.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
+var CustomFilterContainer = require('./customFilterContainer.jsx');
 var ColumnProperties = require('./columnProperties');
 var RowProperties = require('./rowProperties');
 var deep = require('./deep');
@@ -58,11 +59,15 @@ var Griddle = React.createClass({
             "useCustomRowComponent": false,
             "useCustomGridComponent": false,
             "useCustomPagerComponent": false,
+            "useCustomFilterer": false,
+            "useCustomFilterComponent": false,
             "useGriddleStyles": true,
             "useGriddleIcons": true,
             "customRowComponent": null,
             "customGridComponent": null,
             "customPagerComponent": {},
+            "customFilterComponent": null,
+            "customFilterer": null,
             "enableToggleCustom":false,
             "noDataMessage":"There is no data to display.",
             "noDataClassName": "griddle-nodata",
@@ -121,6 +126,18 @@ var Griddle = React.createClass({
         ]),
         uniqueIdentifier: React.PropTypes.string
     },
+    defaultFilter: function(results, filter) {
+      return _.filter(results,
+      function(item) {
+           var arr = deep.keys(item);
+           for(var i = 0; i < arr.length; i++){
+              if ((deep.getAt(item, arr[i])||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+               return true;
+              }
+           }
+           return false;
+       });
+    },
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
         if(this.props.useExternal) {
@@ -135,17 +152,9 @@ var Griddle = React.createClass({
         };
 
         // Obtain the state results.
-       updatedState.filteredResults = _.filter(this.props.results,
-       function(item) {
-            var arr = deep.keys(item);
-            for(var i = 0; i < arr.length; i++){
-               if ((deep.getAt(item, arr[i])||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
-                return true;
-               }
-            }
-
-            return false;
-        });
+        updatedState.filteredResults = this.props.useCustomFilterer ?
+          this.props.customFilterer(this.props.results, filter) :
+          this.defaultFilter(this.props.results, filter);
 
         // Update the max page.
         updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -381,6 +390,12 @@ var Griddle = React.createClass({
         if(this.props.useCustomGridComponent === true && this.props.useCustomRowComponent === true){
             console.error("Cannot currently use both customGridComponent and customRowComponent.");
         }
+        if(this.props.useCustomFilterer === true && this.props.customFilterer === null){
+            console.error("useCustomFilterer is set to true but no custom filter function was specified.");
+        }
+        if(this.props.useCustomFilterComponent === true && this.props.customFilterComponent === null){
+            console.error("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
+        }
     },
     getDataForRender: function(data, cols, pageList){
         var that = this;
@@ -589,7 +604,9 @@ var Griddle = React.createClass({
     },
     getFilter: function(){
      return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
-        <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} /> :
+        ( this.props.useCustomFilterComponent ?
+         <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} results={this.props.results} currentResults={this.getCurrentResults()} /> :
+         <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} />) :
         "");
     },
     getSettings: function(){

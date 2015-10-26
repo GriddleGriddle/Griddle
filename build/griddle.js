@@ -81,6 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridRow = __webpack_require__(12);
 	var CustomRowComponentContainer = __webpack_require__(13);
 	var CustomPaginationContainer = __webpack_require__(14);
+	var CustomFilterContainer = __webpack_require__(15);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var deep = __webpack_require__(6);
@@ -126,11 +127,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            useCustomRowComponent: false,
 	            useCustomGridComponent: false,
 	            useCustomPagerComponent: false,
+	            useCustomFilterer: false,
+	            useCustomFilterComponent: false,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
 	            customRowComponent: null,
 	            customGridComponent: null,
 	            customPagerComponent: {},
+	            customFilterComponent: null,
+	            customFilterer: null,
 	            enableToggleCustom: false,
 	            noDataMessage: "There is no data to display.",
 	            noDataClassName: "griddle-nodata",
@@ -186,6 +191,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        selectedRowIds: React.PropTypes.oneOfType([React.PropTypes.arrayOf(React.PropTypes.number), React.PropTypes.arrayOf(React.PropTypes.string)]),
 	        uniqueIdentifier: React.PropTypes.string
 	    },
+	    defaultFilter: function (results, filter) {
+	        return _.filter(results, function (item) {
+	            var arr = deep.keys(item);
+	            for (var i = 0; i < arr.length; i++) {
+	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        });
+	    },
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function (filter) {
 	        if (this.props.useExternal) {
@@ -200,16 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        // Obtain the state results.
-	        updatedState.filteredResults = _.filter(this.props.results, function (item) {
-	            var arr = deep.keys(item);
-	            for (var i = 0; i < arr.length; i++) {
-	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
-	                    return true;
-	                }
-	            }
-
-	            return false;
-	        });
+	        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
 
 	        // Update the max page.
 	        updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -439,6 +446,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.props.useCustomGridComponent === true && this.props.useCustomRowComponent === true) {
 	            console.error("Cannot currently use both customGridComponent and customRowComponent.");
 	        }
+	        if (this.props.useCustomFilterer === true && this.props.customFilterer === null) {
+	            console.error("useCustomFilterer is set to true but no custom filter function was specified.");
+	        }
+	        if (this.props.useCustomFilterComponent === true && this.props.customFilterComponent === null) {
+	            console.error("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
+	        }
 	    },
 	    getDataForRender: function (data, cols, pageList) {
 	        var that = this;
@@ -640,7 +653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function () {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function () {
 	        return this.props.showSettings ? React.createElement(
@@ -1180,8 +1193,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(15);
-	var GridRowContainer = __webpack_require__(16);
+	var GridTitle = __webpack_require__(16);
+	var GridRowContainer = __webpack_require__(17);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var _ = __webpack_require__(3);
@@ -1428,7 +1441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      );
 	    }
 
-	    var pagingContent = "";
+	    var pagingContent = React.createElement("tbody", null);
 	    if (this.props.showPager) {
 	      var pagingStyles = this.props.useGriddleStyles ? {
 	        padding: "0",
@@ -1842,147 +1855,147 @@ return /******/ (function(modules) { // webpackBootstrap
 	var deep = __webpack_require__(6);
 
 	var GridRow = React.createClass({
-	  displayName: "GridRow",
-	  getDefaultProps: function () {
-	    return {
-	      isChildRow: false,
-	      showChildren: false,
-	      data: {},
-	      columnSettings: null,
-	      rowSettings: null,
-	      hasChildren: false,
-	      useGriddleStyles: true,
-	      useGriddleIcons: true,
-	      isSubGriddle: false,
-	      paddingHeight: null,
-	      rowHeight: null,
-	      parentRowCollapsedClassName: "parent-row",
-	      parentRowExpandedClassName: "parent-row expanded",
-	      parentRowCollapsedComponent: "▶",
-	      parentRowExpandedComponent: "▼",
-	      onRowClick: null,
-	      multipleSelectionSettings: null
-	    };
-	  },
-	  handleClick: function (e) {
-	    if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
-	      this.props.onRowClick(this, e);
-	    } else if (this.props.hasChildren) {
-	      this.props.toggleChildren();
-	    }
-	  },
-	  handleSelectionChange: function (e) {
-	    //hack to get around warning that's not super useful in this case
-	    return;
-	  },
-	  handleSelectClick: function (e) {
-	    if (this.props.multipleSelectionSettings.isMultipleSelection) {
-	      if (e.target.type === "checkbox") {
-	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
-	      } else {
-	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked);
-	      }
-	    }
-	  },
-	  verifyProps: function () {
-	    if (this.props.columnSettings === null) {
-	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
-	    }
-	  },
-	  render: function () {
-	    var _this = this;
-	    this.verifyProps();
-	    var that = this;
-	    var columnStyles = null;
+	    displayName: "GridRow",
+	    getDefaultProps: function () {
+	        return {
+	            isChildRow: false,
+	            showChildren: false,
+	            data: {},
+	            columnSettings: null,
+	            rowSettings: null,
+	            hasChildren: false,
+	            useGriddleStyles: true,
+	            useGriddleIcons: true,
+	            isSubGriddle: false,
+	            paddingHeight: null,
+	            rowHeight: null,
+	            parentRowCollapsedClassName: "parent-row",
+	            parentRowExpandedClassName: "parent-row expanded",
+	            parentRowCollapsedComponent: "▶",
+	            parentRowExpandedComponent: "▼",
+	            onRowClick: null,
+	            multipleSelectionSettings: null
+	        };
+	    },
+	    handleClick: function (e) {
+	        if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
+	            this.props.onRowClick(this, e);
+	        } else if (this.props.hasChildren) {
+	            this.props.toggleChildren();
+	        }
+	    },
+	    handleSelectionChange: function (e) {
+	        //hack to get around warning that's not super useful in this case
+	        return;
+	    },
+	    handleSelectClick: function (e) {
+	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	            if (e.target.type === "checkbox") {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+	            } else {
+	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked);
+	            }
+	        }
+	    },
+	    verifyProps: function () {
+	        if (this.props.columnSettings === null) {
+	            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	        }
+	    },
+	    render: function () {
+	        var _this = this;
+	        this.verifyProps();
+	        var that = this;
+	        var columnStyles = null;
 
-	    if (this.props.useGriddleStyles) {
-	      columnStyles = {
-	        margin: "0",
-	        padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
-	        height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
-	        backgroundColor: "#FFF",
-	        borderTopColor: "#DDD",
-	        color: "#222"
-	      };
-	    }
+	        if (this.props.useGriddleStyles) {
+	            columnStyles = {
+	                margin: "0",
+	                padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+	                height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
+	                backgroundColor: "#FFF",
+	                borderTopColor: "#DDD",
+	                color: "#222"
+	            };
+	        }
 
-	    var columns = this.props.columnSettings.getColumns();
+	        var columns = this.props.columnSettings.getColumns();
 
-	    // make sure that all the columns we need have default empty values
-	    // otherwise they will get clipped
-	    var defaults = _.object(columns, []);
+	        // make sure that all the columns we need have default empty values
+	        // otherwise they will get clipped
+	        var defaults = _.object(columns, []);
 
-	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	    var dataView = Object.create(this.props.data);
+	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	        var dataView = Object.create(this.props.data);
 
-	    _.defaults(dataView, defaults);
+	        _.defaults(dataView, defaults);
 
-	    var data = _.pairs(deep.pick(dataView, columns));
+	        var data = _.pairs(deep.pick(dataView, columns));
 
-	    var nodes = data.map(function (col, index) {
-	      var returnValue = null;
-	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
+	        var nodes = data.map(function (col, index) {
+	            var returnValue = null;
+	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
 
-	      //todo: Make this not as ridiculous looking
-	      var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
-	        "span",
-	        { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
-	        _this.props.parentRowCollapsedComponent
-	      ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
-	        "span",
-	        { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
-	        _this.props.parentRowExpandedComponent
-	      ) : "";
+	            //todo: Make this not as ridiculous looking
+	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
+	                "span",
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
+	                _this.props.parentRowCollapsedComponent
+	            ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
+	                "span",
+	                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
+	                _this.props.parentRowExpandedComponent
+	            ) : "";
 
-	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
-	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
-	      }
+	            if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
+	                columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
+	            }
 
-	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	        var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	        returnValue = meta == null ? returnValue : React.createElement(
-	          "td",
-	          { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
-	          colData
+	            if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
+	                var colData = typeof meta.customComponent === "undefined" || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	                returnValue = meta == null ? returnValue : React.createElement(
+	                    "td",
+	                    { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+	                    colData
+	                );
+	            }
+
+	            return returnValue || React.createElement(
+	                "td",
+	                { onClick: _this.handleClick, key: index, style: columnStyles },
+	                firstColAppend,
+	                col[1]
+	            );
+	        });
+
+	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	            nodes.unshift(React.createElement(
+	                "td",
+	                { key: "selection", style: columnStyles },
+	                React.createElement("input", {
+	                    type: "checkbox",
+	                    checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
+	                    onChange: this.handleSelectionChange,
+	                    ref: "selected" })
+	            ));
+	        }
+
+	        //Get the row from the row settings.
+	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
+
+	        if (that.props.isChildRow) {
+	            className = "child-row";
+	        } else if (that.props.hasChildren) {
+	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+	        }
+	        return React.createElement(
+	            "tr",
+	            { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
+	            nodes
 	        );
-	      }
-
-	      return returnValue || React.createElement(
-	        "td",
-	        { onClick: _this.handleClick, key: index, style: columnStyles },
-	        firstColAppend,
-	        col[1]
-	      );
-	    });
-
-	    if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-	      var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
-
-	      nodes.unshift(React.createElement(
-	        "td",
-	        { key: "selection", style: columnStyles },
-	        React.createElement("input", {
-	          type: "checkbox",
-	          checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
-	          onChange: this.handleSelectionChange,
-	          ref: "selected" })
-	      ));
 	    }
-
-	    //Get the row from the row settings.
-	    var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
-
-	    if (that.props.isChildRow) {
-	      className = "child-row";
-	    } else if (that.props.hasChildren) {
-	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
-	    }
-	    return React.createElement(
-	      "tr",
-	      { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className },
-	      nodes
-	    );
-	  }
 	});
 
 	module.exports = GridRow;
@@ -2077,6 +2090,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	/*
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
+	*/
+	var React = __webpack_require__(2);
+
+	var CustomFilterContainer = React.createClass({
+	  displayName: "CustomFilterContainer",
+	  getDefaultProps: function () {
+	    return {
+	      placeholderText: ""
+	    };
+	  },
+	  render: function () {
+	    var that = this;
+
+	    if (typeof that.props.customFilterComponent !== "function") {
+	      console.log("Couldn't find valid template.");
+	      return React.createElement("div", null);
+	    }
+
+	    return React.createElement(that.props.customFilterComponent, {
+	      changeFilter: this.props.changeFilter,
+	      results: this.props.results,
+	      currentResults: this.props.currentResults,
+	      placeholderText: this.props.placeholderText });
+	  }
+	});
+
+	module.exports = CustomFilterContainer;
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2194,7 +2243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

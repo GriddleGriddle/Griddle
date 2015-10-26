@@ -130,6 +130,28 @@ describe('Griddle', function() {
     expect(grid.state.filteredResults.length).toEqual(1);
   });
 
+  it('calls the customFilterer for filtering if specified, with results and filter query', function(){
+    var customFilterer = jest.genMockFunction();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    grid2.setFilter('Mayer');
+
+    expect(customFilterer.mock.calls.length).toEqual(1);
+    expect(customFilterer.mock.calls[0]).toEqual([fakeData, 'Mayer']);
+  });
+
+  it('sets the results from the customFilterer, to the grid', function(){
+    var customFilterer = jest.genMockFunction();
+    var empty = [];
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={empty} gridClassName="test" useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    customFilterer.mockReturnValue(fakeData)
+
+    grid2.setFilter('Mayer');
+
+    expect(grid2.state.filteredResults).toBe(fakeData);
+  });
+
   it('removes filter when filter is called with empty string', function(){
     grid.setFilter('Mayer');
     grid.setFilter('');
@@ -474,7 +496,33 @@ describe('Griddle', function() {
   it('should throw an error if useCustomRowComponent is true and no component is added', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowComponent={true} />);
 
-    expect(console.error).toHaveBeenCalledWith("useCustomRowComponent is set to true but no custom component was specified."); 
+    expect(console.error).toHaveBeenCalledWith("useCustomRowComponent is set to true but no custom component was specified.");
+  });
+
+  it('should throw an error if useCustomFilterer is true and no filterer is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterer={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomFilterer is set to true but no custom filter function was specified.");
+  });
+
+  it('should not throw an error if useCustomFilterer is true and filterer is added', function(){
+    var customFilterer = jest.genMockFunction();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    expect(console.error).not.toHaveBeenCalledWith("useCustomFilterer is set to true but no custom filter function was specified.");
+  });
+
+  it('should throw an error if useCustomFilterComponent is true and no customFilterComponent is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterComponent={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
+  });
+
+  it('should not throw an error if useCustomFilterComponent is true and customFilterComponent is added', function(){
+    var customFilterComponent = {};
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterComponent={true} customFilterComponent={customFilterComponent} />);
+
+    expect(console.error).not.toHaveBeenCalledWith("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
   });
 
   it('uses custom grid component when set', function(){
@@ -519,6 +567,26 @@ describe('Griddle', function() {
 
   var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
   expect(rows.length).toEqual(1);
+ });
+
+ it('should not show the default filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useCustomFilterComponent={true}
+    showFilter={true}
+    customFilterComponent={SomeCustomComponent} />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
+  expect(rows.length).toEqual(0);
+ });
+ it('should render the custom filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+     useCustomFilterComponent={true}
+     showFilter={true}
+     customFilterComponent={SomeCustomComponent} />);
+
+   var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+
+   expect(rows.length).toEqual(1);
  });
 
 it('should not show footer when useCustomGridComponent is true', function(){
