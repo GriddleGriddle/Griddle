@@ -144,9 +144,8 @@ var GridTable = React.createClass({
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
             data={row} key={uniqueId + '-container'} uniqueId={uniqueId} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight}
-        multipleSelectionSettings={that.props.multipleSelectionSettings}
+            multipleSelectionSettings={that.props.multipleSelectionSettings}
             rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
-      });
 
         //sort nodes with children
         if (hasChildren) {
@@ -234,7 +233,7 @@ var GridTable = React.createClass({
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
           sortSettings={this.props.sortSettings}
-      multipleSelectionSettings={this.props.multipleSelectionSettings}
+          multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}
           rowSettings={this.props.rowSettings}/>
         : "");
