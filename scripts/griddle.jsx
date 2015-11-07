@@ -645,7 +645,7 @@ var Griddle = React.createClass({
     },
     getPagingSection: function(currentPage, maxPage){
         if ((this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) === false) {
-            return "";
+            return undefined;
         }
 
         return (
