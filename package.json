@@ -27,16 +27,16 @@
     "grunt-jsxhint": "^0.4.0",
     "grunt-markdown": "~0.6.1",
     "grunt-open": "^0.2.3",
-    "grunt-webpack": "~1.0.8",
     "6to5-jest": "*",
+    "grunt-webpack": "^1.0.11",
     "jest-cli": "~0.4.19",
     "jsx-loader": "~0.12.x",
     "react": "^0.13.3",
     "react-chartist": "~0.2.1",
     "react-tools": "~0.12.x",
     "underscore": "~1.6.0",
-    "webpack": "~1.3.3-beta1",
-    "webpack-dev-server": "~1.7.0"
+    "webpack": "1.12.3",
+    "webpack-dev-server": "1.12.1"
   },
   "scripts": {
     "test": "jest"
