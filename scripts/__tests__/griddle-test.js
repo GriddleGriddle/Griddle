@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../columnProperties.js'); 
 jest.dontMock('../rowProperties.js');

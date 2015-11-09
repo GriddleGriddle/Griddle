@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 jest.dontMock('../gridRow.jsx');
 jest.dontMock('../columnProperties.js');
 jest.dontMock('../rowProperties.js');

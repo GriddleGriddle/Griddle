@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 jest.dontMock('../gridPagination.jsx');
 
 var React = require('react/addons');
