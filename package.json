@@ -27,7 +27,6 @@
     "grunt-jsxhint": "^0.4.0",
     "grunt-markdown": "~0.6.1",
     "grunt-open": "^0.2.3",
-    "grunt-react": "~0.10.0",
     "grunt-webpack": "~1.0.8",
     "6to5-jest": "*",
     "jest-cli": "~0.4.19",

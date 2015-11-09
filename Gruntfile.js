@@ -19,19 +19,6 @@ module.exports = function(grunt) {
         url: 'http://localhost:<%= connect.server.options.port %>/docs/html/'
       }
     },
-    react: {
-      dynamic_mappings: {
-        files: [
-          {
-            expand: true,
-            cwd: 'compiled/',
-            src: ['**/*.jsx'],
-            dest: 'modules/',
-            ext: '.jsx.js'
-          }
-        ]
-      }
-    },
     jshint: {
       all: {
         src: ['Gruntfile.js', 'scripts/**/*.jsx', 'scripts/**/*.js'],
@@ -162,6 +149,17 @@ module.exports = function(grunt) {
             src: ['**/*.js', '**/*.jsx'],
             dest: 'compiled/'
           }]
+      },
+      dynamic_mappings: {
+        files: [
+          {
+            expand: true,
+            cwd: 'compiled/',
+            src: ['**/*.jsx'],
+            dest: 'modules/',
+            ext: '.jsx.js'
+          }
+        ]
       }
     },
     watch: {
@@ -205,11 +203,11 @@ module.exports = function(grunt) {
       'markdown',
       'clean:includes',
       'clean:compiled',
-      'babel',
+      'babel:build',
       'webpack:docs',
       'webpack:default',
       'copy',
-      'react',
+      'babel:dynamic_mappings',
       'clean:compiled'
     ]);
   })
