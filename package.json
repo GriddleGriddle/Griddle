@@ -11,7 +11,7 @@
   ],
   "main": "modules/griddle.jsx.js",
   "peerDependencies": {
-    "react": "^0.13.3",
+    "react": "^0.14.2",
     "underscore": ">= 1.6.0 < 2"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "babel-loader": "6.0.1",
     "babel-preset-es2015": "6.1.2",
     "babel-preset-react": "6.1.2",
+    "babel-preset-stage-1": "6.1.2",
     "grunt": "^0.4.5",
     "grunt-babel": "6.0.0",
     "grunt-contrib-clean": "~0.6.0",
@@ -32,8 +33,9 @@
     "grunt-open": "^0.2.3",
     "grunt-webpack": "^1.0.11",
     "jest-cli": "~0.4.19",
-    "react": "^0.13.3",
-    "react-chartist": "~0.2.1",
+    "react": "^0.14.2",
+    "react-chartist": "~0.10.1",
+    "react-dom": "^0.14.2",
     "react-tools": "~0.12.x",
     "underscore": "~1.6.0",
     "webpack": "1.12.3",
