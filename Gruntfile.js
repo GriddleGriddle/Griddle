@@ -128,11 +128,7 @@ module.exports = function(grunt) {
         module: {
           loaders: [{
             test: /\.jsx?$/,
-            loader: 'babel',
-            query: {
-              compact: false,
-              presets: ['es2015', 'stage-1', 'react']
-            }
+            loader: 'babel?presets[]=es2015',
           }]
         },
         externals: {
