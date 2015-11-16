@@ -140,8 +140,7 @@ module.exports = function(grunt) {
     },
     "babel": {
       options: {
-        sourceMap: false,
-        presets: ['es2015', 'react']
+        sourceMap: false
       },
       build: {
         files: [{
