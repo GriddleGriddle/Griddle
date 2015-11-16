@@ -12,6 +12,7 @@ describe('GridTitle', function() {
 	var columnSettings;
 	var sortObject;
 	var multipleSelectOptions;
+	var multipleSelectSettings;
 
 	beforeEach(function(){
 		columns = ["one", "two", "three"];
