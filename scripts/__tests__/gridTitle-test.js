@@ -1,9 +1,9 @@
 jest.dontMock('../gridTitle.jsx');
 jest.dontMock('../columnProperties.js');
 
-var React = require('react/addons');
+var React = require('react');
 var GridTitle = require('../gridTitle.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 var ColumnProperties = require('../columnProperties.js');
 
 describe('GridTitle', function() {

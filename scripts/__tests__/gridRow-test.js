@@ -3,12 +3,12 @@ jest.dontMock('../columnProperties.js');
 jest.dontMock('../rowProperties.js');
 jest.dontMock('../deep.js');
 
-var React = require('react/addons');
 var _ = require('underscore'); 
+var React = require('react');
 var GridRow = require('../gridRow.jsx');
 var ColumnProperties = require('../columnProperties.js');
 var RowProperties = require('../rowProperties.js');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 	  fakeData = [
       {
