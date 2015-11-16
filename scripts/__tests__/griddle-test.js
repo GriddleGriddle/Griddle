@@ -3,9 +3,9 @@ jest.dontMock('../columnProperties.js');
 jest.dontMock('../rowProperties.js');
 jest.dontMock('../deep.js');
 
-var React = require('react/addons');
+var React = require('react');
 var Griddle = require('../griddle.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 var SomeCustomComponent = React.createClass({
   render: function(){
@@ -15,6 +15,7 @@ var SomeCustomComponent = React.createClass({
 
 describe('Griddle', function() {
   var fakeData;
+  var fakeData2;
   var grid;
   var multipleSelectOptions;
 
@@ -278,7 +279,7 @@ describe('Griddle', function() {
   });
 
   it('uses results when external not set', function(){
-      grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
+      var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
       expect(grid2.props.results).toBe(fakeData);
   });
 
