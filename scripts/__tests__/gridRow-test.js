@@ -10,7 +10,7 @@ var ColumnProperties = require('../columnProperties.js');
 var RowProperties = require('../rowProperties.js');
 var TestUtils = require('react-addons-test-utils');
 
-	  fakeData = [
+	  var fakeData = [
       {
         "id": 0,
         "name": "Mayer Leonard",
