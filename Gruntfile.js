@@ -128,7 +128,7 @@ module.exports = function(grunt) {
         module: {
           loaders: [{
             test: /\.jsx?$/,
-            loader: 'babel?presets[]=es2015',
+            loader: 'babel',
           }]
         },
         externals: {
