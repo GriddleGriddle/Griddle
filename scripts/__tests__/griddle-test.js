@@ -162,7 +162,7 @@ describe('Griddle', function() {
 
   it('sets the page size when a number is passed in to setPageSize', function(){
     grid.setPageSize(25);
-    expect(grid.props.resultsPerPage).toEqual(25);
+    expect(grid.state.resultsPerPage).toEqual(25);
   });
 
   it('sets the max page when the results property is updated', function(){
