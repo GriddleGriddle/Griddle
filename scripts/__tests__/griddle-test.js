@@ -292,7 +292,7 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'th')
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
       expect(mock.mock.calls.length).toEqual(1);
@@ -307,7 +307,7 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, "th");
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
       expect(mock.mock.calls.length).toEqual(0);

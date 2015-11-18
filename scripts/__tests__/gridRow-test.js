@@ -230,7 +230,14 @@ describe('GridRow', function(){
       getIsRowChecked: function(){}
 		};
 
-	  row = TestUtils.renderIntoDocument(<GridRow data={fakeData[0]} columnSettings={columnSettings} rowSettings={rowSettings} multipleSelectionSettings={multipleSelectOptions} />);
+    const FakeTable = React.createClass({
+      render() {
+        return <table><GridRow data={fakeData[0]} columnSettings={columnSettings} rowSettings={rowSettings} multipleSelectionSettings={multipleSelectOptions} /></table>
+      }
+    });
+
+	  row = TestUtils.renderIntoDocument(<FakeTable />);
+console.log(row);
 		expect(TestUtils.isCompositeComponent(row)).toBe(true);
 		var mock = jest.genMockFunction();
 		row.props.toggleChildren = mock;
