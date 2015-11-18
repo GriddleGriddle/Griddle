@@ -7,7 +7,12 @@ var TestUtils = require('react-addons-test-utils');
 describe('GridPagination', function(){
 	it('calls change filter when clicked', function(){
 		var mock = jest.genMockFunction(); 
-		var pagination = TestUtils.renderIntoDocument(<GridPagination setPage={mock}/>);
+    var FakeComponent = React.createClass({
+      render() {
+        return <table><GridPagination setPage={mock}/></table>;
+      }
+    })
+		var pagination = TestUtils.renderIntoDocument(<FakeComponent />);
 
 		var someEvent = {
 			"target":{
