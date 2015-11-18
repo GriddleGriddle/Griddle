@@ -191,7 +191,7 @@ describe('Griddle', function() {
 
     //this is kind of testing two things at this point :(
     grid.setPageSize(1);
-    other = grid.getMaxPage();
+    var other = grid.getMaxPage();
     expect(other).toEqual(2);
   });
 
