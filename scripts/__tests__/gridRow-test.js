@@ -213,7 +213,7 @@ var TestUtils = require('react-addons-test-utils');
 describe('GridRow', function(){
 	it('does not call toggleChildren if no child rows are specified', function(){
    var columnSettings = new ColumnProperties(
-        _.keys(fakeData[0]),
+        ['id', 'name', 'address.city', 'address.state', 'country', 'company', 'favoriteNumber'],
         [],
         "children",
         [],
@@ -230,28 +230,35 @@ describe('GridRow', function(){
       getIsRowChecked: function(){}
 		};
 
+		var mock = jest.genMockFunction();
+
     const FakeTable = React.createClass({
       render() {
-        return <table><GridRow data={fakeData[0]} columnSettings={columnSettings} rowSettings={rowSettings} multipleSelectionSettings={multipleSelectOptions} /></table>
+        return (<table>
+          <tbody>
+            <GridRow data={fakeData[0]}
+              toggleChildren={mock}
+              columnSettings={columnSettings}
+              rowSettings={rowSettings}
+              multipleSelectionSettings={multipleSelectOptions} />
+          </tbody>
+        </table>);
       }
     });
 
-	  row = TestUtils.renderIntoDocument(<FakeTable />);
-console.log(row);
+	  var row = TestUtils.renderIntoDocument(<FakeTable />);
 		expect(TestUtils.isCompositeComponent(row)).toBe(true);
-		var mock = jest.genMockFunction();
-		row.props.toggleChildren = mock;
 
 		expect(mock.mock.calls.length).toEqual(0);
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row, 'tr');
 		expect(tr.length).not.toBe(null);
 
-		var td = TestUtils.scryRenderedDOMComponentsWithTag(tr, 'td');
+		var td = TestUtils.scryRenderedDOMComponentsWithTag(row, 'td');
 
 		expect(td.length).toBeGreaterThan(0);
 		var first = td[0];
 
-		React.addons.TestUtils.Simulate.click(first);
+		TestUtils.Simulate.click(first);
 
 		expect(mock.mock.calls.length).toEqual(0);
 	})
@@ -259,7 +266,7 @@ console.log(row);
 
 	it('calls toggleChildren if child rows are specified', function(){
     var columnSettings = new ColumnProperties(
-        _.keys(fakeSubgridData[0]),
+        ['id', 'name', 'address.city', 'address.state', 'country', 'company', 'favoriteNumber'],
         [],
         "children",
         [],
@@ -275,20 +282,34 @@ console.log(row);
       getIsRowChecked: function(){}
 		};
 
-	  row2 = TestUtils.renderIntoDocument(<GridRow data={fakeSubgridData[0]} hasChildren={true} columnSettings={columnSettings} multipleSelectionSettings={multipleSelectOptions}/>);
-	  expect(TestUtils.isCompositeComponent(row2)).toBe(true);
 		var mock = jest.genMockFunction();
-		row2.props.toggleChildren = mock;
+
+    const FakeTable = React.createClass({
+      render() {
+        return (<table>
+          <tbody>
+            <GridRow data={fakeSubgridData[0]}
+              hasChildren={true}
+              toggleChildren={mock}
+              columnSettings={columnSettings}
+              multipleSelectionSettings={multipleSelectOptions}/>
+          </tbody>
+        </table>);
+      }
+    });
+
+	  const row2 = TestUtils.renderIntoDocument(<FakeTable />);
+	  expect(TestUtils.isCompositeComponent(row2)).toBe(true);
 
 		expect(mock.mock.calls.length).toEqual(0);
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row2, 'tr');
 		expect(tr.length).not.toBe(null);
-		var td = TestUtils.scryRenderedDOMComponentsWithTag(tr, 'td');
+		var td = TestUtils.scryRenderedDOMComponentsWithTag(row2, 'td');
 		
 		expect(td.length).toBeGreaterThan(0);
 		var first = td[0];
 
-		React.addons.TestUtils.Simulate.click(first);
+		TestUtils.Simulate.click(first);
 
 		expect(mock.mock.calls.length).toEqual(1);
 	})
