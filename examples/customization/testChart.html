@@ -44,5 +44,5 @@ var TestLineChart = React.createClass({
   }
 });
 
-React.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table" gridMetadata={{type: 'Bar'}}/>, document.getElementById('grid-chart'));
+ReactDOM.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table" gridMetadata={{type: 'Bar'}}/>, document.getElementById('grid-chart'));
 </script>

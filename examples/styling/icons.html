@@ -5,5 +5,5 @@
 <div id="griddle-subgrid"></div>
 
 <script type="text/jsx">
-React.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]}  sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("griddle-subgrid"));
+ReactDOM.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]}  sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("griddle-subgrid"));
 </script>

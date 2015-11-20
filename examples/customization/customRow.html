@@ -17,7 +17,7 @@ var OtherComponent = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <Griddle results={fakeData} useCustomRowComponent={true} customRowComponent={OtherComponent} customRowComponentClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
    document.getElementById('custom-row')
 );
