@@ -42,9 +42,9 @@ var GridRow = React.createClass({
 	handleSelectClick: function(e) {
 		if(this.props.multipleSelectionSettings.isMultipleSelection) {
 			if(e.target.type === "checkbox") {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
 			} else {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked)
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked)
 			}
 		}
 	},
