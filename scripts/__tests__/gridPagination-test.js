@@ -1,19 +1,13 @@
-/** @jsx React.DOM */
 jest.dontMock('../gridPagination.jsx');
 
-var React = require('react/addons');
+var React = require('react');
 var GridPagination = require('../gridPagination.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 describe('GridPagination', function(){
-	var pagination; 
-	beforeEach(function(){
-	    pagination = TestUtils.renderIntoDocument(<GridPagination />);
-	});
-
 	it('calls change filter when clicked', function(){
 		var mock = jest.genMockFunction(); 
-		pagination.props.setPage = mock;
+		var pagination = TestUtils.renderIntoDocument(<GridPagination setPage={mock}/>);
 
 		var someEvent = {
 			"target":{
@@ -22,7 +16,7 @@ describe('GridPagination', function(){
 		};
 
 		var input = TestUtils.findRenderedDOMComponentWithTag(pagination, 'select');		
-		React.addons.TestUtils.Simulate.change(input, someEvent);
+		TestUtils.Simulate.change(input, someEvent);
 
 		expect(mock.mock.calls).toEqual([[2]]);
 	})

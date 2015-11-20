@@ -42,9 +42,9 @@ var GridRow = React.createClass({
 	handleSelectClick: function(e) {
 		if(this.props.multipleSelectionSettings.isMultipleSelection) {
 			if(e.target.type === "checkbox") {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
 			} else {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked)
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked)
 			}
 		}
 	},
@@ -79,9 +79,7 @@ var GridRow = React.createClass({
         var dataView = _.extend(this.props.data);
 
         _.defaults(dataView, defaults);
-
-        var data = _.pairs(deep.pick(dataView, columns));
-
+        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);

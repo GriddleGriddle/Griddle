@@ -1,12 +1,11 @@
-/** @jsx React.DOM */
 jest.dontMock('../griddle.jsx');
 jest.dontMock('../columnProperties.js'); 
 jest.dontMock('../rowProperties.js');
 jest.dontMock('../deep.js');
 
-var React = require('react/addons');
+var React = require('react');
 var Griddle = require('../griddle.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 var SomeCustomComponent = React.createClass({
   render: function(){
@@ -16,6 +15,7 @@ var SomeCustomComponent = React.createClass({
 
 describe('Griddle', function() {
   var fakeData;
+  var fakeData2;
   var grid;
   var multipleSelectOptions;
 
@@ -162,7 +162,7 @@ describe('Griddle', function() {
 
   it('sets the page size when a number is passed in to setPageSize', function(){
     grid.setPageSize(25);
-    expect(grid.props.resultsPerPage).toEqual(25);
+    expect(grid.state.resultsPerPage).toEqual(25);
   });
 
   it('sets the max page when the results property is updated', function(){
@@ -191,7 +191,7 @@ describe('Griddle', function() {
 
     //this is kind of testing two things at this point :(
     grid.setPageSize(1);
-    other = grid.getMaxPage();
+    var other = grid.getMaxPage();
     expect(other).toEqual(2);
   });
 
@@ -279,7 +279,7 @@ describe('Griddle', function() {
   });
 
   it('uses results when external not set', function(){
-      grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
+      var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
       expect(grid2.props.results).toBe(fakeData);
   });
 
@@ -292,7 +292,7 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'th')
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
       expect(mock.mock.calls.length).toEqual(1);
@@ -307,7 +307,7 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, "th");
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
       expect(mock.mock.calls.length).toEqual(0);

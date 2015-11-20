@@ -447,5 +447,5 @@ var DefinitionItem = React.createClass({
     )
   }
 })
-React.render(<Griddle results={propertiesItem} useCustomRowComponent={true} customRowComponent={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
+ReactDOM.render(<Griddle results={propertiesItem} useCustomRowComponent={true} customRowComponent={DefinitionItem} useGriddleStyles={false} showFilter={true} tableClassName="table" resultsPerPage={100} columnMetadata={propertyGridMeta} showPager={false} enableToggleCustom={true}/>, document.getElementById('griddle-properties'));
 </script>
