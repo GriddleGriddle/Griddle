@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",
@@ -45,7 +45,7 @@
     "type": "git",
     "url": "git://github.com/GriddleGriddle/Griddle.git"
   },
-  "author": "Ryan Lanciaux",
+  "author": "GriddleGriddle",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GriddleGriddle/Griddle/issues"
