@@ -41,7 +41,7 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 0.2.15
 
-- Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshreshtha) on nearly single-handedly taking on this effort!
+- Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshrestha) on nearly single-handedly taking on this effort!
 
 0.2.13
 - Numerous bug fixes, additions.
