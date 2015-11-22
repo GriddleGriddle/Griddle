@@ -1,8 +1,3 @@
-jest.dontMock('../gridRow.jsx');
-jest.dontMock('../columnProperties.js');
-jest.dontMock('../rowProperties.js');
-jest.dontMock('../deep.js');
-
 var _ = require('underscore'); 
 var React = require('react');
 var GridRow = require('../gridRow.jsx');
@@ -230,7 +225,7 @@ describe('GridRow', function(){
       getIsRowChecked: function(){}
 		};
 
-		var mock = jest.genMockFunction();
+		var mock = jasmine.createSpy();
 
     const FakeTable = React.createClass({
       render() {
@@ -249,7 +244,7 @@ describe('GridRow', function(){
 	  var row = TestUtils.renderIntoDocument(<FakeTable />);
 		expect(TestUtils.isCompositeComponent(row)).toBe(true);
 
-		expect(mock.mock.calls.length).toEqual(0);
+		expect(mock.calls.count()).toEqual(0);
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row, 'tr');
 		expect(tr.length).not.toBe(null);
 
@@ -260,7 +255,7 @@ describe('GridRow', function(){
 
 		TestUtils.Simulate.click(first);
 
-		expect(mock.mock.calls.length).toEqual(0);
+		expect(mock.calls.count()).toEqual(0);
 	})
 
 
@@ -282,7 +277,7 @@ describe('GridRow', function(){
       getIsRowChecked: function(){}
 		};
 
-		var mock = jest.genMockFunction();
+		var mock = jasmine.createSpy();
 
     const FakeTable = React.createClass({
       render() {
@@ -301,7 +296,7 @@ describe('GridRow', function(){
 	  const row2 = TestUtils.renderIntoDocument(<FakeTable />);
 	  expect(TestUtils.isCompositeComponent(row2)).toBe(true);
 
-		expect(mock.mock.calls.length).toEqual(0);
+		expect(mock.calls.count()).toEqual(0);
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row2, 'tr');
 		expect(tr.length).not.toBe(null);
 		var td = TestUtils.scryRenderedDOMComponentsWithTag(row2, 'td');
@@ -311,6 +306,6 @@ describe('GridRow', function(){
 
 		TestUtils.Simulate.click(first);
 
-		expect(mock.mock.calls.length).toEqual(1);
+		expect(mock.calls.count()).toEqual(1);
 	})
 });
