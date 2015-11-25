@@ -39,6 +39,14 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.2.16
+
+- Reverted to prevent an auto-upgrade to React 0.14.
+
+0.2.15
+
+- Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshrestha) on nearly single-handedly taking on this effort!
+
 0.2.13
 - Numerous bug fixes, additions.
 - Additional notes will be added soon.
