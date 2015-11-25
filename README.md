@@ -42,6 +42,10 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.3.0
+
+- Pulling the React 0.14 update into a larger version update to prevent npm from assuming it's safe to update.
+
 0.2.15
 
 - Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshrestha) on nearly single-handedly taking on this effort!
