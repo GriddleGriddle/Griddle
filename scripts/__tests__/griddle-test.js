@@ -399,8 +399,8 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetPage={mock} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPage function specified."); 
-  }); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPage function specified.");
+  });
 
   it('should log an error if useExternal is true and externalChangeSort is not set', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
@@ -414,7 +414,7 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalChangeSort={mock} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalChangeSort function specified."); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalChangeSort function specified.");
   });
 
   it('should log an error if useExternal is true and externalSetFilter is not set', function(){
@@ -429,8 +429,8 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetFilter={mock} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetFilter function specified."); 
-  }); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetFilter function specified.");
+  });
 
   it('should log an error if useExternal is true and externalSetPageSize is not set', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
@@ -444,7 +444,7 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetPageSize={mock} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPageSize function specified."); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but there is no externalSetPageSize function specified.");
   });
 
   it('should log an error if useExternal is true and externalMaxPage is not set', function(){
@@ -458,7 +458,7 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalMaxPage={8} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalMaxPage is not set."); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalMaxPage is not set.");
   });
 
   it('should log an error if useExternal is true and externalCurrentPage is not set', function(){
@@ -471,7 +471,7 @@ describe('Griddle', function() {
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalCurrentPage={8} gridClassName="test" />);
 
-   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data."); 
+   expect(console.error).not.toHaveBeenCalledWith("useExternal is set to true but externalCurrentPage is not set. Griddle will not page correctly without that property when using external data.");
   });
 
   it('uses custom row component when set', function(){
@@ -536,16 +536,16 @@ describe('Griddle', function() {
 
   it('should throw an error if useCustomGridComponent is true and no component is added', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomGridComponent={true} />);
-    expect(console.error).toHaveBeenCalledWith("useCustomGridComponent is set to true but no custom component was specified."); 
+    expect(console.error).toHaveBeenCalledWith("useCustomGridComponent is set to true but no custom component was specified.");
   });
 
   it('should display a warning if useCustomGridComponent and useCustomRowComponent are both true', function(){
     var mock = React.createClass({ render: function(){ return <h1>mock</h1>}});
-    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} 
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}
       useCustomGridComponent={true} customGridComponent={mock}
       useCustomRowComponent={true} customRowComponent={mock} />)
 
-    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridComponent and customRowComponent."); 
+    expect(console.error).toHaveBeenCalledWith("Cannot currently use both customGridComponent and customRowComponent.");
   })
 
  it('should not show filter when useCustomGridComponent is true', function(){
@@ -626,5 +626,15 @@ it('should not show footer when useCustomGridComponent is true', function(){
     var cells = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'td');
     TestUtils.Simulate.click(cells[0].getDOMNode());
     expect(clicked).toEqual(true);
+  });
+
+  it('renders gridNoData with no data', function(){
+    var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test"/>);
+    expect(emptyGrid.getDOMNode().innerHTML.indexOf('no data') > -1).toEqual(true);
+  });
+
+  it('renders grid with no data when "allowEmptyGrid" == true', function(){
+    var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test" allowEmptyGrid={true}/>);
+    expect(emptyGrid.getDOMNode().innerHTML.indexOf('<table') > -1).toEqual(true);
   });
 });
