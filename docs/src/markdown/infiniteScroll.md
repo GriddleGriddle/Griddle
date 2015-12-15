@@ -50,7 +50,7 @@ Feel free to scroll through your external data, too! When data is loading, the l
 @@include('./infiniteScroll/infiniteScrollExternalResults.html')
 
 ####Cautions:####
-When using infinite scroll on a table, re-renders of the Griddle component will cause the table to recreate itself - setting the scroll position back to 0, making the table appear to jump back to the top. To prevent this, specify the ```key``` attribute on ```rowMetadata```. For more information please see the (React page on reconciliation)[https://facebook.github.io/react/docs/reconciliation.html].
+When using infinite scroll on a table, re-renders of the Griddle component will cause the table to recreate itself - setting the scroll position back to 0, making the table appear to jump back to the top. To prevent this, specify the ```key``` attribute on ```rowMetadata```. For more information please see the [React page on reconciliation](https://facebook.github.io/react/docs/reconciliation.html).
 ```
 var rowMetadata = {
       "key": "nameOfIndexInMyResultSet"
