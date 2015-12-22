@@ -282,6 +282,23 @@ var Griddle = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
 
+        if(nextProps.results.length > 0)
+        {
+            var deepKeys = deep.keys(nextProps.results[0]);
+
+            var is_same = (this.columnSettings.allColumns.length == deepKeys.length) && this.columnSettings.allColumns.every(function(element, index) {
+                return element === deepKeys[index]; 
+            });
+
+            if(!is_same) {
+                this.columnSettings.allColumns = deepKeys;
+            }
+        }
+        else if(this.columnSettings.allColumns.length > 0)
+        {
+            this.columnSettings.allColumns = [];
+        }
+
         if(nextProps.columns !== this.columnSettings.filteredColumns){
             this.columnSettings.filteredColumns = nextProps.columns;
         }
