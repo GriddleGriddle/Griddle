@@ -11,7 +11,7 @@
   ],
   "main": "modules/griddle.jsx.js",
   "peerDependencies": {
-    "react": "0.14.3",
+    "react": "^0.14.3",
     "underscore": ">= 1.6.0 < 2"
   },
   "devDependencies": {
