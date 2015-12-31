@@ -360,6 +360,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        this.setMaxPage(nextProps.results);
 
+	        if (nextProps.results.length > 0) {
+	            var deepKeys = deep.keys(nextProps.results[0]);
+
+	            var is_same = this.columnSettings.allColumns.length == deepKeys.length && this.columnSettings.allColumns.every(function (element, index) {
+	                return element === deepKeys[index];
+	            });
+
+	            if (!is_same) {
+	                this.columnSettings.allColumns = deepKeys;
+	            }
+	        } else if (this.columnSettings.allColumns.length > 0) {
+	            this.columnSettings.allColumns = [];
+	        }
+
 	        if (nextProps.columns !== this.columnSettings.filteredColumns) {
 	            this.columnSettings.filteredColumns = nextProps.columns;
 	        }
@@ -714,7 +728,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getCustomRowSection: function getCustomRowSection(data, cols, meta, pagingContent) {
 	        return React.createElement('div', null, React.createElement(CustomRowComponentContainer, { data: data, columns: cols, metadataColumns: meta,
 	            className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent,
-	            style: this.getClearFixStyles() }), this.props.showPager && pagingContent);
+	            style: this.props.useGriddleStyles ? this.getClearFixStyles() : null }), this.props.showPager && pagingContent);
 	    },
 	    getStandardGridSection: function getStandardGridSection(data, cols, meta, pagingContent, hasMorePages) {
 	        var sortProperties = this.getSortObject();
