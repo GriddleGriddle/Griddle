@@ -1,7 +1,7 @@
 {
-  "name": "griddle-react",
-  "version": "0.3.1",
-  "description": "Griddle - A fast and flexible grid component for React.",
+  "name": "griddle",
+  "version": "1.0.0-alpha1",
+  "description": "A fast and flexible grid component for React",
   "keywords": [
     "react-component",
     "grid",
@@ -9,54 +9,30 @@
     "pagination",
     "sort"
   ],
-  "main": "modules/griddle.jsx.js",
-  "peerDependencies": {
-    "react": "^0.14.3",
-    "underscore": ">= 1.6.0 < 2"
+  "main": "build/griddle.js",
+  "scripts": {
+    "start": "node server.js",
+    "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
+    "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "babel-jest": "^5.2.1",
-    "babel-loader": "^5.3.3",
-    "grunt": "^0.4.5",
-    "grunt-babel": "^5.0.3",
-    "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-connect": "^0.8.0",
-    "grunt-contrib-copy": "~0.7.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-include-replace": "~2.0.0",
-    "grunt-jsxhint": "^0.4.0",
-    "grunt-markdown": "~0.6.1",
-    "grunt-open": "^0.2.3",
-    "grunt-webpack": "^1.0.11",
-    "jasmine-core": "^2.3.4",
-    "karma": "^0.13.15",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-chrome-launcher": "^0.2.1",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-webpack": "^1.7.0",
-    "phantomjs": "^1.9.18",
-    "phantomjs-polyfill": "0.0.1",
-    "react": "^0.14.3",
-    "react-addons-test-utils": "0.14.3",
-    "react-chartist": "~0.2.1",
-    "react-dom": "0.14.3",
-    "underscore": "~1.6.0",
-    "webpack": "1.12.3",
-    "webpack-dev-server": "1.12.1"
+    "babel": "^5.5.8",
+    "babel-core": "5.6.18",
+    "babel-eslint": "^3.1.15",
+    "babel-loader": "^5.1.4",
+    "babel-plugin-object-assign": "^1.2.0",
+    "node-libs-browser": "^0.5.3",
+    "webpack": "~1.9.11",
+    "webpack-dev-server": "~1.9.0"
   },
-  "scripts": {
-    "test": "karma start --browsers PhantomJS",
-    "test-single": "karma start --singleRun true --browsers PhantomJS"
+  "dependencies": {
+    "griddle-connector": "latest",
+    "griddle-core": "latest",
+    "griddle-render": "latest",
+    "lodash.assign": "^3.2.0",
+    "react": "^0.14.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/GriddleGriddle/Griddle.git"
-  },
-  "author": "GriddleGriddle",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GriddleGriddle/Griddle/issues"
-  },
-  "homepage": "https://github.com/GriddleGriddle/Griddle"
+  "author": "Griddle",
+  "license": "MIT"
 }
