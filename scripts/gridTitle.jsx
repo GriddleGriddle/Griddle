@@ -5,6 +5,19 @@ var React = require('react');
 var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
 
+var DefaultHeaderComponent = React.createClass({
+  render: function(){
+    return (<span>{this.props.displayName}</span>);
+  }
+});
+
+var ascendParentsUntil = function(element, tagName) {
+  if (element.tagName === tagName) {
+    return element;
+  }
+  return ascendParentsUntil(element.parentElement,tagName);
+}
+
 var GridTitle = React.createClass({
   getDefaultProps: function(){
       return {
@@ -22,7 +35,8 @@ var GridTitle = React.createClass({
     this.verifyProps();
   },
   sort: function(event){
-      this.props.sortSettings.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
+      var thElement = ascendParentsUntil(event.target,'TH');
+      this.props.sortSettings.changeSort(thElement.dataset.title);
   },
   toggleSelectAll: function (event) {
 		this.props.multipleSelectionSettings.toggleSelectAll();
@@ -61,6 +75,8 @@ var GridTitle = React.createClass({
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+        var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+        var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
 
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
@@ -75,7 +91,10 @@ var GridTitle = React.createClass({
           }
         }
 
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
+          <HeaderComponent columnName={col} displayName={displayName} {...headerProps}/>
+          {sortComponent}
+        </th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
