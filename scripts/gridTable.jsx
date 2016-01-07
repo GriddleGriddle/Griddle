@@ -29,6 +29,7 @@ var GridTable = React.createClass({
       "useGriddleStyles": true,
       "useGriddleIcons": true,
       "isSubGriddle": false,
+      "expanded": false,
       "parentRowCollapsedClassName": "parent-row",
       "parentRowExpandedClassName": "parent-row expanded",
       "parentRowCollapsedComponent": "▶",
@@ -138,7 +139,7 @@ var GridTable = React.createClass({
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
 
-          return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
+          return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} expanded={that.props.expanded}
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
             data={row} key={uniqueId + '-container'} uniqueId={uniqueId} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight}

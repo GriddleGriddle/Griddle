@@ -10,6 +10,7 @@ var GridRowContainer = React.createClass({
         "useGriddleStyles": true,
         "useGriddleIcons": true,
         "isSubGriddle": false,
+        "expanded": false,
         "columnSettings": null,
         "rowSettings": null,
         "paddingHeight": null,
@@ -26,7 +27,7 @@ var GridRowContainer = React.createClass({
         return {
            "data": {
            },
-           "showChildren":false
+           "showChildren":this.props.expanded
         }
     },
     componentWillReceiveProps: function(){
@@ -53,9 +54,9 @@ var GridRowContainer = React.createClass({
 
       var columns = this.props.columnSettings.getColumns();
 
-      arr.push(<this.props.rowSettings.rowComponent 
+      arr.push(<this.props.rowSettings.rowComponent
         useGriddleStyles={this.props.useGriddleStyles}
-        isSubGriddle={this.props.isSubGriddle} 
+        isSubGriddle={this.props.isSubGriddle}
         data={this.props.rowSettings.isCustom ? _.pick(this.props.data, columns) : this.props.data}
         rowData={this.props.rowSettings.isCustom ? this.props.data : null }
         columnSettings={this.props.columnSettings}

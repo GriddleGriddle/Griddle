@@ -170,6 +170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "infiniteScrollLoadTreshold": 50,
 	            "useFixedLayout": true,
 	            "isSubGriddle": false,
+	            "expanded": false,
 	            "enableSort": true,
 	            "onRowClick": null,
 	            /* css class names */
@@ -741,6 +742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortSettings: sortProperties,
 	            multipleSelectionSettings: multipleSelectionProperties,
 	            isSubGriddle: this.props.isSubGriddle,
+	            expanded: this.props.expanded,
 	            useGriddleIcons: this.props.useGriddleIcons,
 	            useFixedLayout: this.props.useFixedLayout,
 	            showPager: this.props.showPager,
@@ -888,6 +890,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "useGriddleStyles": true,
 	      "useGriddleIcons": true,
 	      "isSubGriddle": false,
+	      "expanded": false,
 	      "parentRowCollapsedClassName": "parent-row",
 	      "parentRowExpandedClassName": "parent-row expanded",
 	      "parentRowCollapsedComponent": "▶",
@@ -997,7 +1000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          anyHasChildren = hasChildren;
 	        }
 
-	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
+	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, expanded: that.props.expanded,
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
 	          data: row, key: uniqueId + '-container', uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
@@ -1345,6 +1348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "useGriddleStyles": true,
 	      "useGriddleIcons": true,
 	      "isSubGriddle": false,
+	      "expanded": false,
 	      "columnSettings": null,
 	      "rowSettings": null,
 	      "paddingHeight": null,
@@ -1360,7 +1364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  getInitialState: function getInitialState() {
 	    return {
 	      "data": {},
-	      "showChildren": false
+	      "showChildren": this.props.expanded
 	    };
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps() {

@@ -93,6 +93,7 @@ var Griddle = React.createClass({
             "infiniteScrollLoadTreshold": 50,
             "useFixedLayout": true,
             "isSubGriddle": false,
+            "expanded": false,
             "enableSort": true,
             "onRowClick": null,
             /* css class names */
@@ -288,7 +289,7 @@ var Griddle = React.createClass({
             var deepKeys = deep.keys(nextProps.results[0]);
 
             var is_same = (this.columnSettings.allColumns.length == deepKeys.length) && this.columnSettings.allColumns.every(function(element, index) {
-                return element === deepKeys[index]; 
+                return element === deepKeys[index];
             });
 
             if(!is_same) {
@@ -702,6 +703,7 @@ var Griddle = React.createClass({
                 sortSettings={sortProperties}
 				multipleSelectionSettings={multipleSelectionProperties}
                 isSubGriddle={this.props.isSubGriddle}
+                expanded={this.props.expanded}
                 useGriddleIcons={this.props.useGriddleIcons}
                 useFixedLayout={this.props.useFixedLayout}
                 showPager={this.props.showPager}
