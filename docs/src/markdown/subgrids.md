@@ -6,6 +6,11 @@ Griddle also supports subgrids with little configuration. Simply add a property 
   <dt>childrenColumnName (optional)</dt>
   <dd><strong>string</strong> - The name of the column that contains subgrid data.</dd>
 </dl>
+<dl>
+  <dt>expanded (optional)</dt>
+  <dd><strong>boolean</strong> - Start the subgrid expanded.</dd>
+</dl>
+
 
 #####Example:#####
 
