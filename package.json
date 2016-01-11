@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "description": "A fast and flexible grid component for React",
   "keywords": [
     "react-component",
@@ -29,7 +29,7 @@
   "dependencies": {
     "griddle-connector": "latest",
     "griddle-core": "latest",
-    "griddle-render": "^0.0.11",
+    "griddle-render": "^0.0.13",
     "lodash.assign": "^3.2.0",
     "react": "^0.14.0"
   },
