@@ -1,11 +1,6 @@
-/** @jsx React.DOM */
-jest.dontMock('../griddle.jsx');
-jest.dontMock('../columnProperties.js'); 
-jest.dontMock('../rowProperties.js'); 
-
-var React = require('react/addons');
+var React = require('react');
 var Griddle = require('../griddle.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 var SomeCustomComponent = React.createClass({
   render: function(){
@@ -15,6 +10,7 @@ var SomeCustomComponent = React.createClass({
 
 describe('Griddle', function() {
   var fakeData;
+  var fakeData2;
   var grid;
   var multipleSelectOptions;
 
@@ -34,8 +30,8 @@ describe('Griddle', function() {
       var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
       expect(thRow[0].getDOMNode().textContent).toBe("id");
       expect(thRow[1].getDOMNode().textContent).toBe("name");
-      expect(thRow[2].getDOMNode().textContent).toBe("city");
-      expect(thRow[3].getDOMNode().textContent).toBe("state");
+      expect(thRow[2].getDOMNode().textContent).toBe("address.city");
+      expect(thRow[3].getDOMNode().textContent).toBe("address.state");
       expect(thRow[4].getDOMNode().textContent).toBe("country");
       expect(thRow[5].getDOMNode().textContent).toBe("company");
       expect(thRow[6].getDOMNode().textContent).toBe("favoriteNumber");
@@ -66,8 +62,10 @@ describe('Griddle', function() {
       {
         "id": 0,
         "name": "Mayer Leonard",
-        "city": "Kapowsin",
-        "state": "Hawaii",
+        "address": {
+          "city": "Kapowsin",
+          "state": "Hawaii"
+        },
         "country": "United Kingdom",
         "company": "Ovolo",
         "favoriteNumber": 7
@@ -75,8 +73,10 @@ describe('Griddle', function() {
       {
         "id": 1,
         "name": "Koch Becker",
-        "city": "Johnsonburg",
-        "state": "New Jersey",
+        "address": {
+          "city": "Johnsonburg",
+          "state": "New Jersey"
+        },
         "country": "Madagascar",
         "company": "Eventage",
         "favoriteNumber": 2
@@ -87,8 +87,10 @@ describe('Griddle', function() {
       {
         "id": 0,
         "name": "Mayer Leonard",
-        "city": "Kapowsin",
-        "state": "Hawaii",
+        "address": {
+          "city": "Kapowsin",
+          "state": "Hawaii"
+        },
         "country": "United Kingdom",
         "company": "Ovolo",
         "favoriteNumber": 7
@@ -96,8 +98,10 @@ describe('Griddle', function() {
       {
         "id": 1,
         "name": "Koch Becker",
-        "city": "Johnsonburg",
-        "state": "New Jersey",
+        "address": {
+          "city": "Johnsonburg",
+          "state": "New Jersey"
+        },
         "country": "Madagascar",
         "company": "Eventage",
         "favoriteNumber": 2
@@ -121,6 +125,28 @@ describe('Griddle', function() {
     expect(grid.state.filteredResults.length).toEqual(1);
   });
 
+  it('calls the customFilterer for filtering if specified, with results and filter query', function(){
+    var customFilterer = jasmine.createSpy();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    grid2.setFilter('Mayer');
+
+    expect(customFilterer.calls.count()).toEqual(1);
+    expect(customFilterer.calls.argsFor(0)).toEqual([fakeData, 'Mayer']);
+  });
+
+  it('sets the results from the customFilterer, to the grid', function(){
+    var customFilterer = jasmine.createSpy();
+    var empty = [];
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={empty} gridClassName="test" useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    customFilterer.and.returnValue(fakeData)
+
+    grid2.setFilter('Mayer');
+
+    expect(grid2.state.filteredResults).toBe(fakeData);
+  });
+
   it('removes filter when filter is called with empty string', function(){
     grid.setFilter('Mayer');
     grid.setFilter('');
@@ -131,7 +157,7 @@ describe('Griddle', function() {
 
   it('sets the page size when a number is passed in to setPageSize', function(){
     grid.setPageSize(25);
-    expect(grid.props.resultsPerPage).toEqual(25);
+    expect(grid.state.resultsPerPage).toEqual(25);
   });
 
   it('sets the max page when the results property is updated', function(){
@@ -160,7 +186,7 @@ describe('Griddle', function() {
 
     //this is kind of testing two things at this point :(
     grid.setPageSize(1);
-    other = grid.getMaxPage();
+    var other = grid.getMaxPage();
     expect(other).toEqual(2);
   });
 
@@ -182,21 +208,21 @@ describe('Griddle', function() {
     expect(7).toEqual(cols.length);
     expect(cols[0]).toEqual('id');
     expect(cols[1]).toEqual('name');
-    expect(cols[2]).toEqual('city');
-    expect(cols[3]).toEqual('state');
+    expect(cols[2]).toEqual('address.city');
+    expect(cols[3]).toEqual('address.state');
     expect(cols[4]).toEqual('country');
     expect(cols[5]).toEqual('company');
     expect(cols[6]).toEqual('favoriteNumber');
   });
 
   it('shows only the specified columns', function(){
-    var cols = ["id", "name", "city"];
+    var cols = ["id", "name", "address.city"];
     grid.setColumns(cols);
     var cols2 = grid.columnSettings.getColumns();
     expect(cols2.length).toEqual(cols.length);
     expect(cols2[0]).toEqual('id');
     expect(cols2[1]).toEqual('name');
-    expect(cols2[2]).toEqual('city');
+    expect(cols2[2]).toEqual('address.city');
   });
 
   it('sets next page correctly', function(){
@@ -234,26 +260,26 @@ describe('Griddle', function() {
 
   it('sets sort filter correctly', function(){
     expect(grid.state.sortColumn).toEqual("");
-    grid.changeSort("name");
-    expect(grid.state.sortColumn).toEqual("name");
+    grid.changeSort("address.state");
+    expect(grid.state.sortColumn).toEqual("address.state");
   });
 
   it('sets sort direction correctly', function(){
     expect(grid.state.sortColumn).toEqual("");
-    grid.changeSort("name");
-    expect(grid.state.sortColumn).toEqual("name");
+    grid.changeSort("address.state");
+    expect(grid.state.sortColumn).toEqual("address.state");
     expect(grid.state.sortAscending).toEqual(true);
-    grid.changeSort("name");
+    grid.changeSort("address.state");
     expect(grid.state.sortAscending).toEqual(false);
   });
 
   it('uses results when external not set', function(){
-      grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
+      var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
       expect(grid2.props.results).toBe(fakeData);
   });
 
   it('calls external sort function when clicked and useExternal is true', function(){
-      var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
           results={fakeData2}
           useExternal={true}
@@ -261,14 +287,14 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'th')
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
-      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.calls.count()).toEqual(1);
   });
 
   it('does not call external sort function when useExternal is false', function(){
-          var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
           results={fakeData2}
           useExternal={false}
@@ -276,35 +302,35 @@ describe('Griddle', function() {
           gridClassName="test" />);
 
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
-      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(rows[0], "th");
+      var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, "th");
 
       TestUtils.Simulate.click(thRow[0].getDOMNode(), {target: {dataset: { title: "Test"}}});
-      expect(mock.mock.calls.length).toEqual(0);
+      expect(mock.calls.count()).toEqual(0);
   });
 
   it('calls external filter when filter changed and useExternal is true', function(){
-      var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
         useExternal={true} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
 
       var input = TestUtils.findRenderedDOMComponentWithTag(grid2, "input");
       TestUtils.Simulate.change(input, {target: {value: 'Hi'}});
-      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.calls.count()).toEqual(1);
   });
 
   it('does not call external filter when filter changed and useExternal is false', function(){
-    var mock = jest.genMockFunction();
+    var mock = jasmine.createSpy();
     var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
       useExternal={false} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
 
       var input = TestUtils.findRenderedDOMComponentWithTag(grid2, "input");
       TestUtils.Simulate.change(input, {target: {value: 'Hi'}});
-      expect(mock.mock.calls.length).toEqual(0);
+      expect(mock.calls.count()).toEqual(0);
   });
 
   //basically if external is true it should never use filteredResults
   it('does not set filtered results when filter changes and external results is true', function(){
-      var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
         useExternal={true} showFilter={true} externalSetFilter={mock} gridClassName="test" />);
 
@@ -314,21 +340,21 @@ describe('Griddle', function() {
   });
 
   it('calls external set page when page changed and useExternal is true', function(){
-      var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
         useExternal={true} showFilter={true} externalSetPage={mock} gridClassName="test" />);
 
       grid2.setPage(2);
-      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.calls.count()).toEqual(1);
   });
 
   it('calls external set page size when page changed and useExternal is true', function(){
-      var mock = jest.genMockFunction();
+      var mock = jasmine.createSpy();
       var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
         useExternal={true} showFilter={true} externalSetPageSize={mock} gridClassName="test" />);
 
       grid2.setPageSize(2);
-      expect(mock.mock.calls.length).toEqual(1);
+      expect(mock.calls.count()).toEqual(1);
   });
 
   it('uses external max pages when useExternal is true', function(){
@@ -369,7 +395,7 @@ describe('Griddle', function() {
   });
 
   it('should not log error with externalSetPage if it is available', function(){
-   var mock = jest.genMockFunction();
+   var mock = jasmine.createSpy();
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetPage={mock} gridClassName="test" />);
 
@@ -384,7 +410,7 @@ describe('Griddle', function() {
   });
 
   it('should not log error with externalChangeSort if it is available', function(){
-   var mock = jest.genMockFunction();
+   var mock = jasmine.createSpy();
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalChangeSort={mock} gridClassName="test" />);
 
@@ -399,7 +425,7 @@ describe('Griddle', function() {
   });
 
   it('should not log error with useExternal if externalSetFilter is available', function(){
-   var mock = jest.genMockFunction();
+   var mock = jasmine.createSpy();
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetFilter={mock} gridClassName="test" />);
 
@@ -414,7 +440,7 @@ describe('Griddle', function() {
   });
 
   it('should not log error with externalSetPage if it is available', function(){
-   var mock = jest.genMockFunction();
+   var mock = jasmine.createSpy();
    var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
     useExternal={true} externalSetPageSize={mock} gridClassName="test" />);
 
@@ -465,7 +491,33 @@ describe('Griddle', function() {
   it('should throw an error if useCustomRowComponent is true and no component is added', function(){
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomRowComponent={true} />);
 
-    expect(console.error).toHaveBeenCalledWith("useCustomRowComponent is set to true but no custom component was specified."); 
+    expect(console.error).toHaveBeenCalledWith("useCustomRowComponent is set to true but no custom component was specified.");
+  });
+
+  it('should throw an error if useCustomFilterer is true and no filterer is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterer={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomFilterer is set to true but no custom filter function was specified.");
+  });
+
+  it('should not throw an error if useCustomFilterer is true and filterer is added', function(){
+    var customFilterer = jasmine.createSpy();
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterer={true} customFilterer={customFilterer} />);
+
+    expect(console.error).not.toHaveBeenCalledWith("useCustomFilterer is set to true but no custom filter function was specified.");
+  });
+
+  it('should throw an error if useCustomFilterComponent is true and no customFilterComponent is added', function(){
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterComponent={true} />);
+
+    expect(console.error).toHaveBeenCalledWith("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
+  });
+
+  it('should not throw an error if useCustomFilterComponent is true and customFilterComponent is added', function(){
+    var customFilterComponent = {};
+    var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} useCustomFilterComponent={true} customFilterComponent={customFilterComponent} />);
+
+    expect(console.error).not.toHaveBeenCalledWith("useCustomFilterComponent is set to true but no customFilterComponent was specified.");
   });
 
   it('uses custom grid component when set', function(){
@@ -512,6 +564,26 @@ describe('Griddle', function() {
   expect(rows.length).toEqual(1);
  });
 
+ it('should not show the default filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+  var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+    useCustomFilterComponent={true}
+    showFilter={true}
+    customFilterComponent={SomeCustomComponent} />);
+
+  var rows = TestUtils.scryRenderedDOMComponentsWithClass(grid2, 'form-control')
+  expect(rows.length).toEqual(0);
+ });
+ it('should render the custom filter when useCustomGridComponent is false but useCustomFilterComponent is true', function(){
+   var grid2 = TestUtils.renderIntoDocument(<Griddle externalResults={fakeData}
+     useCustomFilterComponent={true}
+     showFilter={true}
+     customFilterComponent={SomeCustomComponent} />);
+
+   var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'h1');
+
+   expect(rows.length).toEqual(1);
+ });
+
 it('should not show footer when useCustomGridComponent is true', function(){
   var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" useCustomGridComponent={true} customGridComponent={CustomGridComponent} />);
 
@@ -544,7 +616,7 @@ it('should not show footer when useCustomGridComponent is true', function(){
 
   it('should call the onRowClick callback when clicking a row', function () {
     var clicked = false;
-    var onRowClick = function onRowClick(){
+    var onRowClick = function(){
       clicked = true;
     };
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}

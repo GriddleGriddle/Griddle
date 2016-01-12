@@ -239,7 +239,8 @@ var Griddle = require('griddle-react');</pre></code>
   </div>
 <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 
@@ -251,7 +252,7 @@ var Griddle = require('griddle-react');</pre></code>
   <script src="scripts/fakeData.js"></script>
   <script type="text/jsx">
   /** @jsx React.DOM */
-    React.render(
+    ReactDOM.render(
         <Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>

@@ -30,6 +30,7 @@ var data = [
 
 var TestLineChart = React.createClass({
   render: function(){
+    var type = this.props.type || 'Line'
     var simpleLineChartData = {
       labels: _.keys(this.props.data[0]),
       series: []
@@ -38,10 +39,10 @@ var TestLineChart = React.createClass({
     _.each(this.props.data, function(item){
       simpleLineChartData.series.push(_.values(item));
     });
-    
-    return <ChartistGraph data={simpleLineChartData} type={'Line'} />
+
+    return <ChartistGraph data={simpleLineChartData} type={type} />
   }
 });
 
-React.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table"/>, document.getElementById('grid-chart'));
+ReactDOM.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table" gridMetadata={{type: 'Bar'}}/>, document.getElementById('grid-chart'));
 </script>

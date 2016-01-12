@@ -16,13 +16,18 @@ Use the `columns` property to set the default columns in a Griddle grid. Please 
 
 ###Column Metadata###
 
-The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the `columnMetadata` property is where this would be defined. 
+The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the `columnMetadata` property is where this would be defined.
 
-The properties that the columnMetadata object can contain are as follows: 
+Griddle parses and evaluates the following columnMetadata object properties:
 
 <dl>
   <dt>columnName</dt>
   <dd><strong>string (required)</strong> - this is the name of the column as it appears in the results passed into Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>sortable</dt>
+  <dd><strong>bool</strong> - Determines whether or not the user can sort this column (defaults to `true`, so specify `false` to disable sort)</dd>
 </dl>
 
 <dl>
@@ -49,11 +54,15 @@ The properties that the columnMetadata object can contain are as follows:
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
 </dl>
 
+However, you are also able to pass other properties in as columnMetadata.
+
+[columnMetadata can be accessed on the `metadata` property of a Custom Column component.](#custom-columns)
+
 #####Example:#####
 
-Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read `Employee Name` instead of name. 
+Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read `Employee Name` instead of name.
 
-Our metadata object would look something like 
+Our metadata object would look something like
 
 ```
   {
@@ -92,16 +101,17 @@ Our metadata object would look something like
     "order":  4,
     "locked": false,
     "visible": true,
-    "displayName": "Favorite Number"
+    "displayName": "Favorite Number",
+    "sortable": false
   }
 ```
 
-We would then load Griddle as follows: 
+We would then load Griddle as follows:
 
 ```
 React.render(
-  <Griddle results={fakeData} columnMetadata={exampleMetadata} showFilter={true} 
-    showSettings={true} columns={["name", "city", "state", "country"]}/>, 
+  <Griddle results={fakeData} columnMetadata={exampleMetadata} showFilter={true}
+    showSettings={true} columns={["name", "city", "state", "country"]}/>,
     document.getElementById('griddle-metadata')
 ```
 
@@ -110,7 +120,7 @@ React.render(
 <a name="customColumns"></a>
 ###Custom Columns###
 
-Custom column components are defined in the [Column Metadata object](#). The components are passed **data** and **rowData** properties.
+Custom column components are defined in the [Column Metadata object](#). The components are passed **data**, **rowData**, **metadata** properties.
 
 <dl>
   <dt>data</dt>
@@ -120,6 +130,11 @@ Custom column components are defined in the [Column Metadata object](#). The com
 <dl>
   <dt>rowData</dt>
   <dd><strong>object</strong> - the data for all items in the same row</dd>
+</dl>
+
+<dl>
+  <dt>metadata</dt>
+  <dd><strong>object</strong> - The columnMetadata object</dd>
 </dl>
 
 #####Example:#####
@@ -190,6 +205,35 @@ React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
 
 <hr />
 
+###Row Metadata###
+
+<dl>
+  <dt>bodyCssClassName</dt>
+  <dd><strong>function or string</strong> - If you supply a string, that class is applied to all rows. If you supply a function, the rows data is supplied to that function as the first argument and you are expected to return the css class name. This is useful if you want to style a row based on the rows data.</dd>
+</dl>
+
+#####Example:#####
+
+```javascript
+var rowMetadata = {
+    "bodyCssClassName": function(rowData) {
+        if (rowData.action === "added") {
+            return "green-row";
+        } else if (rowData.action === "removed") {
+            return "red-row";
+        } else if (rowData.action === "transfer") {
+            return "blue-row";
+        }
+        return "default-row";
+    }
+};
+
+return (
+    <div className="griddle-container">
+        <Griddle results={this.state.rows} rowMetadata={rowMetadata} />
+    </div>
+)
+```
 
 ###Custom Row Format###
 
@@ -359,7 +403,7 @@ var OtherPager = React.createClass({
 Then initialize your component as follows:
 
 ```
-<Griddle results={fakeData} tableClassName="table" useCustomRowComponent="true" 
+<Griddle results={fakeData} tableClassName="table" useCustomRowComponent="true"
   customRowComponent={OtherComponent} useCustomPagerComponent="true" customPagerComponent={OtherPager} />
 ```
 

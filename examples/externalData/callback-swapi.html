@@ -28,5 +28,5 @@ var Loading = React.createClass({
 	}
 });
 
-React.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback')); 
+ReactDOM.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback'));
 </script>

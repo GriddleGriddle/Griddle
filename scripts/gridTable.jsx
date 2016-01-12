@@ -27,7 +27,6 @@ var GridTable = React.createClass({
       "rowHeight": null,
       "infiniteScrollLoadTreshold": null,
       "bodyHeight": null,
-      "tableHeading": "",
       "useGriddleStyles": true,
       "useGriddleIcons": true,
       "isSubGriddle": false,
@@ -59,7 +58,7 @@ var GridTable = React.createClass({
   gridScroll: function(){
     if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
-      var scrollable = this.refs.scrollable.getDOMNode();
+      var scrollable = this.refs.scrollable;
       var scrollTop = scrollable.scrollTop
       var scrollHeight = scrollable.scrollHeight;
       var clientHeight = scrollable.clientHeight;
@@ -228,7 +227,7 @@ var GridTable = React.createClass({
 		  multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}
           rowSettings={this.props.rowSettings}/>
-        : "");
+      : undefined);
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
@@ -239,7 +238,7 @@ var GridTable = React.createClass({
       }
     }
 
-    var pagingContent = "";
+    var pagingContent = <tbody />;
     if(this.props.showPager){
       var pagingStyles = this.props.useGriddleStyles ?
         {

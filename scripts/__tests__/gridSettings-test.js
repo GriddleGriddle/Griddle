@@ -1,22 +1,13 @@
-/** @jsx React.DOM */
-jest.dontMock('../gridSettings.jsx');
-
-var React = require('react/addons');
+var React = require('react');
 var GridSettings = require('../gridSettings.jsx');
-var TestUtils = React.addons.TestUtils;
+var TestUtils = require('react-addons-test-utils');
 
 describe('GridSettings', function() {
-	var settings;
-
-	beforeEach(function(){
-		columns = ["one", "two", "three"];
-	    settings = TestUtils.renderIntoDocument(<GridSettings columns={columns} />);
-	});
 
 	it('calls method when page sizing', function(){
-		var mock = jest.genMockFunction();
-
-		settings.props.setPageSize = mock; 
+		var columns = ["one", "two", "three"];
+		var mock = jasmine.createSpy();
+		var settings = TestUtils.renderIntoDocument(<GridSettings columns={columns} setPageSize={mock} />);
 
 		var someEvent = {
 			"target":{
@@ -25,6 +16,6 @@ describe('GridSettings', function() {
 		};
 
 		settings.setPageSize(someEvent); 
-		expect(mock.mock.calls).toEqual([[3]]);
+		expect(mock.calls.argsFor(0)).toEqual([3]);
 	});
 });

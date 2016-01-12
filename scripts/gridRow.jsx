@@ -4,7 +4,7 @@
 var React = require('react');
 var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
-var powerPick = require('./powerPick.js');
+var deep = require('./deep.js');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
@@ -42,9 +42,9 @@ var GridRow = React.createClass({
 	handleSelectClick: function(e) {
 		if(this.props.multipleSelectionSettings.isMultipleSelection) {
 			if(e.target.type === "checkbox") {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.getDOMNode().checked);
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
 			} else {
-				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.getDOMNode().checked)
+				this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked)
 			}
 		}
 	},
@@ -76,12 +76,10 @@ var GridRow = React.createClass({
         var defaults = _.object(columns, []);
 
         // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-        var dataView = Object.create(this.props.data);
+        var dataView = _.extend(this.props.data);
 
         _.defaults(dataView, defaults);
-
-        var data = _.pairs(powerPick(dataView, columns));
-
+        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);

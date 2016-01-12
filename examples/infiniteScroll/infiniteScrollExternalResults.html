@@ -83,5 +83,5 @@
 		}
 	});
 
-	React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
+	ReactDOM.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
 </script>
