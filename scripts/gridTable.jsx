@@ -103,7 +103,8 @@ var GridTable = React.createClass({
     var that = this;
 
     //figure out if we need to wrap the group in one tbody or many
-    var anyHasChildren = false;
+    var nodesWithChildren = [];
+    var nodesWithoutChildren = [];
 
     // If the data is still being loaded, don't build the nodes unless this is an infinite scroll table.
     if (!this.props.externalIsLoading || this.props.enableInfiniteScroll) {
@@ -142,22 +143,31 @@ var GridTable = React.createClass({
             parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
             parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
             data={row} key={uniqueId + '-container'} uniqueId={uniqueId} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight}
-		    multipleSelectionSettings={that.props.multipleSelectionSettings}
+            multipleSelectionSettings={that.props.multipleSelectionSettings}
             rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
+
+        //sort nodes with children
+        if (hasChildren) {
+          nodesWithChildren.push(node);
+        } else {
+          nodesWithoutChildren.push(node);
+        }
       });
 
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {
-        nodes.unshift(aboveSpacerRow);
+        nodesWithoutChildren.unshift(aboveSpacerRow);
+        nodesWithChildren.unshift(aboveSpacerRow);
       }
       if (belowSpacerRow) {
-        nodes.push(belowSpacerRow);
+        nodesWithoutChildren.push(belowSpacerRow);
+        nodesWithChildren.push(belowSpacerRow);
       }
 
       // Send back the nodes.
       return {
-        nodes: nodes,
-        anyHasChildren : anyHasChildren
+        nodesWithChildren: nodesWithChildren,
+        nodesWithoutChildren: nodesWithoutChildren
       };
     } else {
       return null;
@@ -173,8 +183,8 @@ var GridTable = React.createClass({
     // Grab the nodes to render
     var nodeContent = this.getNodeContent();
     if (nodeContent) {
-      nodes = nodeContent.nodes;
-      anyHasChildren = nodeContent.anyHasChildren;
+      nodesWithChildren = nodeContent.nodesWithChildren;
+      nodesWithoutChildren = nodeContent.nodesWithoutChildren
     }
 
     var gridStyle = null;
@@ -222,14 +232,14 @@ var GridTable = React.createClass({
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
           sortSettings={this.props.sortSettings}
-		  multipleSelectionSettings={this.props.multipleSelectionSettings}
+          multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}
           rowSettings={this.props.rowSettings}/>
       : undefined);
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
-    if (!anyHasChildren){
-      nodes = <tbody>{nodes}</tbody>
+    if (nodesWithoutChildren) {
+      nodesWithoutChildren = <tbody>{nodesWithoutChildren}</tbody>;
     }
 
     var pagingContent = <tbody />;
@@ -261,7 +271,8 @@ var GridTable = React.createClass({
               </table>
               <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
                 <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
-                    {nodes}
+                    {nodesWithChildren}
+                    {nodesWithoutChildren}
                     {loadingContent}
                     {pagingContent}
                 </table>
@@ -272,7 +283,8 @@ var GridTable = React.createClass({
     return  <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
               <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
                   {tableHeading}
-                  {nodes}
+                  {nodesWithChildren}
+                  {nodesWithoutChildren}
                   {loadingContent}
                   {pagingContent}
               </table>
