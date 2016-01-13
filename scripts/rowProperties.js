@@ -7,14 +7,17 @@ class RowProperties{
     this.isCustom = isCustom;
   }
 
-  getRowKey(row) {
+  getRowKey(row, key) {
     var uniqueId;
 
     if(this.hasRowMetadataKey()){
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      uniqueId = _.uniqueId("grid_row");
+      // commented because of that issue related to rerendering table
+      // https://github.com/facebook/react/issues/2410
+      // uniqueId = _.uniqueId("grid_row");
+      uniqueId = "grid_row_" + key;
     }
 
     //todo: add error handling
