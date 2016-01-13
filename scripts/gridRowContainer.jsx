@@ -53,9 +53,9 @@ var GridRowContainer = React.createClass({
 
       var columns = this.props.columnSettings.getColumns();
 
-      arr.push(<this.props.rowSettings.rowComponent 
+      arr.push(<this.props.rowSettings.rowComponent
         useGriddleStyles={this.props.useGriddleStyles}
-        isSubGriddle={this.props.isSubGriddle} 
+        isSubGriddle={this.props.isSubGriddle}
         data={this.props.rowSettings.isCustom ? _.pick(this.props.data, columns) : this.props.data}
         rowData={this.props.rowSettings.isCustom ? this.props.data : null }
         columnSettings={this.props.columnSettings}
@@ -93,7 +93,7 @@ var GridRowContainer = React.createClass({
                         </tr>);
               }
 
-              return <that.props.rowSettings.rowComponent useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnSettings.columnMetadata} key={that.props.rowSettings.getRowKey(row)} />
+              return <that.props.rowSettings.rowComponent useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle} data={row} columnSettings={that.props.columnSettings} isChildRow={true} columnMetadata={that.props.columnSettings.columnMetadata} key={that.props.rowSettings.getRowKey(row, index)} />
           });
       }
 

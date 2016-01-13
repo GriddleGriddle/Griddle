@@ -787,7 +787,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return myReturn;
 	    },
 	    shouldShowNoDataSection: function shouldShowNoDataSection(results) {
-	        return this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
+	        // known issue https://github.com/GriddleGriddle/Griddle/issues/274
+	        // return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) ||
+	        //     (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
+	        return false;
 	    },
 	    render: function render() {
 	        var that = this,
@@ -994,7 +997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var nodes = nodeData.map(function (row, index) {
 	        var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
-	        var uniqueId = that.props.rowSettings.getRowKey(row);
+	        var uniqueId = that.props.rowSettings.getRowKey(row, index);
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
@@ -2005,7 +2008,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })));
 	        }
 
-	        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnSettings.columnMetadata, key: that.props.rowSettings.getRowKey(row) });
+	        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnSettings.columnMetadata, key: that.props.rowSettings.getRowKey(row, index) });
 	      });
 	    }
 
@@ -2042,13 +2045,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  _createClass(RowProperties, [{
 	    key: 'getRowKey',
-	    value: function getRowKey(row) {
+	    value: function getRowKey(row, key) {
 	      var uniqueId;
 
 	      if (this.hasRowMetadataKey()) {
 	        uniqueId = row[this.rowMetadata.key];
 	      } else {
-	        uniqueId = _.uniqueId("grid_row");
+	        // commented because of that issue related to rerendering table
+	        // https://github.com/facebook/react/issues/2410
+	        // uniqueId = _.uniqueId("grid_row");
+	        uniqueId = "grid_row_" + key;
 	      }
 
 	      //todo: add error handling

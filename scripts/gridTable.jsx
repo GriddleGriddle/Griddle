@@ -135,7 +135,7 @@ var GridTable = React.createClass({
 
       var nodes = nodeData.map(function(row, index){
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId = that.props.rowSettings.getRowKey(row);
+          var uniqueId = that.props.rowSettings.getRowKey(row, index);
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
