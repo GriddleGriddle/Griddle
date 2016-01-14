@@ -5,6 +5,8 @@ class RowProperties{
     this.rowMetadata = rowMetadata;
     this.rowComponent = rowComponent;
     this.isCustom = isCustom;
+    // assign unique Id to each griddle instance
+    this.gridId = _.uniqueId();
   }
 
   getRowKey(row, key) {
@@ -14,10 +16,7 @@ class RowProperties{
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      // commented because of that issue related to rerendering table
-      // https://github.com/facebook/react/issues/2410
-      // uniqueId = _.uniqueId("grid_row");
-      uniqueId = "grid_row_" + key;
+      uniqueId = 'grid_' + this.gridId + '_row_' + key;
     }
 
     //todo: add error handling
