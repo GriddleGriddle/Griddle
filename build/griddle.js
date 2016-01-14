@@ -997,12 +997,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	          anyHasChildren = hasChildren;
 	        }
 
-	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
-	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	          data: row, key: uniqueId + '-container', uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	        return React.createElement(GridRowContainer, {
+	          useGriddleStyles: that.props.useGriddleStyles,
+	          isSubGriddle: that.props.isSubGriddle,
+	          parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
+	          parentRowExpandedComponent: that.props.parentRowExpandedComponent,
+	          parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
+	          data: row,
+	          key: uniqueId + '-container',
+	          uniqueId: uniqueId,
+	          columnSettings: that.props.columnSettings,
+	          rowSettings: that.props.rowSettings,
+	          paddingHeight: that.props.paddingHeight,
 	          multipleSelectionSettings: that.props.multipleSelectionSettings,
-	          rowHeight: that.props.rowHeight, hasChildren: hasChildren, tableClassName: that.props.className, onRowClick: that.props.onRowClick });
+	          rowHeight: that.props.rowHeight,
+	          hasChildren: hasChildren,
+	          tableClassName: that.props.className,
+	          onRowClick: that.props.onRowClick
+	        });
 	      });
 
 	      // no data section
@@ -1981,7 +1994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      hasChildren: that.props.hasChildren,
 	      toggleChildren: that.toggleChildren,
 	      showChildren: that.state.showChildren,
-	      key: that.props.uniqueId,
+	      key: that.props.uniqueId + '_base_row',
 	      useGriddleIcons: that.props.useGriddleIcons,
 	      parentRowExpandedClassName: this.props.parentRowExpandedClassName,
 	      parentRowCollapsedClassName: this.props.parentRowCollapsedClassName,
@@ -1990,23 +2003,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	      paddingHeight: that.props.paddingHeight,
 	      rowHeight: that.props.rowHeight,
 	      onRowClick: that.props.onRowClick,
-	      multipleSelectionSettings: this.props.multipleSelectionSettings }));
+	      multipleSelectionSettings: this.props.multipleSelectionSettings
+	    }));
 
 	    var children = null;
 
 	    if (that.state.showChildren) {
 	      children = that.props.hasChildren && this.props.data["children"].map(function (row, index) {
+	        var key = that.props.rowSettings.getRowKey(row, index);
+
 	        if (typeof row["children"] !== "undefined") {
 	          var Griddle = __webpack_require__(1);
-	          return React.createElement('tr', { style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          return React.createElement('tr', { key: key, style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, {
+	            rowMetadata: { key: 'id' },
+	            isSubGriddle: true,
+	            results: [row],
+	            columns: that.props.columnSettings.getColumns(),
+	            tableClassName: that.props.tableClassName,
+	            parentRowExpandedClassName: that.props.parentRowExpandedClassName,
 	            parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	            showTableHeading: false, showPager: false, columnMetadata: that.props.columnSettings.columnMetadata,
+	            showTableHeading: false,
+	            showPager: false,
+	            columnMetadata: that.props.columnSettings.columnMetadata,
 	            parentRowExpandedComponent: that.props.parentRowExpandedComponent,
 	            parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	            paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })));
+	            paddingHeight: that.props.paddingHeight,
+	            rowHeight: that.props.rowHeight
+	          })));
 	        }
 
-	        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnSettings.columnMetadata, key: that.props.rowSettings.getRowKey(row, index) });
+	        return React.createElement(that.props.rowSettings.rowComponent, {
+	          useGriddleStyles: that.props.useGriddleStyles,
+	          isSubGriddle: that.props.isSubGriddle,
+	          data: row,
+	          columnSettings: that.props.columnSettings,
+	          isChildRow: true,
+	          columnMetadata: that.props.columnSettings.columnMetadata,
+	          key: key
+	        });
 	      });
 	    }
 
@@ -2039,6 +2073,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.rowMetadata = rowMetadata;
 	    this.rowComponent = rowComponent;
 	    this.isCustom = isCustom;
+	    // assign unique Id to each griddle instance
+	    this.gridId = _.uniqueId();
 	  }
 
 	  _createClass(RowProperties, [{
@@ -2049,10 +2085,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.hasRowMetadataKey()) {
 	        uniqueId = row[this.rowMetadata.key];
 	      } else {
-	        // commented because of that issue related to rerendering table
-	        // https://github.com/facebook/react/issues/2410
-	        // uniqueId = _.uniqueId("grid_row");
-	        uniqueId = "grid_row_" + key;
+	        uniqueId = 'grid_' + this.gridId + '_row_' + key;
 	      }
 
 	      //todo: add error handling
