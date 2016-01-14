@@ -1425,7 +1425,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      );
 	    }
 
-	    var pagingContent = "";
+	    var pagingContent = React.createElement("tbody", null);
 	    if (this.props.showPager) {
 	      var pagingStyles = this.props.useGriddleStyles ? {
 	        padding: "0",
@@ -1910,7 +1910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var defaults = _.object(columns, []);
 
 	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	    var dataView = Object.create(this.props.data);
+	    var dataView = _.extend(this.props.data);
 
 	    _.defaults(dataView, defaults);
 
