@@ -146,6 +146,11 @@ var GridTable = React.createClass({
             rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
       });
 
+      // no data section
+      if (this.props.showNoData) {
+        nodes.push(<tr key="no-data-section"><td>{this.props.noDataSection}</td></tr>);
+      }
+
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {
         nodes.unshift(aboveSpacerRow);
