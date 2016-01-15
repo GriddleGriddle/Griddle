@@ -133,18 +133,38 @@ var GridTable = React.createClass({
 
       var nodes = nodeData.map(function(row, index){
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId = that.props.rowSettings.getRowKey(row);
+          var uniqueId = that.props.rowSettings.getRowKey(row, index);
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
 
-          return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
-            parentRowExpandedClassName={that.props.parentRowExpandedClassName} parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
-            parentRowExpandedComponent={that.props.parentRowExpandedComponent} parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
-            data={row} key={uniqueId + '-container'} uniqueId={uniqueId} columnSettings={that.props.columnSettings} rowSettings={that.props.rowSettings} paddingHeight={that.props.paddingHeight}
-		    multipleSelectionSettings={that.props.multipleSelectionSettings}
-            rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
+          return (
+            <GridRowContainer
+                useGriddleStyles={that.props.useGriddleStyles}
+                isSubGriddle={that.props.isSubGriddle}
+                parentRowExpandedClassName={that.props.parentRowExpandedClassName}
+                parentRowCollapsedClassName={that.props.parentRowCollapsedClassName}
+                parentRowExpandedComponent={that.props.parentRowExpandedComponent}
+                parentRowCollapsedComponent={that.props.parentRowCollapsedComponent}
+                data={row}
+                key={uniqueId + '-container'}
+                uniqueId={uniqueId}
+                columnSettings={that.props.columnSettings}
+                rowSettings={that.props.rowSettings}
+                paddingHeight={that.props.paddingHeight}
+		            multipleSelectionSettings={that.props.multipleSelectionSettings}
+                rowHeight={that.props.rowHeight}
+                hasChildren={hasChildren}
+                tableClassName={that.props.className}
+                onRowClick={that.props.onRowClick}
+            />
+          )
       });
+
+      // no data section
+      if (this.props.showNoData) {
+        nodes.push(<tr key="no-data-section"><td>{this.props.noDataSection}</td></tr>);
+      }
 
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {
