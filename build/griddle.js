@@ -1107,9 +1107,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "padding": "0",
 	        backgroundColor: "#EDEDED",
 	        border: "0",
-	        color: "#222"
+	        color: "#222",
+	        height: this.props.showNoData ? "20px" : null
 	      } : null;
-	      pagingContent = React.createElement('tbody', null, React.createElement('tr', null, React.createElement('td', { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: 'footer-container' }, this.props.pagingContent)));
+	      pagingContent = React.createElement('tbody', null, React.createElement('tr', null, React.createElement('td', { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: 'footer-container' }, !this.props.showNoData ? this.props.pagingContent : null)));
 	    }
 
 	    // If we have a fixed header, split into two tables.

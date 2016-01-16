@@ -259,12 +259,13 @@ var GridTable = React.createClass({
           "padding" : "0",
           backgroundColor: "#EDEDED",
           border: "0",
-          color: "#222"
+          color: "#222",
+          height: this.props.showNoData ? "20px" : null
         }
         : null;
       pagingContent = (<tbody><tr>
           <td colSpan={this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount()} style={pagingStyles} className="footer-container">
-            {this.props.pagingContent}
+            {!this.props.showNoData ? this.props.pagingContent : null}
           </td>
         </tr></tbody>)
     }
