@@ -140,6 +140,30 @@ var propertiesItem = [
     "default": "false"
   },
   {
+    "property": "useCustomFilterer",
+    "description": "Determines if a custom filter function is used",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "customFilterer",
+    "description": "The function called when the filter is changed. Expects items and the query, returns filtered items",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "useCustomFilterComponent",
+    "description": "Determines if a custom filter component is used",
+    "type": "bool",
+    "default": "false"
+  },
+  {
+    "property": "customFilterComponent",
+    "description": "The component that is rendered above the table for filtering",
+    "type": "React Component",
+    "default": "null"
+  },
+  {
     "property": "showSettings",
     "description": "Whether or not to display the \"Settings\" section of Griddle.",
     "type": "bool",

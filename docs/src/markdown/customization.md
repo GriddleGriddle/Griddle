@@ -332,6 +332,66 @@ var TestLineChart = React.createClass({
 
 <hr />
 
+###Custom Filtering and Filter Component###
+
+Griddle supports custom filtering and custom filter components. In order to use a custom filter function set the property `useCustomFilterer` to true and pass in a function to the  `customFilterer` property. To use a custom filter component set `useCustomFilterComponent` to true and pass a component to `customFilterComponent`.
+
+#####Example:#####
+
+This example shows how to make a custom filter component with a custom filter function that does a case-insensitive search through the items. The component must call `this.props.changeFilter(val)` when the filter should be updated. In the example below we pass a string but any variable type can be used as long as the filter function is expecting it, for example an advanced query could be passed in using an object. The filter function signature takes the items to be filtered and the query to filter them by.
+
+```javascript
+  var _ = require('underscore'),
+      squish = require('object-squish');
+
+  var customFilterFunction = function(items, query) {
+    return _.filter(items, (item) => {
+      var flat = squish(item);
+
+      for (var key in flat) {
+        if (String(flat[key]).toLowerCase().indexOf(query.toLowerCase()) >= 0) return true;
+      };
+      return false;
+    });
+  };
+
+  var customFilterComponent = React.createClass({
+    getDefaultProps: function() {
+      return {
+        "query": ""
+      }
+    },
+
+    searchChange: function(event) {
+      this.props.query = event.target.value;
+      this.props.changeFilter(this.props.query);
+    },
+
+    render: function() {
+      return (
+        <div className="filter-container">
+          <input type="text"
+                 name="search"
+                 placeholder="Search..."
+                 onChange={this.searchChange} />
+        </div>
+      )
+    }
+  });
+```
+
+Then initialize Griddle:
+
+```
+React.render(
+  <Griddle results={fakeData} showFilter={true}
+  useCustomFilterer={true} customFilterer={customFilterFunction}
+  useCustomFilterComponent={true} customFilterComponent={customFilterComponent}/>,
+  document.getElementById('griddle-metadata')
+```
+
+<hr />
+
 ###Custom Paging Component###
 
 If you want to customize the paging component, just set the property 'useCustomPagerComponent' to true and pass in another component as property named 'customPagerComponent'. The example component below shows 11 buttons (5 previous, current, 5 next):
