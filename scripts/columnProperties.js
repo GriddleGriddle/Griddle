@@ -1,4 +1,8 @@
-var _ = require('underscore');
+var map = require('lodash.map');
+var filter = require('lodash.filter');
+var find = require('lodash.find');
+var sortBy = require('lodash.sortby');
+var difference = require('lodash.difference');
 
 class ColumnProperties{
   constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
@@ -10,7 +14,7 @@ class ColumnProperties{
   }
 
   getMetadataColumns(){
-    var meta = _.map(_.where(this.columnMetadata, {visible: false}), function(item){ return item.columnName});
+    var meta = map(filter(this.columnMetadata, {visible: false}), function(item){ return item.columnName});
       if(meta.indexOf(this.childrenColumnName) < 0){
          meta.push(this.childrenColumnName);
       }
@@ -22,7 +26,7 @@ class ColumnProperties{
   }
 
   getColumnMetadataByName(name){
-    return _.findWhere(this.columnMetadata, {columnName: name});
+    return find(this.columnMetadata, {columnName: name});
   }
 
   hasColumnMetadata(){
@@ -42,13 +46,13 @@ class ColumnProperties{
   orderColumns(cols) {
     var ORDER_MAX = 100;
 
-    var orderedColumns = _.sortBy(cols, (item) => {
-        var metaItem = _.findWhere(this.columnMetadata, {columnName: item});
+    var orderedColumns = sortBy(cols, (item) => {
+        var metaItem = find(this.columnMetadata, {columnName: item});
 
         if (typeof metaItem === 'undefined' || metaItem === null || isNaN(metaItem.order)){
             return ORDER_MAX;
         }
-        
+
         return metaItem.order;
     });
 
@@ -59,7 +63,7 @@ class ColumnProperties{
     //if we didn't set default or filter
     var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
-    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
+    filteredColumns = difference(filteredColumns, this.metadataColumns);
 
     filteredColumns = this.orderColumns(filteredColumns);
 

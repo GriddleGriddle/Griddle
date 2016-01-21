@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",
@@ -11,8 +11,34 @@
   ],
   "main": "modules/griddle.jsx.js",
   "peerDependencies": {
-    "react": "^0.14.3",
-    "underscore": ">= 1.6.0 < 2"
+    "react": "^0.14.3"
+  },
+  "dependencies": {
+    "lodash.assign": "^4.0.0",
+    "lodash.defaults": "^4.0.0",
+    "lodash.difference": "^4.0.1",
+    "lodash.drop": "^4.0.0",
+    "lodash.dropright": "^4.0.0",
+    "lodash.filter": "^4.0.0",
+    "lodash.find": "^4.0.0",
+    "lodash.first": "^3.0.0",
+    "lodash.foreach": "^4.0.0",
+    "lodash.frompairs": "^4.0.0",
+    "lodash.includes": "^4.0.0",
+    "lodash.initial": "^4.0.0",
+    "lodash.isarray": "^4.0.0",
+    "lodash.isempty": "^4.0.0",
+    "lodash.isfunction": "^3.0.7",
+    "lodash.isnull": "^3.0.0",
+    "lodash.isobject": "^3.0.2",
+    "lodash.isundefined": "^3.0.1",
+    "lodash.map": "^4.0.0",
+    "lodash.omit": "^4.0.1",
+    "lodash.pick": "^4.0.0",
+    "lodash.sortby": "^4.0.0",
+    "lodash.topairs": "^4.0.0",
+    "lodash.uniqueid": "^3.1.0",
+    "lodash.without": "^4.0.1"
   },
   "devDependencies": {
     "babel-jest": "^5.2.1",
