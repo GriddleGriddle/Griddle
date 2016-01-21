@@ -105,9 +105,7 @@ module.exports = function(grunt) {
           ]
         },
         externals: {
-          "react": "React",
-          "underscore": "_",
-
+          "react": "React"
         }
       },
       docs: {
@@ -133,7 +131,6 @@ module.exports = function(grunt) {
         },
         externals: {
           "react": "React",
-          "underscore": "_",
           "Chartist": "chartist"
         }
       }

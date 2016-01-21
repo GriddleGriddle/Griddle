@@ -2,7 +2,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var _ = require('underscore');
+var assign = require('lodash.assign');
 
 //needs props maxPage, currentPage, nextFunction, prevFunction
 var GridPagination = React.createClass({
@@ -45,9 +45,9 @@ var GridPagination = React.createClass({
                 marginTop: "5px"
             };
 
-            rightStyle = _.extend({textAlign:"right", width: "34%"}, baseStyle);
-            middleStyle = _.extend({textAlign:"center", width: "33%"}, baseStyle);
-            leftStyle = _.extend({ width: "33%"}, baseStyle)
+            rightStyle = assign({textAlign:"right", width: "34%"}, baseStyle);
+            middleStyle = assign({textAlign:"center", width: "33%"}, baseStyle);
+            leftStyle = assign({ width: "33%"}, baseStyle)
         }
 
         var options = [];
