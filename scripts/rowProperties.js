@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _uniqueId = require('lodash.uniqueid');
 
 class RowProperties{
   constructor (rowMetadata={}, rowComponent=null, isCustom=false) {
@@ -14,7 +14,7 @@ class RowProperties{
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      uniqueId = _.uniqueId("grid_row");
+      uniqueId = _uniqueId("grid_row");
     }
 
     //todo: add error handling

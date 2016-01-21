@@ -9,7 +9,7 @@ Join us here [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.
 
 ----------
 
-Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [React](http://facebook.github.io/react/).
+Griddle is a simple grid Component for use with React. It depends on [Lodash Modules](https://lodash.com/) and [React](http://facebook.github.io/react/).
 
 Please check out the [documentation and examples](http://dynamictyped.github.io/Griddle).
 
@@ -41,6 +41,9 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 ----------
 ###Changelog:###
+
+0.4.0
+- Remove the underscore dependencies and implement the use of lodash-modularized
 
 0.3.0
 

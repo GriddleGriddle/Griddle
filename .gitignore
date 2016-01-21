@@ -30,5 +30,6 @@ docs/html
 
 # Users Environment Variables
 .lock-wscript
+.node-version
 
 .idea
