@@ -4,14 +4,12 @@
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
 var deep = require('./deep.js');
-
 var isFunction = require('lodash.isfunction');
 var fromPairs = require('lodash.frompairs');
 var assign = require('lodash.assign');
 var defaults = require('lodash.defaults');
 var toPairs = require('lodash.topairs');
 var without = require('lodash.without');
-var _ = require('underscore');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
