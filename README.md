@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/GriddleGriddle/griddle.png?label=ready&title=Ready)](https://waffle.io/GriddleGriddle/griddle)
 Griddle
 =======
 #### [Take a brief look at what's coming in Griddle v1.0](https://github.com/GriddleGriddle/Griddle/issues/276) ####
