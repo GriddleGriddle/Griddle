@@ -27,9 +27,9 @@
     "webpack-dev-server": "~1.9.0"
   },
   "dependencies": {
-    "griddle-connector": "0.0.12",
-    "griddle-core": "0.0.7",
-    "griddle-render": "0.0.18",
+    "griddle-connector": "0.0.15",
+    "griddle-core": "0.0.9",
+    "griddle-render": "0.0.19",
     "lodash.assign": "^3.2.0",
     "react": "^0.14.0"
   },

@@ -1,0 +1,6 @@
+{
+  "stage": 0,
+  "plugins": [
+    "babel-plugin-object-assign"
+  ]
+ }
