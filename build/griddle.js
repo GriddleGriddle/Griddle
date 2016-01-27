@@ -749,7 +749,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sortProperties = this.getSortObject();
 	        var multipleSelectionProperties = this.getMultipleSelectionObject();
 
+	        // no data section
+	        var showNoData = this.shouldShowNoDataSection(data);
+	        var noDataSection = this.getNoDataSection();
+
 	        return React.createElement('div', { className: 'griddle-body' }, React.createElement(GridTable, { useGriddleStyles: this.props.useGriddleStyles,
+	            noDataSection: noDataSection,
+	            showNoData: showNoData,
 	            columnSettings: this.columnSettings,
 	            rowSettings: this.rowSettings,
 	            sortSettings: sortProperties,
@@ -787,16 +793,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.getStandardGridSection(data, cols, meta, pagingContent, hasMorePages);
 	        }
 	    },
-	    getNoDataSection: function getNoDataSection(gridClassName, topSection) {
-	        var myReturn = null;
+	    getNoDataSection: function getNoDataSection() {
 	        if (this.props.customNoDataComponent != null) {
-	            myReturn = React.createElement('div', { className: gridClassName }, React.createElement(this.props.customNoDataComponent, null));
-
-	            return myReturn;
+	            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, null));
 	        }
-
-	        myReturn = React.createElement('div', { className: gridClassName }, topSection, React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage }));
-	        return myReturn;
+	        return React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage });
 	    },
 	    shouldShowNoDataSection: function shouldShowNoDataSection(results) {
 	        return this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
@@ -845,11 +846,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
-
-	        if (this.shouldShowNoDataSection(results)) {
-	            gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
-	            return this.getNoDataSection(gridClassName, topSection);
-	        }
 
 	        return React.createElement('div', { className: gridClassName }, topSection, columnSelector, React.createElement('div', { className: 'griddle-container', style: this.props.useGriddleStyles && !this.props.isSubGriddle ? { border: "1px solid #DDD" } : null }, resultContent));
 	    }
@@ -1004,20 +1000,38 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var nodes = nodeData.map(function (row, index) {
 	        var hasChildren = typeof row["children"] !== "undefined" && row["children"].length > 0;
-	        var uniqueId = that.props.rowSettings.getRowKey(row);
+	        var uniqueId = that.props.rowSettings.getRowKey(row, index);
 
 	        //at least one item in the group has children.
 	        if (hasChildren) {
 	          anyHasChildren = hasChildren;
 	        }
 
-	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
-	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	          data: row, key: uniqueId + '-container', uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	        return React.createElement(GridRowContainer, {
+	          useGriddleStyles: that.props.useGriddleStyles,
+	          isSubGriddle: that.props.isSubGriddle,
+	          parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
+	          parentRowExpandedComponent: that.props.parentRowExpandedComponent,
+	          parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
+	          data: row,
+	          key: uniqueId + '-container',
+	          uniqueId: uniqueId,
+	          columnSettings: that.props.columnSettings,
+	          rowSettings: that.props.rowSettings,
+	          paddingHeight: that.props.paddingHeight,
 	          multipleSelectionSettings: that.props.multipleSelectionSettings,
-	          rowHeight: that.props.rowHeight, hasChildren: hasChildren, tableClassName: that.props.className, onRowClick: that.props.onRowClick });
+	          rowHeight: that.props.rowHeight,
+	          hasChildren: hasChildren,
+	          tableClassName: that.props.className,
+	          onRowClick: that.props.onRowClick
+	        });
 	      });
+
+	      // no data section
+	      if (this.props.showNoData) {
+	        nodes.push(React.createElement('tr', { key: 'no-data-section' }, React.createElement('td', null, this.props.noDataSection)));
+	      }
 
 	      // Add the spacer rows for nodes we're not rendering.
 	      if (aboveSpacerRow) {
@@ -1107,9 +1121,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        "padding": "0",
 	        backgroundColor: "#EDEDED",
 	        border: "0",
-	        color: "#222"
+	        color: "#222",
+	        height: this.props.showNoData ? "20px" : null
 	      } : null;
-	      pagingContent = React.createElement('tbody', null, React.createElement('tr', null, React.createElement('td', { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: 'footer-container' }, this.props.pagingContent)));
+	      pagingContent = React.createElement('tbody', null, React.createElement('tr', null, React.createElement('td', { colSpan: this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount(), style: pagingStyles, className: 'footer-container' }, !this.props.showNoData ? this.props.pagingContent : null)));
 	    }
 
 	    // If we have a fixed header, split into two tables.
@@ -25203,7 +25218,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      hasChildren: that.props.hasChildren,
 	      toggleChildren: that.toggleChildren,
 	      showChildren: that.state.showChildren,
-	      key: that.props.uniqueId,
+	      key: that.props.uniqueId + '_base_row',
 	      useGriddleIcons: that.props.useGriddleIcons,
 	      parentRowExpandedClassName: this.props.parentRowExpandedClassName,
 	      parentRowCollapsedClassName: this.props.parentRowCollapsedClassName,
@@ -25212,23 +25227,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	      paddingHeight: that.props.paddingHeight,
 	      rowHeight: that.props.rowHeight,
 	      onRowClick: that.props.onRowClick,
-	      multipleSelectionSettings: this.props.multipleSelectionSettings }));
+	      multipleSelectionSettings: this.props.multipleSelectionSettings
+	    }));
 
 	    var children = null;
 
 	    if (that.state.showChildren) {
 	      children = that.props.hasChildren && this.props.data["children"].map(function (row, index) {
+	        var key = that.props.rowSettings.getRowKey(row, index);
+
 	        if (typeof row["children"] !== "undefined") {
 	          var Griddle = __webpack_require__(1);
-	          return React.createElement('tr', { style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          return React.createElement('tr', { key: key, style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, {
+	            rowMetadata: { key: 'id' },
+	            isSubGriddle: true,
+	            results: [row],
+	            columns: that.props.columnSettings.getColumns(),
+	            tableClassName: that.props.tableClassName,
+	            parentRowExpandedClassName: that.props.parentRowExpandedClassName,
 	            parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	            showTableHeading: false, showPager: false, columnMetadata: that.props.columnSettings.columnMetadata,
+	            showTableHeading: false,
+	            showPager: false,
+	            columnMetadata: that.props.columnSettings.columnMetadata,
 	            parentRowExpandedComponent: that.props.parentRowExpandedComponent,
 	            parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	            paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })));
+	            paddingHeight: that.props.paddingHeight,
+	            rowHeight: that.props.rowHeight
+	          })));
 	        }
 
-	        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnSettings.columnMetadata, key: that.props.rowSettings.getRowKey(row) });
+	        return React.createElement(that.props.rowSettings.rowComponent, {
+	          useGriddleStyles: that.props.useGriddleStyles,
+	          isSubGriddle: that.props.isSubGriddle,
+	          data: row,
+	          columnSettings: that.props.columnSettings,
+	          isChildRow: true,
+	          columnMetadata: that.props.columnSettings.columnMetadata,
+	          key: key
+	        });
 	      });
 	    }
 
@@ -25930,17 +25966,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.rowMetadata = rowMetadata;
 	    this.rowComponent = rowComponent;
 	    this.isCustom = isCustom;
+	    // assign unique Id to each griddle instance
+	    this.gridId = _uniqueId();
 	  }
 
 	  _createClass(RowProperties, [{
 	    key: 'getRowKey',
-	    value: function getRowKey(row) {
+	    value: function getRowKey(row, key) {
 	      var uniqueId;
 
 	      if (this.hasRowMetadataKey()) {
 	        uniqueId = row[this.rowMetadata.key];
 	      } else {
-	        uniqueId = _uniqueId("grid_row");
+	        uniqueId = 'grid_' + this.gridId + '_row_' + key;
 	      }
 
 	      //todo: add error handling
@@ -29730,14 +29768,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var ColumnProperties = __webpack_require__(6);
 	var deep = __webpack_require__(104);
-
 	var isFunction = __webpack_require__(111);
 	var fromPairs = __webpack_require__(112);
 	var assign = __webpack_require__(87);
 	var defaults = __webpack_require__(114);
 	var toPairs = __webpack_require__(21);
 	var without = __webpack_require__(94);
-	var _ = __webpack_require__(5);
 
 	var GridRow = React.createClass({
 	    displayName: 'GridRow',

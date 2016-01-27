@@ -5,16 +5,18 @@ class RowProperties{
     this.rowMetadata = rowMetadata;
     this.rowComponent = rowComponent;
     this.isCustom = isCustom;
+    // assign unique Id to each griddle instance
+    this.gridId = _uniqueId();
   }
 
-  getRowKey(row) {
+  getRowKey(row, key) {
     var uniqueId;
 
     if(this.hasRowMetadataKey()){
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      uniqueId = _uniqueId("grid_row");
+      uniqueId = 'grid_' + this.gridId + '_row_' + key;
     }
 
     //todo: add error handling
