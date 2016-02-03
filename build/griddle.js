@@ -7,7 +7,7 @@
 		exports["Griddle"] = factory(require("React"), require("_"));
 	else
 		root["Griddle"] = factory(root["React"], root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_5__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_11__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,18 +82,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var React = __webpack_require__(2);
 	var GridTable = __webpack_require__(3);
-	var GridFilter = __webpack_require__(9);
-	var GridPagination = __webpack_require__(10);
-	var GridSettings = __webpack_require__(11);
-	var GridNoData = __webpack_require__(12);
-	var GridRow = __webpack_require__(13);
-	var CustomRowComponentContainer = __webpack_require__(15);
-	var CustomPaginationContainer = __webpack_require__(16);
-	var CustomFilterContainer = __webpack_require__(17);
-	var ColumnProperties = __webpack_require__(6);
-	var RowProperties = __webpack_require__(8);
-	var deep = __webpack_require__(14);
-	var _ = __webpack_require__(5);
+	var GridFilter = __webpack_require__(15);
+	var GridPagination = __webpack_require__(16);
+	var GridSettings = __webpack_require__(17);
+	var GridNoData = __webpack_require__(18);
+	var GridRow = __webpack_require__(19);
+	var CustomRowComponentContainer = __webpack_require__(21);
+	var CustomPaginationContainer = __webpack_require__(22);
+	var CustomFilterContainer = __webpack_require__(23);
+	var ColumnProperties = __webpack_require__(12);
+	var RowProperties = __webpack_require__(14);
+	var deep = __webpack_require__(20);
+	var _ = __webpack_require__(11);
 
 	var Griddle = React.createClass({
 	    displayName: 'Griddle',
@@ -192,7 +192,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "previousIconComponent": "",
 	            "isMultipleSelection": false, //currently does not support subgrids
 	            "selectedRowIds": [],
-	            "uniqueIdentifier": "id"
+	            "uniqueIdentifier": "id",
+	            "transitionName": null
 	        };
 	    },
 	    propTypes: {
@@ -744,6 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            showNoData: showNoData,
 	            columnSettings: this.columnSettings,
 	            rowSettings: this.rowSettings,
+	            transitionName: this.props.transitionName,
 	            sortSettings: sortProperties,
 	            multipleSelectionSettings: multipleSelectionProperties,
 	            isSubGriddle: this.props.isSubGriddle,
@@ -855,11 +857,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(4);
-	var GridRowContainer = __webpack_require__(7);
-	var ColumnProperties = __webpack_require__(6);
-	var RowProperties = __webpack_require__(8);
-	var _ = __webpack_require__(5);
+	var ReactCSSTransitionGroup = __webpack_require__(4);
+	var GridTitle = __webpack_require__(10);
+	var GridRowContainer = __webpack_require__(13);
+	var ColumnProperties = __webpack_require__(12);
+	var RowProperties = __webpack_require__(14);
+	var _ = __webpack_require__(11);
 
 	var GridTable = React.createClass({
 	  displayName: 'GridTable',
@@ -890,7 +893,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "parentRowExpandedComponent": "▼",
 	      "externalLoadingComponent": null,
 	      "externalIsLoading": false,
-	      "onRowClick": null
+	      "onRowClick": null,
+	      "transitionName": null
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -1098,7 +1102,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren) {
-	      nodes = React.createElement('tbody', null, nodes);
+	      if (that.props.transitionName) {
+	        nodes = React.createElement(ReactCSSTransitionGroup, { component: 'tbody', transitionName: that.props.transitionName }, nodes);
+	      } else {
+	        nodes = React.createElement('tbody', null, nodes);
+	      }
 	    }
 
 	    var pagingContent = React.createElement('tbody', null);
@@ -1132,14 +1140,587 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	module.exports = __webpack_require__(5);
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var ReactTransitionChildMapping = __webpack_require__(6);
+	var CSSTransitionGroupChild = __webpack_require__(7);
+
+	var CSSTransitionGroup = React.createClass({
+	  displayName: 'CSSTransitionGroup',
+
+	  protoTypes: {
+	    component: React.PropTypes.any,
+	    transitionName: React.PropTypes.string.isRequired,
+	    transitionEnter: React.PropTypes.bool,
+	    transitionLeave: React.PropTypes.bool
+	  },
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      component: 'span',
+	      transitionEnter: true,
+	      transitionLeave: true
+	    };
+	  },
+
+	  getInitialState: function getInitialState() {
+	    var ret = [];
+	    React.Children.forEach(this.props.children, function (c) {
+	      ret.push(c);
+	    });
+	    return {
+	      children: ret
+	    };
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    this.currentlyTransitioningKeys = {};
+	    this.keysToEnter = [];
+	    this.keysToLeave = [];
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var _this = this;
+
+	    var nextChildMapping = [];
+	    var showProp = this.props.showProp;
+	    var exclusive = this.props.exclusive;
+
+	    React.Children.forEach(nextProps.children, function (c) {
+	      nextChildMapping.push(c);
+	    });
+
+	    // // last props children if exclusive
+	    var prevChildMapping = exclusive ? this.props.children : this.state.children;
+
+	    var newChildren = ReactTransitionChildMapping.mergeChildMappings(prevChildMapping, nextChildMapping);
+
+	    if (showProp) {
+	      newChildren = newChildren.map(function (c) {
+	        if (!c.props[showProp] && ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp)) {
+	          var newProps = {};
+	          newProps[showProp] = true;
+	          c = React.cloneElement(c, newProps);
+	        }
+	        return c;
+	      });
+	    }
+
+	    if (exclusive) {
+	      // make middle state children invalid
+	      // restore to last props children
+	      newChildren.forEach(function (c) {
+	        _this.stop(c.key);
+	      });
+	    }
+
+	    this.setState({
+	      children: newChildren
+	    });
+
+	    nextChildMapping.forEach(function (c) {
+	      var key = c.key;
+	      var hasPrev = prevChildMapping && ReactTransitionChildMapping.inChildren(prevChildMapping, c);
+	      if (showProp) {
+	        if (hasPrev) {
+	          var showInPrev = ReactTransitionChildMapping.isShownInChildren(prevChildMapping, c, showProp);
+	          var showInNow = c.props[showProp];
+	          if (!showInPrev && showInNow && !_this.currentlyTransitioningKeys[key]) {
+	            _this.keysToEnter.push(key);
+	          }
+	        }
+	      } else if (!hasPrev && !_this.currentlyTransitioningKeys[key]) {
+	        _this.keysToEnter.push(key);
+	      }
+	    });
+
+	    prevChildMapping.forEach(function (c) {
+	      var key = c.key;
+	      var hasNext = nextChildMapping && ReactTransitionChildMapping.inChildren(nextChildMapping, c);
+	      if (showProp) {
+	        if (hasNext) {
+	          var showInNext = ReactTransitionChildMapping.isShownInChildren(nextChildMapping, c, showProp);
+	          var showInNow = c.props[showProp];
+	          if (!showInNext && showInNow && !_this.currentlyTransitioningKeys[key]) {
+	            _this.keysToLeave.push(key);
+	          }
+	        }
+	      } else if (!hasNext && !_this.currentlyTransitioningKeys[key]) {
+	        _this.keysToLeave.push(key);
+	      }
+	    });
+	  },
+
+	  performEnter: function performEnter(key) {
+	    this.currentlyTransitioningKeys[key] = true;
+	    var component = this.refs[key];
+	    if (component.componentWillEnter) {
+	      component.componentWillEnter(this._handleDoneEntering.bind(this, key));
+	    } else {
+	      this._handleDoneEntering(key);
+	    }
+	  },
+
+	  _handleDoneEntering: function _handleDoneEntering(key) {
+	    //console.log('_handleDoneEntering, ', key);
+	    delete this.currentlyTransitioningKeys[key];
+	    var currentChildMapping = this.props.children;
+	    var showProp = this.props.showProp;
+	    if (!currentChildMapping || !showProp && !ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key) || showProp && !ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
+	      // This was removed before it had fully entered. Remove it.
+	      //console.log('releave ',key);
+	      this.performLeave(key);
+	    } else {
+	      this.setState({ children: currentChildMapping });
+	    }
+	  },
+
+	  stop: function stop(key) {
+	    delete this.currentlyTransitioningKeys[key];
+	    var component = this.refs[key];
+	    if (component) {
+	      component.stop();
+	    }
+	  },
+
+	  performLeave: function performLeave(key) {
+	    this.currentlyTransitioningKeys[key] = true;
+
+	    var component = this.refs[key];
+	    if (component.componentWillLeave) {
+	      component.componentWillLeave(this._handleDoneLeaving.bind(this, key));
+	    } else {
+	      // Note that this is somewhat dangerous b/c it calls setState()
+	      // again, effectively mutating the component before all the work
+	      // is done.
+	      this._handleDoneLeaving(key);
+	    }
+	  },
+
+	  _handleDoneLeaving: function _handleDoneLeaving(key) {
+	    //console.log('_handleDoneLeaving, ', key);
+	    delete this.currentlyTransitioningKeys[key];
+	    var showProp = this.props.showProp;
+	    var currentChildMapping = this.props.children;
+	    if (showProp && currentChildMapping && ReactTransitionChildMapping.isShownInChildrenByKey(currentChildMapping, key, showProp)) {
+	      this.performEnter(key);
+	    } else if (!showProp && currentChildMapping && ReactTransitionChildMapping.inChildrenByKey(currentChildMapping, key)) {
+	      // This entered again before it fully left. Add it again.
+	      //console.log('reenter ',key);
+	      this.performEnter(key);
+	    } else {
+	      this.setState({ children: currentChildMapping });
+	    }
+	  },
+
+	  componentDidUpdate: function componentDidUpdate() {
+	    var keysToEnter = this.keysToEnter;
+	    this.keysToEnter = [];
+	    keysToEnter.forEach(this.performEnter);
+	    var keysToLeave = this.keysToLeave;
+	    this.keysToLeave = [];
+	    keysToLeave.forEach(this.performLeave);
+	  },
+
+	  render: function render() {
+	    var props = this.props;
+	    var children = this.state.children.map(function (child) {
+	      return React.createElement(
+	        CSSTransitionGroupChild,
+	        {
+	          key: child.key,
+	          ref: child.key,
+	          name: props.transitionName,
+	          enter: props.transitionEnter,
+	          leave: props.transitionLeave },
+	        child
+	      );
+	    });
+	    var Component = this.props.component;
+	    return React.createElement(
+	      Component,
+	      this.props,
+	      children
+	    );
+	  }
+	});
+	module.exports = CSSTransitionGroup;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	function inChildren(children, child) {
+	  var found = 0;
+	  children.forEach(function (c) {
+	    if (found) {
+	      return;
+	    }
+	    found = c.key === child.key;
+	  });
+	  return found;
+	}
+
+	module.exports = {
+	  inChildren: inChildren,
+
+	  isShownInChildren: function isShownInChildren(children, child, showProp) {
+	    var found = 0;
+	    children.forEach(function (c) {
+	      if (found) {
+	        return;
+	      }
+	      found = c.key === child.key && c.props[showProp];
+	    });
+	    return found;
+	  },
+
+	  inChildrenByKey: function inChildrenByKey(children, key) {
+	    var found = 0;
+	    children.forEach(function (c) {
+	      if (found) {
+	        return;
+	      }
+	      found = c.key === key;
+	    });
+	    return found;
+	  },
+
+	  isShownInChildrenByKey: function isShownInChildrenByKey(children, key, showProp) {
+	    var found = 0;
+	    children.forEach(function (c) {
+	      if (found) {
+	        return;
+	      }
+	      found = c.key === key && c.props[showProp];
+	    });
+	    return found;
+	  },
+
+	  mergeChildMappings: function mergeChildMappings(prev, next) {
+	    var ret = [];
+
+	    // For each key of `next`, the list of keys to insert before that key in
+	    // the combined list
+	    var nextChildrenPending = {};
+	    var pendingChildren = [];
+	    prev.forEach(function (c) {
+	      if (inChildren(next, c)) {
+	        if (pendingChildren.length) {
+	          nextChildrenPending[c.key] = pendingChildren;
+	          pendingChildren = [];
+	        }
+	      } else {
+	        pendingChildren.push(c);
+	      }
+	    });
+
+	    next.forEach(function (c) {
+	      if (nextChildrenPending.hasOwnProperty(c.key)) {
+	        ret = ret.concat(nextChildrenPending[c.key]);
+	      }
+	      ret.push(c);
+	    });
+
+	    ret = ret.concat(pendingChildren);
+
+	    return ret;
+	  }
+	};
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks
+	 * @providesModule ReactCSSTransitionGroupChild
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+
+	var CSSCore = __webpack_require__(8);
+	var ReactTransitionEvents = __webpack_require__(9);
+
+	var TICK = 17;
+
+	var ReactCSSTransitionGroupChild = React.createClass({
+	  displayName: 'ReactCSSTransitionGroupChild',
+
+	  transition: function transition(animationType, finishCallback) {
+	    var _this = this;
+
+	    var node = this.getDOMNode();
+	    var className = this.props.name + '-' + animationType;
+	    var activeClassName = className + '-active';
+
+	    if (this.endListener) {
+	      this.endListener();
+	    }
+
+	    this.endListener = function (e) {
+	      if (e && e.target !== node) {
+	        return;
+	      }
+
+	      CSSCore.removeClass(node, className);
+	      CSSCore.removeClass(node, activeClassName);
+
+	      ReactTransitionEvents.removeEndEventListener(node, _this.endListener);
+	      _this.endListener = null;
+
+	      // Usually this optional callback is used for informing an owner of
+	      // a leave animation and telling it to remove the child.
+	      if (finishCallback) {
+	        finishCallback();
+	      }
+	    };
+
+	    ReactTransitionEvents.addEndEventListener(node, this.endListener);
+
+	    CSSCore.addClass(node, className);
+
+	    // Need to do this to actually trigger a transition.
+	    this.queueClass(activeClassName);
+	  },
+
+	  queueClass: function queueClass(className) {
+	    this.classNameQueue.push(className);
+
+	    if (!this.timeout) {
+	      this.timeout = setTimeout(this.flushClassNameQueue, TICK);
+	    }
+	  },
+
+	  stop: function stop() {
+	    //console.log('force stop')
+	    if (this.timeout) {
+	      clearTimeout(this.timeout);
+	      this.classNameQueue.length = 0;
+	      this.timeout = null;
+	    }
+	    if (this.endListener) {
+	      this.endListener();
+	    }
+	  },
+
+	  flushClassNameQueue: function flushClassNameQueue() {
+	    if (this.isMounted()) {
+	      this.classNameQueue.forEach(CSSCore.addClass.bind(CSSCore, this.getDOMNode()));
+	    }
+	    this.classNameQueue.length = 0;
+	    this.timeout = null;
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    this.classNameQueue = [];
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this.timeout) {
+	      clearTimeout(this.timeout);
+	    }
+	  },
+
+	  componentWillEnter: function componentWillEnter(done) {
+	    if (this.props.enter) {
+	      this.transition('enter', done);
+	    } else {
+	      done();
+	    }
+	  },
+
+	  componentWillLeave: function componentWillLeave(done) {
+	    if (this.props.leave) {
+	      this.transition('leave', done);
+	    } else {
+	      done();
+	    }
+	  },
+
+	  render: function render() {
+	    return this.props.children;
+	  }
+	});
+
+	module.exports = ReactCSSTransitionGroupChild;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var SPACE = ' ';
+	var RE_CLASS = /[\n\t\r]/g;
+
+	var norm = function norm(elemClass) {
+	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
+	};
+
+	module.exports = {
+	  addClass: function addClass(elem, className) {
+	    elem.className += ' ' + className;
+	  },
+
+	  removeClass: function removeClass(elem, needle) {
+	    var elemClass = elem.className.trim();
+	    var className = norm(elemClass);
+	    needle = needle.trim();
+	    needle = SPACE + needle + SPACE;
+	    // 一个 cls 有可能多次出现：'link link2 link link3 link'
+	    while (className.indexOf(needle) >= 0) {
+	      className = className.replace(needle, SPACE);
+	    }
+	    elem.className = className.trim();
+	  }
+	};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactTransitionEvents
+	 */
+
+	'use strict';
+	/**
+	 * EVENT_NAME_MAP is used to determine which event fired when a
+	 * transition/animation ends, based on the style property used to
+	 * define that event.
+	 */
+	var EVENT_NAME_MAP = {
+	  transitionend: {
+	    transition: 'transitionend',
+	    WebkitTransition: 'webkitTransitionEnd',
+	    MozTransition: 'mozTransitionEnd',
+	    OTransition: 'oTransitionEnd',
+	    msTransition: 'MSTransitionEnd'
+	  },
+
+	  animationend: {
+	    animation: 'animationend',
+	    WebkitAnimation: 'webkitAnimationEnd',
+	    MozAnimation: 'mozAnimationEnd',
+	    OAnimation: 'oAnimationEnd',
+	    msAnimation: 'MSAnimationEnd'
+	  }
+	};
+
+	var endEvents = [];
+
+	function detectEvents() {
+	  var testEl = document.createElement('div');
+	  var style = testEl.style;
+
+	  // On some platforms, in particular some releases of Android 4.x,
+	  // the un-prefixed "animation" and "transition" properties are defined on the
+	  // style object but the events that fire will still be prefixed, so we need
+	  // to check if the un-prefixed events are useable, and if not remove them
+	  // from the map
+	  if (!('AnimationEvent' in window)) {
+	    delete EVENT_NAME_MAP.animationend.animation;
+	  }
+
+	  if (!('TransitionEvent' in window)) {
+	    delete EVENT_NAME_MAP.transitionend.transition;
+	  }
+
+	  for (var baseEventName in EVENT_NAME_MAP) {
+	    var baseEvents = EVENT_NAME_MAP[baseEventName];
+	    for (var styleName in baseEvents) {
+	      if (styleName in style) {
+	        endEvents.push(baseEvents[styleName]);
+	        break;
+	      }
+	    }
+	  }
+	}
+
+	if (typeof window !== 'undefined') {
+	  detectEvents();
+	}
+
+	// We use the raw {add|remove}EventListener() call because EventListener
+	// does not know how to remove event listeners and we really should
+	// clean up. Also, these events are not triggered in older browsers
+	// so we should be A-OK here.
+
+	function addEventListener(node, eventName, eventListener) {
+	  node.addEventListener(eventName, eventListener, false);
+	}
+
+	function removeEventListener(node, eventName, eventListener) {
+	  node.removeEventListener(eventName, eventListener, false);
+	}
+
+	var ReactTransitionEvents = {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      // If CSS transitions are not supported, trigger an "end animation"
+	      // event immediately.
+	      window.setTimeout(eventListener, 0);
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      addEventListener(node, endEvent, eventListener);
+	    });
+	  },
+
+	  endEvents: endEvents,
+
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      removeEventListener(node, endEvent, eventListener);
+	    });
+	  }
+	};
+
+	module.exports = ReactTransitionEvents;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/*
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var _ = __webpack_require__(5);
-	var ColumnProperties = __webpack_require__(6);
+	var _ = __webpack_require__(11);
+	var ColumnProperties = __webpack_require__(12);
 
 	var GridTitle = React.createClass({
 	    displayName: 'GridTitle',
@@ -1231,13 +1812,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 5 */
+/* 11 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 /***/ },
-/* 6 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1246,7 +1827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _ = __webpack_require__(5);
+	var _ = __webpack_require__(11);
 
 	var ColumnProperties = (function () {
 	  function ColumnProperties() {
@@ -1341,7 +1922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1350,7 +1931,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var ColumnProperties = __webpack_require__(6);
+	var ColumnProperties = __webpack_require__(12);
 
 	var GridRowContainer = React.createClass({
 	  displayName: 'GridRowContainer',
@@ -1471,7 +2052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridRowContainer;
 
 /***/ },
-/* 8 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1480,7 +2061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _ = __webpack_require__(5);
+	var _ = __webpack_require__(11);
 
 	var RowProperties = (function () {
 	  function RowProperties() {
@@ -1548,7 +2129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1577,7 +2158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 10 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1586,7 +2167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var _ = __webpack_require__(5);
+	var _ = __webpack_require__(11);
 
 	//needs props maxPage, currentPage, nextFunction, prevFunction
 	var GridPagination = React.createClass({
@@ -1649,7 +2230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 11 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1658,7 +2239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var _ = __webpack_require__(5);
+	var _ = __webpack_require__(11);
 
 	var GridSettings = React.createClass({
 	    displayName: 'GridSettings',
@@ -1727,7 +2308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 12 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1755,7 +2336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 13 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -1764,138 +2345,147 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var _ = __webpack_require__(5);
-	var ColumnProperties = __webpack_require__(6);
-	var deep = __webpack_require__(14);
+	var _ = __webpack_require__(11);
+	var ColumnProperties = __webpack_require__(12);
+	var deep = __webpack_require__(20);
 
 	var GridRow = React.createClass({
-	    displayName: 'GridRow',
+	  displayName: 'GridRow',
 
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            "isChildRow": false,
-	            "showChildren": false,
-	            "data": {},
-	            "columnSettings": null,
-	            "rowSettings": null,
-	            "hasChildren": false,
-	            "useGriddleStyles": true,
-	            "useGriddleIcons": true,
-	            "isSubGriddle": false,
-	            "paddingHeight": null,
-	            "rowHeight": null,
-	            "parentRowCollapsedClassName": "parent-row",
-	            "parentRowExpandedClassName": "parent-row expanded",
-	            "parentRowCollapsedComponent": "▶",
-	            "parentRowExpandedComponent": "▼",
-	            "onRowClick": null,
-	            "multipleSelectionSettings": null
-	        };
-	    },
-	    handleClick: function handleClick(e) {
-	        if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
-	            this.props.onRowClick(this, e);
-	        } else if (this.props.hasChildren) {
-	            this.props.toggleChildren();
-	        }
-	    },
-	    handleSelectionChange: function handleSelectionChange(e) {
-	        //hack to get around warning that's not super useful in this case
-	        return;
-	    },
-	    handleSelectClick: function handleSelectClick(e) {
-	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
-	            if (e.target.type === "checkbox") {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
-	            } else {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked);
-	            }
-	        }
-	    },
-	    verifyProps: function verifyProps() {
-	        if (this.props.columnSettings === null) {
-	            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
-	        }
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        this.verifyProps();
-	        var that = this;
-	        var columnStyles = null;
-
-	        if (this.props.useGriddleStyles) {
-	            columnStyles = {
-	                margin: "0",
-	                padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
-	                height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
-	                backgroundColor: "#FFF",
-	                borderTopColor: "#DDD",
-	                color: "#222"
-	            };
-	        }
-
-	        var columns = this.props.columnSettings.getColumns();
-
-	        // make sure that all the columns we need have default empty values
-	        // otherwise they will get clipped
-	        var defaults = _.object(columns, []);
-
-	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	        var dataView = _.extend(this.props.data);
-
-	        _.defaults(dataView, defaults);
-	        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
-	        var nodes = data.map(function (col, index) {
-	            var returnValue = null;
-	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
-
-	            //todo: Make this not as ridiculous looking
-	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null }, _this.props.parentRowExpandedComponent) : "";
-
-	            if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
-	                columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
-	            }
-
-	            if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== "undefined") {
-	                var colData = typeof meta.customComponent === 'undefined' || meta.customComponent === null ? col[1] : React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	                returnValue = meta == null ? returnValue : React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, colData);
-	            }
-
-	            return returnValue || React.createElement('td', { onClick: _this.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);
-	        });
-
-	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
-
-	            nodes.unshift(React.createElement('td', { key: 'selection', style: columnStyles }, React.createElement('input', {
-	                type: 'checkbox',
-	                checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
-	                onChange: this.handleSelectionChange,
-	                ref: 'selected' })));
-	        }
-
-	        //Get the row from the row settings.
-	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
-
-	        if (that.props.isChildRow) {
-	            className = "child-row";
-	        } else if (that.props.hasChildren) {
-	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
-	        }
-	        return React.createElement('tr', { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className }, nodes);
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      "isChildRow": false,
+	      "showChildren": false,
+	      "data": {},
+	      "columnSettings": null,
+	      "rowSettings": null,
+	      "hasChildren": false,
+	      "useGriddleStyles": true,
+	      "useGriddleIcons": true,
+	      "isSubGriddle": false,
+	      "paddingHeight": null,
+	      "rowHeight": null,
+	      "parentRowCollapsedClassName": "parent-row",
+	      "parentRowExpandedClassName": "parent-row expanded",
+	      "parentRowCollapsedComponent": "▶",
+	      "parentRowExpandedComponent": "▼",
+	      "onRowClick": null,
+	      "multipleSelectionSettings": null
+	    };
+	  },
+	  handleClick: function handleClick(e) {
+	    if (this.props.onRowClick !== null && _.isFunction(this.props.onRowClick)) {
+	      this.props.onRowClick(this, e);
+	    } else if (this.props.hasChildren) {
+	      this.props.toggleChildren();
 	    }
+	  },
+	  handleSelectionChange: function handleSelectionChange(e) {
+	    //hack to get around warning that's not super useful in this case
+	    return;
+	  },
+	  handleSelectClick: function handleSelectClick(e) {
+	    if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	      if (e.target.type === "checkbox") {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
+	      } else {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked);
+	      }
+	    }
+	  },
+	  verifyProps: function verifyProps() {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	    return nextProps.data !== this.props.data;
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    this.verifyProps();
+	    var that = this;
+	    var columnStyles = null;
+
+	    if (this.props.useGriddleStyles) {
+	      columnStyles = {
+	        margin: "0",
+	        padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+	        height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
+	        backgroundColor: "#FFF",
+	        borderTopColor: "#DDD",
+	        color: "#222"
+	      };
+	    }
+
+	    var columns = this.props.columnSettings.getColumns();
+
+	    // make sure that all the columns we need have default empty values
+	    // otherwise they will get clipped
+	    var defaults = _.object(columns, []);
+
+	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	    // using Object.create allows us to update the rowData without altering the original data.
+	    // We can use this info to detect only changed properties via getOwnProperties
+	    var dataView = Object.create(this.props.data);
+
+	    _.defaults(dataView, defaults);
+	    var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
+	    var nodes = data.map(function (col, index) {
+	      var returnValue = null;
+	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
+
+	      //todo: Make this not as ridiculous looking
+	      var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null }, _this.props.parentRowExpandedComponent) : "";
+
+	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
+	        columnStyles = _.extend(columnStyles, { paddingLeft: 10 });
+	      }
+
+	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
+	        if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
+	          var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
+	        } else {
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, col[1]);
+	        }
+	      }
+
+	      return returnValue || React.createElement('td', { onClick: _this.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);
+	    });
+
+	    if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	      var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	      nodes.unshift(React.createElement('td', { key: 'selection', style: columnStyles }, React.createElement('input', {
+	        type: 'checkbox',
+	        checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
+	        onChange: this.handleSelectionChange,
+	        ref: 'selected' })));
+	    }
+
+	    //Get the row from the row settings.
+	    var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
+
+	    if (that.props.isChildRow) {
+	      className = "child-row";
+	    } else if (that.props.hasChildren) {
+	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+	    }
+	    return React.createElement('tr', { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className }, nodes);
+	  }
 	});
 
 	module.exports = GridRow;
 
 /***/ },
-/* 14 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var _ = __webpack_require__(5);
+	var _ = __webpack_require__(11);
 
 	// Credits: https://github.com/documentcloud/underscore-contrib
 	// Sub module: underscore.object.selectors
@@ -2001,7 +2591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2047,7 +2637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 16 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -2088,7 +2678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 17 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

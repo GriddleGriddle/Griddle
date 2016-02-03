@@ -2,6 +2,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var ReactCSSTransitionGroup = require('rc-css-transition-group');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
@@ -35,7 +36,8 @@ var GridTable = React.createClass({
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
       "externalIsLoading": false,
-      "onRowClick": null
+      "onRowClick": null,
+      "transitionName": null,
     }
   },
   getInitialState: function(){
@@ -249,7 +251,11 @@ var GridTable = React.createClass({
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
-      nodes = <tbody>{nodes}</tbody>
+      if (that.props.transitionName) {
+        nodes = <ReactCSSTransitionGroup component="tbody" transitionName={that.props.transitionName}>{nodes}</ReactCSSTransitionGroup>
+      } else {
+        nodes = <tbody>{nodes}</tbody>
+      }
     }
 
     var pagingContent = <tbody />;
