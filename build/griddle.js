@@ -2399,6 +2399,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 	  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	    if (nextProps.columnSettings && nextProps.columnSettings.columnMetadata) {
+	      var forceUpdate = _.find(nextProps.columnSettings.columnMetadata, function (metadta) {
+	        return metadta.forceUpdate;
+	      });
+	      if (forceUpdate) {
+	        return true;
+	      }
+	    }
+
 	    return nextProps.data !== this.props.data;
 	  },
 	  render: function render() {
