@@ -79,7 +79,11 @@ var GridRow = React.createClass({
         var dataView = _.extend(this.props.data);
 
         _.defaults(dataView, defaults);
-        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
+
+        var data = _.map(_.without(columns, 'children'), function (dataColumn) {
+          return _.pairs(deep.pick(dataView, [dataColumn]))[0];
+        });
+
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);

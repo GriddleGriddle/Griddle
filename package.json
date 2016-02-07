@@ -47,6 +47,7 @@
   },
   "scripts": {
     "test": "karma start --browsers PhantomJS",
+    "test-chrome": "karma start --browsers Chrome",
     "test-single": "karma start --singleRun true --browsers PhantomJS"
   },
   "repository": {

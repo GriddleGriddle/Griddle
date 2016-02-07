@@ -1,4 +1,4 @@
-var _ = require('underscore'); 
+var _ = require('underscore');
 var React = require('react');
 var GridRow = require('../gridRow.jsx');
 var ColumnProperties = require('../columnProperties.js');
@@ -300,7 +300,7 @@ describe('GridRow', function(){
 		var tr = TestUtils.findRenderedDOMComponentWithTag(row2, 'tr');
 		expect(tr.length).not.toBe(null);
 		var td = TestUtils.scryRenderedDOMComponentsWithTag(row2, 'td');
-		
+
 		expect(td.length).toBeGreaterThan(0);
 		var first = td[0];
 
@@ -308,4 +308,59 @@ describe('GridRow', function(){
 
 		expect(mock.calls.count()).toEqual(1);
 	})
+
+	describe('cells order', function(){
+		function renderRowTds(columnSettings, data) {
+			const multipleSelectOptions =  {
+				isMultipleSelection: false,
+				toggleSelectAll: function(){},
+				getIsSelectAllChecked: function(){},
+
+				toggleSelectRow: function(){},
+				getSelectedRowIds: function(){},
+				getIsRowChecked: function(){}
+			};
+
+			const FakeTable = React.createClass({
+	      render() {
+	        return (<table>
+	          <tbody>
+	            <GridRow data={data}
+	              hasChildren={false}
+	              toggleChildren={function(){}}
+	              columnSettings={columnSettings}
+	              multipleSelectionSettings={multipleSelectOptions}/>
+	          </tbody>
+	        </table>);
+	      }
+	    });
+
+			const row = TestUtils.renderIntoDocument(<FakeTable />);
+
+			return TestUtils.scryRenderedDOMComponentsWithTag(row, 'td');
+		}
+
+		it('should consider columns order in columnSettings', function(){
+			const columnSettings = new ColumnProperties(['id', 'name', 'country']);
+			const data = {
+				'name': 'test name',
+				'country': 'test country',
+				'id': 1
+			};
+
+			expect(renderRowTds(columnSettings, data).map((td) => td.textContent)).toEqual(['1', 'test name', 'test country']);
+		});
+
+		it('should consider columns order in columnSettings if there are numeric named columns', function(){
+			const columnSettings = new ColumnProperties(['id', '3', '1', '2']);
+			const data = {
+				'1': '1 data',
+				'2': '2 data',
+				'3': '3 data',
+				'id': 'id data'
+			};
+
+			expect(renderRowTds(columnSettings, data).map((td) => td.textContent)).toEqual(['id data', '3 data', '1 data', '2 data']);
+		});
+	});
 });
