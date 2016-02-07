@@ -55,13 +55,22 @@ var GridRow = React.createClass({
     },
     shouldComponentUpdate: function(nextProps, nextState) {
       if (nextProps.columnSettings && nextProps.columnSettings.columnMetadata) {
-        var forceUpdate = _.find(nextProps.columnSettings.columnMetadata, function(metadta) { return metadta.forceUpdate});
-        if (forceUpdate) {
-            return true;
+        var shouldUpdateFuncs = _.filter(nextProps.columnSettings.columnMetadata, function(metadta) { return !!metadta.shouldUpdate; });
+        if (shouldUpdateFuncs.length) {
+            var shouldUpdate;
+            for (var i=0; i<shouldUpdateFuncs.length; i++) {
+                shouldUpdate = shouldUpdateFuncs[i].shouldUpdate;
+                if (shouldUpdate(this.props, nextProps , this.state, nextState)) {
+                    return true;
+                }
+            }
+            
+            return false;
         }
       }
 
-      return nextProps.data !== this.props.data;
+      // by default always update
+      return true;
     },
     render: function() {
         this.verifyProps();
