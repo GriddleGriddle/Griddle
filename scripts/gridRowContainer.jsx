@@ -84,7 +84,7 @@ var GridRowContainer = React.createClass({
               var key = that.props.rowSettings.getRowKey(row, index);
 
               if(typeof row["children"] !== "undefined"){
-                var Griddle = require('./griddle.jsx');
+                var Griddle = this.constructor.Griddle;
                 return (
                   <tr key={key} style={{paddingLeft: 5}}>
                     <td colSpan={that.props.columnSettings.getVisibleColumnCount()} className="griddle-parent" style={that.props.useGriddleStyles ? {border: "none", "padding": "0 0 0 5px"} : null}>
