@@ -12,6 +12,7 @@ var GridPagination = require('./gridPagination.jsx');
 var GridSettings = require('./gridSettings.jsx');
 var GridNoData = require('./gridNoData.jsx');
 var GridRow = require('./gridRow.jsx');
+var GridRowContainer = require('./gridRowContainer.jsx');
 var CustomRowComponentContainer = require('./customRowComponentContainer.jsx');
 var CustomPaginationContainer = require('./customPaginationContainer.jsx');
 var CustomFilterContainer = require('./customFilterContainer.jsx');
@@ -808,4 +809,4 @@ var Griddle = React.createClass({
     }
 });
 
-module.exports = Griddle;
+GridRowContainer.Griddle = module.exports = Griddle;
