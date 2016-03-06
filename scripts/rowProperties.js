@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _uniqueId = require('lodash.uniqueid');
 
 class RowProperties{
   constructor (rowMetadata={}, rowComponent=null, isCustom=false) {
@@ -6,7 +6,7 @@ class RowProperties{
     this.rowComponent = rowComponent;
     this.isCustom = isCustom;
     // assign unique Id to each griddle instance
-    this.gridId = _.uniqueId();
+    this.gridId = _uniqueId();
   }
 
   getRowKey(row, key) {

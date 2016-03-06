@@ -3,6 +3,7 @@
 */
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
+var pick = require('lodash.pick');
 
 var GridRowContainer = React.createClass({
     getDefaultProps: function(){
@@ -57,7 +58,7 @@ var GridRowContainer = React.createClass({
         <this.props.rowSettings.rowComponent
             useGriddleStyles={this.props.useGriddleStyles}
             isSubGriddle={this.props.isSubGriddle}
-            data={this.props.rowSettings.isCustom ? _.pick(this.props.data, columns) : this.props.data}
+            data={this.props.rowSettings.isCustom ? pick(this.props.data, columns) : this.props.data}
             rowData={this.props.rowSettings.isCustom ? this.props.data : null }
             columnSettings={this.props.columnSettings}
             rowSettings={this.props.rowSettings}
