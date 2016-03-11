@@ -11,13 +11,6 @@ var DefaultHeaderComponent = React.createClass({
   }
 });
 
-var ascendParentsUntil = function(element, tagName) {
-  if (element.tagName === tagName) {
-    return element;
-  }
-  return ascendParentsUntil(element.parentElement,tagName);
-}
-
 var GridTitle = React.createClass({
   getDefaultProps: function(){
       return {
@@ -34,9 +27,11 @@ var GridTitle = React.createClass({
   componentWillMount: function(){
     this.verifyProps();
   },
-  sort: function(event){
-      var thElement = ascendParentsUntil(event.target,'TH');
-      this.props.sortSettings.changeSort(thElement.dataset.title);
+  sort: function(column) {
+    var that = this;
+    return function(event) {
+      that.props.sortSettings.changeSort(column);
+    };
   },
   toggleSelectAll: function (event) {
 		this.props.multipleSelectionSettings.toggleSelectAll();
@@ -90,7 +85,7 @@ var GridTitle = React.createClass({
           }
         }
 
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
+        return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
           <HeaderComponent columnName={col} displayName={displayName} {...headerProps}/>
           {sortComponent}
         </th>);
