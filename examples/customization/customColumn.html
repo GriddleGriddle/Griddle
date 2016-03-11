@@ -10,6 +10,12 @@ var LinkComponent = React.createClass({
   }
 });
 
+var HeaderComponent = React.createClass({
+  render: function(){
+    return <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
+  }
+});
+
 var customColumnMetadata = [
 {
   "columnName": "id",
@@ -28,13 +34,17 @@ var customColumnMetadata = [
   "columnName": "city",
   "order": 3,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'red' }
 },
 {
   "columnName": "state",
   "order": 4,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'blue' }
 },
 {
   "columnName": "country",

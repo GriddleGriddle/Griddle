@@ -5,6 +5,12 @@ var React = require('react');
 var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
 
+var DefaultHeaderComponent = React.createClass({
+  render: function(){
+    return (<span>{this.props.displayName}</span>);
+  }
+});
+
 var GridTitle = React.createClass({
   getDefaultProps: function(){
       return {
@@ -21,8 +27,11 @@ var GridTitle = React.createClass({
   componentWillMount: function(){
     this.verifyProps();
   },
-  sort: function(event){
-      this.props.sortSettings.changeSort(event.target.dataset.title||event.target.parentElement.dataset.title);
+  sort: function(column) {
+    var that = this;
+    return function(event) {
+      that.props.sortSettings.changeSort(column);
+    };
   },
   toggleSelectAll: function (event) {
 		this.props.multipleSelectionSettings.toggleSelectAll();
@@ -60,6 +69,8 @@ var GridTitle = React.createClass({
 
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+        var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+        var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
 
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
@@ -74,7 +85,10 @@ var GridTitle = React.createClass({
           }
         }
 
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+        return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
+          <HeaderComponent columnName={col} displayName={displayName} {...headerProps}/>
+          {sortComponent}
+        </th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
