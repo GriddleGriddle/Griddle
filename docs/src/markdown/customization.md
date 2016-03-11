@@ -53,6 +53,14 @@ Griddle parses and evaluates the following columnMetadata object properties:
   <dt>customComponent</dt>
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a `TD` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
 </dl>
+<dl>
+  <dt>customHeaderComponent</dt>
+  <dd><strong>React Component</strong> - The component that should be rendered instead of the standard header data. This component will still be rendered inside of a `TH` element. (more information below in the [Custom Columns section](#customColumns).)</dd>
+</dl>
+<dl>
+  <dt>customHeaderComponentProps</dt>
+  <dd><strong>object</strong> - An object containing additional properties that will be passed into the custom header component. (more information below in the [Custom Columns section](#customColumns).)</dd>
+</dl>
 
 However, you are also able to pass other properties in as columnMetadata.
 
@@ -177,8 +185,17 @@ var LinkComponent = React.createClass({
   }
 });
 ```
+Additionally, we want the city and state column headers to be highlighted a specific color. We can define a custom header component as:
 
-From there, we will set the customComponent value in the **name** columnMetadata object to this LinkComponent.
+```
+var HeaderComponent = React.createClass({
+  render: function(){
+    return <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
+  }
+});
+```
+
+From there, we will set the customComponent value in the **name** columnMetadata object to this LinkComponent. We're also going to update **state** and **city**'s `customHeaderComponent` and `customHeaderComponentProps`.
 
 ```
 var columnMeta = [
@@ -189,6 +206,18 @@ var columnMeta = [
   "locked": false,
   "visible": true,
   "customComponent": LinkComponent
+  },
+  {
+  ...
+  "columnName": "city",
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'red' }
+  },
+  {
+  ...
+  "columnName": "state",
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'blue' }
   },
   ...
 ];
