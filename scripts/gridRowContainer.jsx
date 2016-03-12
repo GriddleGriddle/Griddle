@@ -3,6 +3,7 @@
 */
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
+var pick = require('lodash.pick');
 
 var GridRowContainer = React.createClass({
     getDefaultProps: function(){
@@ -55,26 +56,25 @@ var GridRowContainer = React.createClass({
 
       arr.push(
         <this.props.rowSettings.rowComponent
-            useGriddleStyles={this.props.useGriddleStyles}
-            isSubGriddle={this.props.isSubGriddle}
-            data={this.props.rowSettings.isCustom ? _.pick(this.props.data, columns) : this.props.data}
-            rowData={this.props.rowSettings.isCustom ? this.props.data : null }
-            columnSettings={this.props.columnSettings}
-            rowSettings={this.props.rowSettings}
-            hasChildren={that.props.hasChildren}
-            toggleChildren={that.toggleChildren}
-            showChildren={that.state.showChildren}
-            key={that.props.uniqueId + '_base_row'}
-            useGriddleIcons={that.props.useGriddleIcons}
-            parentRowExpandedClassName={this.props.parentRowExpandedClassName}
-            parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
-            parentRowExpandedComponent={this.props.parentRowExpandedComponent}
-            parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
-            paddingHeight={that.props.paddingHeight}
-            rowHeight={that.props.rowHeight}
-            onRowClick={that.props.onRowClick}
-    	      multipleSelectionSettings={this.props.multipleSelectionSettings}
-        />
+          useGriddleStyles={this.props.useGriddleStyles}
+          isSubGriddle={this.props.isSubGriddle}
+          data={this.props.rowSettings.isCustom ? pick(this.props.data, columns) : this.props.data}
+          rowData={this.props.rowSettings.isCustom ? this.props.data : null }
+          columnSettings={this.props.columnSettings}
+          rowSettings={this.props.rowSettings}
+          hasChildren={that.props.hasChildren}
+          toggleChildren={that.toggleChildren}
+          showChildren={that.state.showChildren}
+          key={that.props.uniqueId + '_base_row'}
+          useGriddleIcons={that.props.useGriddleIcons}
+          parentRowExpandedClassName={this.props.parentRowExpandedClassName}
+          parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}
+          parentRowExpandedComponent={this.props.parentRowExpandedComponent}
+          parentRowCollapsedComponent={this.props.parentRowCollapsedComponent}
+          paddingHeight={that.props.paddingHeight}
+          rowHeight={that.props.rowHeight}
+          onRowClick={that.props.onRowClick}
+          multipleSelectionSettings={this.props.multipleSelectionSettings} />
       );
 
       var children = null;
@@ -84,7 +84,7 @@ var GridRowContainer = React.createClass({
               var key = that.props.rowSettings.getRowKey(row, index);
 
               if(typeof row["children"] !== "undefined"){
-                var Griddle = this.constructor.Griddle;
+                var Griddle = that.constructor.Griddle;
                 return (
                   <tr key={key} style={{paddingLeft: 5}}>
                     <td colSpan={that.props.columnSettings.getVisibleColumnCount()} className="griddle-parent" style={that.props.useGriddleStyles ? {border: "none", "padding": "0 0 0 5px"} : null}>
