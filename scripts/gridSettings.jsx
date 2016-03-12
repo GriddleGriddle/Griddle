@@ -2,7 +2,9 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var _ = require('underscore');
+var includes = require('lodash.includes');
+var without = require('lodash.without');
+var find = require('lodash.find');
 
 var GridSettings = React.createClass({
     getDefaultProps: function(){
@@ -25,12 +27,12 @@ var GridSettings = React.createClass({
     },
     handleChange: function(event){
         var columnName = event.target.dataset ? event.target.dataset.name : event.target.getAttribute('data-name');
-        if(event.target.checked === true && _.contains(this.props.selectedColumns, columnName) === false){
+        if(event.target.checked === true && includes(this.props.selectedColumns, columnName) === false){
             this.props.selectedColumns.push(columnName);
             this.props.setColumns(this.props.selectedColumns);
         } else {
             /* redraw with the selected columns minus the one just unchecked */
-            this.props.setColumns(_.without(this.props.selectedColumns, columnName));
+            this.props.setColumns(without(this.props.selectedColumns, columnName));
         }
     },
     render: function(){
@@ -40,9 +42,9 @@ var GridSettings = React.createClass({
         //don't show column selector if we're on a custom component
         if (that.props.useCustomComponent === false){
             nodes = this.props.columns.map(function(col, index){
-                var checked = _.contains(that.props.selectedColumns, col);
+                var checked = includes(that.props.selectedColumns, col);
                 //check column metadata -- if this one is locked make it disabled and don't put an onChange event
-                var meta  = _.findWhere(that.props.columnMetadata, {columnName: col});
+                var meta  = find(that.props.columnMetadata, {columnName: col});
                 var displayName = col;
 
                 if (typeof meta !== "undefined" && typeof meta.displayName !== "undefined" && meta.displayName != null) {

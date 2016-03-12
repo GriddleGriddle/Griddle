@@ -2,9 +2,14 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
 var deep = require('./deep.js');
+var isFunction = require('lodash.isfunction');
+var fromPairs = require('lodash.frompairs');
+var assign = require('lodash.assign');
+var defaults = require('lodash.defaults');
+var toPairs = require('lodash.topairs');
+var without = require('lodash.without');
 
 var GridRow = React.createClass({
     getDefaultProps: function(){
@@ -29,7 +34,7 @@ var GridRow = React.createClass({
       }
     },
     handleClick: function(e){
-        if(this.props.onRowClick !== null && _.isFunction(this.props.onRowClick) ){
+        if(this.props.onRowClick !== null && isFunction(this.props.onRowClick) ){
             this.props.onRowClick(this, e);
         }else if(this.props.hasChildren){
             this.props.toggleChildren();
@@ -73,13 +78,13 @@ var GridRow = React.createClass({
 
         // make sure that all the columns we need have default empty values
         // otherwise they will get clipped
-        var defaults = _.object(columns, []);
+        var defaultValues = fromPairs(columns, []);
 
         // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-        var dataView = _.extend(this.props.data);
+        var dataView = assign({}, this.props.data);
 
-        _.defaults(dataView, defaults);
-        var data = _.pairs(deep.pick(dataView, _.without(columns, 'children')));
+        defaults(dataView, defaultValues);
+        var data = toPairs(deep.pick(dataView, without(columns, 'children')));
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
@@ -91,7 +96,7 @@ var GridRow = React.createClass({
                 <span style={this.props.useGriddleStyles ? {fontSize: "10px"} : null}>{this.props.parentRowExpandedComponent}</span> : "";
 
             if(index === 0 && this.props.isChildRow && this.props.useGriddleStyles){
-              columnStyles = _.extend(columnStyles, {paddingLeft:10})
+              columnStyles = assign(columnStyles, {paddingLeft:10})
             }
 
             if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
