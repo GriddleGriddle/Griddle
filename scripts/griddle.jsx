@@ -153,6 +153,19 @@ var Griddle = React.createClass({
            return false;
        });
     },
+
+    filterByColumn: function(results, filter, column) {
+      return _filter(results,
+        function(item) {
+          if ((deep.getAt(item, column)||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+            return true;
+          }
+
+          return false;
+        }
+      )
+    },
+
     /* if we have a filter display the max page and results accordingly */
     setFilter: function(filter) {
         if(this.props.useExternal) {
