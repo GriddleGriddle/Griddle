@@ -11,8 +11,17 @@ var LinkComponent = React.createClass({
 });
 
 var HeaderComponent = React.createClass({
+  filterText: function(e) {
+    this.props.filterByColumn(e.target.value, this.props.columnName)
+  },
+
   render: function(){
-    return <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
+    return (
+      <span>
+        <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
+        <input type='text' onChange={this.filterText} />
+      </span>
+    );
   }
 });
 

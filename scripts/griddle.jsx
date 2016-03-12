@@ -33,6 +33,7 @@ var isUndefined = require('lodash.isundefined');
 var omit = require('lodash.omit');
 var map = require('lodash.map');
 var sortBy = require('lodash.sortby');
+var extend = require('lodash.assign');
 var _filter = require('lodash.filter');
 
 var Griddle = React.createClass({
@@ -154,16 +155,51 @@ var Griddle = React.createClass({
        });
     },
 
-    filterByColumn: function(results, filter, column) {
-      return _filter(results,
+    filterByColumnFilters(columnFilters) {
+      var filteredResults = _filter(
+        this.props.results,
         function(item) {
-          if ((deep.getAt(item, column)||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
-            return true;
+          for(var column in columnFilters) {
+            if(deep.getAt(item, column||"").toString().toLowerCase().indexOf(columnFilters[column].toLowerCase()) >= 0) {
+              return true;
+            }
           }
 
           return false;
         }
-      )
+      );
+
+      var newState = {
+        columnFilters: columnFilters
+      };
+
+      if(filteredResults.length > 0) {
+        newState.filteredResults = filteredResults;
+      } else if(this.state.filter) {
+        newState.filteredResults = this.props.useCustomFilterer ?
+          this.props.customFilterer(this.props.results, filter) :
+          this.defaultFilter(this.props.results, filter);
+      } else {
+        newState.filteredResults = null;
+      }
+
+      this.setState(newState);
+    },
+
+    filterByColumn: function(filter, column) {
+      //else the column and the filter to an object and pass it to the filterByColumnFilters
+      var columnFilters = this.state.columnFilters;
+
+      //if filter is "" remove it from the columnFilters object
+      if(columnFilters.hasOwnProperty(column) && !filter) {
+        columnFilters = omit(columnFilters, column);
+      } else {
+        var newObject = {};
+        newObject[column] = filter;
+        columnFilters = extend({}, columnFilters, newObject);
+      }
+
+      this.filterByColumnFilters(columnFilters);
     },
 
     /* if we have a filter display the max page and results accordingly */
@@ -349,6 +385,10 @@ var Griddle = React.createClass({
             filteredResults: null,
             filteredColumns: [],
             filter: "",
+            //this sets the individual column filters
+            //should be in the format of:
+            //  [ {columnName: 'columnFilter'}, ...]
+            columnFilters: {},
             resultsPerPage: this.props.resultsPerPage || 5,
             sortColumn: this.props.initialSort,
             sortAscending: this.props.initialSortAscending,
@@ -734,7 +774,8 @@ var Griddle = React.createClass({
                 columnSettings={this.columnSettings}
                 rowSettings = {this.rowSettings}
                 sortSettings={sortProperties}
-				multipleSelectionSettings={multipleSelectionProperties}
+                multipleSelectionSettings={multipleSelectionProperties}
+                filterByColumn={this.filterByColumn}
                 isSubGriddle={this.props.isSubGriddle}
                 useGriddleIcons={this.props.useGriddleIcons}
                 useFixedLayout={this.props.useFixedLayout}
