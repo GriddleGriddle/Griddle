@@ -15,6 +15,7 @@ var GridTitle = React.createClass({
   getDefaultProps: function(){
       return {
          "columnSettings" : null,
+         "filterByColumn": function() {},
          "rowSettings" : null,
          "sortSettings": null,
          "multipleSelectionSettings": null,
@@ -86,7 +87,7 @@ var GridTitle = React.createClass({
         }
 
         return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
-          <HeaderComponent columnName={col} displayName={displayName} {...headerProps}/>
+          <HeaderComponent columnName={col} displayName={displayName} filterByColumn={that.props.filterByColumn} {...headerProps}/>
           {sortComponent}
         </th>);
     });
