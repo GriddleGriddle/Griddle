@@ -8039,7 +8039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var key = that.props.rowSettings.getRowKey(row, index);
 
 	        if (typeof row["children"] !== "undefined") {
-	          var Griddle = this.constructor.Griddle;
+	          var Griddle = that.constructor.Griddle;
 	          return React.createElement('tr', { key: key, style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, {
 	            rowMetadata: { key: 'id' },
 	            isSubGriddle: true,
@@ -10240,14 +10240,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(2);
 	var ColumnProperties = __webpack_require__(6);
 	var deep = __webpack_require__(36);
-
 	var isFunction = __webpack_require__(40);
 	var fromPairs = __webpack_require__(41);
 	var assign = __webpack_require__(29);
 	var defaults = __webpack_require__(42);
 	var toPairs = __webpack_require__(45);
 	var without = __webpack_require__(33);
-	var _ = __webpack_require__(5);
 
 	var GridRow = React.createClass({
 	  displayName: 'GridRow',
