@@ -229,22 +229,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    filterByColumnFilters: function filterByColumnFilters(columnFilters) {
-	        var filteredResults = _filter(this.props.results, function (item) {
-	            for (var column in columnFilters) {
-	                if (deep.getAt(item, column || "").toString().toLowerCase().indexOf(columnFilters[column].toLowerCase()) >= 0) {
+	        var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
+	            return _filter(previous, function (item) {
+	                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
 	                    return true;
 	                }
-	            }
 
-	            return false;
-	        });
+	                return false;
+	            });
+	        }, this.props.results);
 
 	        var newState = {
 	            columnFilters: columnFilters
 	        };
 
-	        if (filteredResults.length > 0) {
+	        if (columnFilters) {
 	            newState.filteredResults = filteredResults;
+	            newState.maxPage = this.getMaxPage(newState.filteredResults);
 	        } else if (this.state.filter) {
 	            newState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
 	        } else {
@@ -255,7 +256,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    filterByColumn: function filterByColumn(filter, column) {
-	        //else the column and the filter to an object and pass it to the filterByColumnFilters
 	        var columnFilters = this.state.columnFilters;
 
 	        //if filter is "" remove it from the columnFilters object
@@ -455,8 +455,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            filteredColumns: [],
 	            filter: "",
 	            //this sets the individual column filters
-	            //should be in the format of:
-	            //  [ {columnName: 'columnFilter'}, ...]
 	            columnFilters: {},
 	            resultsPerPage: this.props.resultsPerPage || 5,
 	            sortColumn: this.props.initialSort,

@@ -188,7 +188,6 @@ var Griddle = React.createClass({
     },
 
     filterByColumn: function(filter, column) {
-      //else the column and the filter to an object and pass it to the filterByColumnFilters
       var columnFilters = this.state.columnFilters;
 
       //if filter is "" remove it from the columnFilters object
@@ -387,8 +386,6 @@ var Griddle = React.createClass({
             filteredColumns: [],
             filter: "",
             //this sets the individual column filters
-            //should be in the format of:
-            //  [ {columnName: 'columnFilter'}, ...]
             columnFilters: {},
             resultsPerPage: this.props.resultsPerPage || 5,
             sortColumn: this.props.initialSort,
