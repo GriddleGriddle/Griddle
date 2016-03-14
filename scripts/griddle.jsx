@@ -173,8 +173,9 @@ var Griddle = React.createClass({
         columnFilters: columnFilters
       };
 
-      if(filteredResults.length > 0) {
+      if(columnFilters) {
         newState.filteredResults = filteredResults;
+        newState.maxPage = this.getMaxPage(newState.filteredResults);
       } else if(this.state.filter) {
         newState.filteredResults = this.props.useCustomFilterer ?
           this.props.customFilterer(this.props.results, filter) :

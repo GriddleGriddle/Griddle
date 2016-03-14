@@ -11,6 +11,10 @@ var LinkComponent = React.createClass({
 });
 
 var HeaderComponent = React.createClass({
+  textOnClick: function(e) {
+    e.stopPropagation();
+  },
+
   filterText: function(e) {
     this.props.filterByColumn(e.target.value, this.props.columnName)
   },
@@ -18,8 +22,8 @@ var HeaderComponent = React.createClass({
   render: function(){
     return (
       <span>
-        <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
-        <input type='text' onChange={this.filterText} />
+        <div><strong style={{color: this.props.color}}>{this.props.displayName}</strong></div>
+        <input type='text' onChange={this.filterText} onClick={this.textOnClick} />
       </span>
     );
   }
