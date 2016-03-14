@@ -156,18 +156,18 @@ var Griddle = React.createClass({
     },
 
     filterByColumnFilters(columnFilters) {
-      var filteredResults = _filter(
-        this.props.results,
-        function(item) {
-          for(var column in columnFilters) {
-            if(deep.getAt(item, column||"").toString().toLowerCase().indexOf(columnFilters[column].toLowerCase()) >= 0) {
+      var filteredResults = Object.keys(columnFilters).reduce(function(previous, current) {
+        return _filter(
+          previous,
+          function(item) {
+            if(deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
               return true;
             }
-          }
 
-          return false;
-        }
-      );
+            return false;
+          }
+        )
+      }, this.props.results)
 
       var newState = {
         columnFilters: columnFilters
