@@ -185,15 +185,31 @@ var LinkComponent = React.createClass({
   }
 });
 ```
-Additionally, we want the city and state column headers to be highlighted a specific color. We can define a custom header component as:
+
+Additionally, we want the city and state column headers to be highlighted a specific color and have a filter by column input. We can define a custom header component as:
 
 ```
 var HeaderComponent = React.createClass({
+  textOnClick: function(e) {
+    e.stopPropagation();
+  },
+
+  filterText: function(e) {
+    this.props.filterByColumn(e.target.value, this.props.columnName)
+  },
+
   render: function(){
-    return <strong style={{color: this.props.color}}>{this.props.displayName}</strong>
+    return (
+      <span>
+        <div><strong style={{color: this.props.color}}>{this.props.displayName}</strong></div>
+        <input type='text' onChange={this.filterText} onClick={this.textOnClick} />
+      </span>
+    );
   }
 });
 ```
+
+<small>Please note: filterByColumn is a method that is passed as a prop to any customHeaderComponent.</small>
 
 From there, we will set the customComponent value in the **name** columnMetadata object to this LinkComponent. We're also going to update **state** and **city**'s `customHeaderComponent` and `customHeaderComponentProps`.
 
