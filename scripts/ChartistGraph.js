@@ -11,41 +11,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
-/******/
+
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -61,10 +61,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict'
+	'use strict';
 
-	var React = __webpack_require__(2)
-	var Chartist = __webpack_require__(8)
+	var React = __webpack_require__(2);
+	var Chartist = __webpack_require__(3);
 
 	var ChartistGraph = React.createClass({
 
@@ -77,57 +77,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	    responsiveOptions: React.PropTypes.array
 	  },
 
-	  componentWillReceiveProps: function(newProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
 	    return this.updateChart(newProps);
 	  },
 
-	  updateChart: function(config) {
-	    var type = config.type
-	    var data = config.data
-	    var options = config.options || {}
-	    var responsiveOptions = config.responsiveOptions || []
+	  updateChart: function updateChart(config) {
+	    var type = config.type;
+	    var data = config.data;
+	    var options = config.options || {};
+	    var responsiveOptions = config.responsiveOptions || [];
 	    return new Chartist[type](this.getDOMNode(), data, options, responsiveOptions);
 	  },
 
-	  componentDidMount: function() {
+	  componentDidMount: function componentDidMount() {
 	    return this.updateChart(this.props);
 	  },
 
-	  render: function() {
-	    return React.DOM.div({className: 'ct-chart'})
+	  render: function render() {
+	    return React.DOM.div({ className: 'ct-chart' });
 	  }
 
 	});
 
-	module.exports = ChartistGraph
-
+	module.exports = ChartistGraph;
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	(function(root, factory) {
-	    if(true) {
-	        module.exports = factory();
-	    }
-	    else if(typeof define === 'function' && define.amd) {
-	        define([], factory);
-	    }
-	    else {
-	        root['Chartist'] = factory();
-	    }
-	}(this, function() {
+	'use strict';
+
+	(function (root, factory) {
+	  if (true) {
+	    module.exports = factory();
+	  } else if (typeof define === 'function' && define.amd) {
+	    define([], factory);
+	  } else {
+	    root['Chartist'] = factory();
+	  }
+	})(undefined, function () {
 
 	  /* Chartist.js 0.3.1
 	   * Copyright © 2014 Gion Kunz
@@ -195,8 +189,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String|Number} length
 	     * @returns {Number} Returns the pixel as number or NaN if the passed length could not be converted to pixel
 	     */
-	    Chartist.getPixelLength = function(length) {
-	      if(typeof length === 'string') {
+	    Chartist.getPixelLength = function (length) {
+	      if (typeof length === 'string') {
 	        length = length.replace(/px/i, '');
 	      }
 
@@ -210,7 +204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String|Node} query The query to use for selecting a Node or a DOM node that will be returned directly
 	     * @return {Node}
 	     */
-	    Chartist.querySelector = function(query) {
+	    Chartist.querySelector = function (query) {
 	      return query instanceof Node ? query : document.querySelector(query);
 	    };
 
@@ -240,7 +234,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        // Clear the draw if its already used before so we start fresh
 	        svg.empty();
-
 	      } else {
 	        // Create svg object with width and height or use 100% as default
 	        svg = Chartist.Svg('svg').attr({
@@ -271,8 +264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (var i = 0; i < data.series.length; i++) {
 	        // If the series array contains an object with a data property we will use the property
 	        // otherwise the value directly (array or number)
-	        array[i] = typeof(data.series[i]) === 'object' && data.series[i].data !== undefined ?
-	          data.series[i].data : data.series[i];
+	        array[i] = typeof data.series[i] === 'object' && data.series[i].data !== undefined ? data.series[i].data : data.series[i];
 
 	        // Convert values to number
 	        for (var j = 0; j < array[i].length; j++) {
@@ -328,7 +320,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Chartist.projectLength = function (svg, length, bounds, options) {
 	      var availableHeight = Chartist.getAvailableHeight(svg, options);
-	      return (length / bounds.range * availableHeight);
+	      return length / bounds.range * availableHeight;
 	    };
 
 	    /**
@@ -340,7 +332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {Number} The height of the area in the chart for the data series
 	     */
 	    Chartist.getAvailableHeight = function (svg, options) {
-	      return Math.max((Chartist.getPixelLength(options.height) || svg.height()) - (options.chartPadding * 2) - options.axisX.offset, 0);
+	      return Math.max((Chartist.getPixelLength(options.height) || svg.height()) - options.chartPadding * 2 - options.axisX.offset, 0);
 	    };
 
 	    /**
@@ -352,11 +344,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Chartist.getHighLow = function (dataArray) {
 	      var i,
-	        j,
-	        highLow = {
-	          high: -Number.MAX_VALUE,
-	          low: Number.MAX_VALUE
-	        };
+	          j,
+	          highLow = {
+	        high: -Number.MAX_VALUE,
+	        low: Number.MAX_VALUE
+	      };
 
 	      for (i = 0; i < dataArray.length; i++) {
 	        for (j = 0; j < dataArray[i].length; j++) {
@@ -386,9 +378,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Chartist.getBounds = function (svg, normalizedData, options, referenceValue) {
 	      var i,
-	        newMin,
-	        newMax,
-	        bounds = Chartist.getHighLow(normalizedData);
+	          newMin,
+	          newMax,
+	          bounds = Chartist.getHighLow(normalizedData);
 
 	      // Overrides of high / low from settings
 	      bounds.high = +options.high || (options.high === 0 ? 0 : bounds.high);
@@ -396,11 +388,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // If high and low are the same because of misconfiguration or flat data (only the same value) we need
 	      // to set the high or low to 0 depending on the polarity
-	      if(bounds.high === bounds.low) {
+	      if (bounds.high === bounds.low) {
 	        // If both values are 0 we set high to 1
-	        if(bounds.low === 0) {
+	        if (bounds.low === 0) {
 	          bounds.high = 1;
-	        } else if(bounds.low < 0) {
+	        } else if (bounds.low < 0) {
 	          // If we have the same negative value for the bounds we set bounds.high to 0
 	          bounds.high = 0;
 	        } else {
@@ -428,7 +420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Optimize scale step by checking if subdivision is possible based on horizontalGridMinSpace
 	      // If we are already below the scaleMinSpace value we will scale up
 	      var length = Chartist.projectLength(svg, bounds.step, bounds, options),
-	        scaleUp = length < options.axisY.scaleMinSpace;
+	          scaleUp = length < options.axisY.scaleMinSpace;
 
 	      while (true) {
 	        if (scaleUp && Chartist.projectLength(svg, bounds.step, bounds, options) <= options.axisY.scaleMinSpace) {
@@ -478,8 +470,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
 
 	      return {
-	        x: centerX + (radius * Math.cos(angleInRadians)),
-	        y: centerY + (radius * Math.sin(angleInRadians))
+	        x: centerX + radius * Math.cos(angleInRadians),
+	        y: centerY + radius * Math.sin(angleInRadians)
 	      };
 	    };
 
@@ -493,17 +485,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Chartist.createChartRect = function (svg, options) {
 	      var yOffset = options.axisY ? options.axisY.offset : 0,
-	        xOffset = options.axisX ? options.axisX.offset : 0;
+	          xOffset = options.axisX ? options.axisX.offset : 0;
 
 	      return {
 	        x1: options.chartPadding + yOffset,
 	        y1: Math.max((Chartist.getPixelLength(options.height) || svg.height()) - options.chartPadding - xOffset, options.chartPadding),
 	        x2: Math.max((Chartist.getPixelLength(options.width) || svg.width()) - options.chartPadding, options.chartPadding + yOffset),
 	        y2: options.chartPadding,
-	        width: function () {
+	        width: function width() {
 	          return this.x2 - this.x1;
 	        },
-	        height: function () {
+	        height: function height() {
 	          return this.y1 - this.y2;
 	        }
 	      };
@@ -519,8 +511,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Boolean} supportsForeignObject If this is true then a foreignObject will be used instead of a text element
 	     * @returns {Object} The newly created SVG element
 	     */
-	    Chartist.createLabel = function(parent, text, attributes, className, supportsForeignObject) {
-	      if(supportsForeignObject) {
+	    Chartist.createLabel = function (parent, text, attributes, className, supportsForeignObject) {
+	      if (supportsForeignObject) {
 	        var content = '<span class="' + className + '">' + text + '</span>';
 	        return parent.foreignObject(content, attributes);
 	      } else {
@@ -544,9 +536,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Create X-Axis
 	      data.labels.forEach(function (value, index) {
 	        var interpolatedValue = options.axisX.labelInterpolationFnc(value, index),
-	          width = chartRect.width() / data.labels.length,
-	          height = options.axisX.offset,
-	          pos = chartRect.x1 + width * index;
+	            width = chartRect.width() / data.labels.length,
+	            height = options.axisX.offset,
+	            pos = chartRect.x1 + width * index;
 
 	        // If interpolated value returns falsey (except 0) we don't draw the grid line
 	        if (!interpolatedValue && interpolatedValue !== 0) {
@@ -589,7 +581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style: 'overflow: visible;'
 	          }, [options.classNames.label, options.classNames.horizontal].join(' '), supportsForeignObject);
 
-	          eventEmitter.emit('draw', {
+	          eventEmitter.emit('draw', Object.defineProperties({
 	            type: 'label',
 	            axis: 'x',
 	            index: index,
@@ -599,13 +591,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            x: labelPosition.x,
 	            y: labelPosition.y,
 	            width: width,
-	            height: height,
-	            // TODO: Remove in next major release
-	            get space() {
-	              window.console.warn('EventEmitter: space is deprecated, use width or height instead.');
-	              return this.width;
+	            height: height
+	          }, {
+	            space: { // TODO: Remove in next major release
+
+	              get: function get() {
+	                window.console.warn('EventEmitter: space is deprecated, use width or height instead.');
+	                return this.width;
+	              },
+	              configurable: true,
+	              enumerable: true
 	            }
-	          });
+	          }));
 	        }
 	      });
 	    };
@@ -626,9 +623,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Create Y-Axis
 	      bounds.values.forEach(function (value, index) {
 	        var interpolatedValue = options.axisY.labelInterpolationFnc(value, index),
-	          width = options.axisY.offset,
-	          height = chartRect.height() / bounds.values.length,
-	          pos = chartRect.y1 - height * index;
+	            width = options.axisY.offset,
+	            height = chartRect.height() / bounds.values.length,
+	            pos = chartRect.y1 - height * index;
 
 	        // If interpolated value returns falsey (except 0) we don't draw the grid line
 	        if (!interpolatedValue && interpolatedValue !== 0) {
@@ -671,7 +668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style: 'overflow: visible;'
 	          }, [options.classNames.label, options.classNames.vertical].join(' '), supportsForeignObject);
 
-	          eventEmitter.emit('draw', {
+	          eventEmitter.emit('draw', Object.defineProperties({
 	            type: 'label',
 	            axis: 'y',
 	            index: index,
@@ -681,13 +678,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            x: labelPosition.x,
 	            y: labelPosition.y,
 	            width: width,
-	            height: height,
-	            // TODO: Remove in next major release
-	            get space() {
-	              window.console.warn('EventEmitter: space is deprecated, use width or height instead.');
-	              return this.height;
+	            height: height
+	          }, {
+	            space: { // TODO: Remove in next major release
+
+	              get: function get() {
+	                window.console.warn('EventEmitter: space is deprecated, use width or height instead.');
+	                return this.height;
+	              },
+	              configurable: true,
+	              enumerable: true
 	            }
-	          });
+	          }));
 	        }
 	      });
 	    };
@@ -722,9 +724,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    Chartist.optionsProvider = function (defaultOptions, options, responsiveOptions, eventEmitter) {
 	      var baseOptions = Chartist.extend(Chartist.extend({}, defaultOptions), options),
-	        currentOptions,
-	        mediaQueryListeners = [],
-	        i;
+	          currentOptions,
+	          mediaQueryListeners = [],
+	          i;
 
 	      function updateCurrentOptions() {
 	        var previousOptions = currentOptions;
@@ -739,7 +741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 
-	        if(eventEmitter) {
+	        if (eventEmitter) {
 	          eventEmitter.emit('optionsChanged', {
 	            previousOptions: previousOptions,
 	            currentOptions: currentOptions
@@ -748,7 +750,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      function removeMediaQueryListeners() {
-	        mediaQueryListeners.forEach(function(mql) {
+	        mediaQueryListeners.forEach(function (mql) {
 	          mql.removeListener(updateCurrentOptions);
 	        });
 	      }
@@ -766,60 +768,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Execute initially so we get the correct options
 	      updateCurrentOptions();
 
-	      return {
-	        get currentOptions() {
-	          return Chartist.extend({}, currentOptions);
-	        },
+	      return Object.defineProperties({
 	        removeMediaQueryListeners: removeMediaQueryListeners
-	      };
+	      }, {
+	        currentOptions: {
+	          get: function get() {
+	            return Chartist.extend({}, currentOptions);
+	          },
+	          configurable: true,
+	          enumerable: true
+	        }
+	      });
 	    };
 
 	    //http://schepers.cc/getting-to-the-point
 	    Chartist.catmullRom2bezier = function (crp, z) {
 	      var d = [];
 	      for (var i = 0, iLen = crp.length; iLen - 2 * !z > i; i += 2) {
-	        var p = [
-	          {x: +crp[i - 2], y: +crp[i - 1]},
-	          {x: +crp[i], y: +crp[i + 1]},
-	          {x: +crp[i + 2], y: +crp[i + 3]},
-	          {x: +crp[i + 4], y: +crp[i + 5]}
-	        ];
+	        var p = [{ x: +crp[i - 2], y: +crp[i - 1] }, { x: +crp[i], y: +crp[i + 1] }, { x: +crp[i + 2], y: +crp[i + 3] }, { x: +crp[i + 4], y: +crp[i + 5] }];
 	        if (z) {
 	          if (!i) {
-	            p[0] = {x: +crp[iLen - 2], y: +crp[iLen - 1]};
+	            p[0] = { x: +crp[iLen - 2], y: +crp[iLen - 1] };
 	          } else if (iLen - 4 === i) {
-	            p[3] = {x: +crp[0], y: +crp[1]};
+	            p[3] = { x: +crp[0], y: +crp[1] };
 	          } else if (iLen - 2 === i) {
-	            p[2] = {x: +crp[0], y: +crp[1]};
-	            p[3] = {x: +crp[2], y: +crp[3]};
+	            p[2] = { x: +crp[0], y: +crp[1] };
+	            p[3] = { x: +crp[2], y: +crp[3] };
 	          }
 	        } else {
 	          if (iLen - 4 === i) {
 	            p[3] = p[2];
 	          } else if (!i) {
-	            p[0] = {x: +crp[i], y: +crp[i + 1]};
+	            p[0] = { x: +crp[i], y: +crp[i + 1] };
 	          }
 	        }
-	        d.push(
-	          [
-	            (-p[0].x + 6 * p[1].x + p[2].x) / 6,
-	            (-p[0].y + 6 * p[1].y + p[2].y) / 6,
-	            (p[1].x + 6 * p[2].x - p[3].x) / 6,
-	            (p[1].y + 6 * p[2].y - p[3].y) / 6,
-	            p[2].x,
-	            p[2].y
-	          ]
-	        );
+	        d.push([(-p[0].x + 6 * p[1].x + p[2].x) / 6, (-p[0].y + 6 * p[1].y + p[2].y) / 6, (p[1].x + 6 * p[2].x - p[3].x) / 6, (p[1].y + 6 * p[2].y - p[3].y) / 6, p[2].x, p[2].y]);
 	      }
 
 	      return d;
 	    };
-
-	  }(window, document, Chartist));;/**
-	   * A very basic event module that helps to generate and catch events.
-	   *
-	   * @module Chartist.Event
-	   */
+	  })(window, document, Chartist);; /**
+	                                   * A very basic event module that helps to generate and catch events.
+	                                   *
+	                                   * @module Chartist.Event
+	                                   */
 	  /* global Chartist */
 	  (function (window, document, Chartist) {
 	    'use strict';
@@ -848,11 +840,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      function removeEventHandler(event, handler) {
 	        // Only do something if there are event handlers with this name existing
-	        if(handlers[event]) {
+	        if (handlers[event]) {
 	          // If handler is set we will look for a specific handler and only remove this
-	          if(handler) {
+	          if (handler) {
 	            handlers[event].splice(handlers[event].indexOf(handler), 1);
-	            if(handlers[event].length === 0) {
+	            if (handlers[event].length === 0) {
 	              delete handlers[event];
 	            }
 	          } else {
@@ -871,8 +863,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      function emit(event, data) {
 	        // Only do something if there are event handlers with this name existing
-	        if(handlers[event]) {
-	          handlers[event].forEach(function(handler) {
+	        if (handlers[event]) {
+	          handlers[event].forEach(function (handler) {
 	            handler(data);
 	          });
 	        }
@@ -884,14 +876,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        emit: emit
 	      };
 	    };
-
-	  }(window, document, Chartist));;/**
-	   * This module provides some basic prototype inheritance utilities.
-	   *
-	   * @module Chartist.Class
-	   */
+	  })(window, document, Chartist);; /**
+	                                   * This module provides some basic prototype inheritance utilities.
+	                                   *
+	                                   * @module Chartist.Class
+	                                   */
 	  /* global Chartist */
-	  (function(window, document, Chartist) {
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    function listToArray(list) {
@@ -951,9 +942,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      Chartist.Class.cloneDefinitions(proto, properties);
 
-	      var constr = function() {
+	      var constr = function constr() {
 	        var fn = proto.constructor || function () {},
-	          instance;
+	            instance;
 
 	        // If this is linked to the Chartist namespace the constructor was not called with new
 	        // To provide a fallback we will instantiate here and return the instance
@@ -966,7 +957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      constr.prototype = proto;
-	      constr.super = superProto;
+	      constr['super'] = superProto;
 	      constr.extend = this.extend;
 
 	      return constr;
@@ -1060,16 +1051,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     */
 	    function mix(mixProtoArr, properties) {
-	      if(this !== Chartist.Class) {
+	      if (this !== Chartist.Class) {
 	        throw new Error('Chartist.Class.mix should only be called on the type and never on an instance!');
 	      }
 
 	      // Make sure our mixin prototypes are the class objects and not the constructors
-	      var superPrototypes = [{}]
-	        .concat(mixProtoArr)
-	        .map(function (prototype) {
-	          return prototype instanceof Function ? prototype.prototype : prototype;
-	        });
+	      var superPrototypes = [{}].concat(mixProtoArr).map(function (prototype) {
+	        return prototype instanceof Function ? prototype.prototype : prototype;
+	      });
 
 	      var mixedSuperProto = Chartist.Class.cloneDefinitions.apply(undefined, superPrototypes);
 	      // Delete the constructor if present because we don't want to invoke a constructor on a mixed prototype
@@ -1087,8 +1076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // If this property already exist in target we delete it first
 	          delete target[propName];
 	          // Define the property with the descriptor from source
-	          Object.defineProperty(target, propName,
-	            Object.getOwnPropertyDescriptor(source, propName));
+	          Object.defineProperty(target, propName, Object.getOwnPropertyDescriptor(source, propName));
 	        });
 	      });
 
@@ -1100,14 +1088,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      mix: mix,
 	      cloneDefinitions: cloneDefinitions
 	    };
-
-	  }(window, document, Chartist));;/**
-	   * Base for all chart types. The methods in Chartist.Base are inherited to all chart types.
-	   *
-	   * @module Chartist.Base
-	   */
+	  })(window, document, Chartist);; /**
+	                                   * Base for all chart types. The methods in Chartist.Base are inherited to all chart types.
+	                                   *
+	                                   * @module Chartist.Base
+	                                   */
 	  /* global Chartist */
-	  (function(window, document, Chartist) {
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    // TODO: Currently we need to re-draw the chart on window resize. This is usually very bad and will affect performance.
@@ -1178,13 +1165,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // Using event loop for first draw to make it possible to register event listeners in the same call stack where
 	      // the chart was created.
-	      setTimeout(function() {
+	      setTimeout((function () {
 	        // Obtain current options based on matching media queries (if responsive options are given)
 	        // This will also register a listener that is re-creating the chart based on media changes
 	        // TODO: Remove default options parameter from optionsProvider
 	        this.optionsProvider = Chartist.optionsProvider({}, this.options, this.responsiveOptions, this.eventEmitter);
 	        this.createChart(this.optionsProvider.currentOptions);
-	      }.bind(this), 0);
+	      }).bind(this), 0);
 	    }
 
 	    // Creating the chart base class
@@ -1194,7 +1181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      container: undefined,
 	      svg: undefined,
 	      eventEmitter: undefined,
-	      createChart: function() {
+	      createChart: function createChart() {
 	        throw new Error('Base chart type can\'t be instantiated!');
 	      },
 	      update: update,
@@ -1204,14 +1191,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      version: Chartist.version,
 	      supportsForeignObject: false
 	    });
-
-	  }(window, document, Chartist));;/**
-	   * Chartist SVG module for simple SVG DOM abstraction
-	   *
-	   * @module Chartist.Svg
-	   */
+	  })(window, document, Chartist);; /**
+	                                   * Chartist SVG module for simple SVG DOM abstraction
+	                                   *
+	                                   * @module Chartist.Svg
+	                                   */
 	  /* global Chartist */
-	  (function(window, document, Chartist) {
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    Chartist.xmlNs = {
@@ -1231,11 +1217,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Boolean} insertFirst If this param is set to true in conjunction with a parent element the newly created element will be added as first child element in the parent element
 	     * @returns {Object} Returns a Chartist.Svg wrapper object that can be used to modify the containing SVG data
 	     */
-	    Chartist.Svg = function(name, attributes, className, parent, insertFirst) {
+	    Chartist.Svg = function (name, attributes, className, parent, insertFirst) {
 
 	      var svgNs = 'http://www.w3.org/2000/svg',
-	        xmlNs = 'http://www.w3.org/2000/xmlns/',
-	        xhtmlNs = 'http://www.w3.org/1999/xhtml';
+	          xmlNs = 'http://www.w3.org/2000/xmlns/',
+	          xhtmlNs = 'http://www.w3.org/1999/xhtml';
 
 	      /**
 	       * Set attributes on the current SVG element of the wrapper you're currently working on.
@@ -1245,14 +1231,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {String} ns If specified, the attributes will be set as namespace attributes with ns as prefix.
 	       * @returns {Object} The current wrapper object will be returned so it can be used for chaining.
 	       */
-	      function attr(node, attributes, ns) {
-	        Object.keys(attributes).forEach(function(key) {
+	      function _attr(node, attributes, ns) {
+	        Object.keys(attributes).forEach(function (key) {
 	          // If the attribute value is undefined we can skip this one
-	          if(attributes[key] === undefined) {
+	          if (attributes[key] === undefined) {
 	            return;
 	          }
 
-	          if(ns) {
+	          if (ns) {
 	            node.setAttributeNS(ns, [Chartist.xmlNs.prefix, ':', key].join(''), attributes[key]);
 	          } else {
 	            node.setAttribute(key, attributes[key]);
@@ -1276,24 +1262,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var node = document.createElementNS(svgNs, name);
 
 	        // If this is an SVG element created then custom namespace
-	        if(name === 'svg') {
+	        if (name === 'svg') {
 	          node.setAttributeNS(xmlNs, Chartist.xmlNs.qualifiedName, Chartist.xmlNs.uri);
 	        }
 
-	        if(parentNode) {
-	          if(insertFirst && parentNode.firstChild) {
+	        if (parentNode) {
+	          if (insertFirst && parentNode.firstChild) {
 	            parentNode.insertBefore(node, parentNode.firstChild);
 	          } else {
 	            parentNode.appendChild(node);
 	          }
 	        }
 
-	        if(attributes) {
-	          attr(node, attributes);
+	        if (attributes) {
+	          _attr(node, attributes);
 	        }
 
-	        if(className) {
-	          addClass(node, className);
+	        if (className) {
+	          _addClass(node, className);
 	        }
 
 	        return node;
@@ -1309,10 +1295,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {Boolean} [insertFirst] Specifies if the foreignObject should be inserted as first child
 	       * @returns {Object} New wrapper object that wraps the foreignObject element
 	       */
-	      function foreignObject(content, attributes, className, parent, insertFirst) {
+	      function _foreignObject(content, attributes, className, parent, insertFirst) {
 	        // If content is string then we convert it to DOM
 	        // TODO: Handle case where content is not a string nor a DOM Node
-	        if(typeof content === 'string') {
+	        if (typeof content === 'string') {
 	          var container = document.createElement('div');
 	          container.innerHTML = content;
 	          content = container.firstChild;
@@ -1338,7 +1324,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {String} t The text that should be added to the text element that is created
 	       * @returns {Object} The same wrapper object that was used to add the newly created element
 	       */
-	      function text(node, t) {
+	      function _text(node, t) {
 	        node.appendChild(document.createTextNode(t));
 	      }
 
@@ -1348,7 +1334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Svg
 	       * @returns {Object} The same wrapper object that got emptied
 	       */
-	      function empty(node) {
+	      function _empty(node) {
 	        while (node.firstChild) {
 	          node.removeChild(node.firstChild);
 	        }
@@ -1360,7 +1346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Svg
 	       * @returns {Object} The parent wrapper object of the element that got removed
 	       */
-	      function remove(node) {
+	      function _remove(node) {
 	        node.parentNode.removeChild(node);
 	      }
 
@@ -1371,7 +1357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {Object} newElement The new wrapper object that will be used to replace the current wrapper object
 	       * @returns {Object} The wrapper of the new element
 	       */
-	      function replace(node, newChild) {
+	      function _replace(node, newChild) {
 	        node.parentNode.replaceChild(newChild, node);
 	      }
 
@@ -1383,8 +1369,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {Boolean} [insertFirst] Specifies if the element should be inserted as first child
 	       * @returns {Object} The wrapper of the appended object
 	       */
-	      function append(node, child, insertFirst) {
-	        if(insertFirst && node.firstChild) {
+	      function _append(node, child, insertFirst) {
+	        if (insertFirst && node.firstChild) {
 	          node.insertBefore(child, node.firstChild);
 	        } else {
 	          node.appendChild(child);
@@ -1397,7 +1383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Svg
 	       * @returns {Array} A list of classes or an empty array if there are no classes on the current element
 	       */
-	      function classes(node) {
+	      function _classes(node) {
 	        return node.getAttribute('class') ? node.getAttribute('class').trim().split(/\s+/) : [];
 	      }
 
@@ -1408,14 +1394,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {String} names A white space separated list of class names
 	       * @returns {Object} The wrapper of the current element
 	       */
-	      function addClass(node, names) {
-	        node.setAttribute('class',
-	          classes(node)
-	            .concat(names.trim().split(/\s+/))
-	            .filter(function(elem, pos, self) {
-	              return self.indexOf(elem) === pos;
-	            }).join(' ')
-	        );
+	      function _addClass(node, names) {
+	        node.setAttribute('class', _classes(node).concat(names.trim().split(/\s+/)).filter(function (elem, pos, self) {
+	          return self.indexOf(elem) === pos;
+	        }).join(' '));
 	      }
 
 	      /**
@@ -1425,10 +1407,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @param {String} names A white space separated list of class names
 	       * @returns {Object} The wrapper of the current element
 	       */
-	      function removeClass(node, names) {
+	      function _removeClass(node, names) {
 	        var removedClasses = names.trim().split(/\s+/);
 
-	        node.setAttribute('class', classes(node).filter(function(name) {
+	        node.setAttribute('class', _classes(node).filter(function (name) {
 	          return removedClasses.indexOf(name) === -1;
 	        }).join(' '));
 	      }
@@ -1439,7 +1421,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Svg
 	       * @returns {Object} The wrapper of the current element
 	       */
-	      function removeAllClasses(node) {
+	      function _removeAllClasses(node) {
 	        node.setAttribute('class', '');
 	      }
 
@@ -1450,7 +1432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Svg
 	       * @return {Number} The elements height in pixels
 	       */
-	      function height(node) {
+	      function _height(node) {
 	        return node.clientHeight || Math.round(node.getBBox().height) || node.parentNode.clientHeight;
 	      }
 
@@ -1461,68 +1443,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @memberof Chartist.Core
 	       * @return {Number} The elements width in pixels
 	       */
-	      function width(node) {
+	      function _width(node) {
 	        return node.clientWidth || Math.round(node.getBBox().width) || node.parentNode.clientWidth;
 	      }
 
 	      return {
 	        _node: elem(name, attributes, className, parent ? parent._node : undefined, insertFirst),
 	        _parent: parent,
-	        parent: function() {
+	        parent: function parent() {
 	          return this._parent;
 	        },
-	        attr: function(attributes, ns) {
-	          attr(this._node, attributes, ns);
+	        attr: function attr(attributes, ns) {
+	          _attr(this._node, attributes, ns);
 	          return this;
 	        },
-	        empty: function() {
-	          empty(this._node);
+	        empty: function empty() {
+	          _empty(this._node);
 	          return this;
 	        },
-	        remove: function() {
-	          remove(this._node);
+	        remove: function remove() {
+	          _remove(this._node);
 	          return this.parent();
 	        },
-	        replace: function(newElement) {
+	        replace: function replace(newElement) {
 	          newElement._parent = this._parent;
-	          replace(this._node, newElement._node);
+	          _replace(this._node, newElement._node);
 	          return newElement;
 	        },
-	        append: function(element, insertFirst) {
+	        append: function append(element, insertFirst) {
 	          element._parent = this;
-	          append(this._node, element._node, insertFirst);
+	          _append(this._node, element._node, insertFirst);
 	          return element;
 	        },
-	        elem: function(name, attributes, className, insertFirst) {
+	        elem: function elem(name, attributes, className, insertFirst) {
 	          return Chartist.Svg(name, attributes, className, this, insertFirst);
 	        },
-	        foreignObject: function(content, attributes, className, insertFirst) {
-	          return foreignObject(content, attributes, className, this, insertFirst);
+	        foreignObject: function foreignObject(content, attributes, className, insertFirst) {
+	          return _foreignObject(content, attributes, className, this, insertFirst);
 	        },
-	        text: function(t) {
-	          text(this._node, t);
+	        text: function text(t) {
+	          _text(this._node, t);
 	          return this;
 	        },
-	        addClass: function(names) {
-	          addClass(this._node, names);
+	        addClass: function addClass(names) {
+	          _addClass(this._node, names);
 	          return this;
 	        },
-	        removeClass: function(names) {
-	          removeClass(this._node, names);
+	        removeClass: function removeClass(names) {
+	          _removeClass(this._node, names);
 	          return this;
 	        },
-	        removeAllClasses: function() {
-	          removeAllClasses(this._node);
+	        removeAllClasses: function removeAllClasses() {
+	          _removeAllClasses(this._node);
 	          return this;
 	        },
-	        classes: function() {
-	          return classes(this._node);
+	        classes: function classes() {
+	          return _classes(this._node);
 	        },
-	        height: function() {
-	          return height(this._node);
+	        height: function height() {
+	          return _height(this._node);
 	        },
-	        width: function() {
-	          return width(this._node);
+	        width: function width() {
+	          return _width(this._node);
 	        }
 	      };
 	    };
@@ -1534,19 +1516,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {String} feature The SVG 1.1 feature that should be checked for support.
 	     * @returns {Boolean} True of false if the feature is supported or not
 	     */
-	    Chartist.Svg.isSupported = function(feature) {
+	    Chartist.Svg.isSupported = function (feature) {
 	      return document.implementation.hasFeature('www.http://w3.org/TR/SVG11/feature#' + feature, '1.1');
 	    };
-
-	  }(window, document, Chartist));;/**
-	   * The Chartist line chart can be used to draw Line or Scatter charts. If used in the browser you can access the global `Chartist` namespace where you find the `Line` function as a main entry point.
-	   *
-	   * For examples on how to use the line chart please check the examples of the `Chartist.Line` method.
-	   *
-	   * @module Chartist.Line
-	   */
+	  })(window, document, Chartist);; /**
+	                                   * The Chartist line chart can be used to draw Line or Scatter charts. If used in the browser you can access the global `Chartist` namespace where you find the `Line` function as a main entry point.
+	                                   *
+	                                   * For examples on how to use the line chart please check the examples of the `Chartist.Line` method.
+	                                   *
+	                                   * @module Chartist.Line
+	                                   */
 	  /* global Chartist */
-	  (function(window, document, Chartist){
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    var defaultOptions = {
@@ -1596,8 +1577,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function createChart(options) {
 	      var seriesGroups = [],
-	        bounds,
-	        normalizedData = Chartist.normalizeDataArray(Chartist.getDataArray(this.data), this.data.labels.length);
+	          bounds,
+	          normalizedData = Chartist.normalizeDataArray(Chartist.getDataArray(this.data), this.data.labels.length);
 
 	      // Create new svg object
 	      this.svg = Chartist.createSvg(this.container, options.width, options.height, options.classNames.chart);
@@ -1608,7 +1589,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var chartRect = Chartist.createChartRect(this.svg, options);
 	      // Start drawing
 	      var labels = this.svg.elem('g'),
-	        grid = this.svg.elem('g');
+	          grid = this.svg.elem('g');
 
 	      Chartist.createXAxis(chartRect, this.data, grid, labels, options, this.eventEmitter, this.supportsForeignObject);
 	      Chartist.createYAxis(chartRect, bounds, grid, labels, options, this.eventEmitter, this.supportsForeignObject);
@@ -1619,21 +1600,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        seriesGroups[i] = this.svg.elem('g');
 
 	        // If the series is an object and contains a name we add a custom attribute
-	        if(this.data.series[i].name) {
+	        if (this.data.series[i].name) {
 	          seriesGroups[i].attr({
 	            'series-name': this.data.series[i].name
 	          }, Chartist.xmlNs.uri);
 	        }
 
 	        // Use series class from series data or if not set generate one
-	        seriesGroups[i].addClass([
-	          options.classNames.series,
-	          (this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i))
-	        ].join(' '));
+	        seriesGroups[i].addClass([options.classNames.series, this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i)].join(' '));
 
 	        var p,
-	          pathCoordinates = [],
-	          point;
+	            pathCoordinates = [],
+	            point;
 
 	        for (var j = 0; j < normalizedData[i].length; j++) {
 	          p = Chartist.projectPoint(chartRect, bounds, normalizedData[i], j);
@@ -1672,16 +1650,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (options.lineSmooth && pathCoordinates.length > 4) {
 
 	            var cr = Chartist.catmullRom2bezier(pathCoordinates);
-	            for(var k = 0; k < cr.length; k++) {
+	            for (var k = 0; k < cr.length; k++) {
 	              pathElements.push('C' + cr[k].join());
 	            }
 	          } else {
-	            for(var l = 3; l < pathCoordinates.length; l += 2) {
+	            for (var l = 3; l < pathCoordinates.length; l += 2) {
 	              pathElements.push('L' + pathCoordinates[l - 1] + ',' + pathCoordinates[l]);
 	            }
 	          }
 
-	          if(options.showArea) {
+	          if (options.showArea) {
 	            // If areaBase is outside the chart area (< low or > high) we need to set it respectively so that
 	            // the area is not drawn outside the chart area.
 	            var areaBase = Math.max(Math.min(options.areaBase, bounds.high), bounds.low);
@@ -1704,7 +1682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }, Chartist.xmlNs.uri);
 	          }
 
-	          if(options.showLine) {
+	          if (options.showLine) {
 	            seriesGroups[i].elem('path', {
 	              d: pathElements.join('')
 	            }, options.classNames.line, true).attr({
@@ -1854,11 +1832,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     */
 	    function Line(query, data, options, responsiveOptions) {
-	      Chartist.Line.super.constructor.call(this,
-	        query,
-	        data,
-	        Chartist.extend(Chartist.extend({}, defaultOptions), options),
-	        responsiveOptions);
+	      Chartist.Line['super'].constructor.call(this, query, data, Chartist.extend(Chartist.extend({}, defaultOptions), options), responsiveOptions);
 	    }
 
 	    // Creating line chart type in Chartist namespace
@@ -1866,15 +1840,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      constructor: Line,
 	      createChart: createChart
 	    });
-
-	  }(window, document, Chartist));
-	  ;/**
-	   * The bar chart module of Chartist that can be used to draw unipolar or bipolar bar and grouped bar charts.
-	   *
-	   * @module Chartist.Bar
-	   */
+	  })(window, document, Chartist);
+	  ; /**
+	    * The bar chart module of Chartist that can be used to draw unipolar or bipolar bar and grouped bar charts.
+	    *
+	    * @module Chartist.Bar
+	    */
 	  /* global Chartist */
-	  (function(window, document, Chartist){
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    var defaultOptions = {
@@ -1918,8 +1891,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function createChart(options) {
 	      var seriesGroups = [],
-	        bounds,
-	        normalizedData = Chartist.normalizeDataArray(Chartist.getDataArray(this.data), this.data.labels.length);
+	          bounds,
+	          normalizedData = Chartist.normalizeDataArray(Chartist.getDataArray(this.data), this.data.labels.length);
 
 	      // Create new svg element
 	      this.svg = Chartist.createSvg(this.container, options.width, options.height, options.classNames.chart);
@@ -1930,9 +1903,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var chartRect = Chartist.createChartRect(this.svg, options);
 	      // Start drawing
 	      var labels = this.svg.elem('g'),
-	        grid = this.svg.elem('g'),
+	          grid = this.svg.elem('g'),
+
 	      // Projected 0 point
-	        zeroPoint = Chartist.projectPoint(chartRect, bounds, [0], 0);
+	      zeroPoint = Chartist.projectPoint(chartRect, bounds, [0], 0);
 
 	      Chartist.createXAxis(chartRect, this.data, grid, labels, options, this.eventEmitter, this.supportsForeignObject);
 	      Chartist.createYAxis(chartRect, bounds, grid, labels, options, this.eventEmitter, this.supportsForeignObject);
@@ -1942,31 +1916,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (var i = 0; i < this.data.series.length; i++) {
 	        // Calculating bi-polar value of index for seriesOffset. For i = 0..4 biPol will be -1.5, -0.5, 0.5, 1.5 etc.
 	        var biPol = i - (this.data.series.length - 1) / 2,
+
 	        // Half of the period with between vertical grid lines used to position bars
-	          periodHalfWidth = chartRect.width() / normalizedData[i].length / 2;
+	        periodHalfWidth = chartRect.width() / normalizedData[i].length / 2;
 
 	        seriesGroups[i] = this.svg.elem('g');
 
 	        // If the series is an object and contains a name we add a custom attribute
-	        if(this.data.series[i].name) {
+	        if (this.data.series[i].name) {
 	          seriesGroups[i].attr({
 	            'series-name': this.data.series[i].name
 	          }, Chartist.xmlNs.uri);
 	        }
 
 	        // Use series class from series data or if not set generate one
-	        seriesGroups[i].addClass([
-	          options.classNames.series,
-	          (this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i))
-	        ].join(' '));
+	        seriesGroups[i].addClass([options.classNames.series, this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i)].join(' '));
 
-	        for(var j = 0; j < normalizedData[i].length; j++) {
+	        for (var j = 0; j < normalizedData[i].length; j++) {
 	          var p = Chartist.projectPoint(chartRect, bounds, normalizedData[i], j),
-	            bar;
+	              bar;
 
 	          // Offset to center bar between grid lines and using bi-polar offset for multiple series
 	          // TODO: Check if we should really be able to add classes to the series. Should be handles with Sass and semantic / specific selectors
-	          p.x += periodHalfWidth + (biPol * options.seriesBarDistance);
+	          p.x += periodHalfWidth + biPol * options.seriesBarDistance;
 
 	          bar = seriesGroups[i].elem('line', {
 	            x1: p.x,
@@ -2091,11 +2063,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     */
 	    function Bar(query, data, options, responsiveOptions) {
-	      Chartist.Bar.super.constructor.call(this,
-	        query,
-	        data,
-	        Chartist.extend(Chartist.extend({}, defaultOptions), options),
-	        responsiveOptions);
+	      Chartist.Bar['super'].constructor.call(this, query, data, Chartist.extend(Chartist.extend({}, defaultOptions), options), responsiveOptions);
 	    }
 
 	    // Creating bar chart type in Chartist namespace
@@ -2103,15 +2071,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      constructor: Bar,
 	      createChart: createChart
 	    });
-
-	  }(window, document, Chartist));
-	  ;/**
-	   * The pie chart module of Chartist that can be used to draw pie, donut or gauge charts
-	   *
-	   * @module Chartist.Pie
-	   */
+	  })(window, document, Chartist);
+	  ; /**
+	    * The pie chart module of Chartist that can be used to draw pie, donut or gauge charts
+	    *
+	    * @module Chartist.Pie
+	    */
 	  /* global Chartist */
-	  (function(window, document, Chartist) {
+	  (function (window, document, Chartist) {
 	    'use strict';
 
 	    var defaultOptions = {
@@ -2139,11 +2106,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function determineAnchorPosition(center, label, direction) {
 	      var toTheRight = label.x > center.x;
 
-	      if(toTheRight && direction === 'explode' ||
-	        !toTheRight && direction === 'implode') {
+	      if (toTheRight && direction === 'explode' || !toTheRight && direction === 'implode') {
 	        return 'start';
-	      } else if(toTheRight && direction === 'implode' ||
-	        !toTheRight && direction === 'explode') {
+	      } else if (toTheRight && direction === 'implode' || !toTheRight && direction === 'explode') {
 	        return 'end';
 	      } else {
 	        return 'middle';
@@ -2152,12 +2117,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function createChart(options) {
 	      var seriesGroups = [],
-	        chartRect,
-	        radius,
-	        labelRadius,
-	        totalDataSum,
-	        startAngle = options.startAngle,
-	        dataArray = Chartist.getDataArray(this.data);
+	          chartRect,
+	          radius,
+	          labelRadius,
+	          totalDataSum,
+	          startAngle = options.startAngle,
+	          dataArray = Chartist.getDataArray(this.data);
 
 	      // Create SVG.js draw
 	      this.svg = Chartist.createSvg(this.container, options.width, options.height, options.classNames.chart);
@@ -2166,14 +2131,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Get biggest circle radius possible within chartRect
 	      radius = Math.min(chartRect.width() / 2, chartRect.height() / 2);
 	      // Calculate total of all series to get reference value or use total reference from optional options
-	      totalDataSum = options.total || dataArray.reduce(function(previousValue, currentValue) {
+	      totalDataSum = options.total || dataArray.reduce(function (previousValue, currentValue) {
 	        return previousValue + currentValue;
 	      }, 0);
 
 	      // If this is a donut chart we need to adjust our radius to enable strokes to be drawn inside
 	      // Unfortunately this is not possible with the current SVG Spec
 	      // See this proposal for more details: http://lists.w3.org/Archives/Public/www-svg/2003Oct/0000.html
-	      radius -= options.donut ? options.donutWidth / 2  : 0;
+	      radius -= options.donut ? options.donutWidth / 2 : 0;
 
 	      // If a donut chart then the label position is at the radius, if regular pie chart it's half of the radius
 	      // see https://github.com/gionkunz/chartist-js/issues/21
@@ -2188,7 +2153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      // Check if there is only one non-zero value in the series array.
-	      var hasSingleValInSeries = this.data.series.filter(function(val) {
+	      var hasSingleValInSeries = this.data.series.filter(function (val) {
 	        return val !== 0;
 	      }).length === 1;
 
@@ -2198,37 +2163,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        seriesGroups[i] = this.svg.elem('g', null, null, true);
 
 	        // If the series is an object and contains a name we add a custom attribute
-	        if(this.data.series[i].name) {
+	        if (this.data.series[i].name) {
 	          seriesGroups[i].attr({
 	            'series-name': this.data.series[i].name
 	          }, Chartist.xmlNs.uri);
 	        }
 
 	        // Use series class from series data or if not set generate one
-	        seriesGroups[i].addClass([
-	          options.classNames.series,
-	          (this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i))
-	        ].join(' '));
+	        seriesGroups[i].addClass([options.classNames.series, this.data.series[i].className || options.classNames.series + '-' + Chartist.alphaNumerate(i)].join(' '));
 
 	        var endAngle = startAngle + dataArray[i] / totalDataSum * 360;
 	        // If we need to draw the arc for all 360 degrees we need to add a hack where we close the circle
 	        // with Z and use 359.99 degrees
-	        if(endAngle - startAngle === 360) {
+	        if (endAngle - startAngle === 360) {
 	          endAngle -= 0.01;
 	        }
 
 	        var start = Chartist.polarToCartesian(center.x, center.y, radius, startAngle - (i === 0 || hasSingleValInSeries ? 0 : 0.2)),
-	          end = Chartist.polarToCartesian(center.x, center.y, radius, endAngle),
-	          arcSweep = endAngle - startAngle <= 180 ? '0' : '1',
-	          d = [
-	            // Start at the end point from the cartesian coordinates
-	            'M', end.x, end.y,
-	            // Draw arc
-	            'A', radius, radius, 0, arcSweep, 0, start.x, start.y
-	          ];
+	            end = Chartist.polarToCartesian(center.x, center.y, radius, endAngle),
+	            arcSweep = endAngle - startAngle <= 180 ? '0' : '1',
+	            d = [
+	        // Start at the end point from the cartesian coordinates
+	        'M', end.x, end.y,
+	        // Draw arc
+	        'A', radius, radius, 0, arcSweep, 0, start.x, start.y];
 
 	        // If regular pie chart (no donut) we add a line to the center of the circle for completing the pie
-	        if(options.donut === false) {
+	        if (options.donut === false) {
 	          d.push('L', center.x, center.y);
 	        }
 
@@ -2244,9 +2205,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }, Chartist.xmlNs.uri);
 
 	        // If this is a donut, we add the stroke-width as style attribute
-	        if(options.donut === true) {
+	        if (options.donut === true) {
 	          path.attr({
-	            'style': 'stroke-width: ' + (+options.donutWidth) + 'px'
+	            'style': 'stroke-width: ' + +options.donutWidth + 'px'
 	          });
 	        }
 
@@ -2265,10 +2226,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        // If we need to show labels we need to add the label for this slice now
-	        if(options.showLabel) {
+	        if (options.showLabel) {
 	          // Position at the labelRadius distance from center and between start and end angle
 	          var labelPosition = Chartist.polarToCartesian(center.x, center.y, labelRadius, startAngle + (endAngle - startAngle) / 2),
-	            interpolatedValue = options.labelInterpolationFnc(this.data.labels ? this.data.labels[i] : dataArray[i], i);
+	              interpolatedValue = options.labelInterpolationFnc(this.data.labels ? this.data.labels[i] : dataArray[i], i);
 
 	          var labelElement = seriesGroups[i].elem('text', {
 	            dx: labelPosition.x,
@@ -2375,11 +2336,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * });
 	     */
 	    function Pie(query, data, options, responsiveOptions) {
-	      Chartist.Pie.super.constructor.call(this,
-	        query,
-	        data,
-	        Chartist.extend(Chartist.extend({}, defaultOptions), options),
-	        responsiveOptions);
+	      Chartist.Pie['super'].constructor.call(this, query, data, Chartist.extend(Chartist.extend({}, defaultOptions), options), responsiveOptions);
 	    }
 
 	    // Creating pie chart type in Chartist namespace
@@ -2388,15 +2345,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      createChart: createChart,
 	      determineAnchorPosition: determineAnchorPosition
 	    });
-
-	  }(window, document, Chartist));
-
+	  })(window, document, Chartist);
 
 	  return Chartist;
-
-	}));
-
+	});
 
 /***/ }
 /******/ ])
 });
+;
