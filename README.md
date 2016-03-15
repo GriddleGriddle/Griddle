@@ -46,6 +46,8 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 
 0.4.0
 - Remove the underscore dependencies and implement the use of lodash-modularized
+- Support filter by column
+- Various fixes
 
 0.3.0
 
