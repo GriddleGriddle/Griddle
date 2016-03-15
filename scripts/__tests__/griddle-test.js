@@ -153,6 +153,17 @@ describe('Griddle', function() {
     expect(grid.state.filteredResults).toBe(null);
   });
 
+  it('adds column filter  on filterByColumn', function() {
+    grid.filterByColumn('test', 'name');
+    expect(grid.state.columnFilters).toEqual({ name: 'test' })
+  });
+
+  it('removes column filter  when empty', function() {
+    grid.filterByColumn('test', 'name');
+    grid.filterByColumn('', 'name');
+    expect(grid.state.columnFilters).toEqual({});
+  })
+
   //TODO: getExternalResults
 
   it('sets the page size when a number is passed in to setPageSize', function(){
