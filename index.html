@@ -139,7 +139,7 @@
             <img src="images/custom-infinite.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
           </div>
         </div>
-      </div>      
+      </div>
       <div class="row feature-row last">
         <div class="four columns">
           <h4 class="text-dark-grey">Custom Styling</h4>
@@ -152,7 +152,7 @@
             <img src="images/custom-style.gif" alt="Infinite Scrolling Example" class="freezeframe"/>
           </div>
         </div>
-      </div>       
+      </div>
     </div>
   </div>
   <div class="order-primary text-primary-dark content-section background-primary-light border-dark-grey border-bottom border-big" id="quickstart">
@@ -174,9 +174,8 @@ var Griddle = require('griddle-react');</pre></code>
           </p>
           <hr class="border-primary border-bottom"/>
           <h4>From Source</h4>
-          <p>At the most basic level, using Griddle is as simple as wiring up an array of JSON objects as a property to the component. First off, include <a href="http://underscorejs.org/">Underscore</a>, <a href="http://facebook.github.io/react/">React</a> and <a href="http://www.github.com/GriddleGriddle/griddle">Griddle</a> before your React Code.</p>
-          <pre><code>&lt;script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"&gt;&lt;/script&gt;
-&lt;script src="//fb.me/react-0.13.2.js"&gt;&lt;/script&gt;
+          <p>At the most basic level, using Griddle is as simple as wiring up an array of JSON objects as a property to the component. First off, include <a href="http://facebook.github.io/react/">React</a> and <a href="http://www.github.com/GriddleGriddle/griddle">Griddle</a> before your React Code.</p>
+          <pre><code>&lt;script src="//fb.me/react-0.13.2.js"&gt;&lt;/script&gt;
 &lt;script src="//fb.me/JSXTransformer-0.13.2.js"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="scripts/griddle.js"&gt;&lt;/script&gt;</code></pre>
 
@@ -221,7 +220,7 @@ var Griddle = require('griddle-react');</pre></code>
         <div class="twelve columns">
           <small>
             Example data has been generated with <a href="http://json-generator.com">json-generator.com</a>. Any data that resembles real people, places, companies, etc. is coincidence.
-          </small> 
+          </small>
           <br />
         </div>
       </div>
@@ -229,7 +228,7 @@ var Griddle = require('griddle-react');</pre></code>
         <div class="six columns">
           <small>
             &copy; 2015 <a href="http://www.twitter.com/ryanlanciaux">Ryan Lanciaux</a> | <a href="https://www.github.com/DynamicTyped">DynamicTyped</a>
-          </small> 
+          </small>
         </div>
         <div class="six columns right">
           <small>Epic pancake logo by <a href="https://www.behance.net/ryanstraube">Ryan Straube</a></small>
@@ -239,9 +238,9 @@ var Griddle = require('griddle-react');</pre></code>
   </div>
 <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 
   <!-- Griddle doesn't need jQuery at all -- just for the freezeframe library-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -251,7 +250,7 @@ var Griddle = require('griddle-react');</pre></code>
   <script src="scripts/fakeData.js"></script>
   <script type="text/jsx">
   /** @jsx React.DOM */
-    React.render(
+    ReactDOM.render(
         <Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('grid-basic')
     );
   </script>

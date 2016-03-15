@@ -29,7 +29,8 @@
 
 	<!-- Scripts
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 	<script src="scripts/Griddle.js"></script>
@@ -97,7 +98,7 @@
 <div id="griddle-infinite-scroll"></div>
 
 <script type="text/jsx">
-  React.render(<Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} resultsPerPage={5} enableInfiniteScroll={true} bodyHeight={400}/>, document.getElementById('griddle-infinite-scroll'));
+  ReactDOM.render(<Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} resultsPerPage={5} enableInfiniteScroll={true} bodyHeight={400}/>, document.getElementById('griddle-infinite-scroll'));
 </script>
 
 
@@ -110,7 +111,7 @@
 <div id="griddle-infinite-fixed-header"></div>
 
 <script type="text/jsx">
-    React.render(<Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById('griddle-infinite-fixed-header'));
+    ReactDOM.render(<Griddle results={fakeData} columnMetadata={columnMeta} rowMetadata={rowMeta} resultsPerPage={5} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById('griddle-infinite-fixed-header'));
 </script>
 
 
@@ -204,9 +205,22 @@
         }
     });
 
-    React.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
+    ReactDOM.render(<GriddleWithCallback getExternalResults={fakeDataMethod} loadingComponent={Loading} enableInfiniteScroll={true} useFixedHeader={true} bodyHeight={400}/>, document.getElementById("griddle-external"));
 </script>
 
+
+<h4 id="cautions-">Cautions:</h4>
+<p>When using infinite scroll on a table, re-renders of the Griddle component will cause the table to recreate itself - setting the scroll position back to 0, making the table appear to jump back to the top. To prevent this, specify the <code>key</code> attribute on <code>rowMetadata</code>. For more information please see the <a href="https://facebook.github.io/react/docs/reconciliation.html">React page on reconciliation</a>.</p>
+<pre><code><span class="keyword">var</span> rowMetadata = {
+      <span class="string">"key"</span>: <span class="string">"nameOfIndexInMyResultSet"</span>
+    }
+};
+
+<span class="keyword">return</span> (
+    <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"griddle-container"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{this.state.rows}</span> <span class="attribute">enableInfiniteScroll</span>=<span class="value">{true}</span> <span class="attribute">rowMetadata</span>=<span class="value">{rowMetadata}</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+)</span></code></pre>
 
 			</div>
 		</div>

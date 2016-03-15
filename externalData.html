@@ -29,7 +29,8 @@
 
 	<!-- Scripts
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 	<script src="scripts/Griddle.js"></script>
@@ -287,7 +288,7 @@ var ExternalSwapiComponent = React.createClass({
 });
 
 
-  React.render(<ExternalSwapiComponent />, document.getElementById("griddle-external-swapi"));
+  ReactDOM.render(<ExternalSwapiComponent />, document.getElementById("griddle-external-swapi"));
 </script>
 
 
@@ -494,7 +495,7 @@ var SimulatedExternalComponent = React.createClass({
     }
 });
 
-React.render(<SimulatedExternalComponent />, document.getElementById("griddle-external-simulated"));
+ReactDOM.render(<SimulatedExternalComponent />, document.getElementById("griddle-external-simulated"));
 </script>
 
 <hr />
@@ -547,7 +548,7 @@ var Loading = React.createClass({
     }
 });
 
-React.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback')); 
+ReactDOM.render(<GriddleWithCallback getExternalResults={loadData} loadingComponent={Loading} enableSort={false} columns={["name", "model", "manufacturer", "passengers"]} resultsPerPage={10} showFilter={false} showSettings={false} />, document.getElementById('griddle-callback'));
 </script>
 			</div>
 		</div>

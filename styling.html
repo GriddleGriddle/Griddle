@@ -29,7 +29,8 @@
 
 	<!-- Scripts
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 	<script src="scripts/Griddle.js"></script>
@@ -79,7 +80,7 @@
 <div id="griddle-nostyle"></div>
 
 <script type="text/jsx">
-React.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]} useGriddleStyles={false}/>, document.getElementById("griddle-nostyle"));
+ReactDOM.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]} useGriddleStyles={false}/>, document.getElementById("griddle-nostyle"));
 </script>
 
 
@@ -182,7 +183,7 @@ React.render(<Griddle results={fakeData} columns={["name", "city", "state", "cou
 <div id="griddle-subgrid"></div>
 
 <script type="text/jsx">
-React.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]}  sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("griddle-subgrid"));
+ReactDOM.render(<Griddle results={fakeData} columns={["name", "city", "state", "country"]}  sortAscendingComponent={<span className="fa fa-sort-alpha-asc"></span>} sortDescendingComponent={<span className="fa fa-sort-alpha-desc"></span>}/>, document.getElementById("griddle-subgrid"));
 </script>
 
 

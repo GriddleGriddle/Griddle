@@ -29,7 +29,8 @@
 
 	<!-- Scripts
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 	<script src="scripts/Griddle.js"></script>
@@ -84,11 +85,16 @@
 </dl>
 
 <h3 id="column-metadata">Column Metadata</h3>
-<p>The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the <code>columnMetadata</code> property is where this would be defined. </p>
+<p>The column meta data property is used to specify column properties that are not part of the result data object. For instance, if you want to specify a displayName that is different than the property name in the result data, the <code>columnMetadata</code> property is where this would be defined.</p>
 <p>Griddle parses and evaluates the following columnMetadata object properties:</p>
 <dl>
   <dt>columnName</dt>
   <dd><strong>string (required)</strong> - this is the name of the column as it appears in the results passed into Griddle.</dd>
+</dl>
+
+<dl>
+  <dt>sortable</dt>
+  <dd><strong>bool</strong> - Determines whether or not the user can sort this column (defaults to <code>true</code>, so specify <code>false</code> to disable sort)</dd>
 </dl>
 
 <dl>
@@ -114,12 +120,20 @@
   <dt>customComponent</dt>
   <dd><strong>React Component</strong> - The component that should be rendered instead of the standard column data. This component will still be rendered inside of a <code>TD</code> element. (more information below in the <a href="#customColumns">Custom Columns section</a>.)</dd>
 </dl>
+<dl>
+  <dt>customHeaderComponent</dt>
+  <dd><strong>React Component</strong> - The component that should be rendered instead of the standard header data. This component will still be rendered inside of a <code>TH</code> element. (more information below in the <a href="#customColumns">Custom Columns section</a>.)</dd>
+</dl>
+<dl>
+  <dt>customHeaderComponentProps</dt>
+  <dd><strong>object</strong> - An object containing additional properties that will be passed into the custom header component. (more information below in the <a href="#customColumns">Custom Columns section</a>.)</dd>
+</dl>
 
-<p>However, you are also able to pass other properties in as columnMetadata. </p>
+<p>However, you are also able to pass other properties in as columnMetadata.</p>
 <p><a href="#custom-columns">columnMetadata can be accessed on the <code>metadata</code> property of a Custom Column component.</a></p>
 <h5 id="example-">Example:</h5>
-<p>Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read <code>Employee Name</code> instead of name. </p>
-<p>Our metadata object would look something like </p>
+<p>Assume we want to reverse the columns so name would be last, followed by followed by city, state, company, country and favorite number. Also we want the name column heading to read <code>Employee Name</code> instead of name.</p>
+<p>Our metadata object would look something like</p>
 <pre><code>  {
     <span class="string">"columnName"</span>: <span class="string">"name"</span>,
     <span class="string">"order"</span>: 9,
@@ -156,12 +170,13 @@
     <span class="string">"order"</span>:  4,
     <span class="string">"locked"</span>: <span class="literal">false</span>,
     <span class="string">"visible"</span>: <span class="literal">true</span>,
-    <span class="string">"displayName"</span>: <span class="string">"Favorite Number"</span>
+    <span class="string">"displayName"</span>: <span class="string">"Favorite Number"</span>,
+    <span class="string">"sortable"</span>: <span class="literal">false</span>
   }</code></pre>
-<p>We would then load Griddle as follows: </p>
+<p>We would then load Griddle as follows:</p>
 <pre><code>React.render(
-  <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">columnMetadata</span>=<span class="value">{exampleMetadata}</span> <span class="attribute">showFilter</span>=<span class="value">{true}</span> 
-    <span class="attribute">showSettings</span>=<span class="value">{true}</span> <span class="attribute">columns</span>=<span class="value">{["name",</span> "<span class="attribute">city</span>", "<span class="attribute">state</span>", "<span class="attribute">country</span>"]}/&gt;</span>, 
+  <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">columnMetadata</span>=<span class="value">{exampleMetadata}</span> <span class="attribute">showFilter</span>=<span class="value">{true}</span>
+    <span class="attribute">showSettings</span>=<span class="value">{true}</span> <span class="attribute">columns</span>=<span class="value">{["name",</span> "<span class="attribute">city</span>", "<span class="attribute">state</span>", "<span class="attribute">country</span>"]}/&gt;</span>,
     document.getElementById('griddle-metadata')</span></code></pre>
 <div id="griddle-metadata"></div>
 
@@ -213,7 +228,7 @@
   }
 ];
 
-    React.render(
+    ReactDOM.render(
         <Griddle results={fakeData} columnMetadata={exampleMetadata} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]}/>, document.getElementById('griddle-metadata')
     );
 </script>
@@ -267,7 +282,27 @@
     <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">{url}</span>&gt;</span>{this.props.data}<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
   }
 });</span></code></pre>
-<p>From there, we will set the customComponent value in the <strong>name</strong> columnMetadata object to this LinkComponent.</p>
+<p>Additionally, we want the city and state column headers to be highlighted a specific color and have a filter by column input. We can define a custom header component as:</p>
+<pre><code><span class="keyword">var</span> HeaderComponent = React.createClass({
+  textOnClick: <span class="keyword">function</span>(e) {
+    e.stopPropagation();
+  },
+
+  filterText: <span class="keyword">function</span>(e) {
+    <span class="keyword">this</span>.props.filterByColumn(e.target.value, <span class="keyword">this</span>.props.columnName)
+  },
+
+  render: <span class="keyword">function</span>(){
+    <span class="keyword">return</span> (
+      <span class="xml"><span class="tag">&lt;<span class="title">span</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span><span class="tag">&lt;<span class="title">strong</span> <span class="attribute">style</span>=<span class="value">{{color:</span> <span class="attribute">this.props.color</span>}}&gt;</span>{this.props.displayName}<span class="tag">&lt;/<span class="title">strong</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">'text'</span> <span class="attribute">onChange</span>=<span class="value">{this.filterText}</span> <span class="attribute">onClick</span>=<span class="value">{this.textOnClick}</span> /&gt;</span>
+      <span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+    );
+  }
+});</span></code></pre>
+<p><small>Please note: filterByColumn is a method that is passed as a prop to any customHeaderComponent.</small></p>
+<p>From there, we will set the customComponent value in the <strong>name</strong> columnMetadata object to this LinkComponent. We&#39;re also going to update <strong>state</strong> and <strong>city</strong>&#39;s <code>customHeaderComponent</code> and <code>customHeaderComponentProps</code>.</p>
 <pre><code>var columnMeta = [
   {
   <span class="keyword">...</span>
@@ -276,6 +311,18 @@
   <span class="string">"locked"</span>: false,
   <span class="string">"visible"</span>: true,
   <span class="string">"customComponent"</span>: LinkComponent
+  },
+  {
+  <span class="keyword">...</span>
+  <span class="string">"columnName"</span>: <span class="string">"city"</span>,
+  <span class="string">"customHeaderComponent"</span>: HeaderComponent,
+  <span class="string">"customHeaderComponentProps"</span>: { color: <span class="string">'red'</span> }
+  },
+  {
+  <span class="keyword">...</span>
+  <span class="string">"columnName"</span>: <span class="string">"state"</span>,
+  <span class="string">"customHeaderComponent"</span>: HeaderComponent,
+  <span class="string">"customHeaderComponentProps"</span>: { color: <span class="string">'blue'</span> }
   },
   <span class="keyword">...</span>
 ];</code></pre>
@@ -291,6 +338,25 @@ var LinkComponent = React.createClass({
   render: function(){
     url ="#speakers/" + this.props.rowData.state + "/" + this.props.data;
     return <a href={url}>{this.props.data}</a>
+  }
+});
+
+var HeaderComponent = React.createClass({
+  textOnClick: function(e) {
+    e.stopPropagation();
+  },
+
+  filterText: function(e) {
+    this.props.filterByColumn(e.target.value, this.props.columnName)
+  },
+
+  render: function(){
+    return (
+      <span>
+        <div><strong style={{color: this.props.color}}>{this.props.displayName}</strong></div>
+        <input type='text' onChange={this.filterText} onClick={this.textOnClick} />
+      </span>
+    );
   }
 });
 
@@ -312,13 +378,17 @@ var customColumnMetadata = [
   "columnName": "city",
   "order": 3,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'red' }
 },
 {
   "columnName": "state",
   "order": 4,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'blue' }
 },
 {
   "columnName": "country",
@@ -340,7 +410,7 @@ var customColumnMetadata = [
 }
 ];
 
-React.render(
+ReactDOM.render(
 <Griddle results={fakeData} columnMetadata={customColumnMetadata} columns={["name", "city", "state", "country"]}/>, document.getElementById('customLink')
 );
 </script>
@@ -429,7 +499,7 @@ var OtherComponent = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <Griddle results={fakeData} useCustomRowComponent={true} customRowComponent={OtherComponent} customRowComponentClassName={"custom-row"} enableToggleCustom={true} showSettings={true} showFilter={true}/>,
    document.getElementById('custom-row')
 );
@@ -507,6 +577,7 @@ var data = [
 
 var TestLineChart = React.createClass({
   render: function(){
+    var type = this.props.type || 'Line'
     var simpleLineChartData = {
       labels: _.keys(this.props.data[0]),
       series: []
@@ -516,14 +587,63 @@ var TestLineChart = React.createClass({
       simpleLineChartData.series.push(_.values(item));
     });
 
-    return <ChartistGraph data={simpleLineChartData} type={'Line'} />
+    return <ChartistGraph data={simpleLineChartData} type={type} />
   }
 });
 
-React.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table"/>, document.getElementById('grid-chart'));
+ReactDOM.render(<Griddle enableToggleCustom={true} showSettings={true} results={data} useCustomGridComponent={true} customGridComponent={TestLineChart} tableClassName="table" gridMetadata={{type: 'Bar'}}/>, document.getElementById('grid-chart'));
 </script>
 
 
+<hr />
+
+<h3 id="custom-filtering-and-filter-component">Custom Filtering and Filter Component</h3>
+<p>Griddle supports custom filtering and custom filter components. In order to use a custom filter function set the property <code>useCustomFilterer</code> to true and pass in a function to the  <code>customFilterer</code> property. To use a custom filter component set <code>useCustomFilterComponent</code> to true and pass a component to <code>customFilterComponent</code>.</p>
+<h5 id="example-">Example:</h5>
+<p>This example shows how to make a custom filter component with a custom filter function that does a case-insensitive search through the items. The component must call <code>this.props.changeFilter(val)</code> when the filter should be updated. In the example below we pass a string but any variable type can be used as long as the filter function is expecting it, for example an advanced query could be passed in using an object. The filter function signature takes the items to be filtered and the query to filter them by.</p>
+<pre><code class="lang-javascript">  <span class="keyword">var</span> _ = require(<span class="string">'underscore'</span>),
+      squish = require(<span class="string">'object-squish'</span>);
+
+  <span class="keyword">var</span> customFilterFunction = <span class="keyword">function</span>(items, query) {
+    <span class="keyword">return</span> _.filter(items, (item) =&gt; {
+      <span class="keyword">var</span> flat = squish(item);
+
+      <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> flat) {
+        <span class="keyword">if</span> (String(flat[key]).toLowerCase().indexOf(query.toLowerCase()) &gt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">true</span>;
+      };
+      <span class="keyword">return</span> <span class="literal">false</span>;
+    });
+  };
+
+  <span class="keyword">var</span> customFilterComponent = React.createClass({
+    getDefaultProps: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> {
+        <span class="string">"query"</span>: <span class="string">""</span>
+      }
+    },
+
+    searchChange: <span class="keyword">function</span>(event) {
+      <span class="keyword">this</span>.props.query = event.target.value;
+      <span class="keyword">this</span>.props.changeFilter(<span class="keyword">this</span>.props.query);
+    },
+
+    render: <span class="keyword">function</span>() {
+      <span class="keyword">return</span> (
+        <span class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">className</span>=<span class="value">"filter-container"</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span>
+                 <span class="attribute">name</span>=<span class="value">"search"</span>
+                 <span class="attribute">placeholder</span>=<span class="value">"Search..."</span>
+                 <span class="attribute">onChange</span>=<span class="value">{this.searchChange}</span> /&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+      )
+    }
+  });</span></code></pre>
+<p>Then initialize Griddle:</p>
+<pre><code>React.render(
+  <span class="xml"><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">showFilter</span>=<span class="value">{true}</span>
+  <span class="attribute">useCustomFilterer</span>=<span class="value">{true}</span> <span class="attribute">customFilterer</span>=<span class="value">{customFilterFunction}</span>
+  <span class="attribute">useCustomFilterComponent</span>=<span class="value">{true}</span> <span class="attribute">customFilterComponent</span>=<span class="value">{customFilterComponent}</span>/&gt;</span>,
+  document.getElementById('griddle-metadata')</span></code></pre>
 <hr />
 
 <h3 id="custom-paging-component">Custom Paging Component</h3>
@@ -589,7 +709,7 @@ React.render(<Griddle enableToggleCustom={true} showSettings={true} results={dat
     }
 });</span></code></pre>
 <p>Then initialize your component as follows:</p>
-<pre><code><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">tableClassName</span>=<span class="value">"table"</span> <span class="attribute">useCustomRowComponent</span>=<span class="value">"true"</span> 
+<pre><code><span class="tag">&lt;<span class="title">Griddle</span> <span class="attribute">results</span>=<span class="value">{fakeData}</span> <span class="attribute">tableClassName</span>=<span class="value">"table"</span> <span class="attribute">useCustomRowComponent</span>=<span class="value">"true"</span>
   <span class="attribute">customRowComponent</span>=<span class="value">{OtherComponent}</span> <span class="attribute">useCustomPagerComponent</span>=<span class="value">"true"</span> <span class="attribute">customPagerComponent</span>=<span class="value">{OtherPager}</span> /&gt;</span></code></pre>
 <div id="custom-paging"></div>
 
@@ -645,7 +765,7 @@ var OtherPager = React.createClass({
     }
 });
 
-React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComponent={true}
+ReactDOM.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComponent={true}
   customRowComponent={OtherComponent} useCustomPagerComponent={true} customPagerComponent={OtherPager} />, document.getElementById("custom-paging"));
 </script>
 
@@ -670,7 +790,7 @@ React.render(<Griddle results={fakeData} tableClassName="table" useCustomRowComp
 <div id="griddle-nodata-basic"></div>
 
 <script type="text/jsx">
-    React.render(<Griddle noDataMessage={"No data could be found."} />, document.getElementById("griddle-nodata-basic"));
+    ReactDOM.render(<Griddle noDataMessage={"No data could be found."} />, document.getElementById("griddle-nodata-basic"));
 </script>
 
 
@@ -708,7 +828,7 @@ React.render(<span class="tag">&lt;<span class="title">Griddle</span> <span clas
     }
   });
 
-  React.render(<Griddle customNoDataComponent={NoDataComponent} />, document.getElementById("griddle-nodata-component"));
+  ReactDOM.render(<Griddle customNoDataComponent={NoDataComponent} />, document.getElementById("griddle-nodata-component"));
 </script>
 
 
