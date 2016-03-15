@@ -49,6 +49,8 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 - Support filter by column
 - Various fixes
 
+Thanks @dlong500, Chris Main, @astraw, Tony L. Kerz, @jsdmc, @kevinhughes27, @liorbentov, @bouk, @yorchv, and everyone else who has helped with 0.4.0!
+
 0.3.0
 
 - Pulling the React 0.14 update into a larger version update to prevent npm from assuming it's safe to update.
