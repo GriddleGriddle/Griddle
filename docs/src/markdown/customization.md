@@ -386,7 +386,6 @@ Griddle supports custom filtering and custom filter components. In order to use 
 This example shows how to make a custom filter component with a custom filter function that does a case-insensitive search through the items. The component must call `this.props.changeFilter(val)` when the filter should be updated. In the example below we pass a string but any variable type can be used as long as the filter function is expecting it, for example an advanced query could be passed in using an object. The filter function signature takes the items to be filtered and the query to filter them by.
 
 ```javascript
-  var _ = require('underscore'),
       squish = require('object-squish');
 
   var customFilterFunction = function(items, query) {

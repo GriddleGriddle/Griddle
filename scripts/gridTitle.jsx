@@ -2,7 +2,6 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
 
 var DefaultHeaderComponent = React.createClass({
