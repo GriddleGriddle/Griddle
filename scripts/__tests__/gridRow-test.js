@@ -1,4 +1,3 @@
-var _ = require('underscore'); 
 var React = require('react');
 var GridRow = require('../gridRow.jsx');
 var ColumnProperties = require('../columnProperties.js');

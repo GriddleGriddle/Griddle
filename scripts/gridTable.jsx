@@ -6,7 +6,6 @@ var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
 var RowProperties = require('./rowProperties.js');
-var _ = require('underscore');
 
 var GridTable = React.createClass({
   getDefaultProps: function(){
