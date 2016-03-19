@@ -560,13 +560,13 @@ var Griddle = React.createClass({
         }
     },
 	_toggleSelectAll: function () {
-
 		var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
             newIsSelectAllChecked = !this.state.isSelectAllChecked,
 			newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
 
+        var self = this;
 		forEach(visibleRows, function (row) {
-            this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, newIsSelectAllChecked);
+            self._updateSelectedRowIds(row[self.props.uniqueIdentifier], newSelectedRowIds, newIsSelectAllChecked);
 		}, this);
 
 		this.setState({
