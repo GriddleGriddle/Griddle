@@ -163,7 +163,8 @@ var GridTable = React.createClass({
 
       // no data section
       if (this.props.showNoData) {
-        nodes.push(<tr key="no-data-section"><td>{this.props.noDataSection}</td></tr>);
+        var colSpan = this.props.columnSettings.getVisibleColumnCount();
+        nodes.push(<tr key="no-data-section"><td colSpan={colSpan}>{this.props.noDataSection}</td></tr>);
       }
 
       // Add the spacer rows for nodes we're not rendering.
