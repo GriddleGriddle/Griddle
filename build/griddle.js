@@ -1078,7 +1078,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // no data section
 	      if (this.props.showNoData) {
-	        nodes.push(React.createElement('tr', { key: 'no-data-section' }, React.createElement('td', null, this.props.noDataSection)));
+	        var colSpan = this.props.columnSettings.getVisibleColumnCount();
+	        nodes.push(React.createElement('tr', { key: 'no-data-section' }, React.createElement('td', { colSpan: colSpan }, this.props.noDataSection)));
 	      }
 
 	      // Add the spacer rows for nodes we're not rendering.
