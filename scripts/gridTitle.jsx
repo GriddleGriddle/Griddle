@@ -77,7 +77,7 @@ var GridTitle = React.createClass({
         if (that.props.useGriddleStyles){
           titleStyles = {
             backgroundColor: "#EDEDEF",
-            border: "0",
+            border: "0px",
             borderBottom: "1px solid #DDD",
             color: "#222",
             padding: "5px",

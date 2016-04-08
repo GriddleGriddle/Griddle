@@ -65,7 +65,7 @@ var GridRow = React.createClass({
 
         if (this.props.useGriddleStyles) {
           columnStyles = {
-            margin: "0",
+            margin: "0px",
             padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
             height: that.props.rowHeight? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
             backgroundColor: "#FFF",
