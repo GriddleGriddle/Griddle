@@ -25,16 +25,29 @@ var CustomRowComponentContainer = React.createClass({
       return (<div className={this.props.className}></div>);
     }
 
-    var nodes = this.props.data.map(function(row, index){
-        return <that.props.customComponent data={row} metadataColumns={that.props.metadataColumns} key={index} globalData={that.props.globalData} />
-    });
+    if (this.props.showNoData) {
+      
+      return (
+        <div className={this.props.className}>
+          <div className="no-data-section">{this.props.noDataSection}</div>
+        </div>
+      );
 
-    var footer = this.props.showPager&&this.props.pagingContent;
-    return (
-      <div className={this.props.className} style={this.props.style}>
-          {nodes}
-      </div>
-    );
+    } else {
+      
+      var nodes = this.props.data.map(function(row, index){
+        return <that.props.customComponent data={row} metadataColumns={that.props.metadataColumns} key={index} globalData={that.props.globalData} />
+      });
+      
+      var footer = this.props.showPager&&this.props.pagingContent;
+
+      return (
+        <div className={this.props.className} style={this.props.style}>
+            {nodes}
+        </div>
+      );
+      
+    }
   }
 });
 

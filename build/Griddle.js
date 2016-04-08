@@ -788,7 +788,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(this.props.customGridComponent, _extends({ data: this.props.results, className: this.props.customGridComponentClassName }, this.props.gridMetadata));
 	    },
 	    getCustomRowSection: function getCustomRowSection(data, cols, meta, pagingContent, globalData) {
-	        return React.createElement('div', null, React.createElement(CustomRowComponentContainer, { data: data, columns: cols, metadataColumns: meta, globalData: globalData,
+	        // no data section
+	        var showNoData = this.shouldShowNoDataSection(data);
+	        var noDataSection = this.getNoDataSection();
+
+	        return React.createElement('div', null, React.createElement(CustomRowComponentContainer, { data: data, columns: cols, metadataColumns: meta, globalData: globalData, noDataSection: noDataSection, showNoData: showNoData,
 	            className: this.props.customRowComponentClassName, customComponent: this.props.customRowComponent,
 	            style: this.props.useGriddleStyles ? this.getClearFixStyles() : null }), this.props.showPager && pagingContent);
 	    },
@@ -10607,12 +10611,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return React.createElement("div", { className: this.props.className });
 	    }
 
-	    var nodes = this.props.data.map(function (row, index) {
-	      return React.createElement(that.props.customComponent, { data: row, metadataColumns: that.props.metadataColumns, key: index, globalData: that.props.globalData });
-	    });
+	    if (this.props.showNoData) {
 
-	    var footer = this.props.showPager && this.props.pagingContent;
-	    return React.createElement("div", { className: this.props.className, style: this.props.style }, nodes);
+	      return React.createElement("div", { className: this.props.className }, React.createElement("div", { className: "no-data-section" }, this.props.noDataSection));
+	    } else {
+
+	      var nodes = this.props.data.map(function (row, index) {
+	        return React.createElement(that.props.customComponent, { data: row, metadataColumns: that.props.metadataColumns, key: index, globalData: that.props.globalData });
+	      });
+
+	      var footer = this.props.showPager && this.props.pagingContent;
+
+	      return React.createElement("div", { className: this.props.className, style: this.props.style }, nodes);
+	    }
 	  }
 	});
 

@@ -754,7 +754,11 @@ var Griddle = React.createClass({
         return <this.props.customGridComponent data={this.props.results} className={this.props.customGridComponentClassName} {...this.props.gridMetadata} />
     },
     getCustomRowSection: function(data, cols, meta, pagingContent, globalData){
-        return <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta} globalData={globalData}
+        // no data section
+        var showNoData = this.shouldShowNoDataSection(data);
+        var noDataSection =  this.getNoDataSection();
+
+        return <div><CustomRowComponentContainer data={data} columns={cols} metadataColumns={meta} globalData={globalData} noDataSection={noDataSection} showNoData={showNoData}
             className={this.props.customRowComponentClassName} customComponent={this.props.customRowComponent}
             style={this.props.useGriddleStyles ? this.getClearFixStyles() : null} />{this.props.showPager&&pagingContent}</div>
     },
