@@ -31,7 +31,12 @@ function keysFromPath(path) {
 // path described by the keys given. Keys may be given as an array
 // or as a dot-separated string.
 function getPath (obj, ks) {
-  ks = typeof ks == "string" ? keysFromPath(ks) : ks;
+  if (typeof ks == "string") {
+    if(obj[ks] !== undefined) {
+      return obj[ks];
+    }
+    ks = keysFromPath(ks);
+  }
 
   var i = -1, length = ks.length;
 
