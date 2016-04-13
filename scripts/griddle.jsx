@@ -485,13 +485,29 @@ var Griddle = React.createClass({
         var that = this;
             //get the correct page size
             if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
-                var sortProperty = _filter(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                sortProperty = (sortProperty.length > 0 && sortProperty[0].hasOwnProperty("sortProperty") && sortProperty[0]["sortProperty"]) || null;
+                var sortColumn = _filter(this.props.columnMetadata, {columnName: this.state.sortColumn});
+                var sortProperty = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("sortProperty") && sortColumn[0]["sortProperty"] || null;
+                // for underscore-style sortBy method (with 1 argument)
+                var compare = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("compare") && sortColumn[0]["compare"] || null;
+                // for standard JS sort method (with 2 arguments)
+                var compare2 = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("compare2") && sortColumn[0]["compare2"] || null;
+                var column = that.state.sortColumn || that.props.initialSort;
 
-                data = sortBy(data, function(item){
-                    return sortProperty ? deep.getAt( item, that.state.sortColumn||that.props.initialSort )[sortProperty] :
-                        deep.getAt( item, that.state.sortColumn||that.props.initialSort );
-                });
+                if(compare2){
+                    data = data.sort(function (a, b) {
+                        return compare2(deep.getAt(a, column), deep.getAt(b, column));
+                    });
+                } else {
+                    data = sortBy(data, function (item) {
+                        if(sortProperty){
+                            return deep.getAt(item, column)[sortProperty];
+                        } else if(compare){
+                            return compare(deep.getAt(item, column));
+                        } else {
+                            return deep.getAt(item, column);
+                        }
+                    });
+                }
 
                 if(this.state.sortAscending === false){
                     data.reverse();
