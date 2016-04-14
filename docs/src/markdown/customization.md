@@ -31,6 +31,16 @@ Griddle parses and evaluates the following columnMetadata object properties:
 </dl>
 
 <dl>
+  <dt>compare</dt>
+  <dd><strong>bool</strong> - Specifies a function that defines the sort order of the column data. Passed to [_.sortBy](https://lodash.com/docs#sortBy) method, invoked with 1 argument.</dd>
+</dl>
+
+<dl>
+  <dt>compare2</dt>
+  <dd><strong>bool</strong> - Specifies a function that defines the sort order of the column data. Passed to standard JS [sort](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method, invoked ith 2 arguments. Useful, for example, wih naturalSort(a, b) from [javascript-natural-sort](https://www.npmjs.com/package/javascript-natural-sort)</dd>
+</dl>
+
+<dl>
   <dt>order</dt>
   <dd><strong>int</strong> - The order that this column should appear in Griddle.</dd>
 </dl>
@@ -247,6 +257,49 @@ React.render(<Griddle data={someData} columnMetadata={columnMeta} />,
 ```
 
 @@include('./customization/customColumn.html')
+
+<hr />
+
+###Custom sorting###
+
+#####Example:#####
+
+In this example we are going to sort `Employee Name` column by last name, followed by first name:
+
+```
+var exampleMetadata = [
+  {
+  "columnName": "id",
+  "order": 1,
+  "locked": false,
+  "visible": false,
+  "displayName": "ID"
+  },
+  {
+  "columnName": "name",
+  "order": 9,
+  "locked": false,
+  "visible": true,
+  "displayName": "Employee Name",
+  "compare": function(name) {
+      var a = name.split(" ");
+      return a[1] + " " + a[0];
+    }
+  },
+  ...
+]
+```
+
+Then, like in first example, but specify initialSort column:
+
+```
+React.render(
+  <Griddle results={fakeData} columnMetadata={exampleMetadata} showFilter={true}
+    showSettings={true} columns={["name", "city", "state", "country"]} initialSort="name"/>,
+    document.getElementById('griddle-metadata')
+```
+
+@@include('./customization/customSorting.html')
 
 <hr />
 
