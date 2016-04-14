@@ -249,13 +249,26 @@ var Griddle = React.createClass({
             showColumnChooser: !this.state.showColumnChooser
         });
     },
+    isNullOrUndefined: function(value) {
+      return (value === undefined || value === null)
+    },
+    shouldUseCustomRowComponent: function() {
+      return this.isNullOrUndefined(this.state.useCustomRowComponent) ?
+        this.props.useCustomRowComponent :
+        this.state.useCustomRowComponent
+    },
+    shouldUseCustomGridComponent: function() {
+      return this.isNullOrUndefined(this.state.useCustomGridComponent) ?
+        this.props.useCustomGridComponent :
+        this.state.useCustomGridComponent
+    },
     toggleCustomComponent: function(){
         if(this.state.customComponentType === "grid"){
-            this.setProps({
+            this.setState({
                 useCustomGridComponent: !this.props.useCustomGridComponent
             });
         } else if(this.state.customComponentType === "row"){
-            this.setProps({
+            this.setState({
                 useCustomRowComponent: !this.props.useCustomRowComponent
             });
         }
@@ -420,11 +433,11 @@ var Griddle = React.createClass({
         this.setMaxPage();
 
         //don't like the magic strings
-        if(this.props.useCustomGridComponent === true){
+        if(this.shouldUseCustomGridComponent()){
             this.setState({
                  customComponentType: "grid"
             });
-        } else if(this.props.useCustomRowComponent === true){
+        } else if(this.shouldUseCustomRowComponent()){
             this.setState({
                 customComponentType: "row"
             });
@@ -464,6 +477,7 @@ var Griddle = React.createClass({
             }
         }
     },
+    //TODO: Do this with propTypes
     verifyCustom: function(){
         if(this.props.useCustomGridComponent === true && this.props.customGridComponent === null){
             console.error("useCustomGridComponent is set to true but no custom component was specified.")
@@ -703,7 +717,7 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function(){
-     return ((this.props.showFilter && this.props.useCustomGridComponent === false) ?
+     return ((this.props.showFilter && this.shouldUseCustomGridComponent() === false) ?
         ( this.props.useCustomFilterComponent ?
          <CustomFilterContainer changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} customFilterComponent={this.props.customFilterComponent} results={this.props.results} currentResults={this.getCurrentResults()} /> :
          <GridFilter changeFilter={this.setFilter} placeholderText={this.props.filterPlaceholderText} />) :
@@ -744,7 +758,7 @@ var Griddle = React.createClass({
         </div>);
     },
     getPagingSection: function(currentPage, maxPage){
-        if ((this.props.showPager && !this.isInfiniteScrollEnabled() && !this.props.useCustomGridComponent) === false) {
+        if ((this.props.showPager && !this.isInfiniteScrollEnabled() && !this.shouldUseCustomGridComponent()) === false) {
             return undefined;
         }
 
@@ -761,8 +775,8 @@ var Griddle = React.createClass({
         return this.state.showColumnChooser ? (
             <GridSettings columns={keys} selectedColumns={cols} setColumns={this.setColumns} settingsText={this.props.settingsText}
              settingsIconComponent={this.props.settingsIconComponent} maxRowsText={this.props.maxRowsText} setPageSize={this.setPageSize}
-             showSetPageSize={!this.props.useCustomGridComponent} resultsPerPage={this.state.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
-             toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.props.useCustomRowComponent || this.props.useCustomGridComponent}
+             showSetPageSize={!this.shouldUseCustomGridComponent()} resultsPerPage={this.state.resultsPerPage} enableToggleCustom={this.props.enableToggleCustom}
+             toggleCustomComponent={this.toggleCustomComponent} useCustomComponent={this.shouldUseCustomRowComponent() || this.shouldUseCustomGridComponent()}
              useGriddleStyles={this.props.useGriddleStyles} enableCustomFormatText={this.props.enableCustomFormatText} columnMetadata={this.props.columnMetadata} />
         ) : "";
     },
@@ -815,9 +829,9 @@ var Griddle = React.createClass({
                 onRowClick={this.props.onRowClick}/></div>)
     },
     getContentSection: function(data, cols, meta, pagingContent, hasMorePages, globalData){
-        if(this.props.useCustomGridComponent && this.props.customGridComponent !== null){
+        if(this.shouldUseCustomGridComponent() && this.props.customGridComponent !== null){
            return this.getCustomGridSection();
-        } else if(this.props.useCustomRowComponent){
+        } else if(this.shouldUseCustomRowComponent()){
             return this.getCustomRowSection(data, cols, meta, pagingContent, globalData);
         } else {
             return this.getStandardGridSection(data, cols, meta, pagingContent, hasMorePages);
@@ -876,7 +890,7 @@ var Griddle = React.createClass({
 
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
-        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
+        gridClassName += this.shouldUseCustomRowComponent() ? " griddle-custom" : "";
 
         return (
             <div className={gridClassName}>
