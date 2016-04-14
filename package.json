@@ -50,7 +50,6 @@
     "grunt-contrib-copy": "~0.7.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-include-replace": "~2.0.0",
-    "grunt-jsxhint": "^0.4.0",
     "grunt-markdown": "~0.6.1",
     "grunt-open": "^0.2.3",
     "grunt-webpack": "^1.0.11",
