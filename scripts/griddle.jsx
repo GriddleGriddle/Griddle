@@ -265,11 +265,11 @@ var Griddle = React.createClass({
     toggleCustomComponent: function(){
         if(this.state.customComponentType === "grid"){
             this.setState({
-                useCustomGridComponent: !this.props.useCustomGridComponent
+                useCustomGridComponent: !this.shouldUseCustomGridComponent()
             });
         } else if(this.state.customComponentType === "row"){
             this.setState({
-                useCustomRowComponent: !this.props.useCustomRowComponent
+                useCustomRowComponent: !this.shouldUseCustomRowComponent()
             });
         }
     },
