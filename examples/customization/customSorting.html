@@ -1,0 +1,58 @@
+<div id="griddle-sorting"></div>
+
+<script type="text/jsx">
+  var exampleMetadata = [
+  {
+    "columnName": "id",
+    "order": 1,
+    "locked": false,
+    "visible": false,
+    "displayName": "ID"
+  },
+  {
+    "columnName": "name",
+    "order": 9,
+    "locked": false,
+    "visible": true,
+    "displayName": "Employee Name",
+    "compare": function(name) {
+        var a = name.split(" ");
+        return a[1] + " " + a[0];
+    }
+  },
+  {
+    "columnName": "city",
+    "order": 8,
+    "locked": false,
+  },
+  {
+    "columnName": "state",
+    "order": 7,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "country",
+    "order": 6,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "company",
+    "order": 5,
+    "locked": false,
+    "visible": true
+  },
+  {
+    "columnName": "favoriteNumber",
+    "order":  4,
+    "locked": false,
+    "visible": true,
+    "displayName": "Favorite Number"
+  }
+];
+
+    ReactDOM.render(
+        <Griddle results={fakeData} columnMetadata={exampleMetadata} tableClassName="table" showFilter={true} showSettings={true} columns={["name", "city", "state", "country"]} initialSort="name"/>, document.getElementById('griddle-sorting')
+    );
+</script>
