@@ -1,6 +1,8 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Griddle = require('../griddle.jsx');
 var TestUtils = require('react-addons-test-utils');
+var assign = require('lodash.assign');
 
 var SomeCustomComponent = React.createClass({
   render: function(){
@@ -175,8 +177,9 @@ describe('Griddle', function() {
     grid.setPageSize(1);
     expect(grid.state.maxPage).toEqual(2);
     var shortFakeData = [fakeData[0]];
-    grid.setProps({results: shortFakeData});
-    expect(grid.state.maxPage).toEqual(1);
+
+    const gridLocal = TestUtils.renderIntoDocument(<Griddle results={shortFakeData} gridClassName="test" />);
+    expect(gridLocal.state.maxPage).toEqual(1);
   });
 
   it('sets column chooser to true property when calling toggle column chooser for first time', function(){
@@ -300,7 +303,9 @@ describe('Griddle', function() {
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
       var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'th')
 
-      TestUtils.Simulate.click(thRow[0].getDOMNode(), 'Test');
+      var thDOM = ReactDOM.findDOMNode(thRow[0]);
+
+      TestUtils.Simulate.click(thDOM, 'Test');
       expect(mock.calls.count()).toEqual(1);
   });
 
@@ -315,7 +320,9 @@ describe('Griddle', function() {
       var rows = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'tr')
       var thRow = TestUtils.scryRenderedDOMComponentsWithTag(grid2, "th");
 
-      TestUtils.Simulate.click(thRow[0].getDOMNode(), 'Test');
+      var thDOM = ReactDOM.findDOMNode(thRow[0]);
+
+      TestUtils.Simulate.click(thDOM, 'Test');
       expect(mock.calls.count()).toEqual(0);
   });
 
@@ -635,7 +642,9 @@ it('should not show footer when useCustomGridComponent is true', function(){
                                                       resultsPerPage={1}
                                                       onRowClick={onRowClick} />);
     var cells = TestUtils.scryRenderedDOMComponentsWithTag(grid2, 'td');
-    TestUtils.Simulate.click(cells[0].getDOMNode());
+    var cellDOM = ReactDOM.findDOMNode(cells[0]);
+
+    TestUtils.Simulate.click(cellDOM);
     expect(clicked).toEqual(true);
   });
 });
