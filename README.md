@@ -44,6 +44,12 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.5.0
+- Support React 15
+- Various bug fixes
+
+Thanks @thangaduraicse, @Julusian, Yaohan Chen, and @Dem0n3D
+
 0.4.0
 - Remove the underscore dependencies and implement the use of lodash-modularized
 - Support filter by column
