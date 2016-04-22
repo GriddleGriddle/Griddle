@@ -54,7 +54,14 @@ function getPath (obj, ks) {
 // Credit: https://github.com/jashkenas/underscore/blob/master/underscore.js
 function powerPick (object, keys) {
   var result = {}, obj = object, iteratee;
-  iteratee = function(key, obj) { return key in obj; };
+  iteratee = function(key, obj) {
+    return key.split(".").every(function(x) {
+        if(typeof obj != "object" || obj === null || ! x in obj)
+            return false;
+        obj = obj[x];
+        return true;
+    });
+  }
 
   obj = Object(obj);
 
