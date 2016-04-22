@@ -359,7 +359,8 @@ var Griddle = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
-
+	//This will updaet the column Metadata
+	this.columnSettings.columnMetadata = nextProps.columnMetadata;
         if(nextProps.results.length > 0)
         {
             var deepKeys = deep.keys(nextProps.results[0]);
