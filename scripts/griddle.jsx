@@ -88,6 +88,7 @@ var Griddle = React.createClass({
             "noDataMessage":"There is no data to display.",
             "noDataClassName": "griddle-nodata",
             "customNoDataComponent": null,
+            "allowEmptyGrid": false,
             "showTableHeading":true,
             "showPager":true,
             "useFixedHeader":false,
@@ -129,9 +130,9 @@ var Griddle = React.createClass({
             "settingsIconComponent": "",
             "nextIconComponent": "",
             "previousIconComponent":"",
-			"isMultipleSelection": false, //currently does not support subgrids
+            "isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
-			"uniqueIdentifier": "id"
+            "uniqueIdentifier": "id"
         };
     },
     propTypes: {
@@ -845,8 +846,12 @@ var Griddle = React.createClass({
         return (<GridNoData noDataMessage={this.props.noDataMessage} />);
     },
     shouldShowNoDataSection: function(results){
+        if (this.props.allowEmptyGrid) {
+          return false;
+        }
+
         return (this.props.useExternal === false && (typeof results === 'undefined' || results.length === 0 )) ||
-            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0)
+            (this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0);
     },
     render: function() {
         var that = this,
