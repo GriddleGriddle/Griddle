@@ -647,14 +647,4 @@ it('should not show footer when useCustomGridComponent is true', function(){
     TestUtils.Simulate.click(cellDOM);
     expect(clicked).toEqual(true);
   });
-
-  it('renders gridNoData with no data', function(){
-    var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test"/>);
-    expect(emptyGrid.getDOMNode().innerHTML.indexOf('no data') > -1).toEqual(true);
-  });
-
-  it('renders grid with no data when "allowEmptyGrid" == true', function(){
-    var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test" allowEmptyGrid={true}/>);
-    expect(emptyGrid.getDOMNode().innerHTML.indexOf('<table') > -1).toEqual(true);
-  });
 });
