@@ -3,6 +3,7 @@
 */
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
+var assign = require('lodash.assign');
 
 var DefaultHeaderComponent = React.createClass({
   render: function(){
@@ -84,8 +85,8 @@ var GridTitle = React.createClass({
             cursor: columnIsSortable ? "pointer" : "default"
           }
         }
-
-        return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col} style={titleStyles}>
+        let specificTitleStyles = meta && meta.titleStyle ? assign({}, titleStyles, meta.titleStyle) : assign({}, titleStyles);
+        return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col} style={specificTitleStyles}>
           <HeaderComponent columnName={col} displayName={displayName} filterByColumn={that.props.filterByColumn} {...headerProps}/>
           {sortComponent}
         </th>);
