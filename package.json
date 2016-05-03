@@ -38,7 +38,8 @@
     "lodash.take": "^4.0.1",
     "lodash.topairs": "^4.0.0",
     "lodash.uniqueid": "^3.1.0",
-    "lodash.without": "^4.0.1"
+    "lodash.without": "^4.0.1",
+    "lodash.transform": "^4.0.0"
   },
   "devDependencies": {
     "babel-jest": "^5.2.1",
