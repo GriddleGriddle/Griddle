@@ -1,6 +1,6 @@
 ##Customization##
 
-__Please Note: Styling is similar to customization but is in its [own section](#) for clarity.__
+__Please Note: Styling is similar to customization but is in its [own section](http://griddlegriddle.github.io/Griddle/styling.html) for clarity.__
 
 Griddle comes with a number of customization options to help it fit with your project goals.
 
