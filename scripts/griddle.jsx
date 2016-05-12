@@ -32,9 +32,12 @@ var isNull = require('lodash.isnull');
 var isUndefined = require('lodash.isundefined');
 var omit = require('lodash.omit');
 var map = require('lodash.map');
-var sortBy = require('lodash.sortby');
 var extend = require('lodash.assign');
 var _filter = require('lodash.filter');
+
+var _orderBy = require('lodash/orderby');
+var _property = require('lodash/property');
+var _get = require('lodash/get');
 
 var Griddle = React.createClass({
     statics: {
@@ -360,8 +363,8 @@ var Griddle = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
-	//This will updaet the column Metadata
-	this.columnSettings.columnMetadata = nextProps.columnMetadata;
+	   //This will updaet the column Metadata
+	   this.columnSettings.columnMetadata = nextProps.columnMetadata;
         if(nextProps.results.length > 0)
         {
             var deepKeys = deep.keys(nextProps.results[0]);
@@ -500,33 +503,45 @@ var Griddle = React.createClass({
     getDataForRender: function(data, cols, pageList){
         var that = this;
             //get the correct page size
-            if(this.state.sortColumn !== "" || this.props.initialSort !== ""){
-                var sortColumn = _filter(this.props.columnMetadata, {columnName: this.state.sortColumn});
-                var sortProperty = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("sortProperty") && sortColumn[0]["sortProperty"] || null;
-                // for underscore-style sortBy method (with 1 argument)
-                var compare = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("compare") && sortColumn[0]["compare"] || null;
-                // for standard JS sort method (with 2 arguments)
-                var compare2 = sortColumn.length > 0 && sortColumn[0].hasOwnProperty("compare2") && sortColumn[0]["compare2"] || null;
+            if(this.state.sortColumn !== "" || this.props.initialSort !== "") {
                 var column = that.state.sortColumn || that.props.initialSort;
+                var sortColumn = _filter(this.props.columnMetadata, {columnName: column});
 
-                if(compare2){
-                    data = data.sort(function (a, b) {
-                        return compare2(deep.getAt(a, column), deep.getAt(b, column));
-                    });
-                } else {
-                    data = sortBy(data, function (item) {
-                        if(sortProperty){
-                            return deep.getAt(item, column)[sortProperty];
-                        } else if(compare){
-                            return compare(deep.getAt(item, column));
-                        } else {
-                            return deep.getAt(item, column);
-                        }
-                    });
+                var customCompareFn;
+                var secondarySort = [];
+                var secondarySortExample = { name: 'asc' };
+
+                var order = this.state.sortAscending ? 'asc' : 'desc';
+                
+                if (sortColumn.length > 0) {
+                    customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
+                    secondarySort = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
                 }
 
-                if(this.state.sortAscending === false){
-                    data.reverse();
+                if (typeof customCompareFn === 'function') {
+                    if (customCompareFn.length === 2) {
+                        data = data.sort(function (a, b) {
+                            return customCompareFn(_get(a, column), _get(b, column));
+                        });
+
+                        if(this.state.sortAscending === false) {
+                            data.reverse();
+                        }
+                    } else if (customCompareFn.length === 1) {
+                        data = _orderBy(data, function (item) {
+                            return customCompareFn(_get(item, column));
+                        }, [order]);
+                    }
+                } else {
+                    var iteratees = [_property(column)];
+                    var orders = [order];
+                    
+                    Object.keys(secondarySort).forEach(function (iteratee) {
+                        iteratees.push(_property(iteratee));
+                        orders.push(secondarySort[iteratee]);
+                    });
+
+                    data = _orderBy(data, iteratees, orders);
                 }
             }
 

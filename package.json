@@ -14,6 +14,7 @@
     "react": "^0.14.3 || ^15.0.1"
   },
   "dependencies": {
+    "lodash": "^4.12.0",
     "lodash.assign": "^4.0.6",
     "lodash.defaults": "^4.0.0",
     "lodash.difference": "^4.0.1",
