@@ -56,6 +56,11 @@ Griddle parses and evaluates the following columnMetadata object properties:
 </dl>
 
 <dl>
+    <dt>titleStyles</dt>
+    <dd><strong>object</strong> - collection of styles applied to column header</dd>
+</dl>
+
+<dl>
   <dt>displayName</dt>
   <dd><strong>string</strong> - The display name for the column. This is used when the name in the column heading and settings should be different from the data passed in to the Griddle component.</dd>
 </dl>
