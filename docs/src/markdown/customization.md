@@ -32,10 +32,9 @@ Griddle parses and evaluates the following columnMetadata object properties:
 
 <dl>
   <dt>customCompareFn</dt>
-  <dd><strong>function</strong> - with 1 argument specifies a function that defines the sort order of the column data. Passed to [_.sortBy](https://lodash.com/docs#sortBy) method, invoked with 1 argument.</dd>
-
-  <dd><strong>function</strong> - with 2 arguments specifies a function that defines the sort order of the column data. Passed to standard JS [sort](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method, invoked ith 2 arguments. Useful, for example, wih naturalSort(a, b) from [javascript-natural-sort](https://www.npmjs.com/package/javascript-natural-sort)</dd>
-
+  <dd><strong>function</strong></dd>
+  <dd><strong>with 1 argument</strong> specifies a function that defines the sort order of the column data. Passed to [_.sortBy](https://lodash.com/docs#sortBy) method, invoked with 1 argument.</dd>
+  <dd><strong>with 2 arguments</strong> specifies a function that defines the sort order of the column data. Passed to standard JS [sort](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method, invoked ith 2 arguments. Useful, for example, wih naturalSort(a, b) from [javascript-natural-sort](https://www.npmjs.com/package/javascript-natural-sort)</dd>
 </dl>
 
 
