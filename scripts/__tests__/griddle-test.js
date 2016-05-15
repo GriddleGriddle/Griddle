@@ -650,11 +650,13 @@ it('should not show footer when useCustomGridComponent is true', function(){
 
   it('renders gridNoData with no data', function(){
     var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test"/>);
-    expect(emptyGrid.getDOMNode().innerHTML.indexOf('no data') > -1).toEqual(true);
+    // Read https://facebook.github.io/react/docs/component-api.html#getdomnode
+    // and https://facebook.github.io/react/docs/top-level-api.html#reactdom.finddomnode
+    expect(ReactDOM.findDOMNode(emptyGrid).innerHTML.indexOf('no data') > -1).toEqual(true);
   });
 
   it('renders grid with no data when "allowEmptyGrid" == true', function(){
     var emptyGrid = TestUtils.renderIntoDocument(<Griddle results={[]} gridClassName="test" allowEmptyGrid={true}/>);
-    expect(emptyGrid.getDOMNode().innerHTML.indexOf('<table') > -1).toEqual(true);
+    expect(ReactDOM.findDOMNode(emptyGrid).innerHTML.indexOf('<table') > -1).toEqual(true);
   });
 });
