@@ -344,9 +344,9 @@ var Griddle = React.createClass({
         }
         var columnMeta = find(this.props.columnMetadata, { columnName: column }) || {};
         var sortDirectionCycle = columnMeta.sortDirectionCycle ? columnMeta.sortDirectionCycle : [null, 'asc', 'desc'];
-        var sortDirection;
+        var sortDirection = null;
         // Find the current position in the cycle (or -1).
-        var i = sortDirectionCycle.indexOf(this.state.sortDirection ? this.state.sortDirection : null); 
+        var i = sortDirectionCycle.indexOf(this.state.sortDirection ? this.state.sortDirection : null);
         // Proceed to the next position in the cycle (or start at the beginning).
         i = (i + 1) % sortDirectionCycle.length;
 
@@ -357,7 +357,7 @@ var Griddle = React.createClass({
         }
 
         var state = {
-            page: 0,
+            page:0,
             sortColumn: column,
             sortDirection: sortDirection
         };
@@ -370,8 +370,8 @@ var Griddle = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         this.setMaxPage(nextProps.results);
-	   //This will updaet the column Metadata
-	   this.columnSettings.columnMetadata = nextProps.columnMetadata;
+	    //This will updaet the column Metadata
+	    this.columnSettings.columnMetadata = nextProps.columnMetadata;
         if(nextProps.results.length > 0)
         {
             var deepKeys = deep.keys(nextProps.results[0]);
@@ -413,12 +413,10 @@ var Griddle = React.createClass({
             //this sets the individual column filters
             columnFilters: {},
             resultsPerPage: this.props.resultsPerPage || 5,
-            sortColumn: this.props.initialSort,
             showColumnChooser: false,
 			isSelectAllChecked: false,
 			selectedRowIds: this.props.selectedRowIds
         };
-
         return state;
     },
     componentWillMount: function() {
@@ -441,6 +439,7 @@ var Griddle = React.createClass({
             this.props.useCustomTableRowComponent
         );
 
+        this.changeSort(this.props.initialSort);
         this.setMaxPage();
 
         //don't like the magic strings
@@ -508,9 +507,10 @@ var Griddle = React.createClass({
     },
     getDataForRender: function(data, cols, pageList){
         var that = this;
-            //get the correct page size
-            if(this.state.sortColumn !== "" || this.props.initialSort !== "") {
-                var column = that.state.sortColumn || that.props.initialSort;
+
+            // get the correct page size
+            if(this.state.sortColumn !== "") {
+                var column = this.state.sortColumn;
                 var sortColumn = _filter(this.props.columnMetadata, {columnName: column});
                 var customCompareFn;
                 var secondarySort = {};
@@ -889,7 +889,6 @@ var Griddle = React.createClass({
 
         var keys = [];
         var cols = this.columnSettings.getColumns();
-
         //figure out which columns are displayed and show only those
         var data = this.getDataForRender(results, cols, true);
 
