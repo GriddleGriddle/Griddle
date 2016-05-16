@@ -280,11 +280,13 @@ describe('Griddle', function() {
 
   it('sets sort direction correctly', function(){
     expect(grid.state.sortColumn).toEqual("");
+
     grid.changeSort("address.state");
     expect(grid.state.sortColumn).toEqual("address.state");
-    expect(grid.state.sortAscending).toEqual(true);
+    expect(grid.state.sortDirection).toEqual('asc');
+
     grid.changeSort("address.state");
-    expect(grid.state.sortAscending).toEqual(false);
+    expect(grid.state.sortDirection).toEqual('desc');
   });
 
   it('uses results when external not set', function(){

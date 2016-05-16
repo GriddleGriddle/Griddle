@@ -57,7 +57,6 @@ var Griddle = React.createClass({
             "rowMetadata": null,
             "results": [], // Used if all results are already loaded.
             "initialSort": "",
-            "initialSortAscending": true,
             "gridClassName":"",
             "tableClassName":"",
             "customRowComponentClassName":"",
@@ -151,7 +150,7 @@ var Griddle = React.createClass({
       function(item) {
            var arr = deep.keys(item);
            for(var i = 0; i < arr.length; i++){
-              if ((deep.getAt(item, arr[i])||"").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
+              if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0){
                return true;
               }
            }
@@ -336,24 +335,32 @@ var Griddle = React.createClass({
       var currentPage = this.getCurrentPage();
         if (currentPage > 0) { this.setPage(currentPage - 1); }
     },
-    changeSort: function(sort){
+    changeSort: function (column) {
         if(this.props.enableSort === false){ return; }
+
         if(this.props.useExternal) {
-            this.props.externalChangeSort(sort, this.props.externalSortColumn === sort ? !this.props.externalSortAscending : true);
+            this.props.externalChangeSort(column, this.props.externalSortColumn === column ? !this.props.externalSortAscending : true);
             return;
         }
+        var columnMeta = find(this.props.columnMetadata, { columnName: column }) || {};
+        var sortDirectionCycle = columnMeta.sortDirectionCycle ? columnMeta.sortDirectionCycle : [null, 'asc', 'desc'];
+        var sortDirection;
+        // Find the current position in the cycle (or -1).
+        var i = sortDirectionCycle.indexOf(this.state.sortDirection ? this.state.sortDirection : null); 
+        // Proceed to the next position in the cycle (or start at the beginning).
+        i = (i + 1) % sortDirectionCycle.length;
 
-        var that = this,
-            state = {
-                page:0,
-                sortColumn: sort,
-                sortAscending: true
-            };
-
-        // If this is the same column, reverse the sort.
-        if(this.state.sortColumn == sort){
-            state.sortAscending = !this.state.sortAscending;
+        if (sortDirectionCycle[i]) {
+            sortDirection = sortDirectionCycle[i];
+        } else {
+            sortDirection = null;
         }
+
+        var state = {
+            page: 0,
+            sortColumn: column,
+            sortDirection: sortDirection
+        };
 
         this.setState(state);
 
@@ -407,7 +414,6 @@ var Griddle = React.createClass({
             columnFilters: {},
             resultsPerPage: this.props.resultsPerPage || 5,
             sortColumn: this.props.initialSort,
-            sortAscending: this.props.initialSortAscending,
             showColumnChooser: false,
 			isSelectAllChecked: false,
 			selectedRowIds: this.props.selectedRowIds
@@ -506,42 +512,41 @@ var Griddle = React.createClass({
             if(this.state.sortColumn !== "" || this.props.initialSort !== "") {
                 var column = that.state.sortColumn || that.props.initialSort;
                 var sortColumn = _filter(this.props.columnMetadata, {columnName: column});
-
                 var customCompareFn;
-                var secondarySort = [];
-                var secondarySortExample = { name: 'asc' };
-
-                var order = this.state.sortAscending ? 'asc' : 'desc';
+                var secondarySort = {};
                 
                 if (sortColumn.length > 0) {
                     customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
-                    secondarySort = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
+                    secondarySort = sortColumn[0].hasOwnProperty("secondarySort") && sortColumn[0]["secondarySort"];
                 }
 
-                if (typeof customCompareFn === 'function') {
-                    if (customCompareFn.length === 2) {
-                        data = data.sort(function (a, b) {
-                            return customCompareFn(_get(a, column), _get(b, column));
+                if (this.state.sortDirection) {
+                    if (typeof customCompareFn === 'function') {
+                        if (customCompareFn.length === 2) {
+                            data = data.sort(function (a, b) {
+                                return customCompareFn(_get(a, column), _get(b, column));
+                            });
+
+                            if(sortDirection === 'desc') {
+                                data.reverse();
+                            }
+                        } else if (customCompareFn.length === 1) {
+                            data = _orderBy(data, function (item) {
+                                return customCompareFn(_get(item, column));
+                            }, [this.state.sortDirection]);
+                        }
+                    } else {
+                        var iteratees = [_property(column)];
+                        var orders = [this.state.sortDirection];
+
+                        Object.keys(secondarySort).forEach(function (iteratee) {
+                            let secondaryOrder = secondarySort[iteratee] === 'inherit' ? sortDirection : secondarySort[iteratee];
+                            iteratees.push(_property(iteratee));
+                            orders.push(secondaryOrder);
                         });
 
-                        if(this.state.sortAscending === false) {
-                            data.reverse();
-                        }
-                    } else if (customCompareFn.length === 1) {
-                        data = _orderBy(data, function (item) {
-                            return customCompareFn(_get(item, column));
-                        }, [order]);
+                        data = _orderBy(data, iteratees, orders);
                     }
-                } else {
-                    var iteratees = [_property(column)];
-                    var orders = [order];
-                    
-                    Object.keys(secondarySort).forEach(function (iteratee) {
-                        iteratees.push(_property(iteratee));
-                        orders.push(secondarySort[iteratee]);
-                    });
-
-                    data = _orderBy(data, iteratees, orders);
                 }
             }
 
@@ -587,7 +592,7 @@ var Griddle = React.createClass({
         return this.props.useExternal ? this.props.externalSortColumn : this.state.sortColumn;
     },
     getCurrentSortAscending: function(){
-        return this.props.useExternal ? this.props.externalSortAscending : this.state.sortAscending;
+        return this.props.useExternal ? this.props.externalSortAscending : this.state.sortDirection === 'asc';
     },
     getCurrentMaxPage: function(){
         return this.props.useExternal ? this.props.externalMaxPage : this.state.maxPage;
@@ -599,6 +604,7 @@ var Griddle = React.createClass({
             changeSort: this.changeSort,
             sortColumn: this.getCurrentSort(),
             sortAscending: this.getCurrentSortAscending(),
+            sortDirection: this.state.sortDirection,
             sortAscendingClassName: this.props.sortAscendingClassName,
             sortDescendingClassName: this.props.sortDescendingClassName,
             sortAscendingComponent: this.props.sortAscendingComponent,

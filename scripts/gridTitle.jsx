@@ -62,10 +62,10 @@ var GridTitle = React.createClass({
             var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
             var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
 
-            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
+            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortDirection === 'asc') {
                 columnSort = that.props.sortSettings.sortAscendingClassName;
                 sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
-            } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
+            } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortDirection === 'desc') {
                 columnSort += that.props.sortSettings.sortDescendingClassName;
                 sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
             }
