@@ -439,7 +439,9 @@ var Griddle = React.createClass({
             this.props.useCustomTableRowComponent
         );
 
-        this.changeSort(this.props.initialSort);
+        if (this.props.initialSort) {
+            this.changeSort(this.props.initialSort);
+        }
         this.setMaxPage();
 
         //don't like the magic strings
