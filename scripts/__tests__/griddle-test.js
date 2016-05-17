@@ -273,13 +273,14 @@ describe('Griddle', function() {
   });
 
   it('sets sort filter correctly', function(){
-    expect(grid.state.sortColumn).toEqual("");
+    expect(grid.state.sortColumn).toBeFalsy();
     grid.changeSort("address.state");
     expect(grid.state.sortColumn).toEqual("address.state");
   });
 
   it('sets sort direction correctly', function(){
-    expect(grid.state.sortColumn).toEqual("");
+    expect(grid.state.sortColumn).toBeFalsy();
+      console.log(grid.state.sortColumn);
 
     grid.changeSort("address.state");
     expect(grid.state.sortColumn).toEqual("address.state");
@@ -397,7 +398,7 @@ describe('Griddle', function() {
       useExternal={true} externalSortColumn={'name'} gridClassName="test" />);
 
       expect(grid2.getCurrentSort()).toEqual('name');
-      expect(grid2.state.sortColumn).toEqual("");
+      expect(grid2.state.sortColumn).toBeFalsy();
   });
 
   it ('uses external sort ascending when useExternal is true', function(){
