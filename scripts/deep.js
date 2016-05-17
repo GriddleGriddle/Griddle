@@ -1,7 +1,7 @@
-var forEach = require('lodash.foreach');
-var isObject = require('lodash.isobject');
-var isArray = require('lodash.isarray');
-var isFunction = require('lodash.isfunction');
+var forEach = require('lodash/forEach');
+var isObject = require('lodash/isObject');
+var isArray = require('lodash/isArray');
+var isFunction = require('lodash/isFunction');
 
 // Credits: https://github.com/documentcloud/underscore-contrib
 // Sub module: underscore.object.selectors

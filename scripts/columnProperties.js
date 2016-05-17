@@ -1,8 +1,8 @@
-var map = require('lodash.map');
-var filter = require('lodash.filter');
-var find = require('lodash.find');
-var sortBy = require('lodash.sortby');
-var difference = require('lodash.difference');
+var map = require('lodash/map');
+var filter = require('lodash/filter');
+var find = require('lodash/find');
+var sortBy = require('lodash/sortBy');
+var difference = require('lodash/difference');
 
 class ColumnProperties{
   constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){

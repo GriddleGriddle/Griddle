@@ -2,9 +2,9 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var includes = require('lodash.includes');
-var without = require('lodash.without');
-var find = require('lodash.find');
+var includes = require('lodash/includes');
+var without = require('lodash/without');
+var find = require('lodash/find');
 
 var GridSettings = React.createClass({
     getDefaultProps: function(){

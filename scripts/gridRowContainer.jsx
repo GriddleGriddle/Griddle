@@ -3,7 +3,7 @@
 */
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
-var pick = require('lodash.pick');
+var pick = require('lodash/pick');
 
 var GridRowContainer = React.createClass({
     getDefaultProps: function(){

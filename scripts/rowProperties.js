@@ -1,4 +1,4 @@
-var _uniqueId = require('lodash.uniqueid');
+var _uniqueId = require('lodash/uniqueId');
 
 class RowProperties{
   constructor (rowMetadata={}, rowComponent=null, isCustom=false) {

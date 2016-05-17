@@ -3,7 +3,7 @@
  */
 var React = require('react');
 var ColumnProperties = require('./columnProperties.js');
-var assign = require('lodash.assign');
+var assign = require('lodash/assign');
 
 var DefaultHeaderComponent = React.createClass({
     render: function () {

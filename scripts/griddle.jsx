@@ -20,22 +20,22 @@ var ColumnProperties = require('./columnProperties');
 var RowProperties = require('./rowProperties');
 var deep = require('./deep');
 
-var drop = require('lodash.drop');
-var dropRight = require('lodash.dropright');
-var find = require('lodash.find');
-var first = require('lodash.take');
-var forEach = require('lodash.foreach');
-var initial = require('lodash.initial');
-var isArray = require('lodash.isarray');
-var isEmpty = require('lodash.isempty');
-var isNull = require('lodash.isnull');
-var isUndefined = require('lodash.isundefined');
-var omit = require('lodash.omit');
-var map = require('lodash.map');
-var extend = require('lodash.assign');
-var _filter = require('lodash.filter');
+var drop = require('lodash/drop');
+var dropRight = require('lodash/dropRight');
+var find = require('lodash/find');
+var first = require('lodash/take');
+var forEach = require('lodash/forEach');
+var initial = require('lodash/initial');
+var isArray = require('lodash/isArray');
+var isEmpty = require('lodash/isEmpty');
+var isNull = require('lodash/isNull');
+var isUndefined = require('lodash/isUndefined');
+var omit = require('lodash/omit');
+var map = require('lodash/map');
+var extend = require('lodash/assign');
+var _filter = require('lodash/filter');
 
-var _orderBy = require('lodash/orderby');
+var _orderBy = require('lodash/orderBy');
 var _property = require('lodash/property');
 var _get = require('lodash/get');
 

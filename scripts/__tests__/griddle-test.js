@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Griddle = require('../griddle.jsx');
 var TestUtils = require('react-addons-test-utils');
-var assign = require('lodash.assign');
+var assign = require('lodash/assign');
 
 var SomeCustomComponent = React.createClass({
   render: function(){

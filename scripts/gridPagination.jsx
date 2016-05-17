@@ -2,7 +2,7 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var assign = require('lodash.assign');
+var assign = require('lodash/assign');
 
 //needs props maxPage, currentPage, nextFunction, prevFunction
 var GridPagination = React.createClass({
