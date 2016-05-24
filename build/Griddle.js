@@ -429,6 +429,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	        this.setMaxPage(nextProps.results);
+	        if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
+	            this.setPageSize(nextProps.resultsPerPage);
+	        }
+
 	        //This will updaet the column Metadata
 	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
 	        if (nextProps.results.length > 0) {
