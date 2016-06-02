@@ -602,7 +602,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    var iteratees = [_property(column)];
 	                    var orders = [this.state.sortDirection];
-	                    D;
 	                    multiSort.columns.forEach(function (col, i) {
 	                        iteratees.push(_property(col));
 	                        if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {

@@ -548,7 +548,6 @@ var Griddle = React.createClass({
                     } else {
                         var iteratees = [_property(column)];
                         var orders = [this.state.sortDirection];
-D
                         multiSort.columns.forEach((col, i) => {
                             iteratees.push(_property(col));
                             if (multiSort.orders[i] === 'asc' ||
