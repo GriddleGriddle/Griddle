@@ -44,6 +44,32 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+0.6.0
+
+**Add**
+columnMetadata:
+* sortDirectionCycle - (optional) an array of sort directions, specifying the order that they should cycle through as the user repeatedly clicks on the column heading. The default is ```[null, 'asc', 'desc']```
+* multiSort - (optional) an object of columns and sort direction to allow multiple sort for selected column
+```js
+{
+    columnName: "state",
+    order: 4,
+    locked: false,
+    visible: true,
+    multiSort: {
+      columns: ['name'],
+      orders: ['asc']
+    }
+  },
+```
+
+**Changed**
+columnMetadata:
+* customCompareFn - (optional) a function comparator
+
+**Breaking changes**
+Previous you had to write ```compare``` or ```compare2``` to define your custom compare function, now it is only ```customCompareFn``` that based on number of arguments behaves as ```compare``` or ```compare2```
+
 0.5.0
 - Support React 15
 - Various bug fixes
