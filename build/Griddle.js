@@ -442,7 +442,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
 	            this.setPageSize(nextProps.resultsPerPage);
 	        }
-
 	        //This will updaet the column Metadata
 	        this.columnSettings.columnMetadata = nextProps.columnMetadata;
 	        if (nextProps.results.length > 0) {
@@ -496,7 +495,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
-	        this.changeSort(this.props.initialSort);
+	        if (this.props.initialSort) {
+	            this.changeSort(this.props.initialSort);
+	        }
 	        this.setMaxPage();
 
 	        //don't like the magic strings
@@ -562,6 +563,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 	    getDataForRender: function getDataForRender(data, cols, pageList) {
+	        var _this = this;
+
 	        var that = this;
 
 	        // get the correct page size
@@ -569,11 +572,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var column = this.state.sortColumn;
 	            var sortColumn = _filter(this.props.columnMetadata, { columnName: column });
 	            var customCompareFn;
-	            var secondarySort = {};
+	            var multiSort = {
+	                columns: [],
+	                orders: []
+	            };
 
 	            if (sortColumn.length > 0) {
 	                customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
-	                secondarySort = sortColumn[0].hasOwnProperty("secondarySort") && sortColumn[0]["secondarySort"];
+	                if (sortColumn[0]["multiSort"]) {
+	                    multiSort = sortColumn[0]["multiSort"];
+	                }
 	            }
 
 	            if (this.state.sortDirection) {
@@ -594,11 +602,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    var iteratees = [_property(column)];
 	                    var orders = [this.state.sortDirection];
-
-	                    Object.keys(secondarySort).forEach(function (iteratee) {
-	                        var secondaryOrder = secondarySort[iteratee] === 'inherit' ? sortDirection : secondarySort[iteratee];
-	                        iteratees.push(_property(iteratee));
-	                        orders.push(secondaryOrder);
+	                    D;
+	                    multiSort.columns.forEach(function (col, i) {
+	                        iteratees.push(_property(col));
+	                        if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
+	                            orders.push(multiSort.orders[i]);
+	                        } else {
+	                            orders.push(_this.state.sortDirection);
+	                        }
 	                    });
 
 	                    data = _orderBy(data, iteratees, orders);

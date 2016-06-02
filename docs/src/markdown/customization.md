@@ -37,6 +37,14 @@ Griddle parses and evaluates the following columnMetadata object properties:
   <dd><strong>with 2 arguments</strong> specifies a function that defines the sort order of the column data. Passed to standard JS [sort](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method, invoked ith 2 arguments. Useful, for example, wih naturalSort(a, b) from [javascript-natural-sort](https://www.npmjs.com/package/javascript-natural-sort)</dd>
 </dl>
 
+<dl>
+  <dt>multiSort</dt>
+  <dd><strong>object</strong> - allows to specify multiple sorting when sorting current column. Specified columns will be sorted after current</dd>
+  ```multiSort: {
+      columns: ['name'],
+      orders: ['asc']
+    }```
+</dl>
 
 <dl>
   <dt>order</dt>

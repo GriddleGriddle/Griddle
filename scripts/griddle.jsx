@@ -518,11 +518,16 @@ var Griddle = React.createClass({
                 var column = this.state.sortColumn;
                 var sortColumn = _filter(this.props.columnMetadata, {columnName: column});
                 var customCompareFn;
-                var secondarySort = {};
+                var multiSort = {
+                    columns: [],
+                    orders: []
+                };
                 
                 if (sortColumn.length > 0) {
                     customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
-                    secondarySort = sortColumn[0].hasOwnProperty("secondarySort") && sortColumn[0]["secondarySort"];
+                    if (sortColumn[0]["multiSort"]) {
+                        multiSort = sortColumn[0]["multiSort"];
+                    }
                 }
 
                 if (this.state.sortDirection) {
@@ -543,11 +548,15 @@ var Griddle = React.createClass({
                     } else {
                         var iteratees = [_property(column)];
                         var orders = [this.state.sortDirection];
-
-                        Object.keys(secondarySort).forEach(function (iteratee) {
-                            let secondaryOrder = secondarySort[iteratee] === 'inherit' ? sortDirection : secondarySort[iteratee];
-                            iteratees.push(_property(iteratee));
-                            orders.push(secondaryOrder);
+D
+                        multiSort.columns.forEach((col, i) => {
+                            iteratees.push(_property(col));
+                            if (multiSort.orders[i] === 'asc' ||
+                                multiSort.orders[i] === 'desc') {
+                                orders.push(multiSort.orders[i]);
+                            } else {
+                                orders.push(this.state.sortDirection);
+                            }
                         });
 
                         data = _orderBy(data, iteratees, orders);
