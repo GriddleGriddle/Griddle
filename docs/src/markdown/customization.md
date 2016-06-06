@@ -514,6 +514,11 @@ If you want to customize the paging component, just set the property 'useCustomP
   <dd><strong>object</strong> - The custom pagination component. default: {}</dd>
 </dl>
 
+<dl>
+  <dt>customPagerComponentOptions</dt>
+  <dd><strong>object</strong> - Any options to be passed to the custom pagination component. default: {}</dd>
+</dl>
+
 #####Example#####
 
 ```javascript
