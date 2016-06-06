@@ -522,7 +522,7 @@ var Griddle = React.createClass({
                     columns: [],
                     orders: []
                 };
-                
+
                 if (sortColumn.length > 0) {
                     customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
                     if (sortColumn[0]["multiSort"]) {
@@ -801,7 +801,7 @@ var Griddle = React.createClass({
         return (
           <div className="griddle-footer">
               {this.props.useCustomPagerComponent ?
-                  <CustomPaginationContainer next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
+                  <CustomPaginationContainer customPagerComponentOptions={this.props.customPagerComponentOptions} next={this.nextPage} previous={this.previousPage} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText} customPagerComponent={this.props.customPagerComponent}/> :
                   <GridPagination useGriddleStyles={this.props.useGriddleStyles} next={this.nextPage} previous={this.previousPage} nextClassName={this.props.nextClassName} nextIconComponent={this.props.nextIconComponent} previousClassName={this.props.previousClassName} previousIconComponent={this.props.previousIconComponent} currentPage={currentPage} maxPage={maxPage} setPage={this.setPage} nextText={this.props.nextText} previousText={this.props.previousText}/>
               }
           </div>
