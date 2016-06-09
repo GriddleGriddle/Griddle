@@ -249,6 +249,15 @@ var GridTable = React.createClass({
           rowSettings={this.props.rowSettings}/>
       : undefined);
 
+    var hiddenTableHeading = (this.props.showTableHeading ?
+        <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
+          sortSettings={this.props.sortSettings}
+		  multipleSelectionSettings={this.props.multipleSelectionSettings}
+          columnSettings={this.props.columnSettings}
+          filterByColumn={this.props.filterByColumn}
+          rowSettings={this.props.rowSettings}/>
+      : undefined);
+
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
       nodes = <tbody>{nodes}</tbody>
@@ -277,13 +286,34 @@ var GridTable = React.createClass({
       if (this.props.useGriddleStyles) {
         tableStyle.tableLayout = "fixed";
       }
+      
+      var splitTableHeaderStyle = {
+        position: 'relative',
+        overflowY: 'scroll',
+        height: '100%',
+        width: '100%'
+      };
+      
+      var splitTableStyle = {
+        position: 'relative',
+        top: -22,
+        width: '100%'
+      };
+
+      var fixedHeaderClassName = [];
+      if (this.props.className)
+        fixedHeaderClassName.push(this.props.className);
+      fixedHeaderClassName.push('griddle-table-hidden-header');
 
       return <div>
-              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
-                {tableHeading}
-              </table>
-              <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
+              <div style={splitTableHeaderStyle}>
                 <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+                  {tableHeading}
+                </table>
+              </div>
+              <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
+                <table className={fixedHeaderClassName} style={(this.props.useGriddleStyles&&splitTableStyle)||null}>
+                    {hiddenTableHeading}
                     {nodes}
                     {loadingContent}
                     {pagingContent}
