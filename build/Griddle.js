@@ -415,7 +415,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var sortDirectionCycle = columnMeta.sortDirectionCycle ? columnMeta.sortDirectionCycle : [null, 'asc', 'desc'];
 	        var sortDirection = null;
 	        // Find the current position in the cycle (or -1).
-	        var i = sortDirectionCycle.indexOf(this.state.sortDirection ? this.state.sortDirection : null);
+	        var i = sortDirectionCycle.indexOf(this.state.sortDirection && column === this.state.sortColumn ? this.state.sortDirection : null);
+
 	        // Proceed to the next position in the cycle (or start at the beginning).
 	        i = (i + 1) % sortDirectionCycle.length;
 
@@ -591,7 +592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            return customCompareFn(_get(a, column), _get(b, column));
 	                        });
 
-	                        if (sortDirection === 'desc') {
+	                        if (this.state.sortDirection === 'desc') {
 	                            data.reverse();
 	                        }
 	                    } else if (customCompareFn.length === 1) {
@@ -1210,9 +1211,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          textAlign: "center",
 	          paddingBottom: "40px"
 	        };
-
-	        defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
 	      }
+
+	      defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
 
 	      var loadingComponent = this.props.externalLoadingComponent ? React.createElement(this.props.externalLoadingComponent, null) : React.createElement('div', null, 'Loading...');
 
