@@ -348,7 +348,8 @@ var Griddle = React.createClass({
         var sortDirectionCycle = columnMeta.sortDirectionCycle ? columnMeta.sortDirectionCycle : [null, 'asc', 'desc'];
         var sortDirection = null;
         // Find the current position in the cycle (or -1).
-        var i = sortDirectionCycle.indexOf(this.state.sortDirection ? this.state.sortDirection : null);
+        var i = sortDirectionCycle.indexOf(this.state.sortDirection && column === this.state.sortColumn ? this.state.sortDirection : null);
+
         // Proceed to the next position in the cycle (or start at the beginning).
         i = (i + 1) % sortDirectionCycle.length;
 

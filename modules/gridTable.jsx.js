@@ -230,9 +230,9 @@ var GridTable = React.createClass({
           textAlign: "center",
           paddingBottom: "40px"
         };
-
-        defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
       }
+
+      defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
 
       var loadingComponent = this.props.externalLoadingComponent ? React.createElement(this.props.externalLoadingComponent, null) : React.createElement('div', null, 'Loading...');
 
