@@ -220,10 +220,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        uniqueIdentifier: React.PropTypes.string
 	    },
 	    defaultFilter: function defaultFilter(results, filter) {
+	        var that = this;
 	        return _filter(results, function (item) {
 	            var arr = deep.keys(item);
 	            for (var i = 0; i < arr.length; i++) {
-	                if ((deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
+	                var isFilterable = that.columnSettings.getMetadataColumnProperty(arr[i], "filterable", true);
+	                if (isFilterable && (deep.getAt(item, arr[i]) || "").toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0) {
 	                    return true;
 	                }
 	            }
