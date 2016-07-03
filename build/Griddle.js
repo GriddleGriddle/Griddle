@@ -7217,7 +7217,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // make sure that all the columns we need have default empty values
 	    // otherwise they will get clipped
-	    var defaultValues = fromPairs(columns, []);
+	    var defaultValues = fromPairs(columns.map(function (col) {
+	      return [col, null];
+	    }));
 
 	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
 	    var dataView = assign({}, this.props.data);
