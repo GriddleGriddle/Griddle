@@ -255,7 +255,9 @@ var GridTable = React.createClass({
 		  multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}
           filterByColumn={this.props.filterByColumn}
-          rowSettings={this.props.rowSettings}/>
+          rowSettings={this.props.rowSettings}
+          hideHeader={true}
+          />
       : undefined);
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
@@ -296,7 +298,6 @@ var GridTable = React.createClass({
       
       var splitTableStyle = {
         position: 'relative',
-        top: -22,
         width: '100%'
       };
 

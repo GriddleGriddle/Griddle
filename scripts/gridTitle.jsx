@@ -83,6 +83,9 @@ var GridTitle = React.createClass({
             padding: "5px",
             cursor: columnIsSortable ? "pointer" : "default"
           }
+          if (that.props.hideHeader){
+            titleStyles.display = "none";
+          }
         }
 
         return (<th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col} style={titleStyles}>
