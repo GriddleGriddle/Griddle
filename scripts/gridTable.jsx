@@ -249,17 +249,6 @@ var GridTable = React.createClass({
           rowSettings={this.props.rowSettings}/>
       : undefined);
 
-    var hiddenTableHeading = (this.props.showTableHeading ?
-        <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
-          sortSettings={this.props.sortSettings}
-		  multipleSelectionSettings={this.props.multipleSelectionSettings}
-          columnSettings={this.props.columnSettings}
-          filterByColumn={this.props.filterByColumn}
-          rowSettings={this.props.rowSettings}
-          hideHeader={true}
-          />
-      : undefined);
-
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
       nodes = <tbody>{nodes}</tbody>
@@ -298,7 +287,8 @@ var GridTable = React.createClass({
       
       var splitTableStyle = {
         position: 'relative',
-        width: '100%'
+        width: '100%',
+        top: '-22px'
       };
 
       var fixedHeaderClassName = [];
@@ -314,7 +304,7 @@ var GridTable = React.createClass({
               </div>
               <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
                 <table className={fixedHeaderClassName} style={(this.props.useGriddleStyles&&splitTableStyle)||null}>
-                    {hiddenTableHeading}
+                    {tableHeading}
                     {nodes}
                     {loadingContent}
                     {pagingContent}

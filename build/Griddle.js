@@ -1187,15 +1187,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      filterByColumn: this.props.filterByColumn,
 	      rowSettings: this.props.rowSettings }) : undefined;
 
-	    var hiddenTableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
-	      sortSettings: this.props.sortSettings,
-	      multipleSelectionSettings: this.props.multipleSelectionSettings,
-	      columnSettings: this.props.columnSettings,
-	      filterByColumn: this.props.filterByColumn,
-	      rowSettings: this.props.rowSettings,
-	      hideHeader: true
-	    }) : undefined;
-
 	    //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
 	    if (!anyHasChildren) {
 	      nodes = React.createElement('tbody', null, nodes);
@@ -1228,14 +1219,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var splitTableStyle = {
 	        position: 'relative',
-	        width: '100%'
+	        width: '100%',
+	        top: '-22px'
 	      };
 
 	      var fixedHeaderClassName = [];
 	      if (this.props.className) fixedHeaderClassName.push(this.props.className);
 	      fixedHeaderClassName.push('griddle-table-hidden-header');
 
-	      return React.createElement('div', null, React.createElement('div', { style: splitTableHeaderStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: fixedHeaderClassName, style: this.props.useGriddleStyles && splitTableStyle || null }, hiddenTableHeading, nodes, loadingContent, pagingContent)));
+	      return React.createElement('div', null, React.createElement('div', { style: splitTableHeaderStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading)), React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: fixedHeaderClassName, style: this.props.useGriddleStyles && splitTableStyle || null }, tableHeading, nodes, loadingContent, pagingContent)));
 	    }
 
 	    return React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent, pagingContent));
@@ -1349,9 +1341,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          padding: "5px",
 	          cursor: columnIsSortable ? "pointer" : "default"
 	        };
-	        if (that.props.hideHeader) {
-	          titleStyles.display = "none";
-	        }
 	      }
 
 	      return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: col, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
