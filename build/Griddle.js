@@ -88,29 +88,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridNoData = __webpack_require__(161);
 	var GridRow = __webpack_require__(162);
 	var GridRowContainer = __webpack_require__(148);
-	var CustomRowComponentContainer = __webpack_require__(178);
-	var CustomPaginationContainer = __webpack_require__(179);
-	var CustomFilterContainer = __webpack_require__(180);
+	var CustomRowComponentContainer = __webpack_require__(179);
+	var CustomPaginationContainer = __webpack_require__(180);
+	var CustomFilterContainer = __webpack_require__(181);
 	var ColumnProperties = __webpack_require__(5);
 	var RowProperties = __webpack_require__(152);
 	var deep = __webpack_require__(163);
 
-	var drop = __webpack_require__(181);
-	var dropRight = __webpack_require__(183);
+	var drop = __webpack_require__(182);
+	var dropRight = __webpack_require__(184);
 	var find = __webpack_require__(117);
-	var first = __webpack_require__(184);
+	var first = __webpack_require__(185);
 	var forEach = __webpack_require__(164);
-	var initial = __webpack_require__(185);
+	var initial = __webpack_require__(186);
 	var isArray = __webpack_require__(78);
-	var isEmpty = __webpack_require__(186);
-	var isNull = __webpack_require__(190);
-	var isUndefined = __webpack_require__(191);
-	var omit = __webpack_require__(192);
+	var isEmpty = __webpack_require__(187);
+	var isNull = __webpack_require__(191);
+	var isUndefined = __webpack_require__(192);
+	var omit = __webpack_require__(193);
 	var map = __webpack_require__(6);
 	var extend = __webpack_require__(144);
 	var _filter = __webpack_require__(114);
 
-	var _orderBy = __webpack_require__(198);
+	var _orderBy = __webpack_require__(199);
 	var _property = __webpack_require__(106);
 	var _get = __webpack_require__(92);
 
@@ -7143,10 +7143,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ColumnProperties = __webpack_require__(5);
 	var deep = __webpack_require__(163);
 	var isFunction = __webpack_require__(32);
-	var fromPairs = __webpack_require__(166);
+	var zipObject = __webpack_require__(166);
 	var assign = __webpack_require__(144);
-	var defaults = __webpack_require__(167);
-	var toPairs = __webpack_require__(174);
+	var defaults = __webpack_require__(168);
+	var toPairs = __webpack_require__(175);
 	var without = __webpack_require__(160);
 
 	var GridRow = React.createClass({
@@ -7220,7 +7220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // make sure that all the columns we need have default empty values
 	    // otherwise they will get clipped
-	    var defaultValues = fromPairs(columns, []);
+	    var defaultValues = zipObject(columns, []);
 
 	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
 	    var dataView = assign({}, this.props.data);
@@ -7470,45 +7470,70 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 166 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var assignValue = __webpack_require__(145),
+	    baseZipObject = __webpack_require__(167);
 
 	/**
-	 * The inverse of `_.toPairs`; this method returns an object composed
-	 * from key-value `pairs`.
+	 * This method is like `_.fromPairs` except that it accepts two arrays,
+	 * one of property identifiers and one of corresponding values.
 	 *
 	 * @static
 	 * @memberOf _
-	 * @since 4.0.0
+	 * @since 0.4.0
 	 * @category Array
-	 * @param {Array} pairs The key-value pairs.
+	 * @param {Array} [props=[]] The property identifiers.
+	 * @param {Array} [values=[]] The property values.
 	 * @returns {Object} Returns the new object.
 	 * @example
 	 *
-	 * _.fromPairs([['fred', 30], ['barney', 40]]);
-	 * // => { 'fred': 30, 'barney': 40 }
+	 * _.zipObject(['a', 'b'], [1, 2]);
+	 * // => { 'a': 1, 'b': 2 }
 	 */
-	function fromPairs(pairs) {
-	  var index = -1,
-	      length = pairs ? pairs.length : 0,
-	      result = {};
-
-	  while (++index < length) {
-	    var pair = pairs[index];
-	    result[pair[0]] = pair[1];
-	  }
-	  return result;
+	function zipObject(props, values) {
+	  return baseZipObject(props || [], values || [], assignValue);
 	}
 
-	module.exports = fromPairs;
+	module.exports = zipObject;
 
 
 /***/ },
 /* 167 */
+/***/ function(module, exports) {
+
+	/**
+	 * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
+	 *
+	 * @private
+	 * @param {Array} props The property identifiers.
+	 * @param {Array} values The property values.
+	 * @param {Function} assignFunc The function to assign values.
+	 * @returns {Object} Returns the new object.
+	 */
+	function baseZipObject(props, values, assignFunc) {
+	  var index = -1,
+	      length = props.length,
+	      valsLength = values.length,
+	      result = {};
+
+	  while (++index < length) {
+	    var value = index < valsLength ? values[index] : undefined;
+	    assignFunc(result, props[index], value);
+	  }
+	  return result;
+	}
+
+	module.exports = baseZipObject;
+
+
+/***/ },
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var apply = __webpack_require__(136),
-	    assignInDefaults = __webpack_require__(168),
-	    assignInWith = __webpack_require__(169),
+	    assignInDefaults = __webpack_require__(169),
+	    assignInWith = __webpack_require__(170),
 	    rest = __webpack_require__(135);
 
 	/**
@@ -7541,7 +7566,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var eq = __webpack_require__(16);
@@ -7574,12 +7599,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var copyObject = __webpack_require__(146),
 	    createAssigner = __webpack_require__(147),
-	    keysIn = __webpack_require__(170);
+	    keysIn = __webpack_require__(171);
 
 	/**
 	 * This method is like `_.assignIn` except that it accepts `customizer`
@@ -7618,10 +7643,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseKeysIn = __webpack_require__(171),
+	var baseKeysIn = __webpack_require__(172),
 	    indexKeys = __webpack_require__(69),
 	    isIndex = __webpack_require__(80),
 	    isPrototype = __webpack_require__(81);
@@ -7679,11 +7704,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Reflect = __webpack_require__(172),
-	    iteratorToArray = __webpack_require__(173);
+	var Reflect = __webpack_require__(173),
+	    iteratorToArray = __webpack_require__(174);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -7721,7 +7746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var root = __webpack_require__(37);
@@ -7733,7 +7758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports) {
 
 	/**
@@ -7757,10 +7782,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createToPairs = __webpack_require__(175),
+	var createToPairs = __webpack_require__(176),
 	    keys = __webpack_require__(67);
 
 	/**
@@ -7793,13 +7818,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseToPairs = __webpack_require__(176),
+	var baseToPairs = __webpack_require__(177),
 	    getTag = __webpack_require__(82),
 	    mapToArray = __webpack_require__(62),
-	    setToPairs = __webpack_require__(177);
+	    setToPairs = __webpack_require__(178);
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -7829,7 +7854,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var arrayMap = __webpack_require__(7);
@@ -7853,7 +7878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports) {
 
 	/**
@@ -7877,7 +7902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7923,7 +7948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -7975,7 +8000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8012,10 +8037,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomFilterContainer;
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseSlice = __webpack_require__(182),
+	var baseSlice = __webpack_require__(183),
 	    toInteger = __webpack_require__(121);
 
 	/**
@@ -8056,7 +8081,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports) {
 
 	/**
@@ -8093,10 +8118,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseSlice = __webpack_require__(182),
+	var baseSlice = __webpack_require__(183),
 	    toInteger = __webpack_require__(121);
 
 	/**
@@ -8138,10 +8163,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseSlice = __webpack_require__(182),
+	var baseSlice = __webpack_require__(183),
 	    toInteger = __webpack_require__(121);
 
 	/**
@@ -8181,10 +8206,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dropRight = __webpack_require__(183);
+	var dropRight = __webpack_require__(184);
 
 	/**
 	 * Gets all but the last element of `array`.
@@ -8208,14 +8233,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getTag = __webpack_require__(82),
 	    isArguments = __webpack_require__(71),
 	    isArray = __webpack_require__(78),
 	    isArrayLike = __webpack_require__(73),
-	    isBuffer = __webpack_require__(187),
+	    isBuffer = __webpack_require__(188),
 	    isFunction = __webpack_require__(32),
 	    isObjectLike = __webpack_require__(77),
 	    isString = __webpack_require__(79),
@@ -8294,11 +8319,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(37),
-	    stubFalse = __webpack_require__(189);
+	    stubFalse = __webpack_require__(190);
 
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports;
@@ -8335,10 +8360,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = isBuffer;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(188)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(189)(module)))
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -8354,7 +8379,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports) {
 
 	/**
@@ -8378,7 +8403,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	/**
@@ -8406,7 +8431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports) {
 
 	/**
@@ -8434,14 +8459,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var arrayMap = __webpack_require__(7),
 	    baseDifference = __webpack_require__(138),
 	    baseFlatten = __webpack_require__(125),
 	    basePick = __webpack_require__(150),
-	    getAllKeysIn = __webpack_require__(193),
+	    getAllKeysIn = __webpack_require__(194),
 	    rest = __webpack_require__(135),
 	    toKey = __webpack_require__(101);
 
@@ -8476,12 +8501,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseGetAllKeys = __webpack_require__(194),
-	    getSymbolsIn = __webpack_require__(195),
-	    keysIn = __webpack_require__(170);
+	var baseGetAllKeys = __webpack_require__(195),
+	    getSymbolsIn = __webpack_require__(196),
+	    keysIn = __webpack_require__(171);
 
 	/**
 	 * Creates an array of own and inherited enumerable property names and
@@ -8499,7 +8524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var arrayPush = __webpack_require__(126),
@@ -8525,12 +8550,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var arrayPush = __webpack_require__(126),
 	    getPrototype = __webpack_require__(66),
-	    getSymbols = __webpack_require__(196);
+	    getSymbols = __webpack_require__(197);
 
 	/** Built-in value references. */
 	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
@@ -8556,10 +8581,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var stubArray = __webpack_require__(197);
+	var stubArray = __webpack_require__(198);
 
 	/** Built-in value references. */
 	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
@@ -8586,7 +8611,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	/**
@@ -8615,7 +8640,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseOrderBy = __webpack_require__(128),
