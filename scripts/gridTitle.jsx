@@ -88,13 +88,15 @@ var GridTitle = React.createClass({
                 }
             }
             titleStyles = meta && meta.titleStyles ? assign({}, defaultTitleStyles, meta.titleStyles) : assign({}, defaultTitleStyles);
+            
+            const ComponentClass = displayName ? 'th' : 'td'; 
             return (
-                <th onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col}
+                <ComponentClass onClick={columnIsSortable ? that.sort(col) : null} data-title={col} className={columnSort} key={col}
                     style={titleStyles}>
                     <HeaderComponent columnName={col} displayName={displayName}
                                      filterByColumn={that.props.filterByColumn} {...headerProps}/>
                     {sortComponent}
-                </th>);
+                </ComponentClass>);
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
