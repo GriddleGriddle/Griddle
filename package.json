@@ -14,22 +14,31 @@
     "start": "node server.js",
     "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
     "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava"
   },
   "devDependencies": {
-    "babel-loader": "^6.0.0",
+    "ava": "^0.15.2",
     "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-react": "^6.0.0",
     "babel-preset-stage-0": "^6.0.0",
+    "babel-register": "^6.9.0",
     "node-libs-browser": "^0.5.3",
     "webpack": "~1.9.11",
     "webpack-dev-server": "~1.9.0"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "lodash.assign": "^3.2.0",
     "react": "^15.2.0",
     "react-dom": "^15.2.0"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   },
   "author": "Griddle",
   "license": "MIT"
