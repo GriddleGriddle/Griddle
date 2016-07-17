@@ -2,7 +2,7 @@ var webpack = require('webpack')
 
 module.exports = {
   entry: [
-    './index'
+    './src/griddle'
   ],
   output: {
     path: __dirname + '/build/',
@@ -13,7 +13,14 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loaders: ['babel?{"plugins":["babel-plugin-object-assign"]}'], exclude: /node_modules/ }
+      { test: /\.jsx?$/,
+        loaders: 'babel',
+        exclude: /node_modules/,
+        cacheDirectory: true,
+        query: {
+          presets: ['es2015', 'stage-0', 'react']
+        }
+      }
     ]
   },
   externals: [

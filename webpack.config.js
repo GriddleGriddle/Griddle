@@ -4,7 +4,7 @@ module.exports = {
   devtool: 'source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
-    './index'
+    './src/dev'
   ],
   output: {
     path: __dirname + '/build/',
@@ -25,7 +25,14 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loaders: ['babel?{"plugins":["babel-plugin-object-assign"]}'], exclude: /node_modules/ }
+      { test: /\.jsx?$/,
+        loader: 'babel',
+        exclude: /node_modules/,
+        cacheDirectory: true,
+        query: {
+          presets: ['es2015', 'stage-0', 'react']
+        }
+      }
     ]
   },
   externals: [
