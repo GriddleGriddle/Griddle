@@ -125,14 +125,14 @@ test('gets empty array for sortColumns when none specified', test => {
 test('gets sort column array when specified', test => {
   const state = new Immutable.Map()
     .set('sortColumns', [
-      { column: 'one', sortDirection: 'ascending'},
-      { column: 'two', sortDirection: 'descending'},
-      { column: 'three', sortDirection: 'ascending'}
+      { column: 'one', sortAscending: true},
+      { column: 'two', sortAscending: true},
+      { column: 'three', sortAscending: true}
     ]);
 
   test.deepEqual(selectors.sortColumnsSelector(state), [
-    { column: 'one', sortDirection: 'ascending'},
-    { column: 'two', sortDirection: 'descending'},
-    { column: 'three', sortDirection: 'ascending'}
+    { column: 'one', sortAscending: true},
+    { column: 'two', sortAscending: true},
+    { column: 'three', sortAscending: true}
   ]);
 })
