@@ -67,7 +67,7 @@ test('hasNext gets false when on the last page', test => {
 test('has previous gets true when there are prior pages', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 2);
   test.true(selectors.hasPreviousSelector(state));
-})
+});
 
 test.skip('has previous gets false when there are not prior pages', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 2);
@@ -136,3 +136,25 @@ test('gets sort column array when specified', test => {
     { column: 'three', sortAscending: true}
   ]);
 })
+
+/* allColumnsSelector */
+test('allColumnsSelector: gets all columns', test => {
+  const data = Immutable.fromJS([
+    { one: 'one', two: 'two', three: 'three', four: 'four' }
+  ]);
+
+  const state = new Immutable.Map().set('data', data);
+
+  test.deepEqual(selectors.allColumnsSelector(state), ['one', 'two', 'three', 'four']);
+});
+
+test('allColumnsSelector: gets empty array when no data present', test => {
+  const state = new Immutable.Map();
+
+  test.deepEqual(selectors.allColumnsSelector(state), []);
+});
+
+test('allColumnsSelector: gets empty array when data is empty', test => {
+  const state = new Immutable.Map().set('data', new Immutable.List());
+  test.deepEqual(selectors.allColumnsSelector(state), []);
+});

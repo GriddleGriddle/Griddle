@@ -44,3 +44,15 @@ export const filterSelector = state => state.get('filter') || '';
 
 /** Gets the current sortColumns */
 export const sortColumnsSelector = state => state.get('sortColumns') || [];
+
+/** Gets all the columns */
+export const allColumnsSelector = createSelector(
+  dataSelector,
+  (data) => (
+    !data || data.size === 0 ?
+      [] :
+      data.get(0).keySeq().toJSON()
+  )
+);
+
+/** Gets the columns that are currently not visible but could be displayed */
