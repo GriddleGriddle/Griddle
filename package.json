@@ -32,7 +32,8 @@
     "immutable": "^3.8.1",
     "lodash.assign": "^3.2.0",
     "react": "^15.2.0",
-    "react-dom": "^15.2.0"
+    "react-dom": "^15.2.0",
+    "reselect": "^2.5.3"
   },
   "ava": {
     "require": [
