@@ -32,8 +32,12 @@ export const hasPreviousSelector = createSelector(
   (currentPage) => (currentPage > 1)
 );
 
-export const maxPageSelector = createSelector(
+/** Determines the maxPageCount based on pageSize / recordCount */
+export const maxPageCountSelector = createSelector(
   pageSizeSelector,
   recordCountSelector,
   (pageSize, recordCount) => (Math.ceil(recordCount / pageSize))
 );
+
+/** Gets current filter */
+export const filterSelector = state => state.get('filter') || '';
