@@ -41,3 +41,6 @@ export const maxPageCountSelector = createSelector(
 
 /** Gets current filter */
 export const filterSelector = state => state.get('filter') || '';
+
+/** Gets the current sortColumns */
+export const sortColumnsSelector = state => state.get('sortColumns') || [];

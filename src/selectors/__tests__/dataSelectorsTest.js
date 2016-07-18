@@ -114,13 +114,25 @@ test('gets filter when present', test => {
 test('gets empty string when no filter present', test => {
   const state = new Immutable.Map();
   test.is(selectors.filterSelector(state), '');
-})
+});
 
-/* filteredDataSelector */
-test.skip('gets a filtered subset of the data when filter present', test => {
+/* sortColumnsSelector */
+test('gets empty array for sortColumns when none specified', test => {
+  const state = new Immutable.Map();
+  test.deepEqual(selectors.sortColumnsSelector(state), []);
+});
 
-})
+test('gets sort column array when specified', test => {
+  const state = new Immutable.Map()
+    .set('sortColumns', [
+      { column: 'one', sortDirection: 'ascending'},
+      { column: 'two', sortDirection: 'descending'},
+      { column: 'three', sortDirection: 'ascending'}
+    ]);
 
-test.skip('gets the entire dataset when no filter present', test => {
-
+  test.deepEqual(selectors.sortColumnsSelector(state), [
+    { column: 'one', sortDirection: 'ascending'},
+    { column: 'two', sortDirection: 'descending'},
+    { column: 'three', sortDirection: 'ascending'}
+  ]);
 })
