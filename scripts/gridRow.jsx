@@ -58,6 +58,12 @@ var GridRow = React.createClass({
            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
         }
     },
+    formatData: function(data) {
+        if (typeof data === 'boolean') {
+            return String(data);
+        }
+        return data;
+    },
     render: function() {
         this.verifyProps();
         var that = this;
@@ -104,7 +110,7 @@ var GridRow = React.createClass({
                 var customComponent = <meta.customComponent data={col[1]} rowData={dataView} metadata={meta} />;
                 returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{customComponent}</td>;
               } else {
-                returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>;
+                returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{firstColAppend}{this.formatData(col[1])}</td>;
               }
             }
 
