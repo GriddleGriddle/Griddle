@@ -1,7 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-/* The main griddle component */
-import Griddle from './griddle';
+/** The main griddle component */
+import Griddle from './components/GriddleContainer';
 
-ReactDOM.render(<Griddle />, document.getElementById('main'));
+render(<Griddle />, document.getElementById('main'));

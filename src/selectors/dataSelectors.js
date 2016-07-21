@@ -55,4 +55,4 @@ export const allColumnsSelector = createSelector(
   )
 );
 
-/** Gets the columns that are currently not visible but could be displayed */
+/** Gets the renderProperties */
