@@ -14,7 +14,8 @@
     "start": "node server.js",
     "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
     "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
-    "test": "ava"
+    "test": "ava",
+    "watch-test" : "ava --watch"
   },
   "devDependencies": {
     "ava": "^0.15.2",
