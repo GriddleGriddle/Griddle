@@ -65,6 +65,43 @@ export function composeReducer(nextReducer, previousReducer) {
   return nextReducer;
 }
 
+/** Creates a composed reducer method from an array of reducer methods
+ * @param {Object <array>} reducers - An array of reducer methods to compose
+ */
+export function composeReducers(reducers) {
+  // flip the array (since we want to apply from left-to-right and compose each reducer
+  return reducers.reverse().reduce((previous, next) =>
+    composeReducer(next, previous), {});
+}
+
+/** Obtains all the unique keys between an array of objects
+ * @param {Object <array>} objects - An array of objects
+ */
+export function getKeysForObjects(objects) {
+  return _.uniq(_.flattenDeep(objects.map(o => Object.keys(o))));
+}
+
+export function composeReducerObjects(reducerObjects) {
+  return reducerObjects.reduce((previous, next) => {
+    // if we don't have any reducers in previous object continue with next
+    if(previous === null) { return next; }
+
+    //mutate the previous object by composing the reducer methods
+    for(let key in next) {
+      previous[key] = composeReducer(next[key], previous[key]);
+    }
+
+    return previous;
+  }, null);
+}
+
+/** Creates a composed reducer with BEFORE / AFTER hooks
+ * @param {Object <array>} reducers - An array of reducers to compose
+ */
+export function composeReducersAndAddHooks(reducers) {
+  return composeReducers(reducers);
+}
+
 export function getReducersByWordEnding(reducers, ending) {
   return reducers.reduce((previous, current) => {
     const keys = Object.keys(current).filter((name) => name.endsWith(ending));
