@@ -81,6 +81,30 @@ export function getKeysForObjects(objects) {
   return _.uniq(_.flattenDeep(objects.map(o => Object.keys(o))));
 }
 
+/** Determines if a given key is a Griddle hook reducer 
+ * @param {string} key - the key to check if it refers to a Griddle hook
+ */
+export function isKeyGriddleHook(key) {
+  return (key === 'BEFORE_REDUCE' || key === 'AFTER_REDUCE' ||
+    key.endsWith('AFTER') || key.endsWith('BEFORE'))
+}
+
+/** Removes Griddle hooks from a reducer object
+ * @param {Object} reducerObject - The reducer object to remove hooks from
+ */
+export function removeHooksFromObject(reducerObject) {
+  return _.pickBy(reducerObject, (value, key) => {
+    if (isKeyGriddleHook(key)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+/** Combines the given reducer objects
+ * @param {Object <array>} reducerObjects - An array containing objects consisting of reducer methods as properties
+ */
 export function composeReducerObjects(reducerObjects) {
   return reducerObjects.reduce((previous, next) => {
     // if we don't have any reducers in previous object continue with next

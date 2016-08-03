@@ -7,7 +7,9 @@ import {
   composeReducers,
   composeReducersAndAddHooks,
   getKeysForObjects,
-  composeReducerObjects
+  composeReducerObjects,
+  removeHooksFromObject,
+  isKeyGriddleHook
 } from '../compositionUtils';
 
 test('combine works', test => {
@@ -150,4 +152,27 @@ test('composes reducer objects', test => {
 
   // ensure that plugins with new reducer methods work
   test.deepEqual(reducer.REDUCE_OTHER_THING({ number: 5 }), { number: 500 });
+});
+
+test('it removes hooks from reducer object', test => {
+  const object = {
+    ONE: 'one',
+    ONE_AFTER: 'one_after',
+    BEFORE_REDUCE: 'before_reduce',
+    TWO: 'two',
+    AFTER_REDUCE: 'after_reduce',
+    TWO_BEFORE: 'two_before',
+    TWO_AFTER: 'two_after'
+  }
+
+  test.deepEqual(removeHooksFromObject(object), { ONE: 'one', TWO: 'two' });
+});
+
+test('determines griddle hooks correctly', test => {
+  test.true(isKeyGriddleHook('BEFORE_REDUCE'));
+  test.true(isKeyGriddleHook('AFTER_REDUCE'));
+  test.true(isKeyGriddleHook('ONE_BEFORE'));
+  test.true(isKeyGriddleHook('ONE_AFTER'));
+
+  test.false(isKeyGriddleHook('SOME_REDUCER'));
 });
