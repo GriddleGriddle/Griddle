@@ -102,6 +102,33 @@ export function removeHooksFromObject(reducerObject) {
   });
 }
 
+/** Removes a given string from any key on the object that contains that string
+ * @param {Object} reducer object - the reducer object to update keys on
+ * @param {string} keyString - the string to remove from all keys
+*/
+export function removeKeyNamePartFromObject(reducerObject, keyString) {
+  return Object.keys(reducerObject).reduce((previous, current) => {
+    previous[current.replace(keyString, '')] = reducerObject[current]
+    return previous;
+  }, {});
+}
+
+/** Gets an object that consists of only the _BEFORE hooks. _BEFORE will be removed from the key.
+ * @param {Object} reducerObject - the reducer to get the _BEFORE hooks from
+ */
+export function getBeforeHooksFromObject(reducerObject) {
+  return removeKeyNamePartFromObject(
+    _.pickBy(reducerObject, (value, key) => key.endsWith('BEFORE')), '_BEFORE');
+}
+
+/** Gets an object that conists of only the _AFTER hooks. _AFTER will be removed from the key
+ * @param {Object} reducerObject - the reducer to get the _AFTER hooks from
+ */
+export function getAfterHooksFromObject(reducerObject) {
+  return removeKeyNamePartFromObject(
+    _.pickBy(reducerObject, (value, key) => key.endsWith('AFTER')), '_AFTER');
+}
+
 /** Combines the given reducer objects
  * @param {Object <array>} reducerObjects - An array containing objects consisting of reducer methods as properties
  */
@@ -124,6 +151,20 @@ export function composeReducerObjects(reducerObjects) {
  */
 export function composeReducersAndAddHooks(reducers) {
   return composeReducers(reducers);
+}
+
+/** Builds a new reducer that composes hooks and extends standard reducers between reducerObjects
+ * @param {Object <array>} reducers - An array of reducerObjects
+ */
+export function buildGriddleReducer(reducerObjects) {
+  // remove the hooks and extend the object
+  const justReducerMethods = reducerObjects.map(r =>
+    removeHooksFromObject(r));
+
+  // combine the reducers without hooks
+  const combinedReducer = extendArray(justReducerMethods);
+
+  // apply the hook methods to combined reducers
 }
 
 export function getReducersByWordEnding(reducers, ending) {
