@@ -13,7 +13,9 @@ import {
   buildGriddleReducer,
   getAfterHooksFromObject,
   getBeforeHooksFromObject,
-  removeKeyNamePartFromObject
+  removeKeyNamePartFromObject,
+  getBeforeReduceHooksFromObject,
+  getAfterReduceHooksFromObject
 } from '../compositionUtils';
 
 function getReducerArray() {
@@ -239,6 +241,7 @@ test('gets after hooks', test => {
   };
 
   test.deepEqual(Object.keys(getAfterHooksFromObject(reducer)), ['REDUCE_THING']);
+  test.deepEqual(getAfterHooksFromObject(reducer).REDUCE_THING({ number: 5}), { number: -95 });
 });
 
 test('gets before hooks', test => {
@@ -252,7 +255,41 @@ test('gets before hooks', test => {
   };
 
   test.deepEqual(Object.keys(getBeforeHooksFromObject(reducer)), ['REDUCE_THING']);
+  test.deepEqual(getBeforeHooksFromObject(reducer).REDUCE_THING({ number: 5}), { number: 8});
 });
+
+test('gets before reduce hooks', test => {
+  const reducer = {
+    BEFORE_REDUCE: (state, action) => {
+      return { number: state.number + 2 };
+    },
+    REDUCE_THING_AFTER: (state, action) => {
+      return { number: state.number - 100 };
+    },
+    REDUCE_THING_BEFORE: (state, action) => {
+      return { number: state.number + 3 }
+    }
+  }
+
+  test.deepEqual(Object.keys(getBeforeReduceHooksFromObject(reducer)), ['BEFORE_REDUCE']);
+});
+
+test('gets after reduce hooks', test => {
+  const reducer = {
+    AFTER_REDUCE: (state, action) => {
+      return { number: state.number + 2 };
+    },
+    REDUCE_THING_AFTER: (state, action) => {
+      return { number: state.number - 100 };
+    },
+    REDUCE_THING_BEFORE: (state, action) => {
+      return { number: state.number + 3 }
+    }
+  }
+
+  test.deepEqual(Object.keys(getAfterReduceHooksFromObject(reducer)), ['AFTER_REDUCE']);
+});
+
 /*test('builds griddle reducer', test => {
   const FakeInitialReducer = {
     REDUCE_THING: (state, action) => {

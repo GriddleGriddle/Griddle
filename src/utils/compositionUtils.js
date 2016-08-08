@@ -121,12 +121,27 @@ export function getBeforeHooksFromObject(reducerObject) {
     _.pickBy(reducerObject, (value, key) => key.endsWith('BEFORE')), '_BEFORE');
 }
 
+/** Gets an object that consists of only the BEFORE_REDUCE hooks.
+ * @param {Object} reducerObject - the reducer to get the BEFORE_REDUCE hooks from
+ */
+export function getBeforeReduceHooksFromObject(reducerObject) {
+  return _.pickBy(reducerObject, (value, key) => key === 'BEFORE_REDUCE')
+}
+
+
 /** Gets an object that conists of only the _AFTER hooks. _AFTER will be removed from the key
  * @param {Object} reducerObject - the reducer to get the _AFTER hooks from
  */
 export function getAfterHooksFromObject(reducerObject) {
   return removeKeyNamePartFromObject(
     _.pickBy(reducerObject, (value, key) => key.endsWith('AFTER')), '_AFTER');
+}
+
+/** Gets an object that conists of only the AFTER_REDUCE hooks.
+ * @param {Object} reducerObject - the reducer to get the AFTER_REDUCE hooks from
+ */
+export function getAfterReduceHooksFromObject(reducerObject) {
+  return _.pickBy(reducerObject, (value, key) => key === 'AFTER_REDUCE');
 }
 
 /** Combines the given reducer objects
