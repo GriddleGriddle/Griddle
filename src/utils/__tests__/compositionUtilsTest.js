@@ -5,7 +5,7 @@ import {
   getObjectWherePropertyEndsWith,
   composeReducer,
   composeReducers,
-  composeReducersAndAddHooks,
+  combineReducersWithHooks,
   getKeysForObjects,
   composeReducerObjects,
   removeHooksFromObject,
@@ -290,15 +290,37 @@ test('gets after reduce hooks', test => {
   test.deepEqual(Object.keys(getAfterReduceHooksFromObject(reducer)), ['AFTER_REDUCE']);
 });
 
-/*test('builds griddle reducer', test => {
-  const FakeInitialReducer = {
+test('builds griddle reducer', test => {
+   const reducer1 = {
     REDUCE_THING: (state, action) => {
-      return { number: state.number + 5 }
+      return { number: state.number + 2 };
+    },
+    REDUCE_THING_AFTER: (state, action) => {
+      return { number: state.number - 100 };
+    },
+    REDUCE_THING_BEFORE: (state, action) => {
+      return { number: state.number + 3 }
     }
   };
 
-  const griddleReducer = buildGriddleReducer(getReducerArray);
+  const reducer2 = {
+    REDUCE_THING_AFTER: (state, action) => {
+      return { number: state.number - 5 };
+    },
+    REDUCE_THING_BEFORE: (state, action) => {
+      return { number: state.number * 7 }
+    }
+  }
 
-  test.is(Object.keys(griddleReducer), ['REDUCE_THING']);
-  test.is(griddleReducer.REDUCE_THING({ number: 5}), { number: 700 });
-});*/
+  const reducer3 = {
+    REDUCE_THING: (state, action) => {
+      return { number: state.number + 4 }
+    }
+  }
+
+  const griddleReducer = buildGriddleReducer([reducer1, reducer2, reducer3]);
+
+  test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING']);
+  test.is(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
+});
+

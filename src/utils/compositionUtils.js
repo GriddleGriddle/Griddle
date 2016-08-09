@@ -161,25 +161,24 @@ export function composeReducerObjects(reducerObjects) {
   }, null);
 }
 
-/** Creates a composed reducer with BEFORE / AFTER hooks
- * @param {Object <array>} reducers - An array of reducers to compose
- */
-export function composeReducersAndAddHooks(reducers) {
-  return composeReducers(reducers);
-}
-
 /** Builds a new reducer that composes hooks and extends standard reducers between reducerObjects
  * @param {Object <array>} reducers - An array of reducerObjects
  */
 export function buildGriddleReducer(reducerObjects) {
   // remove the hooks and extend the object
-  const justReducerMethods = reducerObjects.map(r =>
-    removeHooksFromObject(r));
+  const justReducerMethods = reducerObjects.map(r => removeHooksFromObject(r));
 
   // combine the reducers without hooks
   const combinedReducer = extendArray(justReducerMethods);
 
-  // apply the hook methods to combined reducers
+  const beforeHooks = composeReducerObjects(reducerObjects.reverse().map(r => getBeforeHooksFromObject(r)));
+  const afterHooks = composeReducerObjects(reducerObjects.reverse().map(r => getAfterHooksFromObject(r)));
+
+  console.log(beforeHooks.REDUCE_THING({ number: 5}));
+  console.log(afterHooks.REDUCE_THING({ number: 5}));
+  console.log(combinedReducer.REDUCE_THING({ number: 5}));
+  const composed = composeReducerObjects([beforeHooks, combinedReducer, afterHooks]);
+  return composed;
 }
 
 export function getReducersByWordEnding(reducers, ending) {
