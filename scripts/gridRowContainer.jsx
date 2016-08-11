@@ -22,6 +22,8 @@ var GridRowContainer = React.createClass({
         "onRowClick": null,
         "onRowMouseEnter": null,
         "onRowMouseLeave": null,
+        "onRowWillMount": null,
+        "onRowWillUnmount": null,
         "multipleSelectionSettings": null
       };
     },
@@ -78,7 +80,9 @@ var GridRowContainer = React.createClass({
           onRowClick={that.props.onRowClick}
           onRowMouseEnter={that.props.onRowMouseEnter}
           onRowMouseLeave={that.props.onRowMouseLeave}
-          multipleSelectionSettings={this.props.multipleSelectionSettings} />
+          multipleSelectionSettings={this.props.multipleSelectionSettings}
+          onRowWillMount={that.props.onRowWillMount}
+          onRowWillUnmount={that.props.onRowWillUnmount} />
       );
 
       var children = null;

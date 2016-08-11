@@ -37,7 +37,9 @@ var GridTable = React.createClass({
       "externalIsLoading": false,
       "onRowClick": null,
       "onRowMouseEnter": null,
-      "onRowMouseLeave": null
+      "onRowMouseLeave": null,
+      "onRowWillMount": null,
+      "onRowWillUnmount": null
     }
   },
   getInitialState: function(){
@@ -161,6 +163,8 @@ var GridTable = React.createClass({
                 onRowClick={that.props.onRowClick}
                 onRowMouseEnter={that.props.onRowMouseEnter}
                 onRowMouseLeave={that.props.onRowMouseLeave}
+                onRowWillMount={that.props.onRowWillMount}
+                onRowWillUnmount={that.props.onRowWillUnmount}
             />
           )
       });

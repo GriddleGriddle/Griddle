@@ -462,6 +462,18 @@ var propertiesItem = [
     "description": "A function that should be called when a mouse left a row. The 'gridRow' and event will be passed in as arguments.",
     "type": "function",
     "default": "null"
+  },
+  {
+    "property": "onRowWillMount",
+    "description": "A function that should be called before a row was mounted. The 'gridRow' will be passed in as argument.",
+    "type": "function",
+    "default": "null"
+  },
+  {
+    "property": "onRowWillUnmount",
+    "description": "A function that should be called before a row was unmounted. The 'gridRow' will be passed in as argument.",
+    "type": "function",
+    "default": "null"
   }
 ];
 var DefinitionItem = React.createClass({

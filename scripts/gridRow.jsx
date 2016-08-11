@@ -32,7 +32,19 @@ var GridRow = React.createClass({
         "onRowClick": null,
 	      "multipleSelectionSettings": null,
         "onRowMouseEnter": null,
-        "onRowMouseLeave": null
+        "onRowMouseLeave": null,
+        "onRowWillMount": null,
+        "onRowWillUnmount": null
+      }
+    },
+    componentWillMount: function () {
+      if (this.props.onRowWillMount !== null && isFunction(this.props.onRowWillMount)) {
+        this.props.onRowWillMount(this);
+      }
+    },
+    componentWillUnmount: function () {
+      if (this.props.onRowWillUnmount !== null && isFunction(this.props.onRowWillUnmount)) {
+        this.props.onRowWillUnmount(this);
       }
     },
     handleClick: function(e){

@@ -193,6 +193,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "onRowClick": null,
 	            "onRowMouseEnter": null,
 	            "onRowMouseLeave": null,
+	            "onRowWillMount": null,
+	            "onRowWillUnmount": null,
 	            /* css class names */
 	            "sortAscendingClassName": "sort-ascending",
 	            "sortDescendingClassName": "sort-descending",
@@ -901,7 +903,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            hasMorePages: hasMorePages,
 	            onRowClick: this.props.onRowClick,
 	            onRowMouseEnter: this.props.onRowMouseEnter,
-	            onRowMouseLeave: this.props.onRowMouseLeave }));
+	            onRowMouseLeave: this.props.onRowMouseLeave,
+	            onRowWillMount: this.props.onRowWillMount,
+	            onRowWillUnmount: this.props.onRowWillUnmount }));
 	    },
 	    getContentSection: function getContentSection(data, cols, meta, pagingContent, hasMorePages, globalData) {
 	        if (this.shouldUseCustomGridComponent() && this.props.customGridComponent !== null) {
@@ -1028,7 +1032,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "externalIsLoading": false,
 	      "onRowClick": null,
 	      "onRowMouseEnter": null,
-	      "onRowMouseLeave": null
+	      "onRowMouseLeave": null,
+	      "onRowWillMount": null,
+	      "onRowWillUnmount": null
 	    };
 	  },
 	  getInitialState: function getInitialState() {
@@ -1150,7 +1156,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          tableClassName: that.props.className,
 	          onRowClick: that.props.onRowClick,
 	          onRowMouseEnter: that.props.onRowMouseEnter,
-	          onRowMouseLeave: that.props.onRowMouseLeave
+	          onRowMouseLeave: that.props.onRowMouseLeave,
+	          onRowWillMount: that.props.onRowWillMount,
+	          onRowWillUnmount: that.props.onRowWillUnmount
 	        });
 	      });
 
@@ -6465,6 +6473,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "onRowClick": null,
 	      "onRowMouseEnter": null,
 	      "onRowMouseLeave": null,
+	      "onRowWillMount": null,
+	      "onRowWillUnmount": null,
 	      "multipleSelectionSettings": null
 	    };
 	  },
@@ -6521,7 +6531,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      onRowClick: that.props.onRowClick,
 	      onRowMouseEnter: that.props.onRowMouseEnter,
 	      onRowMouseLeave: that.props.onRowMouseLeave,
-	      multipleSelectionSettings: this.props.multipleSelectionSettings }));
+	      multipleSelectionSettings: this.props.multipleSelectionSettings,
+	      onRowWillMount: that.props.onRowWillMount,
+	      onRowWillUnmount: that.props.onRowWillUnmount }));
 
 	    var children = null;
 
@@ -7180,8 +7192,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "onRowClick": null,
 	      "multipleSelectionSettings": null,
 	      "onRowMouseEnter": null,
-	      "onRowMouseLeave": null
+	      "onRowMouseLeave": null,
+	      "onRowWillMount": null,
+	      "onRowWillUnmount": null
 	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    if (this.props.onRowWillMount !== null && isFunction(this.props.onRowWillMount)) {
+	      this.props.onRowWillMount(this);
+	    }
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this.props.onRowWillUnmount !== null && isFunction(this.props.onRowWillUnmount)) {
+	      this.props.onRowWillUnmount(this);
+	    }
 	  },
 	  handleClick: function handleClick(e) {
 	    if (this.props.onRowClick !== null && isFunction(this.props.onRowClick)) {
