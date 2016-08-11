@@ -128,6 +128,8 @@ var Griddle = React.createClass({
             "isSubGriddle": false,
             "enableSort": true,
             "onRowClick": null,
+            "onRowMouseEnter": null,
+            "onRowMouseLeave": null,
             /* css class names */
             "sortAscendingClassName": "sort-ascending",
             "sortDescendingClassName": "sort-descending",

@@ -103,7 +103,9 @@ var GridTitle = React.createClass({
                 };
             }
             titleStyles = meta && meta.titleStyles ? assign({}, defaultTitleStyles, meta.titleStyles) : assign({}, defaultTitleStyles);
-            return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: col,
+
+            var ComponentClass = displayName ? 'th' : 'td';
+            return React.createElement(ComponentClass, { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: col,
                 style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName,
                 filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
         });

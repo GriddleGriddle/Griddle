@@ -35,7 +35,9 @@ var GridTable = React.createClass({
       "parentRowExpandedComponent": "▼",
       "externalLoadingComponent": null,
       "externalIsLoading": false,
-      "onRowClick": null
+      "onRowClick": null,
+      "onRowMouseEnter": null,
+      "onRowMouseLeave": null
     }
   },
   getInitialState: function(){
@@ -157,6 +159,8 @@ var GridTable = React.createClass({
                 hasChildren={hasChildren}
                 tableClassName={that.props.className}
                 onRowClick={that.props.onRowClick}
+                onRowMouseEnter={that.props.onRowMouseEnter}
+                onRowMouseLeave={that.props.onRowMouseLeave}
             />
           )
       });
@@ -229,7 +233,7 @@ var GridTable = React.createClass({
           paddingBottom: "40px"
         };
       }
-	  
+
 	  defaultColSpan = this.props.columnSettings.getVisibleColumnCount();
 
       var loadingComponent = this.props.externalLoadingComponent ?
