@@ -144,11 +144,13 @@ export function getAfterReduceHooksFromObject(reducerObject) {
   return _.pickBy(reducerObject, (value, key) => key === 'AFTER_REDUCE');
 }
 
-/** Combines the given reducer objects
+/** Combines the given reducer objects left to right
  * @param {Object <array>} reducerObjects - An array containing objects consisting of reducer methods as properties
  */
 export function composeReducerObjects(reducerObjects) {
-  return reducerObjects.reduce((previous, next) => {
+  if (reducerObjects.length < 1) return null;
+
+  return reducerObjects.reverse().reduce((previous, next) => {
     // if we don't have any reducers in previous object continue with next
     if(previous === null) { return next; }
 
@@ -171,12 +173,9 @@ export function buildGriddleReducer(reducerObjects) {
   // combine the reducers without hooks
   const combinedReducer = extendArray(justReducerMethods);
 
-  const beforeHooks = composeReducerObjects(reducerObjects.reverse().map(r => getBeforeHooksFromObject(r)));
-  const afterHooks = composeReducerObjects(reducerObjects.reverse().map(r => getAfterHooksFromObject(r)));
+  const beforeHooks = composeReducerObjects(reducerObjects.map(r => getBeforeHooksFromObject(r)));
+  const afterHooks = composeReducerObjects(reducerObjects.map(r => getAfterHooksFromObject(r)));
 
-  console.log(beforeHooks.REDUCE_THING({ number: 5}));
-  console.log(afterHooks.REDUCE_THING({ number: 5}));
-  console.log(combinedReducer.REDUCE_THING({ number: 5}));
   const composed = composeReducerObjects([beforeHooks, combinedReducer, afterHooks]);
   return composed;
 }

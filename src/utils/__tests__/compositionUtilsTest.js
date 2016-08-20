@@ -187,7 +187,7 @@ test('composes reducer objects', test => {
   const reducer = composeReducerObjects(reducers);
 
   test.deepEqual(Object.keys(reducer), ['REDUCE_THING', 'REDUCE_OTHER_THING']);
-  test.deepEqual(reducer.REDUCE_THING({ number: 5 }), { number: 55 });
+  test.deepEqual(reducer.REDUCE_THING({ number: 5 }), { number: 100 });
 
   // ensure that plugins with new reducer methods work
   test.deepEqual(reducer.REDUCE_OTHER_THING({ number: 5 }), { number: 500 });
@@ -321,6 +321,6 @@ test('builds griddle reducer', test => {
   const griddleReducer = buildGriddleReducer([reducer1, reducer2, reducer3]);
 
   test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING']);
-  test.is(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
+  test.deepEqual(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
 });
 
