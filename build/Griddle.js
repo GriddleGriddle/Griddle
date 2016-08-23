@@ -307,10 +307,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    setPageSize: function setPageSize(size) {
 	        if (this.props.useExternal) {
+	            this.setState({
+	                resultsPerPage: size
+	            });
 	            this.props.externalSetPageSize(size);
 	            return;
 	        }
-
 	        //make this better.
 	        this.state.resultsPerPage = size;
 	        this.setMaxPage();
