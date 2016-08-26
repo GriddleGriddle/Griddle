@@ -594,7 +594,11 @@ var Griddle = React.createClass({
         return this.state.filteredResults || this.props.results;
     },
     getCurrentPage: function getCurrentPage() {
-        return this.props.externalCurrentPage || this.state.page;
+        if(this.props.externalCurrentPage===null && this.props.externalCurrentPage===undefined)
+            return this.state.page;
+        else{
+            return this.props.externalCurrentPage;
+        }
     },
     getCurrentSort: function getCurrentSort() {
         return this.props.useExternal ? this.props.externalSortColumn : this.state.sortColumn;
