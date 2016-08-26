@@ -594,7 +594,7 @@ var Griddle = React.createClass({
         return this.state.filteredResults || this.props.results;
     },
     getCurrentPage: function getCurrentPage() {
-        if(this.props.externalCurrentPage===null && this.props.externalCurrentPage===undefined)
+        if(this.props.externalCurrentPage===null || this.props.externalCurrentPage===undefined)
             return this.state.page;
         else{
             return this.props.externalCurrentPage;
