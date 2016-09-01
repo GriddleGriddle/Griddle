@@ -35,3 +35,41 @@ test('sets data', test => {
     loading: false
   });
 });
+
+test('sets the correct page number', test => {
+  const state = reducers.GRIDDLE_SET_PAGE(new Immutable.Map(), {
+    pageNumber: 2
+  });
+
+  test.is(state.getIn(['pageProperties', 'currentPage']), 2);
+});
+
+test('sets page size', test => {
+  const state = reducers.GRIDDLE_SET_PAGE_SIZE( new Immutable.Map(), {
+    pageSize: 11
+  });
+
+  test.is(state.getIn(['pageProperties', 'pageSize']), 11);
+});
+
+test('sets filter', test => {
+  const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
+    filter: 'onetwothree'
+  });
+
+  test.is(state.get('filter'), 'onetwothree');
+});
+
+test('sets sort columns', test => {
+  const state = reducers.GRIDDLE_SET_SORT(new Immutable.Map(), {
+    sortProperties: [
+      { id: 'one', sortAscending: true },
+      { id: 'two', sortAscending: false }
+    ]
+  });
+
+  test.deepEqual(state.get('sortProperties').toJSON(), [
+    { id: 'one', sortAscending: true },
+    { id: 'two', sortAscending: false }
+  ]);
+});
