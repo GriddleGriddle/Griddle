@@ -1,33 +1,18 @@
 import test from 'ava';
 import Immutable from 'immutable';
 
-import * as reducers from '../dataReducers';
+import * as reducers from '../localReducer';
 import constants from '../../constants';
 
-test('initializes data', test => {
-  const initializedState = reducers.GRIDDLE_INITIALIZED(new Immutable.Map(),
-    { type: 'GRIDDLE_INITIALIZED',
-      properties: {
-        one: 'one',
-        two: 'two'
-      }
-  });
-
-  test.deepEqual(initializedState.get('renderProperties').toJSON(), {
-    one: 'one',
-    two: 'two'
-  });
-});
-
-test('sets data', test => {
-  const reducedState = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(),
-    { type: 'GRIDDLE_LOADED_DATA', data: [
+test('it loads data', test => {
+  const state = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(), {
+    data: [
       {name: "one"},
       {name: "two"}
     ]}
   );
 
-  test.deepEqual(reducedState.toJSON(), {
+  test.deepEqual(state.toJSON(), {
     data: [
       {name: "one", griddleKey: 0},
       {name: "two", griddleKey: 1}
@@ -44,6 +29,7 @@ test('sets the correct page number', test => {
   test.is(state.getIn(['pageProperties', 'currentPage']), 2);
 });
 
+
 test('sets page size', test => {
   const state = reducers.GRIDDLE_SET_PAGE_SIZE( new Immutable.Map(), {
     pageSize: 11
@@ -54,10 +40,11 @@ test('sets page size', test => {
 
 test('sets filter', test => {
   const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
-    filter: 'onetwothree'
+    filter: 'onetwothree',
   });
 
   test.is(state.get('filter'), 'onetwothree');
+  test.is(state.getIn(['pageProperties', 'currentPage']), 1)
 });
 
 test('sets sort columns', test => {
@@ -73,3 +60,18 @@ test('sets sort columns', test => {
     { id: 'two', sortAscending: false }
   ]);
 });
+/*
+  describe('sorting', () => {
+    const reducer = (options, method) => {
+      return getMethod(extend(options, { method }));
+    }
+
+    it('sets sort column', () => {
+      const state = reducer({payload: { sortColumns: ['one']}}, GRIDDLE_SORT);
+
+      expect(state.get('sortColumns')).toEqual(['one']);
+    });
+  });
+});
+
+*/
