@@ -3,6 +3,16 @@
 */
 "use strict";
 
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }return target;
+};
+
 var React = require('react');
 
 var CustomFilterContainer = React.createClass({
@@ -10,7 +20,8 @@ var CustomFilterContainer = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      "placeholderText": ""
+      "placeholderText": "",
+      "customFilterComponentOptions": {}
     };
   },
   render: function render() {
@@ -21,11 +32,11 @@ var CustomFilterContainer = React.createClass({
       return React.createElement("div", null);
     }
 
-    return React.createElement(that.props.customFilterComponent, {
+    return React.createElement(that.props.customFilterComponent, _extends({}, this.props.customFilterComponentOptions, {
       changeFilter: this.props.changeFilter,
       results: this.props.results,
       currentResults: this.props.currentResults,
-      placeholderText: this.props.placeholderText });
+      placeholderText: this.props.placeholderText }));
   }
 });
 
