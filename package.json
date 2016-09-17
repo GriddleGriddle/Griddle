@@ -15,7 +15,7 @@
     "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
     "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
     "test": "ava",
-    "watch-test" : "ava --watch"
+    "watch-test": "ava --watch"
   },
   "devDependencies": {
     "ava": "^0.15.2",
@@ -32,6 +32,7 @@
   "dependencies": {
     "immutable": "^3.8.1",
     "lodash.assign": "^3.2.0",
+    "max-safe-integer": "^1.0.0",
     "react": "^15.2.0",
     "react-dom": "^15.2.0",
     "react-redux": "^4.4.5",
