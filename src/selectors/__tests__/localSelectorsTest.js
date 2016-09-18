@@ -282,3 +282,103 @@ test('sortedDataSelector works with multiple sortOptions', test => {
   ])
 });
 
+test('current page data selector gets correct page', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange' },
+      { id: '2', name: 'han solo', food: 'banana' },
+      { id: '3', name: 'han solo', food: 'apple' },
+      { id: '4', name: 'luke skywalker', food: 'apple'}
+    ],
+    pageProperties: {
+      currentPage: 3,
+      pageSize: 1
+    }
+  });
+
+  test.deepEqual(selectors.currentPageDataSelector(state).toJSON(), [{ id: '3', name: 'han solo', food: 'apple' }]);
+})
+
+test('visible data selector gets only visible columns', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange' },
+      { id: '2', name: 'han solo', food: 'banana' },
+      { id: '3', name: 'han solo', food: 'apple' },
+      { id: '4', name: 'luke skywalker', food: 'apple'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        name: {
+          id: 'name'
+        },
+        food: {
+          id: 'food'
+        }
+      }
+    },
+    pageProperties: {
+      currentPage: 3,
+      pageSize: 1
+    }
+  });
+
+  test.deepEqual(selectors.visibleDataSelector(state).toJSON(), [{ name: 'han solo', food: 'apple' }]);
+});
+
+test('hidden columns selector shows all columns that are not visible', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange' },
+      { id: '2', name: 'han solo', food: 'banana' },
+      { id: '3', name: 'han solo', food: 'apple' },
+      { id: '4', name: 'luke skywalker', food: 'apple'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        name: {
+          id: 'name'
+        }
+      }
+    },
+    pageProperties: {
+      currentPage: 3,
+      pageSize: 1
+    }
+  });
+
+  test.deepEqual(selectors.hiddenColumnsSelector(state), ['id', 'food']);
+});
+
+test('columnTitlesSelector gets all column titles', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange' },
+      { id: '2', name: 'han solo', food: 'banana' },
+      { id: '3', name: 'han solo', food: 'apple' },
+      { id: '4', name: 'luke skywalker', food: 'apple'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        name: {
+          id: 'name',
+          title: 'Name'
+        },
+        id: {
+          id: 'id',
+          title: 'ID'
+        },
+        food: {
+          id: 'food',
+          title: 'Food Order'
+        }
+      }
+    },
+    pageProperties: {
+      currentPage: 3,
+      pageSize: 1
+    }
+  });
+
+  test.deepEqual(selectors.columnTitlesSelector(state), ['Name', 'ID', 'Food Order']);
+});

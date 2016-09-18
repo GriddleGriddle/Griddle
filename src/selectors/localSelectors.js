@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 
 import { defaultSort } from '../utils/sortUtils';
+import { getVisibleDataForColumns } from '../utils/dataUtils';
+
 /** Gets the entire data set
  * @param {Immutable} state - state object
  */
@@ -39,6 +41,8 @@ export const filterSelector = state => (state.get('filter') || '');
 export const sortPropertiesSelector = state => (state.get('sortProperties'));
 
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
+
+export const metaDataColumnsSelector = state => (state.get('metadataColumns') || [])
 
 export const allColumnsSelector = createSelector(
   dataSelector,
@@ -105,6 +109,8 @@ export const sortedDataSelector = createSelector(
   sortPropertiesSelector,
   renderPropertiesSelector,
   (filteredData, sortProperties, renderProperties) => {
+    if (!sortProperties) { return filteredData; }
+
     return sortProperties.reverse().reduce((data, sortColumnOptions) => {
       const columnProperties = renderProperties && renderProperties.get('columnProperties').get(sortColumnOptions.get('id'));
 
@@ -113,5 +119,54 @@ export const sortedDataSelector = createSelector(
       return sortFunction(data, sortColumnOptions.get('id'), sortColumnOptions.get('sortAscending'));
     }, filteredData);
   }
+);
+
+/** Gets the current page of data
+ */
+export const currentPageDataSelector = createSelector(
+  sortedDataSelector,
+  pageSizeSelector,
+  currentPageSelector,
+  (sortedData, pageSize, currentPage) => {
+    return sortedData
+      .skip(pageSize * (currentPage - 1))
+      .take(pageSize);
+  }
 )
 
+/** Get the visible data (and only the columns that are visible)
+ */
+export const visibleDataSelector = createSelector(
+  currentPageDataSelector,
+  visibleColumnsSelector,
+  (currentPageData, visibleColumns) => getVisibleDataForColumns(currentPageData, visibleColumns)
+);
+
+/** Gets the columns that are not currently visible
+ */
+export const hiddenColumnsSelector = createSelector(
+  visibleColumnsSelector,
+  allColumnsSelector,
+  metaDataColumnsSelector,
+  (visibleColumns, allColumns, metaDataColumns) => {
+    const removeColumns = [...visibleColumns, ...metaDataColumns];
+
+    return allColumns.filter(c => removeColumns.indexOf(c) === -1);
+  }
+);
+
+/** Gets the column titles for the visible columns
+ */
+export const columnTitlesSelector = createSelector(
+  visibleDataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.get('columnProperties').get(k).get('title') || k
+      )
+    }
+
+    return [];
+  }
+)
