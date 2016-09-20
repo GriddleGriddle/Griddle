@@ -180,6 +180,13 @@ export function buildGriddleReducer(reducerObjects) {
   return composed;
 }
 
+export function buildGriddleReducerReal(reducerObjects) {
+  const reducer = buildGriddleReducer(reducerObjects);
+  return function(action) {
+    return (action.type && reducer[action.type](action)) || reducer['GRIDDLE_INITIALIZED'](action);
+  }
+}
+
 export function getReducersByWordEnding(reducers, ending) {
   return reducers.reduce((previous, current) => {
     const keys = Object.keys(current).filter((name) => name.endsWith(ending));

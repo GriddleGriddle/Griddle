@@ -5,12 +5,11 @@ import * as reducers from '../dataReducer';
 import constants from '../../constants';
 
 test('initializes data', test => {
-  const initializedState = reducers.GRIDDLE_INITIALIZED(new Immutable.Map(),
-    { type: 'GRIDDLE_INITIALIZED',
-      properties: {
-        one: 'one',
-        two: 'two'
-      }
+  const initializedState = reducers.GRIDDLE_INITIALIZED({
+    renderProperties: {
+      one: 'one',
+      two: 'two'
+    }
   });
 
   test.deepEqual(initializedState.get('renderProperties').toJSON(), {

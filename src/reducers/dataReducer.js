@@ -23,8 +23,8 @@ import {
  *
  * TODO: Consider renaming this to be more in line with what it's actually doing (setting render properties)
 */
-export function GRIDDLE_INITIALIZED(state, action) {
-  return state.set('renderProperties', Immutable.fromJS(action.properties));
+export function GRIDDLE_INITIALIZED(initialState) {
+  return Immutable.fromJS(initialState);
 }
 
 /** Sets the griddle data
@@ -32,6 +32,8 @@ export function GRIDDLE_INITIALIZED(state, action) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_LOADED_DATA(state, action, helpers) {
+console.log(action);
+debugger;
   return state.set('data', addKeyToCollection(Immutable.fromJS(action.data)))
     .set('loading', false);
 }

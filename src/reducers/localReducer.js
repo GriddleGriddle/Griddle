@@ -6,6 +6,9 @@ import {
 
 import * as dataReducers from './dataReducer';
 
+export function GRIDDLE_INITIALIZED(state) {
+  return dataReducers.GRIDDLE_INITIALIZED(state)
+}
 /** Sets the Griddle data
  * @param {Immutable} state - Immutable state object
  * @param {Object} action - the action object to work with
