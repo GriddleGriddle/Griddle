@@ -1,8 +1,10 @@
 import { createStore, combineReducers, bindActionCreators } from 'redux';
 import { buildGriddleReducerReal } from '../utils/compositionUtils';
 import Immutable from 'immutable';
+import { connect, Provider } from 'react-redux';
 
 import * as localReducers from '../reducers/localReducer';
+import { columnTitlesSelector, dataSelector } from '../selectors/localSelectors';
 
 const reducers = buildGriddleReducerReal([localReducers]);
 //load all plugins
@@ -43,4 +45,23 @@ const store = createStore(
   initialState
 );
 
-export default (props) => (<h1>HELLO</h1>)
+const Component = (props) => (<h1>HI</h1>);
+
+const enhance = connect((state) => ({
+  columnTitles: columnTitlesSelector(state),
+  data: dataSelector(state)
+}));
+
+const EnhancedComponent = enhance(Component);
+
+class Wrapper extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <EnhancedComponent />
+      </Provider>
+    );
+  }
+}
+
+export default Wrapper
