@@ -2,7 +2,7 @@ import test from 'ava';
 import Immutable from 'immutable';
 
 import * as reducers from '../localReducer';
-import constants from '../../constants';
+import constants from '../../../../constants';
 
 test('it loads data', test => {
   const state = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(), {

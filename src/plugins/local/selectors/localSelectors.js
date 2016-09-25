@@ -2,8 +2,8 @@ import Immutable from 'immutable';
 import { createSelector } from 'reselect';
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 
-import { defaultSort } from '../utils/sortUtils';
-import { getVisibleDataForColumns } from '../utils/dataUtils';
+import { defaultSort } from '../../../utils/sortUtils';
+import { getVisibleDataForColumns } from '../../../utils/dataUtils';
 
 /** Gets the entire data set
  * @param {Immutable} state - state object

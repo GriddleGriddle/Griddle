@@ -2,9 +2,9 @@ import Immutable from 'immutable';
 
 import {
   addKeyToCollection
-} from '../utils/dataUtils';
+} from '../../../utils/dataUtils';
 
-import * as dataReducers from './dataReducer';
+import * as dataReducers from '../../../reducers//dataReducer';
 
 export function GRIDDLE_INITIALIZED(state) {
   return dataReducers.GRIDDLE_INITIALIZED(state)

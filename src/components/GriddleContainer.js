@@ -3,8 +3,8 @@ import { buildGriddleReducerReal } from '../utils/compositionUtils';
 import Immutable from 'immutable';
 import { connect, Provider } from 'react-redux';
 
-import * as localReducers from '../reducers/localReducer';
-import { columnTitlesSelector, dataSelector } from '../selectors/localSelectors';
+import * as localReducers from '../plugins/local/reducers/localReducer';
+import { columnTitlesSelector, dataSelector } from '../plugins/local/selectors/localSelectors';
 
 const reducers = buildGriddleReducerReal([localReducers]);
 //load all plugins

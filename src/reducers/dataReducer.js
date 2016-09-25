@@ -32,8 +32,6 @@ export function GRIDDLE_INITIALIZED(initialState) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_LOADED_DATA(state, action, helpers) {
-console.log(action);
-debugger;
   return state.set('data', addKeyToCollection(Immutable.fromJS(action.data)))
     .set('loading', false);
 }

@@ -15,7 +15,9 @@
     "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
     "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
     "test": "ava",
-    "watch-test": "ava --watch"
+    "watch-test": "ava --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "ava": "^0.15.2",
@@ -27,14 +29,15 @@
     "babel-register": "^6.9.0",
     "node-libs-browser": "^0.5.3",
     "webpack": "~1.9.11",
-    "webpack-dev-server": "~1.9.0"
+    "webpack-dev-server": "~1.9.0",
+    "@kadira/storybook": "^2.5.2"
   },
   "dependencies": {
     "immutable": "^3.8.1",
     "lodash.assign": "^3.2.0",
     "max-safe-integer": "^1.0.0",
-    "react": "^15.2.0",
-    "react-dom": "^15.2.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "recompose": "^0.20.2",
     "redux": "^3.5.2",
