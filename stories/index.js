@@ -1,12 +1,23 @@
 import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
 
+import Griddle from '../src/index';
+
 import Cell from '../src/components/Cell';
 import Row from '../src/components/Row';
 import TableBody from '../src/components/TableBody';
 import TableHeadingCell from '../src/components/TableHeadingCell';
 import TableHeading from '../src/components/TableHeading';
 import Table from '../src/components/Table';
+
+import fakeData from './fakeData';
+
+storiesOf('Griddle main', module)
+  .add('with local', () => {
+    return (
+      <Griddle data={fakeData} />
+    )
+  })
 
 storiesOf('Cell', module)
   .add('base cell', () => {

@@ -1,17 +1,18 @@
 import { createStore, combineReducers, bindActionCreators } from 'redux';
-import { buildGriddleReducerReal } from '../utils/compositionUtils';
+import { buildGriddleReducer } from '../utils/compositionUtils';
 import Immutable from 'immutable';
 import { connect, Provider } from 'react-redux';
 
 import * as localReducers from '../plugins/local/reducers/localReducer';
 import { columnTitlesSelector, dataSelector } from '../plugins/local/selectors/localSelectors';
 
-const reducers = buildGriddleReducerReal([localReducers]);
+const reducers = buildGriddleReducer([localReducers]);
 //load all plugins
 //get the row / column settings and add to initial state
 //setup initial state
 //create combined reducer
 //wire up actions
+//override components in the correct order and set up the containers
 
 const data = [
   {

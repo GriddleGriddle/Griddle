@@ -81,7 +81,7 @@ export function getKeysForObjects(objects) {
   return _.uniq(_.flattenDeep(objects.map(o => Object.keys(o))));
 }
 
-/** Determines if a given key is a Griddle hook reducer 
+/** Determines if a given key is a Griddle hook reducer
  * @param {string} key - the key to check if it refers to a Griddle hook
  */
 export function isKeyGriddleHook(key) {
@@ -166,7 +166,7 @@ export function composeReducerObjects(reducerObjects) {
 /** Builds a new reducer that composes hooks and extends standard reducers between reducerObjects
  * @param {Object <array>} reducers - An array of reducerObjects
  */
-export function buildGriddleReducer(reducerObjects) {
+export function buildGriddleReducerObject(reducerObjects) {
   // remove the hooks and extend the object
   const justReducerMethods = reducerObjects.map(r => removeHooksFromObject(r));
 
@@ -180,13 +180,21 @@ export function buildGriddleReducer(reducerObjects) {
   return composed;
 }
 
-export function buildGriddleReducerReal(reducerObjects) {
-  const reducer = buildGriddleReducer(reducerObjects);
+/** Builds a griddleReducer function from a series of reducerObjects
+ * @param {Object <array>} reducers - An array of reducerObjects
+*/
+export function buildGriddleReducer(reducerObjects) {
+  const reducerObject = buildGriddleReducerObject(reducerObjects);
+
   return function(action) {
-    return (action.type && reducer[action.type](action)) || reducer['GRIDDLE_INITIALIZED'](action);
+    return (action.type && reducer[action.type](action)) || reducerObject['GRIDDLE_INITIALIZED'](action);
   }
 }
 
+/** Gets all reducers by a specific wordEnding
+ * @param {array <Object>} reducers - An array of reducer objects
+ * @param {string} ending - the wordEnding for the reducer name
+ */
 export function getReducersByWordEnding(reducers, ending) {
   return reducers.reduce((previous, current) => {
     const keys = Object.keys(current).filter((name) => name.endsWith(ending));
@@ -212,5 +220,23 @@ export function getReducersByWordEnding(reducers, ending) {
 
     //override anything in previous (since this now calls previous to make sure we have helpers from both);
     return extend(previous, reducer);
+  }, {});
+}
+
+/** Gets a new components object with component per component name
+ * @param {array<Object>} componentObjectArray - An array of component objects
+*/
+export function combineAndEnhanceComponents (componentArray) {
+  return componentArray.reduce((previous, current) => {
+    let newObject = {};
+
+    for(var key in current) {
+      const keyWithoutEnhancer = key.replace('Enhancer', '');
+      if(key.endsWith('Enhancer') && previous.hasOwnProperty(keyWithoutEnhancer)) {
+        newObject[keyWithoutEnhancer] = current[key](previous[keyWithoutEnhancer])
+      }
+    }
+
+    return Object.assign(previous, newObject, current);
   }, {});
 }
