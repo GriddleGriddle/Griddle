@@ -15,7 +15,11 @@ import {
   getBeforeHooksFromObject,
   removeKeyNamePartFromObject,
   getBeforeReduceHooksFromObject,
-  getAfterReduceHooksFromObject
+  getAfterReduceHooksFromObject,
+  combineAndEnhanceComponents,
+  combineAndWrapWithContainerComponents,
+  buildGriddleComponents,
+  wrapMethodsByWordEnding
 } from '../compositionUtils';
 
 function getReducerArray() {
@@ -322,4 +326,101 @@ test('builds griddle reducer', test => {
 
   test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING']);
   test.deepEqual(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
+});
+
+test('combineAndEnhanceComponents', test => {
+  const initial = { one: (someNumber) => (someNumber + 5)}
+  const enhancing = { oneEnhancer: originalMethod => (someNumber) => originalMethod(someNumber * 5)};
+
+  const combined = combineAndEnhanceComponents([initial, enhancing]);
+
+  test.is(combined.one(1), 10);
+});
+
+test('combineAndContainComponents', test => {
+  const initial = { one: (someNumber) => (someNumber + 5)}
+  const enhancing = { oneContainer: originalMethod => (someNumber) => originalMethod(someNumber * 5)};
+
+  const combined = combineAndWrapWithContainerComponents([initial, enhancing]);
+
+  test.is(combined.one(1), 10);
+});
+
+test('wrapMethodsByWordEnding composes methods', test => {
+  const initial = {
+    one: (someNumber) => {
+      return (someNumber + 5)
+    }
+  };
+
+  const oneContainer = {
+    oneContainer: (someMethod) => (someNumber => someMethod(someNumber - 4))
+  };
+
+  const wrapped = wrapMethodsByWordEnding([initial, oneContainer], 'Container');
+
+  test.is(wrapped.one(5), 6);
+});
+
+test('wrapMethodsByWordEnding flows containers / enhancers', test => {
+  const container = {
+    oneContainer: (someMethod) => (someNumber) => {
+      return someMethod(someNumber + 5);
+    }
+  };
+
+  // make sure that you can enhance containers
+  const containerEnhancer = {
+    oneContainerEnhancer: (someMethod) => (someNumber) => {
+      return someMethod(someNumber - 10)
+    }
+  };
+
+  // make sure that you can contain containers 🙃
+  const containerContainer = {
+    oneContainerContainer: (someMethod) => (someNumber) => {
+      return someMethod(someNumber - 100)
+    }
+  };
+
+  const initial = {
+    one: (someNumber) => (someNumber + 3)
+  }
+
+  const wrappedWithContainerEnhancer = wrapMethodsByWordEnding([container, containerEnhancer], 'ContainerEnhancer', 'Container');
+  test.is(wrappedWithContainerEnhancer.oneContainer(initial.one)(5), 3)
+
+  // 🙃  
+  const wrappedWithContainerContainer = wrapMethodsByWordEnding([container, containerContainer], 'ContainerContainer', 'Container');
+  test.is(wrappedWithContainerContainer.oneContainer(initial.one)(5), -87); 
+});
+
+test('buildGriddleComponents wraps in containers and enhancers', test => {
+  const initial = {
+    one: (someNumber) => { 
+      return (someNumber + 5)
+    }
+  };
+
+  const containing = {
+    oneContainer: originalMethod => (someNumber) => {
+      return originalMethod(someNumber * 5)
+    }
+  };
+
+  const enhancedContainer = {
+    oneContainerEnhancer: originalMethod => (someNumber) => {
+      return originalMethod(someNumber - 2)
+    }
+  };
+
+  const enhancing = {
+    oneEnhancer: originalMethod => (someNumber) => {
+      return originalMethod(someNumber + 100)
+    }
+  };
+
+  const combined = buildGriddleComponents([initial, containing, enhancedContainer, enhancing]);
+
+  test.is(combined.one(5), 120);
 });

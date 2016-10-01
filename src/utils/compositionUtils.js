@@ -223,20 +223,63 @@ export function getReducersByWordEnding(reducers, ending) {
   }, {});
 }
 
-/** Gets a new components object with component per component name
- * @param {array<Object>} componentObjectArray - An array of component objects
+/** Wraps all methods in another method by name and word ending
+  * @param {array<Object>} componentObjectArray - An array of component objects
+  * @param {string} ending - the word ending to determine what is a enhancer method
+  * @param {string} keyReplaceString - the word ending to apply when replacing the 'ending' parameter. Defaults to ''
 */
-export function combineAndEnhanceComponents (componentArray) {
+export function wrapMethodsByWordEnding(componentArray, wordEnding, keyReplaceString = '') {
   return componentArray.reduce((previous, current) => {
     let newObject = {};
 
     for(var key in current) {
-      const keyWithoutEnhancer = key.replace('Enhancer', '');
-      if(key.endsWith('Enhancer') && previous.hasOwnProperty(keyWithoutEnhancer)) {
-        newObject[keyWithoutEnhancer] = current[key](previous[keyWithoutEnhancer])
+      const keyWithoutEnhancer = key.replace(wordEnding, keyReplaceString);
+
+      if(key.endsWith(wordEnding) && (previous.hasOwnProperty(keyWithoutEnhancer) || current.hasOwnProperty(keyWithoutEnhancer))) {
+        // Determine if we are working with an HoC that wraps another HoC
+        newObject[keyWithoutEnhancer] = keyWithoutEnhancer.endsWith('Container') || keyWithoutEnhancer.endsWith('Enhancer') ?
+          // If we are enhancing a container or enhancer flow this stuff since it's likely an HoC
+          _.flowRight(current[key], (current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])) :
+          // Wrap the current component in the Enhancer or container
+          current[key](current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])
       }
     }
 
-    return Object.assign(previous, newObject, current);
-  }, {});
+    return _.pickBy(Object.assign(previous, current, newObject), (v, k) => (!k.endsWith(wordEnding))) ;
+  }, {})
+}
+
+/** Gets a new components object with component per component name
+ * @param {array<Object>} componentObjectArray - An array of component objects
+*/
+export function combineAndEnhanceComponents (componentArray) {
+  return wrapMethodsByWordEnding(componentArray, 'Enhancer');
+}
+
+export function combineAndEnhanceContainers (componentArray) {
+  return wrapMethodsByWordEnding(componentArray, 'ContainerEnhancer', 'Container');
+}
+
+/** Gets a new component object with containers wrapping standard components
+  (this is the same as enhance but just applying different naming conventions)
+ * @param {array<Object>} componentObjectArray - An array of component objects
+*/
+export function combineAndWrapWithContainerComponents(componentArray) {
+  return wrapMethodsByWordEnding(componentArray, 'Container');
+}
+
+/** Wraps components in their containers and enhancers
+ * @param {array<Object>} componentObjectArray - An array of component objects
+*/
+export function buildGriddleComponents(componentArray) {
+  //enhance the containers
+  const withEnhancedContainers = combineAndEnhanceContainers(componentArray);
+  
+  //enhance the components
+  const withEnhancedComponents = combineAndEnhanceComponents([withEnhancedContainers]);
+
+  //wrap the components with the container
+  const withWrappedComponents = combineAndWrapWithContainerComponents([withEnhancedComponents])
+
+  return withWrappedComponents;
 }
