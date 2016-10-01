@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import * as dataReducers from '../src/reducers/dataReducer';
 import components from './components';
 
-import { buildGriddleReducer, combineAndEnhanceComponents } from './utils/compositionUtils';
+import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 
 export default class extends Component {
   static childContextTypes = {
@@ -21,8 +21,9 @@ export default class extends Component {
     //Combine / compose the reducers to make a single, unified reducer
     const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
 
+debugger;
     //Combine / Compose the components to make a single component for each component type
-    this.components = combineAndEnhanceComponents([components, ...plugins.map(p => p.components)]);
+    this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
 
     //TODO: This should get the column properties and row properties to determine
     //TODO: This should also look at the default and plugin initial state objects

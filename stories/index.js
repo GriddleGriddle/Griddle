@@ -12,10 +12,12 @@ import Table from '../src/components/Table';
 
 import fakeData from './fakeData';
 
+import LocalPlugin from '../src/plugins/local';
+
 storiesOf('Griddle main', module)
   .add('with local', () => {
     return (
-      <Griddle data={fakeData} />
+      <Griddle data={fakeData} plugins={[LocalPlugin]} />
     )
   })
 
