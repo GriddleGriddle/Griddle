@@ -1,5 +1,5 @@
-import TableContainer from './TableContainer';
+import TableContainerEnhancer from './TableContainerEnhancer';
 
 export default {
-  TableContainer
+  TableContainerEnhancer
 }

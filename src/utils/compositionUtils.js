@@ -274,7 +274,7 @@ export function combineAndWrapWithContainerComponents(componentArray) {
 export function buildGriddleComponents(componentArray) {
   //enhance the containers
   const withEnhancedContainers = combineAndEnhanceContainers(componentArray);
-  
+
   //enhance the components
   const withEnhancedComponents = combineAndEnhanceComponents([withEnhancedContainers]);
 
