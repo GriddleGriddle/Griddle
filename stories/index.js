@@ -1,5 +1,6 @@
 import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
+import { withContext} from 'recompose';
 
 import Griddle from '../src/index';
 
@@ -8,7 +9,8 @@ import Row from '../src/components/Row';
 import TableBody from '../src/components/TableBody';
 import TableHeadingCell from '../src/components/TableHeadingCell';
 import TableHeading from '../src/components/TableHeading';
-import Table from '../src/components/Table';
+import { Table } from '../src/components/Table';
+import TableContainer from '../src/components/TableContainer';
 
 import fakeData from './fakeData';
 
@@ -134,8 +136,62 @@ storiesOf('Table', module)
 
     return (
       <Table
-        tableHeading={tableHeading}
-        tableBody={tableBody}
+        TableHeading={tableHeading}
+        TableBody={tableBody}
       />
+    );
+  })
+
+storiesOf('TableContainer', module)
+  .add('base', () => {
+    const tableHeading = (props) => (
+      <thead>
+        <tr>
+          <th>One</th>
+          <th>Two</th>
+          <th>Three</th>
+        </tr>
+      </thead>
+    );
+
+    const tableBody = (props) => (
+      <tbody>
+        <tr>
+          <td>uno</td>
+          <td>dos</td>
+          <td>tres</td>
+        </tr>
+      </tbody>
+    );
+
+    class BaseWithContext extends React.Component {
+      static childContextTypes = {
+        components: React.PropTypes.object.isRequired
+      }
+
+      getChildContext() {
+        return {
+          components: {
+            TableBody: tableBody,
+            TableHeading: tableHeading
+          }
+        };
+      }
+
+      render() {
+        return (
+          <div>
+            {this.props.children}
+          </div>
+        );
+      }
+    }
+
+    const TableComposed = TableContainer(Table);
+
+    return (
+      <BaseWithContext>
+        <TableComposed />
+      </BaseWithContext>
     );
   })

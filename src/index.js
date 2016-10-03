@@ -21,7 +21,6 @@ export default class extends Component {
     //Combine / compose the reducers to make a single, unified reducer
     const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
 
-debugger;
     //Combine / Compose the components to make a single component for each component type
     this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
 

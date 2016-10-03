@@ -1,10 +1,10 @@
 import React from 'react';
 
-const Table = ({ tableHeading, tableBody, data, columnTitles }) =>  { debugger; return (
+export const Table = ({ TableHeading, TableBody }) =>  (
   <table>
-    { tableHeading }
-    { tableBody }
+    <TableHeading />
+    <TableBody />
   </table>
-)};
+);
 
 export default Table;
