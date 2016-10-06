@@ -11,6 +11,8 @@ import TableHeadingCell from '../src/components/TableHeadingCell';
 import TableHeading from '../src/components/TableHeading';
 import { Table } from '../src/components/Table';
 import TableContainer from '../src/components/TableContainer';
+import ColumnDefinition from '../src/components/ColumnDefinition';
+import RowDefinition from '../src/components/RowDefinition';
 
 import fakeData from './fakeData';
 
@@ -19,7 +21,12 @@ import LocalPlugin from '../src/plugins/local';
 storiesOf('Griddle main', module)
   .add('with local', () => {
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin]} />
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
     )
   })
 

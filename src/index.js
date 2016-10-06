@@ -7,6 +7,8 @@ import * as dataReducers from '../src/reducers/dataReducer';
 import components from './components';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
+import { getColumnProperties } from './utils/columnUtils';
+import { getRowProperties } from './utils/rowUtils';
 
 export default class extends Component {
   static childContextTypes = {
@@ -16,7 +18,10 @@ export default class extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data } = props;
+    const { plugins=[], data, children:rowPropertiesComponent } = props;
+
+    const rowProperties = getRowProperties(rowPropertiesComponent);
+    const columnProperties = getColumnProperties(rowPropertiesComponent);
 
     //Combine / compose the reducers to make a single, unified reducer
     const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
@@ -24,36 +29,19 @@ export default class extends Component {
     //Combine / Compose the components to make a single component for each component type
     this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
 
-    //TODO: This should get the column properties and row properties to determine
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
-      columnProperties: {
-        name: {
-          id: 'name',
-          title: 'NAME'
-        },
-        city: {
-          id: 'city',
-          title: 'City'
-        },
-        state: {
-          id: 'state',
-          title: 'State'
-        },
-        country: {
-          id: 'Country',
-          title: 'Country'
-        },
-        company: {
-          id: 'Company',
-          title: 'Company'
-        }
-      }
+      rowProperties,
+      columnProperties
     };
 
     const initialState = {
       renderProperties,
-      data
+      data,
+      pageProperties: {
+        currentPage: 0,
+        pageSize: 10
+      }
     }
 
     this.store = createStore(

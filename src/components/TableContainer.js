@@ -8,6 +8,7 @@ const ComposedContainerComponent = OriginalComponent => compose(
   {
     components: React.PropTypes.object
   }),
+  //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
   mapProps(props => ({
     TableHeading: props.components.TableHeading,
     TableBody: props.components.TableBody,
