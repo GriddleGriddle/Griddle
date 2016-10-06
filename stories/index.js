@@ -73,15 +73,13 @@ storiesOf('Row', module)
 
 storiesOf('TableBody', module)
   .add('base table body', () => {
-    const rows = [
-      <tr><td>One</td></tr>,
-      <tr><td>Two</td></tr>,
-      <tr><td>Three</td></tr>
-    ];
+    const rowIds = [1,2,3];
+
+    const FakeRow = ({griddleKey}) => <tr><td>Row id: {griddleKey}</td></tr>;
 
     return (
       <table>
-        <TableBody rows={rows} />
+        <TableBody rowIds={rowIds} Row={FakeRow} />
       </table>
     )
   })
@@ -106,22 +104,18 @@ storiesOf('TableHeadingCell', module)
 
 storiesOf('TableHeading', module)
   .add('base table heading', () => {
-    const headingCells = [
-      <th>One</th>,
-      <th>Two</th>,
-      <th>Three</th>
-    ]
+    const columnTitles = ['one', 'two', 'three'];
 
     return (
       <table>
-        <TableHeading headingCells={headingCells}/>
+        <TableHeading columnTitles={columnTitles} TableHeadingCell={TableHeadingCell} />
       </table>
     )
   })
 
 storiesOf('Table', module)
   .add('base table', () => {
-    const tableHeading = (
+    const tableHeading = props => (
       <thead>
         <tr>
           <th>One</th>
@@ -131,7 +125,7 @@ storiesOf('Table', module)
       </thead>
     );
 
-    const tableBody = (
+    const tableBody = props => (
       <tbody>
         <tr>
           <td>uno</td>

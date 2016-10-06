@@ -1,8 +1,8 @@
 import React from 'react';
 
-const TableBody = ({ rows }) => (
+const TableBody = ({ rowIds, Row }) => (
   <tbody>
-    { rows }
+    { rowIds && rowIds.map(r => <Row key={r} griddleKey={r} />) }
   </tbody>
 );
 
