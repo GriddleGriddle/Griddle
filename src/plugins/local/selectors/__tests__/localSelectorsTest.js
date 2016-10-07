@@ -326,6 +326,30 @@ test('visible data selector gets only visible columns', test => {
   test.deepEqual(selectors.visibleDataSelector(state).toJSON(), [{ name: 'han solo', food: 'apple' }]);
 });
 
+test.only('visibleRowIdsSelector gets row ids', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange', griddleKey: 1 },
+      { id: '2', name: 'han solo', food: 'banana', griddleKey: 2 },
+      { id: '3', name: 'han solo', food: 'apple', griddleKey: 3 },
+      { id: '4', name: 'luke skywalker', food: 'apple', griddleKey: 4}
+    ],
+    renderProperties: {
+      columnProperties: {
+        name: {
+          id: 'name'
+        }
+      }
+    },
+    pageProperties: {
+      currentPage: 2,
+      pageSize: 2
+    }
+  });
+
+  test.deepEqual(selectors.visibleRowIdsSelector(state).toJSON(), [3, 4]);
+});
+
 test('hidden columns selector shows all columns that are not visible', test => {
   const state = new Immutable.fromJS({
     data: [

@@ -142,6 +142,12 @@ export const visibleDataSelector = createSelector(
   (currentPageData, visibleColumns) => getVisibleDataForColumns(currentPageData, visibleColumns)
 );
 
+/** Gets the griddleIds for the visible rows */
+export const visibleRowIdsSelector = createSelector(
+  currentPageDataSelector,
+  (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
+);
+
 /** Gets the columns that are not currently visible
  */
 export const hiddenColumnsSelector = createSelector(
