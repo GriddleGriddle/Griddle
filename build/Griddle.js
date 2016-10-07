@@ -411,10 +411,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 
-	        if (this.props.useExternal) {
-	            this.props.externalChangeSort(column, this.props.externalSortColumn === column ? !this.props.externalSortAscending : true);
-	            return;
-	        }
+               if (this.props.useExternal) {
+                   var isAscending = this.props.externalSortColumn === column ? !this.props.externalSortAscending : true;
+                   this.setState({
+                     sortColumn: column,
+                     sortDirection: isAscending ? 'asc' : 'desc' 
+                   });
+                   this.props.externalChangeSort(column, isAscending); 
+                   return;
+               }
 	        var columnMeta = find(this.props.columnMetadata, { columnName: column }) || {};
 	        var sortDirectionCycle = columnMeta.sortDirectionCycle ? columnMeta.sortDirectionCycle : [null, 'asc', 'desc'];
 	        var sortDirection = null;
