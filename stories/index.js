@@ -83,6 +83,22 @@ storiesOf('TableBody', module)
       </table>
     )
   })
+  .add('with local container', () => {
+    const junkPlugin = {
+      components: {
+        Row: (props) => <tr><td>{props.griddleKey}</td></tr>
+      }
+    }
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin, junkPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+    )
+  })
 
 storiesOf('TableHeadingCell', module)
   .add('base table heading cell', () => {

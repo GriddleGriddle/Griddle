@@ -24,7 +24,17 @@ import {
  * TODO: Consider renaming this to be more in line with what it's actually doing (setting render properties)
 */
 export function GRIDDLE_INITIALIZED(initialState) {
-  return Immutable.fromJS(initialState);
+  let tempState = Object.assign({}, initialState);
+  //TODO: could probably make this more efficient by removing data
+  // making the rest of the properties initial state and 
+  // setting the mapped data on the new initial state immutable object
+  if(initialState.hasOwnProperty('data') &&
+    initialState.data.length > 0 &&
+    !initialState.data[0].hasOwnProperty('griddleKey')) {
+      tempState.data = addKeyToCollection(Immutable.fromJS(initialState.data));
+  } 
+
+  return Immutable.fromJS(tempState);
 }
 
 /** Sets the griddle data

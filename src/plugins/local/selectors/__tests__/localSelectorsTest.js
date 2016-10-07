@@ -326,7 +326,7 @@ test('visible data selector gets only visible columns', test => {
   test.deepEqual(selectors.visibleDataSelector(state).toJSON(), [{ name: 'han solo', food: 'apple' }]);
 });
 
-test.only('visibleRowIdsSelector gets row ids', test => {
+test('visibleRowIdsSelector gets row ids', test => {
   const state = new Immutable.fromJS({
     data: [
       { id: '1', name: 'luke skywalker', food: 'orange', griddleKey: 1 },
