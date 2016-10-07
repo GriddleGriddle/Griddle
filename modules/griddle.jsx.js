@@ -244,6 +244,9 @@ var Griddle = React.createClass({
     },
     setPageSize: function setPageSize(size) {
         if (this.props.useExternal) {
+            this.setState({
+                resultsPerPage: size
+            });
             this.props.externalSetPageSize(size);
             return;
         }
