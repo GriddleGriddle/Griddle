@@ -374,6 +374,39 @@ test('hidden columns selector shows all columns that are not visible', test => {
   test.deepEqual(selectors.hiddenColumnsSelector(state), ['id', 'food']);
 });
 
+test('columnIdsSelector gets all column ids', test => {
+    const state = new Immutable.fromJS({
+    data: [
+      { id: '1', name: 'luke skywalker', food: 'orange' },
+      { id: '2', name: 'han solo', food: 'banana' },
+      { id: '3', name: 'han solo', food: 'apple' },
+      { id: '4', name: 'luke skywalker', food: 'apple'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        name: {
+          id: 'first',
+          title: 'Name'
+        },
+        id: {
+          id: 'second',
+          title: 'ID'
+        },
+        food: {
+          id: 'third',
+          title: 'Food Order'
+        }
+      }
+    },
+    pageProperties: {
+      currentPage: 3,
+      pageSize: 1
+    }
+  });
+
+  test.deepEqual(selectors.columnIdsSelector(state), ['first', 'second', 'third']);
+});
+
 test('columnTitlesSelector gets all column titles', test => {
   const state = new Immutable.fromJS({
     data: [

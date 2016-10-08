@@ -161,6 +161,20 @@ export const hiddenColumnsSelector = createSelector(
   }
 );
 
+/** Gets the column ids for the visible columns 
+*/
+export const columnIdsSelector = createSelector(
+  visibleDataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k => 
+        renderProperties.get('columnProperties').get(k).get('id') || k 
+      )
+    }
+  }
+)
+
 /** Gets the column titles for the visible columns
  */
 export const columnTitlesSelector = createSelector(
