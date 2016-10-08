@@ -1,8 +1,13 @@
 import React from 'react';
 
-const Row = ({cells}) => (
+const Row = ({Cell, griddleKey, columnIds}) => (
   <tr>
-    { cells }
+    { columnIds && columnIds.map(c => (
+      <Cell
+        griddleKey={griddleKey}
+        columnId={c}
+      />
+    ))}
   </tr>
 );
 
