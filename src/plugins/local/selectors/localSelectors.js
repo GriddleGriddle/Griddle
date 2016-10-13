@@ -190,3 +190,9 @@ export const columnTitlesSelector = createSelector(
     return [];
   }
 )
+
+export const cellValueSelector = (state, { griddleKey, columnId }) => {
+  return state.get('data')
+    .find(r => r.get('griddleKey') === griddleKey)
+    .get(columnId)
+} 

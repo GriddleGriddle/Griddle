@@ -3,17 +3,6 @@ import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
 import { columnIdsSelector } from '../selectors/localSelectors';
 
-const Override = Original => class extends React.Component {
-  contextTypes: {
-    components: React.PropTypes.object
-  }
-
-  render() {
-    debugger;
-    return <tr><td>Yo</td></tr>
-  }
-}
-
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object
@@ -21,9 +10,10 @@ const ComposedRowContainer = OriginalComponent => compose(
   connect((state) => ({
     columnIds: columnIdsSelector(state)
   })),
-  withHandlers({
-    Cell: props => props.components.Cell
-  })
+  mapProps(props => ({
+    Cell: props.components.Cell,
+    ...props
+  })),
 )(({Cell, columnIds, griddleKey}) => (
   <OriginalComponent
     griddleKey={griddleKey}
@@ -32,4 +22,4 @@ const ComposedRowContainer = OriginalComponent => compose(
   />
 ));
 
-export default Override;
+export default ComposedRowContainer;

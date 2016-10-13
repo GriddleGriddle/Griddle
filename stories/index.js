@@ -47,6 +47,15 @@ storiesOf('Cell', module)
       </tr>
       </tbody>
     </table>
+  })
+  .add('CellContainer', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>);
   });
 
 storiesOf('Row', module)
@@ -73,7 +82,7 @@ storiesOf('Row', module)
   .add('with local plugin container', () => {
     const testPlugin = {
       components: {
-        Cell: props => <td>{ props }</td>
+        Cell: ({griddleKey, columnId}) => <td>{`${griddleKey} ${columnId}`}</td>
       }
     };
 
