@@ -5,7 +5,9 @@ import TableBody from './TableBody';
 import TableHeading from './TableHeading';
 import TableHeadingCell from './TableHeadingCell';
 import TableContainer from './TableContainer';
-import Test from './Test';
+import Layout from './Layout';
+import LayoutContainer from './LayoutContainer';
+import Pagination from './Pagination';
 
 const components = {
   Cell,
@@ -15,7 +17,9 @@ const components = {
   TableHeading,
   TableHeadingCell,
   TableContainer,
-  Test
+  Layout,
+  LayoutContainer,
+  Pagination
 };
 
 export default components;

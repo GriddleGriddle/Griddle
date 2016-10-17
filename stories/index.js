@@ -47,6 +47,15 @@ storiesOf('Cell', module)
       </tr>
       </tbody>
     </table>
+  })
+  .add('CellContainer', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>);
   });
 
 storiesOf('Row', module)
@@ -70,6 +79,22 @@ storiesOf('Row', module)
       </table>
     )
   })
+  .add('with local plugin container', () => {
+    const testPlugin = {
+      components: {
+        Cell: ({griddleKey, columnId}) => <td>{`${griddleKey} ${columnId}`}</td>
+      }
+    };
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin, testPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+    )
+  })
 
 storiesOf('TableBody', module)
   .add('base table body', () => {
@@ -86,7 +111,9 @@ storiesOf('TableBody', module)
   .add('with local container', () => {
     const junkPlugin = {
       components: {
-        Row: (props) => <tr><td>{props.griddleKey}</td></tr>
+        Row: (props) => <tr><td>{props.griddleKey}</td></tr>,
+        // override local row container
+        RowContainer: original => props => original(props)
       }
     }
 

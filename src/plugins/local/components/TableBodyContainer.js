@@ -11,9 +11,13 @@ const ComposedTableBodyContainer = OriginalComponent => compose(
   connect((state) => ({
     visibleRowIds: visibleRowIdsSelector(state)
   })),
-  withHandlers({
-    Row: props => props.components.Row
-  })
+  mapProps(props => ({
+    Row:  props.components.Row,
+    ...props
+  })),
+  // withHandlers({
+  //   Row: props => props.components.Row
+  // })
 )(({Row, visibleRowIds}) => (
   <OriginalComponent
     rowIds={visibleRowIds}

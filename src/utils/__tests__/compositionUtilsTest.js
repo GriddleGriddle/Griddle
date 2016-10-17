@@ -319,12 +319,15 @@ test('builds griddle reducer', test => {
   const reducer3 = {
     REDUCE_THING: (state, action) => {
       return { number: state.number + 4 }
+    },
+    REDUCE_OTHER: (state, action) => {
+      return { number: state.number }
     }
   }
 
   const griddleReducer = buildGriddleReducerObject([reducer1, reducer2, reducer3]);
 
-  test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING']);
+  test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING', 'REDUCE_OTHER']);
   test.deepEqual(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
 });
 

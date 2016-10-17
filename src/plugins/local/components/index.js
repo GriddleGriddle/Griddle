@@ -1,9 +1,13 @@
-import TableContainerEnhancer from './TableContainerEnhancer';
 import TableHeadingContainer from './TableHeadingContainer';
 import TableBodyContainer from './TableBodyContainer';
+import RowContainer from './RowContainer';
+import CellContainer from './CellContainer';
+import PaginationContainer from './PaginationContainer';
 
 export default {
-  TableContainerEnhancer,
   TableBodyContainer,
-  TableHeadingContainer
+  TableHeadingContainer,
+  RowContainer,
+  CellContainer,
+  PaginationContainer,
 }
