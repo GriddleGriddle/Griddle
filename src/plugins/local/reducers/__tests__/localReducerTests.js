@@ -1,7 +1,7 @@
 import test from 'ava';
 import Immutable from 'immutable';
 
-import * as reducers from '../localReducer';
+import * as reducers from '../index';
 import constants from '../../../../constants';
 
 test('it loads data', test => {

@@ -185,9 +185,12 @@ export function buildGriddleReducerObject(reducerObjects) {
 */
 export function buildGriddleReducer(reducerObjects) {
   const reducerObject = buildGriddleReducerObject(reducerObjects);
-
-  return function(action) {
-    return (action.type && reducer[action.type](action)) || reducerObject['GRIDDLE_INITIALIZED'](action);
+  return function(state, action) {
+    return (
+      (action.type &&
+        reducerObject[action.type] &&
+        reducerObject[action.type](state, action)
+      ) || reducerObject['GRIDDLE_INITIALIZED'](state, action));
   }
 }
 

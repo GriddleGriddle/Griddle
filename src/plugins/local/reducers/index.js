@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-
+import { maxPageSelector, currentPageSelector } from '../selectors/localSelectors';
 import {
   addKeyToCollection
 } from '../../../utils/dataUtils';
@@ -39,16 +39,26 @@ export function GRIDDLE_SET_PAGE(state, action) {
   return dataReducers.GRIDDLE_SET_PAGE(state, action);
 }
 
-/*
- * TODO: Either remove this code or add it back in a working state
 export function GRIDDLE_NEXT_PAGE(state, action) {
+  const maxPage = maxPageSelector(state);
+  const currentPage = currentPageSelector(state);
+
+  if(currentPage < maxPage) {
+    return state.setIn(['pageProperties', 'currentPage'], currentPage + 1);
+  }
+
   return state;
 }
 
 export function GRIDDLE_PREVIOUS_PAGE(state, action) {
+  const currentPage = currentPageSelector(state);
+
+  if(currentPage > 0) {
+    return state.setIn(['pageProperties', 'currentPage'], currentPage - 1);
+  }
+
   return state;
 }
-*/
 
 /** Sets the current filter
  * @param {Immutable} state - Immutable state object

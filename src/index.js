@@ -39,7 +39,7 @@ export default class extends Component {
       renderProperties,
       data,
       pageProperties: {
-        currentPage: 0,
+        currentPage: 1,
         pageSize: 10
       }
     }
@@ -59,7 +59,7 @@ export default class extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <this.components.Table />
+        <this.components.Layout />
       </Provider>
     )
 
