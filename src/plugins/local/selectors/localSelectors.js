@@ -10,7 +10,6 @@ import { getVisibleDataForColumns } from '../../../utils/dataUtils';
  */
 export const dataSelector = state => state.get('data');
 
-
 /** Gets the current page from pageProperties
  * @param {Immutable} state - state object
  */
@@ -21,19 +20,6 @@ export const currentPageSelector = state => state.getIn(['pageProperties', 'curr
  */
 export const pageSizeSelector = state => state.getIn(['pageProperties', 'pageSize']);
 
-/** Gets the max page size
- */
-export const maxPageSelector = createSelector(
-  pageSizeSelector,
-  dataSelector,
-  (pageSize, data) => {
-    const total = data.size;
-    const calc = total / pageSize;
-
-    return calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
-  }
-)
-
 /** Gets the currently set filter
  */
 export const filterSelector = state => (state.get('filter') || '');
@@ -43,6 +29,35 @@ export const sortPropertiesSelector = state => (state.get('sortProperties'));
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
 export const metaDataColumnsSelector = state => (state.get('metadataColumns') || [])
+
+/** Gets the data filtered by the current filter
+ */
+export const filteredDataSelector = createSelector(
+  dataSelector,
+  filterSelector,
+  (data, filter) => {
+    return data.filter(row  => {
+      return Object.keys(row.toJSON())
+        .some(key => {
+          return row.get(key) && row.get(key).toString().toLowerCase().indexOf(filter.toLowerCase()) > -1
+        })
+      })
+  }
+);
+
+
+/** Gets the max page size
+ */
+export const maxPageSelector = createSelector(
+  pageSizeSelector,
+  filteredDataSelector,
+  (pageSize, data) => {
+    const total = data.size;
+    const calc = total / pageSize;
+
+    return calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
+  }
+)
 
 export const allColumnsSelector = createSelector(
   dataSelector,
@@ -85,21 +100,6 @@ export const hasNextSelector = createSelector(
 /** Returns whether or not there is a previous page to the current data
  */
 export const hasPreviousSelector = state => (state.getIn(['pageProperties', 'currentPage']) > 1);
-
-/** Gets the data filtered by the current filter
- */
-export const filteredDataSelector = createSelector(
-  dataSelector,
-  filterSelector,
-  (data, filter) => {
-    return data.filter(row  => {
-      return Object.keys(row.toJSON())
-        .some(key => {
-          return row.get(key) && row.get(key).toString().toLowerCase().indexOf(filter.toLowerCase()) > -1
-        })
-      })
-  }
-);
 
 /** Gets the data sorted by the sort function specified in render properties
  *  if no sort method is supplied, it will use the default sort defined in griddle
