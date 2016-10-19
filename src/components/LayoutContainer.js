@@ -7,12 +7,14 @@ const EnhancedLayout = OriginalComponent => compose(
   }),
   mapProps( props => ({
     Table: props.components.Table,
-    Pagination: props.components.Pagination
+    Pagination: props.components.Pagination,
+    Filter: props.components.Filter,
   }))
-)(({Table, Pagination}) => (
+)(({Table, Pagination, Filter}) => (
   <OriginalComponent
     Table={Table}
     Pagination={Pagination}
+    Filter={Filter}
   />
 ));
 

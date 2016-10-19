@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
 import { createStructuredSelector } from 'reselect';
 
 import { hasNextSelector, hasPreviousSelector, currentPageSelector, maxPageSelector } from '../selectors/localSelectors';
-import { getNext, getPrevious, setPage } from '../actions';
+import { getNext, getPrevious, setPage } from '../../../actions';
 
 const EnhancedPaginationContainer = OriginalComponent => connect(
     createStructuredSelector({
