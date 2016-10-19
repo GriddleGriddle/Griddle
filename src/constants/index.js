@@ -1,17 +1,5 @@
-
-/*
-  It should be noted that the action types that are like
-  GRIDDLE_FILTER mean that the operation has started.
-  Past tense action types mean that the operation
-  has completed.
-*/
-
-export const GRIDDLE_FILTER = 'GRIDDLE_FILTER';
-export const GRIDDLE_FILTERED = 'GRIDDLE_FILTERED';
-export const GRIDDLE_FILTER_BY_COLUMN = 'GRIDDLE_FILTER_BY_COLUMN';
-export const GRIDDLE_FILTERED_BY_COLUMN = 'GRIDDLE_FILTERED_BY_COLUMN';
-export const GRIDDLE_FILTER_BY_ADDITIONAL_COLUMN = 'GRIDDLE_FILTER_BY_ADDITIONAL_COLUMN';
-export const GRIDDLE_FILTERED_BY_ADDITIONAL_COLUMN = 'GRIDDLE_FILTERED_BY_ADDITIONAL_COLUMN';
+export const GRIDDLE_SET_FILTER = 'GRIDDLE_SET_FILTER';
+export const GRIDDLE_SET_FILTER_BY_COLUMN = 'GRIDDLE_SET_FILTER_BY_COLUMN';
 export const GRIDDLE_FILTER_REMOVED = 'GRIDDLE_FILTER_REMOVED';
 export const GRIDDLE_SORT = 'GRIDDLE_SORT';
 export const GRIDDLE_SORTED = 'GRIDDLE_SORTED';

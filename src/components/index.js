@@ -8,6 +8,8 @@ import TableContainer from './TableContainer';
 import Layout from './Layout';
 import LayoutContainer from './LayoutContainer';
 import Pagination from './Pagination';
+import Filter from './Filter';
+import FilterContainer from './FilterContainer';
 
 const components = {
   Cell,
@@ -19,7 +21,9 @@ const components = {
   TableContainer,
   Layout,
   LayoutContainer,
-  Pagination
+  Pagination,
+  Filter,
+  FilterContainer
 };
 
 export default components;
