@@ -31,7 +31,16 @@ test('gets current page size', test => {
 
 test('gets the correct max page', test => {
   const state = new Immutable.fromJS({
-    data: [1, 2, 3, 4, 5, 6, 7, 8],
+    data: [
+      { one: 1 },
+      { two: 2 },
+      { three: 3 },
+      { four: 4 },
+      { five: 5 },
+      { six: 6 },
+      { seven: 7 },
+      { eight: 8 }
+    ],
     pageProperties: {
       pageSize: 3
     }
@@ -145,7 +154,16 @@ test('gets all columns as visible columns when no columns specified', test => {
 
 test('hasNextSelector returns true when more pages', test => {
   const state = new Immutable.fromJS({
-    data: [1, 2, 3, 4, 5, 6, 7, 8],
+    data: [
+      { one: 1 },
+      { two: 2 },
+      { three: 3 },
+      { four: 4 },
+      { five: 5 },
+      { six: 6 },
+      { seven: 7 },
+      { eight: 8 }
+    ],
     pageProperties: {
       currentPage: 1,
       pageSize: 3
@@ -157,7 +175,16 @@ test('hasNextSelector returns true when more pages', test => {
 
 test('hasNextSelector returns false when no more pages', test => {
   const state = new Immutable.fromJS({
-    data: [1, 2, 3, 4, 5, 6, 7, 8],
+     data: [
+      { one: 1 },
+      { two: 2 },
+      { three: 3 },
+      { four: 4 },
+      { five: 5 },
+      { six: 6 },
+      { seven: 7 },
+      { eight: 8 }
+    ],
     pageProperties: {
       currentPage: 1,
       pageSize: 8
