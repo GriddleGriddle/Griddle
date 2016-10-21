@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TableHeadingCell = ({ title, onClick, onMouseOver, onMouseOut }) => (
+const TableHeadingCell = ({ title, columnId, onClick, onMouseOver, onMouseOut }) => (
   <th
     onClick={onClick}
     onMouseOver={onMouseOver}

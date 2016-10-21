@@ -2,7 +2,8 @@ import {
   GRIDDLE_NEXT_PAGE,
   GRIDDLE_PREVIOUS_PAGE,
   GRIDDLE_SET_PAGE,
-  GRIDDLE_SET_FILTER
+  GRIDDLE_SET_SORT,
+  GRIDDLE_SET_FILTER,
 } from '../constants';
 
 export function getNext() {
@@ -28,5 +29,12 @@ export function setFilter(filter) {
   return {
     type: GRIDDLE_SET_FILTER,
     filter
+  }
+}
+
+export function setSortColumn(sortProperties) {
+  return {
+    type: GRIDDLE_SET_SORT,
+    sortProperties
   }
 }

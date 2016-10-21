@@ -55,4 +55,10 @@ export const allColumnsSelector = createSelector(
   )
 );
 
-/** Gets the renderProperties */
+/** Gets the sort property for a given column */
+export const sortPropertyByIdSelector = (state, { columnId }) => {
+  const sortProperties = state.get('sortProperties');
+  const individualProperty = sortProperties && sortProperties.size > 0 && sortProperties.find(r => r.get('id') === columnId);
+
+  return (individualProperty && individualProperty.toJSON()) || null;
+}
