@@ -65,5 +65,10 @@ export const sortPropertyByIdSelector = (state, { columnId }) => {
 
 /** Gets the icons property from styles */
 export const iconByNameSelector = (state, { name }) => {
-  return state.getIn(['styles', 'icons', name])
+  return state.getIn(['styles', 'icons', name]);
+}
+
+/** Gets a classname from the styles object */
+export const classNameByNameSelector = (state, { name}) => {
+  return state.getIn(['styles', 'classNames', name]);
 }
