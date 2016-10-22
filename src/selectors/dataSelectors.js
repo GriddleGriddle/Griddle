@@ -62,3 +62,8 @@ export const sortPropertyByIdSelector = (state, { columnId }) => {
 
   return (individualProperty && individualProperty.toJSON()) || null;
 }
+
+/** Gets the icons property from styles */
+export const iconByNameSelector = (state, { name }) => {
+  return state.getIn(['styles', 'icons', name])
+}
