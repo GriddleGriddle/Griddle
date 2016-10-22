@@ -18,6 +18,23 @@ import fakeData from './fakeData';
 
 import LocalPlugin from '../src/plugins/local';
 
+function sortBySecondCharacter(data, column, sortAscending = true) {
+  return data.sort(
+    (original, newRecord) => {
+      original = (!!original.get(column) && original.get(column)) || "";
+      newRecord = (!!newRecord.get(column) && newRecord.get(column)) || "";
+
+      if(original[1] === newRecord[1]) {
+        return 0;
+      } else if (original[1] > newRecord[1]) {
+        return sortAscending ? 1 : -1;
+      }
+      else {
+        return sortAscending ? -1 : 1;
+      }
+    });
+}
+
 storiesOf('Griddle main', module)
   .add('with local', () => {
     return (
@@ -28,6 +45,19 @@ storiesOf('Griddle main', module)
         </RowDefinition>
       </Griddle>
     )
+  })
+  .add('with custom sort on name', () => {
+    return (
+      <div>
+      <small>Sorts name by second character</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} sortMethod={sortBySecondCharacter} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
   })
 
 storiesOf('Cell', module)
