@@ -72,3 +72,8 @@ export const iconByNameSelector = (state, { name }) => {
 export const classNameByNameSelector = (state, { name}) => {
   return state.getIn(['styles', 'classNames', name]);
 }
+
+/** Gets a custom component for a given column */
+export const customComponentSelector = (state, { columnId }) => {
+  return state.getIn(['renderProperties', 'columnProperties', columnId, 'customComponent']);
+}

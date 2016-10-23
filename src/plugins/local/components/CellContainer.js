@@ -3,13 +3,27 @@ import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
 
 import { cellValueSelector } from '../selectors/localSelectors';
+import { customComponentSelector } from '../../../selectors/dataSelectors';
 
 const ComposedCellContainer = OriginalComponent => compose(
   connect((state, props) => ({
-    value: cellValueSelector(state, props)
-  }))
+    value: cellValueSelector(state, props),
+    customComponent: customComponentSelector(state, props),
+  })),
+  mapProps(props => {
+    return ({
+    ...props,
+    value: console.log(props) || props.customComponent ?
+      <props.customComponent
+        value={props.value}
+        griddleKey={props.griddleKey}
+      /> :
+      props.value
+  })})
 )(({value}) => (
-  <td>{value}</td>
+  <OriginalComponent
+    value={value}
+  /> 
 ))
 
 export default ComposedCellContainer;
