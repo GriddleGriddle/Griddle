@@ -1,9 +1,9 @@
 import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
 import { withContext} from 'recompose';
+import { connect } from 'react-redux';
 
 import Griddle from '../src/index';
-
 import Cell from '../src/components/Cell';
 import Row from '../src/components/Row';
 import TableBody from '../src/components/TableBody';
@@ -14,6 +14,7 @@ import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
 
+import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 
 import LocalPlugin from '../src/plugins/local';
@@ -34,6 +35,27 @@ function sortBySecondCharacter(data, column, sortAscending = true) {
       }
     });
 }
+
+const GreenLeftSortIconComponent = (props) => (
+  <span style={{ color: "#00ff00" }}>
+    {props.icon && <span>{props.icon}</span>}
+    {props.title}
+  </span>
+)
+
+const MakeBlueComponent = (props) => (
+  <div style={{backgroundColor: '#0000FF'}}>
+    {props.value}
+    {props.rowData &&
+      <small style={{ marginLeft: 5, opacity: .5}}>{props.rowData.company}</small>}
+  </div>
+)
+
+const EnhanceWithRowData = connect((state, props) => ({
+  rowData: rowDataSelector(state, props)
+}));
+
+const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
 
 storiesOf('Griddle main', module)
   .add('with local', () => {
@@ -58,6 +80,48 @@ storiesOf('Griddle main', module)
       </Griddle>
       </div>
     );
+  })
+  .add('with custom component on name', () => {
+    return (
+      <div>
+        <small>Everything in the name column should be blue</small>
+       <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} customComponent={MakeBlueComponent} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+       
+      </div>
+    )
+  })
+  .add('with \'connected\' custom component', () => {
+     return (
+      <div>
+        <small>Everything in the name column should be blue and we should now see the company name also</small>
+       <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} customComponent={EnhancedCustomComponent} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+       
+      </div>
+    )
+  })
+  .add('with custom heading component', () => {
+    return (
+      <div>
+        <small>Name should have a green heading component -- sort icon should show up on the left of the title</small>
+       <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+       
+      </div>
+    )
   })
 
 storiesOf('Cell', module)

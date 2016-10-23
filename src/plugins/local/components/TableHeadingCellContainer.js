@@ -1,8 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps } from 'recompose';
-import { sortPropertyByIdSelector, iconByNameSelector } from '../../../selectors/dataSelectors';
+import { sortPropertyByIdSelector, iconByNameSelector, customHeadingComponentSelector } from '../../../selectors/dataSelectors';
 import { setSortColumn } from '../../../actions';
+
+const DefaultTableHeadingCellContent = ({title, icon}) => (
+  <span>
+    { title }
+    { icon && <span>{icon}</span> }
+  </span>
+)
 
 function setSortProperties({setSortColumn, sortProperty, columnId}) {
   return function(event) {
@@ -33,7 +40,8 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     (state, props) => ({
       sortProperty: sortPropertyByIdSelector(state, props),
       sortAscendingIcon: iconByNameSelector(state, { name: 'sortAscending'}),
-      sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'})
+      sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'}),
+      customHeadingComponent: customHeadingComponentSelector(state, props)
     }),
     {
       setSortColumn
@@ -43,10 +51,17 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     onClick: setSortProperties
   }),
   //TODO: use with props on change or something more performant here
-  mapProps(props => ({
-    icon: getIcon(props),
-    ...props
-  }))
+  mapProps(props => {
+    const icon = getIcon(props);
+    const title = props.customHeadingComponent ?
+      <props.customHeadingComponent {...props} icon={icon} /> :
+      <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
+    return {
+      ...props,
+      icon,
+      title
+    };
+  })
 )((props) => (
   <OriginalComponent
     {...props}
