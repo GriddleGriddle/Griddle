@@ -75,5 +75,10 @@ export function GRIDDLE_SET_FILTER(state, action) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_SET_SORT(state, action) {
-  return state.set('sortProperties', new Immutable.List(action.sortProperties));
+  // turn this into an array if it's not already
+  const sortProperties = action.sortProperties.hasOwnProperty('length') ?
+    action.sortProperties :
+    [action.sortProperties];
+
+  return state.set('sortProperties', new Immutable.fromJS(sortProperties));
 }

@@ -158,3 +158,51 @@ test('allColumnsSelector: gets empty array when data is empty', test => {
   const state = new Immutable.Map().set('data', new Immutable.List());
   test.deepEqual(selectors.allColumnsSelector(state), []);
 });
+
+test('iconByNameSelector gets given icon', test => {
+  const state = new Immutable.fromJS({
+    styles: {
+      icons: {
+        one: 'yo'
+      }
+    }
+  });
+
+  test.is(selectors.iconByNameSelector(state, {name: 'one'}), 'yo');
+});
+
+test('iconByNameSelector gets undefined when icon not present in collection', test => {
+  const state = new Immutable.fromJS({
+    styles: {
+      icons: {
+        one: 'yo'
+      }
+    }
+  });
+
+  test.is(selectors.iconByNameSelector(state, { name: 'two'}), undefined)
+});
+
+test('classNameByNameSelector gets given icon', test => {
+  const state = new Immutable.fromJS({
+    styles: {
+      classNames: {
+        one: 'yo'
+      }
+    }
+  });
+
+  test.is(selectors.classNameByNameSelector(state, {name: 'one'}), 'yo');
+});
+
+test('classNameByNameSelector gets undefined when icon not present in collection', test => {
+  const state = new Immutable.fromJS({
+    styles: {
+      classNames: {
+        one: 'yo'
+      }
+    }
+  });
+
+  test.is(selectors.classNameByNameSelector(state, { name: 'two'}), undefined)
+});

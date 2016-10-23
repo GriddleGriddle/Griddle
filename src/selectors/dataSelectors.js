@@ -55,4 +55,20 @@ export const allColumnsSelector = createSelector(
   )
 );
 
-/** Gets the renderProperties */
+/** Gets the sort property for a given column */
+export const sortPropertyByIdSelector = (state, { columnId }) => {
+  const sortProperties = state.get('sortProperties');
+  const individualProperty = sortProperties && sortProperties.size > 0 && sortProperties.find(r => r.get('id') === columnId);
+
+  return (individualProperty && individualProperty.toJSON()) || null;
+}
+
+/** Gets the icons property from styles */
+export const iconByNameSelector = (state, { name }) => {
+  return state.getIn(['styles', 'icons', name]);
+}
+
+/** Gets a classname from the styles object */
+export const classNameByNameSelector = (state, { name}) => {
+  return state.getIn(['styles', 'classNames', name]);
+}

@@ -41,6 +41,29 @@ export default class extends Component {
       pageProperties: {
         currentPage: 1,
         pageSize: 10
+      },
+      styles: {
+        icons: {
+          sortDescending: '▼',
+          sortAscending: '▲'
+        },
+        classNames: {
+          column: 'griddle-column',
+          filter: 'griddle-filter',
+          noResults: 'griddle-noResults',
+          loading: 'griddle-loadingResults',
+          pagination: 'griddle-pagination',
+          rowDefinition: 'griddle-row-definition',
+          row: 'griddle-row',
+          settingsToggle: 'griddle-settings-toggle',
+          settings: 'griddle-settings',
+          tableBody: 'griddle-table-body',
+          tableHeading: 'griddle-table-heading',
+          tableHeadingCell: 'griddle-table-heading-cell',
+          tableHeadingCellAscending: 'griddle-heading-ascending',
+          tableHeadingCellDescending: 'griddle-heading-descending',
+          table: 'griddle-table',
+        }
       }
     }
 

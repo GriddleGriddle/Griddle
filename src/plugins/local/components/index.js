@@ -3,6 +3,7 @@ import TableBodyContainer from './TableBodyContainer';
 import RowContainer from './RowContainer';
 import CellContainer from './CellContainer';
 import PaginationContainer from './PaginationContainer';
+import TableHeadingCellContainer from './TableHeadingCellContainer';
 
 export default {
   TableBodyContainer,
@@ -10,4 +11,5 @@ export default {
   RowContainer,
   CellContainer,
   PaginationContainer,
+  TableHeadingCellContainer,
 }

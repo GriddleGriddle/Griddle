@@ -1,7 +1,7 @@
 import React from 'react';
 
-const TableHeading = ({ columnTitles, TableHeadingCell }) => {
-  const headingCells = columnTitles.map(t => <TableHeadingCell key={t} title={t} />)
+const TableHeading = ({ columnTitles, columnIds, TableHeadingCell }) => {
+  const headingCells = columnTitles.map((t, i) => <TableHeadingCell key={t} title={t} columnId={columnIds[i]} />)
 
   return (
     <thead>
