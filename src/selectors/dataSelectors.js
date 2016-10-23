@@ -73,7 +73,16 @@ export const classNameByNameSelector = (state, { name}) => {
   return state.getIn(['styles', 'classNames', name]);
 }
 
-/** Gets a custom component for a given column */
+/** Gets a custom component for a given column
+* TODO: Needs tests
+*/
 export const customComponentSelector = (state, { columnId }) => {
   return state.getIn(['renderProperties', 'columnProperties', columnId, 'customComponent']);
+}
+
+/** Gets a custom heading component for a given column
+* TODO: Needs tests
+*/
+export const customHeadingComponentSelector = (state, { columnId}) => {
+  return state.getIn(['renderProperties', 'columnProperties', columnId, 'customHeadingComponent']);
 }

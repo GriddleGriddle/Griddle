@@ -13,7 +13,7 @@ const ComposedCellContainer = OriginalComponent => compose(
   mapProps(props => {
     return ({
     ...props,
-    value: console.log(props) || props.customComponent ?
+    value: props.customComponent ?
       <props.customComponent
         value={props.value}
         griddleKey={props.griddleKey}

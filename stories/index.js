@@ -36,7 +36,14 @@ function sortBySecondCharacter(data, column, sortAscending = true) {
     });
 }
 
-const MakeBlueComponent = (props) => console.log('CUSTOM', props) || (
+const GreenLeftSortIconComponent = (props) => (
+  <span style={{ color: "#00ff00" }}>
+    {props.icon && <span>{props.icon}</span>}
+    {props.title}
+  </span>
+)
+
+const MakeBlueComponent = (props) => (
   <div style={{backgroundColor: '#0000FF'}}>
     {props.value}
     {props.rowData &&
@@ -95,6 +102,20 @@ storiesOf('Griddle main', module)
        <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
           <ColumnDefinition id="name" order={2} customComponent={EnhancedCustomComponent} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+       
+      </div>
+    )
+  })
+  .add('with custom heading component', () => {
+    return (
+      <div>
+        <small>Name should have a green heading component -- sort icon should show up on the left of the title</small>
+       <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} />
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>

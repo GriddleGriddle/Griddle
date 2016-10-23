@@ -6,8 +6,7 @@ const TableHeadingCell = ({ title, columnId, onClick, onMouseOver, onMouseOut, i
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}
   >
-    { title }
-    { icon && <span>{icon}</span> }
+    {title}
   </th>
 )
 
