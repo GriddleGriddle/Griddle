@@ -167,6 +167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "noDataMessage": "There is no data to display.",
 	            "noDataClassName": "griddle-nodata",
 	            "customNoDataComponent": null,
+		    "customNoDataComponentProps": null,
 	            "allowEmptyGrid": false,
 	            "showTableHeading": true,
 	            "showPager": true,
@@ -917,7 +918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getNoDataSection: function getNoDataSection() {
 	        if (this.props.customNoDataComponent != null) {
-	            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, null));
+	            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, this.props.customNoDataComponentProps));
 	        }
 	        return React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage });
 	    },
