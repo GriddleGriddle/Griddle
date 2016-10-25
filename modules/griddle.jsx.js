@@ -463,6 +463,11 @@ var Griddle = React.createClass({
             });
         }
     },
+    componentDidMount: function componentDidMount() {
+        if(this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
+            return this.props.componentDidMount();
+        }
+    },
     //todo: clean these verify methods up
     verifyExternal: function verifyExternal() {
         if (this.props.useExternal === true) {
