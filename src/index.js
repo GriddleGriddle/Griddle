@@ -38,9 +38,13 @@ export default class extends Component {
     const initialState = {
       renderProperties,
       data,
+      enableSettings: true,
       pageProperties: {
         currentPage: 1,
         pageSize: 10
+      },
+      textProperties: {
+        settingsToggle: 'Settings'
       },
       styles: {
         icons: {

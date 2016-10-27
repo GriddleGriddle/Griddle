@@ -86,3 +86,13 @@ export const customComponentSelector = (state, { columnId }) => {
 export const customHeadingComponentSelector = (state, { columnId}) => {
   return state.getIn(['renderProperties', 'columnProperties', columnId, 'customHeadingComponent']);
 }
+
+export const isSettingsEnabledSelector = (state) => {
+  const enableSettings = state.get('enableSettings');
+
+  return enableSettings === undefined ? true : enableSettings;
+}
+
+export const textSelector = (state, { key}) => {
+  return state.getIn(['textProperties', key]);
+}
