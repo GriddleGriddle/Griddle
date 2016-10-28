@@ -9,14 +9,14 @@ const EnhancedLayout = OriginalComponent => compose(
     Table: props.components.Table,
     Pagination: props.components.Pagination,
     Filter: props.components.Filter,
-    SettingsToggle: props.components.SettingsToggle,
+    SettingsWrapper: props.components.SettingsWrapper,
   }))
-)(({Table, Pagination, Filter, SettingsToggle}) => (
+)(({Table, Pagination, Filter, SettingsWrapper}) => (
   <OriginalComponent
     Table={Table}
     Pagination={Pagination}
     Filter={Filter}
-    SettingsToggle={SettingsToggle}
+    SettingsWrapper={SettingsWrapper}
   />
 ));
 

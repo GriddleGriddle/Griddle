@@ -93,6 +93,9 @@ export const isSettingsEnabledSelector = (state) => {
   return enableSettings === undefined ? true : enableSettings;
 }
 
+export const isSettingsVisibleSelector = (state) => state.get('showSettings');
+
 export const textSelector = (state, { key}) => {
   return state.getIn(['textProperties', key]);
 }
+

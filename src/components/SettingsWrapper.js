@@ -1,10 +1,10 @@
 import React from 'react';
 
-const SettingsWrapper = ({ SettingsToggle, Settings, isEnabled }) => (
+const SettingsWrapper = ({ SettingsToggle, Settings, isEnabled, isVisible }) => (
   isEnabled ? (
     <div>
       <SettingsToggle />
-      <Settings />
+      { isVisible && <Settings /> }
     </div>
   ) : null
 )
