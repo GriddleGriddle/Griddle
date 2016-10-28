@@ -72,3 +72,15 @@ test('sets sort columns', test => {
     { id: 'two', sortAscending: false }
   ]);
 });
+
+test('sets settings visibility', test => {
+  const initialState = Immutable.fromJS({
+  });
+
+  // should be true when showSettings isn't in state
+  const trueState = reducers.GRIDDLE_TOGGLE_SETTINGS(initialState);
+  test.is(trueState.get('showSettings'), true);
+
+  const falseState = reducers.GRIDDLE_TOGGLE_SETTINGS(trueState);
+  test.is(falseState.get('showSettings'), false);
+})

@@ -12,6 +12,8 @@ import Filter from './Filter';
 import FilterContainer from './FilterContainer';
 import SettingsToggle from './SettingsToggle';
 import SettingsToggleContainer from './SettingsToggleContainer';
+import SettingsWrapper from './SettingsWrapper';
+import SettingsWrapperContainer from './SettingsWrapperContainer';
 
 const components = {
   Cell,
@@ -28,6 +30,8 @@ const components = {
   FilterContainer,
   SettingsToggle,
   SettingsToggleContainer,
+  SettingsWrapper,
+  SettingsWrapperContainer,
 };
 
 export default components;

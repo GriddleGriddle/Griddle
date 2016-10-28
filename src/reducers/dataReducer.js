@@ -82,3 +82,12 @@ export function GRIDDLE_SET_SORT(state, action) {
 
   return state.set('sortProperties', new Immutable.fromJS(sortProperties));
 }
+
+/** Sets the settings visibility to true / false depending on the current property
+ */
+export function GRIDDLE_TOGGLE_SETTINGS(state, action) {
+  // if undefined treat as if it's false
+  const showSettings = state.get('showSettings') || false;
+
+  return state.set('showSettings', !showSettings);
+}

@@ -4,6 +4,7 @@ import {
   GRIDDLE_SET_PAGE,
   GRIDDLE_SET_SORT,
   GRIDDLE_SET_FILTER,
+  GRIDDLE_TOGGLE_SETTINGS,
 } from '../constants';
 
 export function getNext() {
@@ -36,5 +37,11 @@ export function setSortColumn(sortProperties) {
   return {
     type: GRIDDLE_SET_SORT,
     sortProperties
+  }
+}
+
+export function toggleSettings() {
+  return {
+    type: GRIDDLE_TOGGLE_SETTINGS
   }
 }
