@@ -5,6 +5,7 @@ import {
   GRIDDLE_SET_SORT,
   GRIDDLE_SET_FILTER,
   GRIDDLE_TOGGLE_SETTINGS,
+  GRIDDLE_SET_PAGE_SIZE,
 } from '../constants';
 
 export function getNext() {
@@ -43,5 +44,12 @@ export function setSortColumn(sortProperties) {
 export function toggleSettings() {
   return {
     type: GRIDDLE_TOGGLE_SETTINGS
+  }
+}
+
+export function setPageSize(pageSize) {
+  return {
+    type: GRIDDLE_SET_PAGE_SIZE,
+    pageSize
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Settings = (props) => (
+const Settings = ({ settingsComponents }) => (
   <div>
-    <h1>Settings!</h1>
+    {settingsComponents.map((SettingsComponent) => <div><SettingsComponent /></div>)}
   </div>
 )
 

@@ -15,6 +15,7 @@ import SettingsToggleContainer from './SettingsToggleContainer';
 import SettingsWrapper from './SettingsWrapper';
 import SettingsWrapperContainer from './SettingsWrapperContainer';
 import Settings from './Settings';
+import SettingsContainer from './SettingsContainer';
 
 const components = {
   Cell,
@@ -34,6 +35,7 @@ const components = {
   SettingsWrapper,
   SettingsWrapperContainer,
   Settings,
+  SettingsContainer,
 };
 
 export default components;

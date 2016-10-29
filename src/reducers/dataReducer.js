@@ -51,7 +51,9 @@ export function GRIDDLE_LOADED_DATA(state, action, helpers) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_SET_PAGE_SIZE(state, action) {
-  return state.setIn(['pageProperties', 'pageSize'], action.pageSize);
+  return state
+    .setIn(['pageProperties', 'currentPage'], 1)
+    .setIn(['pageProperties', 'pageSize'], action.pageSize);
 }
 
 /** Sets the current page
