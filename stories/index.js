@@ -62,8 +62,10 @@ storiesOf('Griddle main', module)
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
-          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="name"  order={2} />
           <ColumnDefinition id="state" order={1} />
+          <ColumnDefinition id="company" visible={false} />
+          <ColumnDefinition id="country" isMetadata={true} />
         </RowDefinition>
       </Griddle>
     )

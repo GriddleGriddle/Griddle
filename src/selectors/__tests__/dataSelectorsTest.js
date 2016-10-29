@@ -230,3 +230,19 @@ test('gets text from state', test => {
 
   test.is(selectors.textSelector(state, { key: 'one'}), 'one two three');
 });
+
+test('gets metadata columns', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { one: 'hi', two: 'hello', three: 'this should not show up'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        one: { id: 'one', displayName: 'One' },
+        two: { id: 'two', displayName: 'Two', isMetadata: true }
+      }
+    }
+  });
+
+  test.deepEqual(selectors.metaDataColumnsSelector(state), ['two']);
+});
