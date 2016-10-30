@@ -10,13 +10,12 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     const { events: { setSortProperties }, ...otherProps } = props;
     return {
       ...otherProps,
-      setSortProperties
+      onClick: setSortProperties
     };
   })
 )((props) => {
-  const { setSortProperties, ...otherProps } = props;
   return (
-    <OriginalComponent {...otherProps} onClick={setSortProperties} />
+    <OriginalComponent {...props} />
   );
 });
 

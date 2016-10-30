@@ -14,13 +14,8 @@ const EnhancedFilterContainer = OriginalComponent => compose(
     };
   })
 )((props) => {
-  const { setFilter, ...otherProps } = props;
-
   return (
-    <OriginalComponent
-      {...otherProps}
-      setFilter={setFilter}
-    />
+    <OriginalComponent {...props} />
   );
 });
 

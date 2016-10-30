@@ -226,4 +226,3 @@ export const cellValueSelector = (state, { griddleKey, columnId }) => {
     .find(r => r.get('griddleKey') === griddleKey)
     .get(columnId);
 }
-
