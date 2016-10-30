@@ -107,9 +107,10 @@ export const visibleColumnPropertiesSelector = createSelector(
   visibleColumnsSelector,
   renderPropertiesSelector,
   (visibleColumns=[], renderProperties) => (
-    renderProperties
-      .get('columnProperties')
-      .filter(r => { return visibleColumns.indexOf(r.get('id')) > -1 }).toJSON()
+    visibleColumns.map(c => {
+      const columnProperty = renderProperties.getIn(['columnProperties', c]);
+      return (columnProperty && columnProperty.toJSON()) || { id: c }
+    })
   )
 )
 
@@ -124,6 +125,20 @@ export const hiddenColumnsSelector = createSelector(
     return allColumns.filter(c => removeColumns.indexOf(c) === -1);
   }
 );
+
+/** TODO: add tests and docs
+ */
+export const hiddenColumnPropertiesSelector = createSelector(
+  hiddenColumnsSelector,
+  renderPropertiesSelector,
+  (hiddenColumns=[], renderProperties) => (
+    hiddenColumns.map(c => {
+      const columnProperty = renderProperties.getIn(['columnProperties', c]);
+
+      return (columnProperty && columnProperty.toJSON()) || { id: c }
+    })
+  )
+)
 
 /** Gets the sort property for a given column */
 export const sortPropertyByIdSelector = (state, { columnId }) => {

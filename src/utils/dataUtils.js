@@ -54,3 +54,49 @@ export function getVisibleDataForColumns(data, columns) {
   return result.mergeDeep(extra)
     .map(item => item.sortBy((val, key) => columns.indexOf(key) > -1 ? columns.indexOf(key) :  MAX_SAFE_INTEGER ));
 }
+
+/* TODO: Add documentation and tests for this whole section!*/
+
+/** Does this initial state object have column properties?
+ * @param (object) stateObject - a non-immutable state object for initialization
+ *
+ * TODO: Needs tests
+ */
+export function hasColumnProperties(stateObject) {
+  return stateObject.hasOwnProperty('renderProperties') &&
+    stateObject.renderProperties.hasOwnProperty('columnProperties') &&
+    Object.keys(stateObject.renderProperties.columnProperties).length > 0
+}
+
+/** Does this initial state object have data?
+ * @param (object) stateObject - a non-immutable state object for initialization
+ *
+ * TODO: Needs tests
+ */
+export function hasData(stateObject) {
+  return stateObject.hasOwnProperty('data') && stateObject.data.length > 0;
+}
+
+/** Gets a new state object (not immutable) that has columnProperties if none exist
+ * @param (object) stateObject - a non-immutable state object for initialization
+ *
+ * TODO: Needs tests
+ */
+export function addColumnPropertiesWhenNoneExist(stateObject) {
+  if(!hasData(stateObject) || hasColumnProperties(stateObject)) {
+    return stateObject;
+  }
+
+  return {
+    ...stateObject,
+    renderProperties: {
+      columnProperties: Object.keys(stateObject.data[0]).reduce(((previous, current) => {
+        previous[current] = { id: current, visible: true }
+
+        return previous;
+      }), {})
+    }
+  };
+}
+
+

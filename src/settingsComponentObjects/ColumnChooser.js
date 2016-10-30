@@ -1,25 +1,68 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { visibleColumnPropertiesSelector, hiddenColumnsSelector } from '../selectors/dataSelectors';
+import { visibleColumnPropertiesSelector, hiddenColumnsSelector, hiddenColumnPropertiesSelector } from '../selectors/dataSelectors';
 import { mapProps, compose, withState, withHandlers } from 'recompose';
-import { setVisibleColumns as setVisibleColumnsAction } from  '../actions';
+import { toggleColumn as toggleColumnAction } from  '../actions';
+
+const style = {
+  label: { clear: 'both' }
+}
 
 const ComposedColumnSettings = compose(
   connect(
     (state) => ({
       visibleColumns: visibleColumnPropertiesSelector(state),
-      hiddenColumns: hiddenColumnsSelector(state)
+      hiddenColumns: hiddenColumnPropertiesSelector(state)
     }),
     {
-      setColumns: setVisibleColumnsAction
+      toggleColumn: toggleColumnAction
     }
-  )
-)(({ visibleColumns, hiddenColumns }) => { debugger; 
-debugger; return (
+  ),
+  withHandlers({
+    onToggle: ({toggleColumn}) => event => {
+      toggleColumn(event.target.name)
+    }
+  })
+)(({ visibleColumns, hiddenColumns, onToggle }) => {
+return (
   <div>
-    { Object.keys(visibleColumns).map(v => <label htmlFor={visibleColumns[v].id}><input type="checkbox" name={visibleColumns[v].id} checked />{visibleColumns[v].title || visibleColumns[v].id}</label>)}
-    { hiddenColumns.map(v => <label htmlFor={v.id}><input type="checkbox" name={v.id} />{v.title}</label>)}
+    <div>
+      <h4>Visible Columns</h4>
+      { Object.keys(visibleColumns).map(v =>
+        <label
+          htmlFor={visibleColumns[v].id}
+          key={visibleColumns[v].id}
+          style={style.label}
+        >
+          <input
+            type="checkbox"
+            name={visibleColumns[v].id}
+            checked
+            onClick={onToggle}
+          />
+          {visibleColumns[v].title || visibleColumns[v].id}
+        </label>
+      )}
+    </div>
+    <div>
+      <h4>Hidden Columns</h4>
+      { Object.keys(hiddenColumns).map(v =>
+        <label
+          key={hiddenColumns[v].id}
+          htmlFor={hiddenColumns[v].id}
+          style={style.label}
+        >
+          <input
+            type="checkbox"
+            name={hiddenColumns[v].id}
+            onClick={onToggle}
+            defaultChecked={false}
+          />
+          {hiddenColumns[v].title || hiddenColumns[v].id}
+        </label>
+      )}
+    </div>
   </div>
 )});
 

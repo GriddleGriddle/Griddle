@@ -18,6 +18,39 @@ test('initializes data', test => {
   });
 });
 
+test('creates column properties if none exist for data', test => {
+  const state = reducers.GRIDDLE_INITIALIZED({
+    data: [
+      {one: 1, two: 2, three: 3},
+      {one: 11, two: 22, three: 33}
+    ]
+  });
+
+  test.deepEqual(state.getIn(['renderProperties', 'columnProperties']).toJSON(), {
+    one: { id: 'one', visible: true },
+    two: { id: 'two', visible: true },
+    three: { id: 'three', visible: true }
+  });
+});
+
+test('does not adjust column properties if exists already', test => {
+  const state = reducers.GRIDDLE_INITIALIZED({
+    data: [
+      { one: 1, two: 2, three: 3},
+      { one: 11, two: 22, three: 33 }
+    ],
+    renderProperties: {
+      columnProperties: {
+        one: { id: 'one', visible: true }
+      }
+    }
+  });
+
+  test.deepEqual(state.getIn(['renderProperties', 'columnProperties']).toJSON(), {
+    one: { id: 'one', visible: true }
+  });
+})
+
 test('sets data', test => {
   const reducedState = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(),
     { type: 'GRIDDLE_LOADED_DATA', data: [
@@ -84,3 +117,29 @@ test('sets settings visibility', test => {
   const falseState = reducers.GRIDDLE_TOGGLE_SETTINGS(trueState);
   test.is(falseState.get('showSettings'), false);
 })
+
+test('toggle column changes column properties visibility', test => {
+  const initialState = Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        name: { id: 'name', visible: false }
+      }
+    }
+  });
+
+  const state = reducers.GRIDDLE_TOGGLE_COLUMN(initialState, { columnId: 'name' });
+  test.deepEqual(state.getIn(['renderProperties', 'columnProperties', 'name']).toJSON(), { id: 'name', visible: true });
+})
+
+test('toggle column sets true when no columnProperty for column but other columnProperties exist', test => {
+  const initialState = Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        name: { id: 'name', visible: false }
+      }
+    }
+  });
+
+  const state = reducers.GRIDDLE_TOGGLE_COLUMN(initialState, { columnId: 'state' });
+  test.deepEqual(state.getIn(['renderProperties', 'columnProperties', 'state']).toJSON(), { id: 'state', visible: true });
+});

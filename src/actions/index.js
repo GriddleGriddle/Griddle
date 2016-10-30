@@ -5,6 +5,7 @@ import {
   GRIDDLE_SET_SORT,
   GRIDDLE_SET_FILTER,
   GRIDDLE_TOGGLE_SETTINGS,
+  GRIDDLE_TOGGLE_COLUMN,
   GRIDDLE_SET_PAGE_SIZE,
 } from '../constants';
 
@@ -44,6 +45,13 @@ export function setSortColumn(sortProperties) {
 export function toggleSettings() {
   return {
     type: GRIDDLE_TOGGLE_SETTINGS
+  }
+}
+
+export function toggleColumn(columnId) {
+  return {
+    type: GRIDDLE_TOGGLE_COLUMN,
+    columnId
   }
 }
 
