@@ -140,14 +140,15 @@ storiesOf('Griddle main', module)
   })
   .add('with controlled', () => {
     const eventDefinition = {
-      setSortProperties: () => { console.log('setSortProperties');},
-      getNext: () => { console.log('getNext');},
-      getPrevious: () => { console.log('getPrevious');},
-      setPage: () => { console.log('setPage');}
+      setFilter: () => {console.log('setFilter');},
+      setSortProperties: () => {console.log('setSortProperties');},
+      getNext: () => {console.log('getNext');},
+      getPrevious: () => {console.log('getPrevious');},
+      setPage: () => {console.log('setPage');}
     };
 
     return (
-      <Griddle data={fakeData} events={eventDefinition} plugins={[ControlledPlugin]}>
+      <Griddle data={fakeData} events={eventDefinition} plugins={[LocalPlugin, ControlledPlugin]}>
         <RowDefinition>
           <ColumnDefinition id="name" order={2} />
           <ColumnDefinition id="state" order={1} />
