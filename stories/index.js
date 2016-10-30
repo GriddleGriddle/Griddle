@@ -18,6 +18,7 @@ import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 
 import LocalPlugin from '../src/plugins/local';
+import ControlledPlugin from '../src/plugins/controlled';
 
 function sortBySecondCharacter(data, column, sortAscending = true) {
   return data.sort(
@@ -133,8 +134,25 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>
-       
+
       </div>
+    )
+  })
+  .add('with controlled', () => {
+    const eventDefinition = {
+      setSortProperties: () => { console.log('setSortProperties');},
+      getNext: () => { console.log('getNext');},
+      getPrevious: () => { console.log('getPrevious');},
+      setPage: () => { console.log('setPage');}
+    };
+
+    return (
+      <Griddle data={fakeData} events={eventDefinition} plugins={[ControlledPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
     )
   })
 
