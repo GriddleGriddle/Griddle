@@ -9,7 +9,6 @@ import Layout from './Layout';
 import LayoutContainer from './LayoutContainer';
 import Pagination from './Pagination';
 import Filter from './Filter';
-import FilterContainer from './FilterContainer';
 import SettingsToggle from './SettingsToggle';
 import SettingsToggleContainer from './SettingsToggleContainer';
 import SettingsWrapper from './SettingsWrapper';
@@ -29,7 +28,6 @@ const components = {
   LayoutContainer,
   Pagination,
   Filter,
-  FilterContainer,
   SettingsToggle,
   SettingsToggleContainer,
   SettingsWrapper,

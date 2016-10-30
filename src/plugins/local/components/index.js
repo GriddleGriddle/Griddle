@@ -4,6 +4,7 @@ import RowContainer from './RowContainer';
 import CellContainer from './CellContainer';
 import PaginationContainer from './PaginationContainer';
 import TableHeadingCellContainer from './TableHeadingCellContainer';
+import FilterContainer from './FilterContainer';
 
 export default {
   TableBodyContainer,
@@ -12,4 +13,5 @@ export default {
   CellContainer,
   PaginationContainer,
   TableHeadingCellContainer,
+  FilterContainer,
 }
