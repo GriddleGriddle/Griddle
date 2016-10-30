@@ -4,6 +4,9 @@ import {
   GRIDDLE_SET_PAGE,
   GRIDDLE_SET_SORT,
   GRIDDLE_SET_FILTER,
+  GRIDDLE_TOGGLE_SETTINGS,
+  GRIDDLE_TOGGLE_COLUMN,
+  GRIDDLE_SET_PAGE_SIZE,
 } from '../constants';
 
 export function getNext() {
@@ -36,5 +39,25 @@ export function setSortColumn(sortProperties) {
   return {
     type: GRIDDLE_SET_SORT,
     sortProperties
+  }
+}
+
+export function toggleSettings() {
+  return {
+    type: GRIDDLE_TOGGLE_SETTINGS
+  }
+}
+
+export function toggleColumn(columnId) {
+  return {
+    type: GRIDDLE_TOGGLE_COLUMN,
+    columnId
+  }
+}
+
+export function setPageSize(pageSize) {
+  return {
+    type: GRIDDLE_SET_PAGE_SIZE,
+    pageSize
   }
 }

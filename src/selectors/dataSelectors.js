@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
 
-//import MAX_SAFE_INTEGER from 'max-save-integer';
+import MAX_SAFE_INTEGER from 'max-safe-integer'
 //import { createSelector } from 'reselect';
 
 /** Gets the full dataset currently tracked by Griddle */
@@ -15,6 +15,9 @@ export const currentPageSelector = state => state.getIn(['pageProperties', 'curr
 
 /** Gets the record count */
 export const recordCountSelector = state => state.getIn(['pageProperties', 'recordCount']);
+
+/** Gets the render properties */
+export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
 /** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
 export const hasNextSelector = createSelector(
@@ -55,6 +58,88 @@ export const allColumnsSelector = createSelector(
   )
 );
 
+/** Gets the column properties objects sorted by order
+ */
+export const sortedColumnPropertiesSelector = createSelector(
+  renderPropertiesSelector,
+  (renderProperties) => (
+    renderProperties && renderProperties.get('columnProperties') && renderProperties.get('columnProperties').size !== 0 ?
+      renderProperties.get('columnProperties')
+        .sortBy(col => (col && col.get('order'))||MAX_SAFE_INTEGER) :
+      null
+  )
+);
+
+/** Gets metadata column ids
+ */
+export const metaDataColumnsSelector = createSelector(
+  sortedColumnPropertiesSelector,
+  (sortedColumnProperties) => (
+    sortedColumnProperties ? sortedColumnProperties
+      .filter(c => c.get('isMetadata'))
+      .keySeq()
+      .toJSON() :
+    []
+  )
+);
+
+/** Gets the visible columns either obtaining the sorted column properties or all columns
+ */
+export const visibleColumnsSelector = createSelector(
+  sortedColumnPropertiesSelector,
+  allColumnsSelector,
+  (sortedColumnProperties, allColumns) => (
+    sortedColumnProperties ? sortedColumnProperties
+      .filter(c => {
+        const isVisible = c.get('visible') || c.get('visible') === undefined;
+        const isMetadata = c.get('isMetadata');
+        return isVisible && !isMetadata;
+      })
+      .keySeq()
+      .toJSON() :
+    allColumns
+  )
+);
+
+/** TODO: add tests and docs
+ */
+export const visibleColumnPropertiesSelector = createSelector(
+  visibleColumnsSelector,
+  renderPropertiesSelector,
+  (visibleColumns=[], renderProperties) => (
+    visibleColumns.map(c => {
+      const columnProperty = renderProperties.getIn(['columnProperties', c]);
+      return (columnProperty && columnProperty.toJSON()) || { id: c }
+    })
+  )
+)
+
+/** Gets the possible columns that are currently hidden */
+export const hiddenColumnsSelector = createSelector(
+  visibleColumnsSelector,
+  allColumnsSelector,
+  metaDataColumnsSelector,
+  (visibleColumns, allColumns, metaDataColumns) => {
+    const removeColumns = [...visibleColumns, ...metaDataColumns];
+
+    return allColumns.filter(c => removeColumns.indexOf(c) === -1);
+  }
+);
+
+/** TODO: add tests and docs
+ */
+export const hiddenColumnPropertiesSelector = createSelector(
+  hiddenColumnsSelector,
+  renderPropertiesSelector,
+  (hiddenColumns=[], renderProperties) => (
+    hiddenColumns.map(c => {
+      const columnProperty = renderProperties.getIn(['columnProperties', c]);
+
+      return (columnProperty && columnProperty.toJSON()) || { id: c }
+    })
+  )
+)
+
 /** Gets the sort property for a given column */
 export const sortPropertyByIdSelector = (state, { columnId }) => {
   const sortProperties = state.get('sortProperties');
@@ -86,3 +171,16 @@ export const customComponentSelector = (state, { columnId }) => {
 export const customHeadingComponentSelector = (state, { columnId}) => {
   return state.getIn(['renderProperties', 'columnProperties', columnId, 'customHeadingComponent']);
 }
+
+export const isSettingsEnabledSelector = (state) => {
+  const enableSettings = state.get('enableSettings');
+
+  return enableSettings === undefined ? true : enableSettings;
+}
+
+export const isSettingsVisibleSelector = (state) => state.get('showSettings');
+
+export const textSelector = (state, { key}) => {
+  return state.getIn(['textProperties', key]);
+}
+

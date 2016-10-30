@@ -206,3 +206,43 @@ test('classNameByNameSelector gets undefined when icon not present in collection
 
   test.is(selectors.classNameByNameSelector(state, { name: 'two'}), undefined)
 });
+
+test('isSettingsEnabled returns true when not set', test => {
+  const state = new Immutable.fromJS({});
+
+  test.is(selectors.isSettingsEnabledSelector(state), true);
+});
+
+test('isSettingsEnabled returns the value that was set', test => {
+  const enabledState = new Immutable.fromJS({ enableSettings: true });
+  const disabledState = new Immutable.fromJS({ enableSettings: false });
+
+  test.is(selectors.isSettingsEnabledSelector(enabledState), true);
+  test.is(selectors.isSettingsEnabledSelector(disabledState), false);
+});
+
+test('gets text from state', test => {
+  const state = new Immutable.fromJS({
+    textProperties: {
+      one: 'one two three'
+    }
+  });
+
+  test.is(selectors.textSelector(state, { key: 'one'}), 'one two three');
+});
+
+test('gets metadata columns', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { one: 'hi', two: 'hello', three: 'this should not show up'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        one: { id: 'one', displayName: 'One' },
+        two: { id: 'two', displayName: 'Two', isMetadata: true }
+      }
+    }
+  });
+
+  test.deepEqual(selectors.metaDataColumnsSelector(state), ['two']);
+});

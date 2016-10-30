@@ -39,7 +39,13 @@ export default class ColumnDefinition extends Component {
     width: React.PropTypes.string,
 
     //The number of cells this column should extend. Default is 1.
-    colSpan: React.PropTypes.number
+    colSpan: React.PropTypes.number,
+
+    // Is this column visible
+    visible: React.PropTypes.bool,
+
+    // Is this column metadta
+    isMetadata: React.PropTypes.bool,
   };
 
   render() {

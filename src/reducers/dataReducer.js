@@ -14,7 +14,8 @@ import Immutable from 'immutable';
  *  .-- sortAscending {boolean} - the direction of the sort. Index matches that of sortColumns
  **/
 import {
-  addKeyToCollection
+  addKeyToCollection,
+  addColumnPropertiesWhenNoneExist
 } from '../utils/dataUtils';
 
 /** Sets the default render properties
@@ -25,14 +26,16 @@ import {
 */
 export function GRIDDLE_INITIALIZED(initialState) {
   let tempState = Object.assign({}, initialState);
+  tempState = addColumnPropertiesWhenNoneExist(tempState);
+
   //TODO: could probably make this more efficient by removing data
-  // making the rest of the properties initial state and 
+  // making the rest of the properties initial state and
   // setting the mapped data on the new initial state immutable object
   if(initialState.hasOwnProperty('data') &&
     initialState.data.length > 0 &&
     !initialState.data[0].hasOwnProperty('griddleKey')) {
       tempState.data = addKeyToCollection(Immutable.fromJS(initialState.data));
-  } 
+  }
 
   return Immutable.fromJS(tempState);
 }
@@ -51,7 +54,9 @@ export function GRIDDLE_LOADED_DATA(state, action, helpers) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_SET_PAGE_SIZE(state, action) {
-  return state.setIn(['pageProperties', 'pageSize'], action.pageSize);
+  return state
+    .setIn(['pageProperties', 'currentPage'], 1)
+    .setIn(['pageProperties', 'pageSize'], action.pageSize);
 }
 
 /** Sets the current page
@@ -81,4 +86,24 @@ export function GRIDDLE_SET_SORT(state, action) {
     [action.sortProperties];
 
   return state.set('sortProperties', new Immutable.fromJS(sortProperties));
+}
+
+/** Sets the settings visibility to true / false depending on the current property
+ */
+export function GRIDDLE_TOGGLE_SETTINGS(state, action) {
+  // if undefined treat as if it's false
+  const showSettings = state.get('showSettings') || false;
+
+  return state.set('showSettings', !showSettings);
+}
+
+export function  GRIDDLE_TOGGLE_COLUMN(state, action) {
+  // flips the visible state if the column property exists
+  return state.getIn(['renderProperties', 'columnProperties', action.columnId]) ?
+    state.setIn(['renderProperties', 'columnProperties', action.columnId, 'visible'],
+      !state.getIn(['renderProperties', 'columnProperties', action.columnId, 'visible'])) :
+
+  // if the columnProperty doesn't exist, create a new one and set the property to true
+    state.setIn(['renderProperties', 'columnProperties', action.columnId],
+      new Immutable.Map({ id: action.columnId, visible: true }))
 }

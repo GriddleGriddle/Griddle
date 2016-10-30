@@ -4,6 +4,7 @@ import MAX_SAFE_INTEGER from 'max-safe-integer'
 
 import { defaultSort } from '../../../utils/sortUtils';
 import { getVisibleDataForColumns } from '../../../utils/dataUtils';
+import * as dataSelectors from '../../../selectors/dataSelectors';
 
 /** Gets the entire data set
  * @param {Immutable} state - state object
@@ -28,7 +29,7 @@ export const sortPropertiesSelector = state => (state.get('sortProperties'));
 
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
-export const metaDataColumnsSelector = state => (state.get('metadataColumns') || [])
+export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 
 /** Gets the data filtered by the current filter
  */
@@ -78,16 +79,7 @@ export const sortedColumnPropertiesSelector = createSelector(
 
 /** Gets the visible columns either obtaining the sorted column properties or all columns
  */
-export const visibleColumnsSelector = createSelector(
-  sortedColumnPropertiesSelector,
-  allColumnsSelector,
-  (sortedColumnProperties, allColumns) => (
-    sortedColumnProperties ? sortedColumnProperties
-      .keySeq()
-      .toJSON() :
-    allColumns
-  )
-);
+export const visibleColumnsSelector = dataSelectors.visibleColumnsSelector;
 
 /** Returns whether or not this result set has more pages
  */
@@ -161,15 +153,15 @@ export const hiddenColumnsSelector = createSelector(
   }
 );
 
-/** Gets the column ids for the visible columns 
+/** Gets the column ids for the visible columns
 */
 export const columnIdsSelector = createSelector(
   visibleDataSelector,
   renderPropertiesSelector,
   (visibleData, renderProperties) => {
     if(visibleData.size > 0) {
-      return Object.keys(visibleData.get(0).toJSON()).map(k => 
-        renderProperties.get('columnProperties').get(k).get('id') || k 
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.getIn(['columnProperties', k, 'id']) || k
       )
     }
   }
@@ -183,7 +175,7 @@ export const columnTitlesSelector = createSelector(
   (visibleData, renderProperties) => {
     if(visibleData.size > 0) {
       return Object.keys(visibleData.get(0).toJSON()).map(k =>
-        renderProperties.get('columnProperties').get(k).get('title') || k
+        renderProperties.getIn(['columnProperties', k, 'title']) || k
       )
     }
 

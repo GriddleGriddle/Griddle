@@ -10,6 +10,12 @@ import LayoutContainer from './LayoutContainer';
 import Pagination from './Pagination';
 import Filter from './Filter';
 import FilterContainer from './FilterContainer';
+import SettingsToggle from './SettingsToggle';
+import SettingsToggleContainer from './SettingsToggleContainer';
+import SettingsWrapper from './SettingsWrapper';
+import SettingsWrapperContainer from './SettingsWrapperContainer';
+import Settings from './Settings';
+import SettingsContainer from './SettingsContainer';
 
 const components = {
   Cell,
@@ -23,7 +29,13 @@ const components = {
   LayoutContainer,
   Pagination,
   Filter,
-  FilterContainer
+  FilterContainer,
+  SettingsToggle,
+  SettingsToggleContainer,
+  SettingsWrapper,
+  SettingsWrapperContainer,
+  Settings,
+  SettingsContainer,
 };
 
 export default components;

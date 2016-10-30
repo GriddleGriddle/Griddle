@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 
 import * as dataReducers from '../src/reducers/dataReducer';
 import components from './components';
+import settingsComponentObjects from './settingsComponentObjects';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
@@ -12,7 +13,8 @@ import { getRowProperties } from './utils/rowUtils';
 
 export default class extends Component {
   static childContextTypes = {
-    components: React.PropTypes.object.isRequired
+    components: React.PropTypes.object.isRequired,
+    settingsComponentObjects: React.PropTypes.object
   }
 
   constructor(props) {
@@ -29,6 +31,8 @@ export default class extends Component {
     //Combine / Compose the components to make a single component for each component type
     this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
 
+    this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => plugins.settingsComponentObjects));
+
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
       rowProperties,
@@ -38,9 +42,13 @@ export default class extends Component {
     const initialState = {
       renderProperties,
       data,
+      enableSettings: true,
       pageProperties: {
         currentPage: 1,
         pageSize: 10
+      },
+      textProperties: {
+        settingsToggle: 'Settings'
       },
       styles: {
         icons: {
@@ -75,7 +83,8 @@ export default class extends Component {
 
   getChildContext() {
     return {
-      components: this.components
+      components: this.components,
+      settingsComponentObjects: this.settingsComponentObjects,
     };
   }
 
