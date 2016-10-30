@@ -184,3 +184,46 @@ export const textSelector = (state, { key}) => {
   return state.getIn(['textProperties', key]);
 }
 
+/** Gets the column ids for the visible columns
+*/
+export const columnIdsSelector = createSelector(
+  dataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.getIn(['columnProperties', k, 'id']) || k
+      )
+    }
+  }
+)
+
+/** Gets the column titles for the visible columns
+ */
+export const columnTitlesSelector = createSelector(
+  dataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.getIn(['columnProperties', k, 'title']) || k
+      )
+    }
+
+    return [];
+  }
+)
+
+/** Gets the griddleIds for the visible rows */
+export const visibleRowIdsSelector = createSelector(
+  dataSelector,
+  (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
+);
+
+// TODO: Needs tests and jsdoc
+export const cellValueSelector = (state, { griddleKey, columnId }) => {
+  return state.get('data')
+    .find(r => r.get('griddleKey') === griddleKey)
+    .get(columnId);
+}
+
