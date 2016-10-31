@@ -123,7 +123,8 @@ storiesOf('Griddle main', module)
       super();
 
       this.state = {
-        data: getRandomFakeData()
+        data: getRandomFakeData(),
+        sortProperties: {}
       };
     }
 
@@ -134,7 +135,15 @@ storiesOf('Griddle main', module)
 
     onSort = (sortProperties) => {
       console.log('onSort', sortProperties);
-      this.setState({ data: getRandomFakeData() })
+      this.setState({
+        data: getRandomFakeData(),
+        sortProperties: {
+          something: {
+            ...sortProperties,
+            sortAscending: getRandomIntInclusive(0,1) > 0 ? true : false
+          }
+        }
+       })
     }
 
     onNext = () => {
@@ -170,6 +179,7 @@ storiesOf('Griddle main', module)
       return <Griddle
         data={this.state.data}
         events={events}
+        sortProperties={this.state.sortProperties}
         pageProperties={pageProperties} />
     }
   }

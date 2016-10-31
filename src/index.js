@@ -22,7 +22,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={} } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={} } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -86,10 +86,9 @@ class Griddle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data, pageProperties } = nextProps;
+    const { data, pageProperties, sortProperties } = nextProps;
 
-    this.store.dispatch(updateState({ data, pageProperties }));
-    
+    this.store.dispatch(updateState({ data, pageProperties, sortProperties }));
   }
 
   getChildContext() {
