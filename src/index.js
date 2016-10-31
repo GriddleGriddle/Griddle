@@ -10,8 +10,9 @@ import settingsComponentObjects from './settingsComponentObjects';
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
+import { updateState } from './actions';
 
-export default class extends Component {
+class Griddle extends Component {
   static childContextTypes = {
     components: React.PropTypes.object.isRequired,
     settingsComponentObjects: React.PropTypes.object,
@@ -84,6 +85,13 @@ export default class extends Component {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { data, pageProperties } = nextProps;
+
+    this.store.dispatch(updateState({ data, pageProperties }));
+    
+  }
+
   getChildContext() {
     return {
       components: this.components,
@@ -101,3 +109,5 @@ export default class extends Component {
 
   }
 }
+
+export default Griddle;
