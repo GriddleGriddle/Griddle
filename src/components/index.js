@@ -13,6 +13,7 @@ import TableContainer from './TableContainer';
 import Layout from './Layout';
 import LayoutContainer from './LayoutContainer';
 import Pagination from './Pagination';
+import PaginationContainer from './PaginationContainer';
 import Filter from './Filter';
 import FilterContainer from './FilterContainer';
 import SettingsToggle from './SettingsToggle';
@@ -38,6 +39,7 @@ const components = {
   Layout,
   LayoutContainer,
   Pagination,
+  PaginationContainer,
   Filter,
   FilterContainer,
   SettingsToggle,

@@ -137,16 +137,34 @@ storiesOf('Griddle main', module)
       this.setState({ data: getRandomFakeData() })
     }
 
+    onNext = () => {
+      console.log('onNext');
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onPrevious = () => {
+      console.log('onPrevious');
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onGetPage = (pageNumber) => {
+      console.log('onGetPage', pageNumber);
+      this.setState({ data: getRandomFakeData() })
+    }
+
     render() {
       const pageProperties = {
-        currentPage: getRandomIntInclusive(1, 1000),
-        maxPage: getRandomIntInclusive(1, 1000)
+        currentPage: getRandomIntInclusive(1, 10),
+        recordCount: getRandomIntInclusive(1, 1000)
       }
 
       // don't do things this way - fine for example storybook
       const events = {
         onFilter: this.onFilter,
         onSort: this.onSort,
+        onNext: this.onNext,
+        onPrevious: this.onPrevious,
+        onGetPage: this.onGetPage
       }
 
       return <Griddle

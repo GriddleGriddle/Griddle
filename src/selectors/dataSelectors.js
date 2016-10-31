@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
+import _ from 'lodash';
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 //import { createSelector } from 'reselect';
@@ -19,27 +20,34 @@ export const recordCountSelector = state => state.getIn(['pageProperties', 'reco
 /** Gets the render properties */
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
-/** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
-export const hasNextSelector = createSelector(
-  currentPageSelector,
-  pageSizeSelector,
-  recordCountSelector,
-  (currentPage, pageSize, recordCount) => {
-    return (currentPage * pageSize) < recordCount;
-  }
-);
-
 /** Determines if there are previous pages */
 export const hasPreviousSelector = createSelector(
   currentPageSelector,
   (currentPage) => (currentPage > 1)
 );
 
-/** Determines the maxPageCount based on pageSize / recordCount */
-export const maxPageCountSelector = createSelector(
+/** Gets the max page size
+ */
+export const maxPageSelector = createSelector(
   pageSizeSelector,
   recordCountSelector,
-  (pageSize, recordCount) => (Math.ceil(recordCount / pageSize))
+  (pageSize, recordCount) => {
+    const calc = recordCount / pageSize;
+
+    const result =  calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
+
+    return _.isFinite(result) ? result : 1;
+  }
+);
+
+/** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
+export const hasNextSelector = createSelector(
+  currentPageSelector,
+  maxPageSelector,
+  (currentPage, maxPage) => {
+    console.log(`hasNext current: ${currentPage} max: ${maxPage}`)
+    return currentPage < maxPage;
+  }
 );
 
 /** Gets current filter */
