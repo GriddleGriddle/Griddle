@@ -109,6 +109,5 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  console.log('UPDATE STATE');
   return state.mergeDeep(action.newState);;
 }

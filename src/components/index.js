@@ -8,6 +8,7 @@ import TableBodyContainer from './TableBodyContainer';
 import TableHeading from './TableHeading';
 import TableHeadingContainer from './TableHeadingContainer';
 import TableHeadingCell from './TableHeadingCell';
+import TableHeadingCellContainer from './TableHeadingCellContainer';
 import TableContainer from './TableContainer';
 import Layout from './Layout';
 import LayoutContainer from './LayoutContainer';
@@ -32,6 +33,7 @@ const components = {
   TableHeading,
   TableHeadingContainer,
   TableHeadingCell,
+  TableHeadingCellContainer,
   TableContainer,
   Layout,
   LayoutContainer,

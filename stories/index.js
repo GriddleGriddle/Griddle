@@ -117,11 +117,46 @@ storiesOf('Griddle main', module)
     )
   })
 .add('with controlled griddle component', () => {
-  const data = getRandomFakeData();
-  const events = {
-    onFilter: (filter) => console.log('CALLBACK', filter)
+
+  class Something extends React.Component {
+    constructor() {
+      super();
+
+      this.state = {
+        data: getRandomFakeData()
+      };
+    }
+
+    onFilter = (filter) => {
+      console.log('onFilter', filter);
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onSort = (sortProperties) => {
+      console.log('onSort', sortProperties);
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    render() {
+      const pageProperties = {
+        currentPage: getRandomIntInclusive(1, 1000),
+        maxPage: getRandomIntInclusive(1, 1000)
+      }
+
+      // don't do things this way - fine for example storybook
+      const events = {
+        onFilter: this.onFilter,
+        onSort: this.onSort,
+      }
+
+      return <Griddle
+        data={this.state.data}
+        events={events}
+        pageProperties={pageProperties} />
+    }
   }
-  return <Griddle data={data} events={events} />
+
+  return <Something />
 })
   .add('with custom heading component', () => {
     return (
@@ -133,7 +168,6 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>
-       
       </div>
     )
   })
