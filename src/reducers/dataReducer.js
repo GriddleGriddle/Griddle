@@ -97,7 +97,7 @@ export function GRIDDLE_TOGGLE_SETTINGS(state, action) {
   return state.set('showSettings', !showSettings);
 }
 
-export function  GRIDDLE_TOGGLE_COLUMN(state, action) {
+export function GRIDDLE_TOGGLE_COLUMN(state, action) {
   // flips the visible state if the column property exists
   return state.getIn(['renderProperties', 'columnProperties', action.columnId]) ?
     state.setIn(['renderProperties', 'columnProperties', action.columnId, 'visible'],
@@ -106,4 +106,9 @@ export function  GRIDDLE_TOGGLE_COLUMN(state, action) {
   // if the columnProperty doesn't exist, create a new one and set the property to true
     state.setIn(['renderProperties', 'columnProperties', action.columnId],
       new Immutable.Map({ id: action.columnId, visible: true }))
+}
+
+export function GRIDDLE_UPDATE_STATE(state, action) {
+  console.log('UPDATE STATE');
+  return state.mergeDeep(action.newState);;
 }

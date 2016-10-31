@@ -7,6 +7,7 @@ import {
   GRIDDLE_TOGGLE_SETTINGS,
   GRIDDLE_TOGGLE_COLUMN,
   GRIDDLE_SET_PAGE_SIZE,
+  GRIDDLE_UPDATE_STATE,
 } from '../constants';
 
 export function getNext() {
@@ -59,5 +60,12 @@ export function setPageSize(pageSize) {
   return {
     type: GRIDDLE_SET_PAGE_SIZE,
     pageSize
+  }
+}
+
+export function updateState(newState) {
+  return {
+    type: GRIDDLE_UPDATE_STATE,
+    newState
   }
 }

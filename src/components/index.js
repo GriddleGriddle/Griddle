@@ -1,8 +1,12 @@
 import Cell from './Cell';
+import CellContainer from './CellContainer';
 import Row from './Row';
+import RowContainer from './RowContainer';
 import Table from './Table';
 import TableBody from './TableBody';
+import TableBodyContainer from './TableBodyContainer';
 import TableHeading from './TableHeading';
+import TableHeadingContainer from './TableHeadingContainer';
 import TableHeadingCell from './TableHeadingCell';
 import TableContainer from './TableContainer';
 import Layout from './Layout';
@@ -19,10 +23,14 @@ import SettingsContainer from './SettingsContainer';
 
 const components = {
   Cell,
+  CellContainer,
   Row,
+  RowContainer,
   Table,
   TableBody,
+  TableBodyContainer,
   TableHeading,
+  TableHeadingContainer,
   TableHeadingCell,
   TableContainer,
   Layout,

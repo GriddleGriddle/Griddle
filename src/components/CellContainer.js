@@ -2,8 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
 
-import { cellValueSelector } from '../selectors/localSelectors';
-import { customComponentSelector } from '../../../selectors/dataSelectors';
+import { customComponentSelector, cellValueSelector } from '../selectors/dataSelectors';
 
 const ComposedCellContainer = OriginalComponent => compose(
   connect((state, props) => ({
