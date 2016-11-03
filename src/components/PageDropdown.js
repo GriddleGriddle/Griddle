@@ -30,7 +30,7 @@ class PageDropdown extends Component {
       >
         {getRange(maxPages)
           .map(num => (
-            <option value={num}>{num}</option>
+            <option key={num} value={num}>{num}</option>
         ))}
       </select>
     );
