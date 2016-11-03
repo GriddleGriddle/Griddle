@@ -49,7 +49,6 @@ export default class ColumnDefinition extends Component {
   };
 
   render() {
-    console.log('in column definition');
     return null;
   }
 }

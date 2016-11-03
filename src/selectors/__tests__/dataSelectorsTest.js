@@ -90,19 +90,19 @@ test('gets max page', test => {
     }
   });
 
-  test.is(selectors.maxPageCountSelector(state), 2);
+  test.is(selectors.maxPageSelector(state), 2);
 
   //ensure that we get 2 pages when full pageSize would not be displayed on next page
   const otherState = state.setIn(['pageProperties', 'pageSize'], 11);
-  test.is(selectors.maxPageCountSelector(otherState), 2);
+  test.is(selectors.maxPageSelector(otherState), 2);
 
   //when pageSize === recordCount should have 1 page
   const onePageState = state.setIn(['pageProperties', 'pageSize'], 20);
-  test.is(selectors.maxPageCountSelector(onePageState), 1);
+  test.is(selectors.maxPageSelector(onePageState), 1);
 
   //when there are no records, there should be 0 pages
   const noDataState = state.setIn(['pageProperties', 'recordCount'], 0);
-  test.is(selectors.maxPageCountSelector(noDataState), 0);
+  test.is(selectors.maxPageSelector(noDataState), 0);
 });
 
 /* filterSelector */

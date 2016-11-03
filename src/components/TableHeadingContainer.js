@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { columnTitlesSelector, columnIdsSelector } from '../selectors/localSelectors';
+import { columnTitlesSelector, columnIdsSelector } from '../selectors/dataSelectors';
 
 const ComposedContainerComponent = OriginalComponent => compose(
   getContext({

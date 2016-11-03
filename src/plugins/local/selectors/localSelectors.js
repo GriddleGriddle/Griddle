@@ -183,12 +183,7 @@ export const columnTitlesSelector = createSelector(
   }
 )
 
-// TODO: Needs tests and jsdoc
-export const cellValueSelector = (state, { griddleKey, columnId }) => {
-  return state.get('data')
-    .find(r => r.get('griddleKey') === griddleKey)
-    .get(columnId);
-} 
+export const cellValueSelector = dataSelectors.cellValueSelector;
 
 // TODO: Needs tests and jsdoc
 export const rowDataSelector = (state, { griddleKey}) => {

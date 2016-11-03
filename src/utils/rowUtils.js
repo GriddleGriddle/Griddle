@@ -2,6 +2,8 @@
  * @param {Object} rowPropertiesComponent - A react component that contains rowProperties as props
 */
 export function getRowProperties(rowPropertiesComponent) {
+    if (!rowPropertiesComponent) return null;
+
     let rowProps = Object.assign({}, rowPropertiesComponent.props);
     delete rowProps.children;
 

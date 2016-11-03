@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
+import _ from 'lodash';
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 //import { createSelector } from 'reselect';
@@ -19,27 +20,34 @@ export const recordCountSelector = state => state.getIn(['pageProperties', 'reco
 /** Gets the render properties */
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
-/** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
-export const hasNextSelector = createSelector(
-  currentPageSelector,
-  pageSizeSelector,
-  recordCountSelector,
-  (currentPage, pageSize, recordCount) => {
-    return (currentPage * pageSize) < recordCount;
-  }
-);
-
 /** Determines if there are previous pages */
 export const hasPreviousSelector = createSelector(
   currentPageSelector,
   (currentPage) => (currentPage > 1)
 );
 
-/** Determines the maxPageCount based on pageSize / recordCount */
-export const maxPageCountSelector = createSelector(
+/** Gets the max page size
+ */
+export const maxPageSelector = createSelector(
   pageSizeSelector,
   recordCountSelector,
-  (pageSize, recordCount) => (Math.ceil(recordCount / pageSize))
+  (pageSize, recordCount) => {
+    const calc = recordCount / pageSize;
+
+    const result =  calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
+
+    return _.isFinite(result) ? result : 1;
+  }
+);
+
+/** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
+export const hasNextSelector = createSelector(
+  currentPageSelector,
+  maxPageSelector,
+  (currentPage, maxPage) => {
+    console.log(`hasNext current: ${currentPage} max: ${maxPage}`)
+    return currentPage < maxPage;
+  }
 );
 
 /** Gets current filter */
@@ -182,5 +190,48 @@ export const isSettingsVisibleSelector = (state) => state.get('showSettings');
 
 export const textSelector = (state, { key}) => {
   return state.getIn(['textProperties', key]);
+}
+
+/** Gets the column ids for the visible columns
+*/
+export const columnIdsSelector = createSelector(
+  dataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.getIn(['columnProperties', k, 'id']) || k
+      )
+    }
+  }
+)
+
+/** Gets the column titles for the visible columns
+ */
+export const columnTitlesSelector = createSelector(
+  dataSelector,
+  renderPropertiesSelector,
+  (visibleData, renderProperties) => {
+    if(visibleData.size > 0) {
+      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+        renderProperties.getIn(['columnProperties', k, 'title']) || k
+      )
+    }
+
+    return [];
+  }
+)
+
+/** Gets the griddleIds for the visible rows */
+export const visibleRowIdsSelector = createSelector(
+  dataSelector,
+  (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
+);
+
+// TODO: Needs tests and jsdoc
+export const cellValueSelector = (state, { griddleKey, columnId }) => {
+  return state.get('data')
+    .find(r => r.get('griddleKey') === griddleKey)
+    .get(columnId);
 }
 

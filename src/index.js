@@ -10,17 +10,19 @@ import settingsComponentObjects from './settingsComponentObjects';
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
+import { updateState } from './actions';
 
-export default class extends Component {
+class Griddle extends Component {
   static childContextTypes = {
     components: React.PropTypes.object.isRequired,
-    settingsComponentObjects: React.PropTypes.object
+    settingsComponentObjects: React.PropTypes.object,
+    events: React.PropTypes.object
   }
 
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={} } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -32,6 +34,8 @@ export default class extends Component {
     this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
 
     this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => plugins.settingsComponentObjects));
+
+    this.events = Object.assign({}, events, ...plugins.map(p => plugins.events));
 
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
@@ -81,10 +85,17 @@ export default class extends Component {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { data, pageProperties, sortProperties } = nextProps;
+
+    this.store.dispatch(updateState({ data, pageProperties, sortProperties }));
+  }
+
   getChildContext() {
     return {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
+      events: this.events,
     };
   }
 
@@ -97,3 +108,5 @@ export default class extends Component {
 
   }
 }
+
+export default Griddle;

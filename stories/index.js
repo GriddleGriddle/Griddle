@@ -13,7 +13,7 @@ import { Table } from '../src/components/Table';
 import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
-
+import _ from 'lodash';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 
@@ -36,6 +36,17 @@ function sortBySecondCharacter(data, column, sortAscending = true) {
     });
 }
 
+// from mdn
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomFakeData() {
+  const start = getRandomIntInclusive(0, fakeData.length - 10);
+  return fakeData.slice(start, start + 10);
+}
 const GreenLeftSortIconComponent = (props) => (
   <span style={{ color: "#00ff00" }}>
     {props.icon && <span>{props.icon}</span>}
@@ -89,7 +100,6 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>
-       
       </div>
     )
   })
@@ -103,10 +113,79 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>
-       
       </div>
     )
   })
+.add('with controlled griddle component', () => {
+
+  class Something extends React.Component {
+    constructor() {
+      super();
+
+      this.state = {
+        data: getRandomFakeData(),
+        sortProperties: {}
+      };
+    }
+
+    onFilter = (filter) => {
+      console.log('onFilter', filter);
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onSort = (sortProperties) => {
+      console.log('onSort', sortProperties);
+      this.setState({
+        data: getRandomFakeData(),
+        sortProperties: {
+          something: {
+            ...sortProperties,
+            sortAscending: getRandomIntInclusive(0,1) > 0 ? true : false
+          }
+        }
+       })
+    }
+
+    onNext = () => {
+      console.log('onNext');
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onPrevious = () => {
+      console.log('onPrevious');
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    onGetPage = (pageNumber) => {
+      console.log('onGetPage', pageNumber);
+      this.setState({ data: getRandomFakeData() })
+    }
+
+    render() {
+      const pageProperties = {
+        currentPage: getRandomIntInclusive(1, 10),
+        recordCount: getRandomIntInclusive(1, 1000)
+      }
+
+      // don't do things this way - fine for example storybook
+      const events = {
+        onFilter: this.onFilter,
+        onSort: this.onSort,
+        onNext: this.onNext,
+        onPrevious: this.onPrevious,
+        onGetPage: this.onGetPage
+      }
+
+      return <Griddle
+        data={this.state.data}
+        events={events}
+        sortProperties={this.state.sortProperties}
+        pageProperties={pageProperties} />
+    }
+  }
+
+  return <Something />
+})
   .add('with custom heading component', () => {
     return (
       <div>
@@ -117,7 +196,6 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>
-       
       </div>
     )
   })
