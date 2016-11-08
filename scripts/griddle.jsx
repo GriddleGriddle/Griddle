@@ -91,6 +91,7 @@ var Griddle = React.createClass({
             "noDataMessage":"There is no data to display.",
             "noDataClassName": "griddle-nodata",
             "customNoDataComponent": null,
+            "customNoDataComponentProps": null,
             "allowEmptyGrid": false,
             "showTableHeading":true,
             "showPager":true,
@@ -346,9 +347,9 @@ var Griddle = React.createClass({
             var isAscending = this.props.externalSortColumn === column ? !this.props.externalSortAscending : true;
             this.setState({
               sortColumn: column,
-              sortDirection: isAscending ? 'asc' : 'desc' 
+              sortDirection: isAscending ? 'asc' : 'desc'
             });
-            this.props.externalChangeSort(column, isAscending); 
+            this.props.externalChangeSort(column, isAscending);
             return;
         }
         var columnMeta = find(this.props.columnMetadata, { columnName: column }) || {};
@@ -465,6 +466,11 @@ var Griddle = React.createClass({
           this.setState({
             filteredColumns: this.columnSettings.filteredColumns
           })
+        }
+    },
+    componentDidMount: function componentDidMount() {
+        if (this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
+            return this.props.componentDidMount();
         }
     },
     //todo: clean these verify methods up
@@ -870,7 +876,7 @@ var Griddle = React.createClass({
     },
     getNoDataSection: function(){
         if (this.props.customNoDataComponent != null) {
-            return (<div className={this.props.noDataClassName}><this.props.customNoDataComponent /></div>);
+            return (<div className={this.props.noDataClassName}><this.props.customNoDataComponent {...this.props.customNoDataComponentProps} /></div>);
         }
         return (<GridNoData noDataMessage={this.props.noDataMessage} />);
     },

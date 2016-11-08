@@ -459,7 +459,7 @@ var Griddle = React.createClass({
         }
     },
     componentDidMount: function componentDidMount() {
-        if(this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
+        if (this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
             return this.props.componentDidMount();
         }
     },
