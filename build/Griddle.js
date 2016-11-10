@@ -940,8 +940,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var meta = this.columnSettings.getMetadataColumns();
 
-	        // Grab the column keys from the first results
-	        keys = deep.keys(omit(results[0], meta));
+	        if (this.props.columnMetadata) {
+	            // Get column keys from column metadata
+	            forEach(this.props.columnMetadata, function (meta) {
+	                if (!(typeof meta.visible === 'boolean' && meta.visible === false)) {
+	                    keys.push(meta.columnName);
+	                }
+	            });
+	        } else {
+	            // Grab the column keys from the first results
+	            keys = deep.keys(omit(results[0], meta));
+	        }
 
 	        // sort keys by order
 	        keys = this.columnSettings.orderColumns(keys);
