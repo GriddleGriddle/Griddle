@@ -89,7 +89,7 @@ function getKeys (obj, prefix) {
 
   forEach( obj, function(value, key) {
     var fullKey = prefix ? prefix + "." + key : key;
-    if(isObject(value) && !isArray(value) && !isFunction(value)) {
+    if(isObject(value) && !isArray(value) && !isFunction(value) && !(value instanceof Date)) {
       keys = keys.concat( getKeys(value, fullKey) );
     } else {
       keys.push(fullKey);
