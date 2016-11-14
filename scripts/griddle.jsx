@@ -399,10 +399,6 @@ var Griddle = React.createClass({
             this.columnSettings.allColumns = [];
         }
 
-        if(nextProps.columns !== this.columnSettings.filteredColumns){
-            this.columnSettings.filteredColumns = nextProps.columns;
-        }
-
         if(nextProps.selectedRowIds) {
             var visibleRows = this.getDataForRender(this.getCurrentResults(nextProps.results), this.columnSettings.getColumns(), true);
 
