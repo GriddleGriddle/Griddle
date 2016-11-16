@@ -4,6 +4,8 @@ import * as dataSelectors from '../../../selectors/dataSelectors';
 
 export const positionSettingsSelector = state => state.get('positionSettings');
 
+export const getRenderedData = state => state.get('renderedData');
+
 export const visibleRecordCountSelector = createSelector(
   positionSettingsSelector,
   (positionSettings) => {
