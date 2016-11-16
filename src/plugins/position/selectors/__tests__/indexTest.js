@@ -9,7 +9,7 @@ test('visible record count selector', test => {
   const state = new Immutable.fromJS({
     positionSettings: {
       rowHeight: 50,
-      currentHeight: 600
+      height: 600
     }
   });
 
