@@ -449,7 +449,15 @@ var Griddle = React.createClass({
         );
 
         if (this.props.initialSort) {
-            this.changeSort(this.props.initialSort);
+            // shouldn't change Sort on init for external
+            if (this.props.useExternal) {
+                this.setState({
+                    sortColumn: this.props.externalSortColumn,
+                    sortDirection: this.props.externalSortAscending ? 'asc' : 'desc'
+                });
+            } else {
+                this.changeSort(this.props.initialSort);
+            }
         }
         this.setMaxPage();
 

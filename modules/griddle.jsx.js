@@ -439,7 +439,15 @@ var Griddle = React.createClass({
         this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
         if (this.props.initialSort) {
-            this.changeSort(this.props.initialSort);
+            // shouldn't change Sort on init for external
+            if (this.props.useExternal) {
+                this.setState({
+                    sortColumn: this.props.externalSortColumn,
+                    sortDirection: this.props.externalSortAscending ? 'asc' : 'desc'
+                });
+            } else {
+                this.changeSort(this.props.initialSort);
+            }
         }
         this.setMaxPage();
 
