@@ -18,6 +18,7 @@ import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 
 import LocalPlugin from '../src/plugins/local';
+import PositionPlugin from '../src/plugins/position';
 
 function sortBySecondCharacter(data, column, sortAscending = true) {
   return data.sort(
@@ -116,76 +117,76 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
-.add('with controlled griddle component', () => {
+  .add('with controlled griddle component', () => {
 
-  class Something extends React.Component {
-    constructor() {
-      super();
+    class Something extends React.Component {
+      constructor() {
+        super();
 
-      this.state = {
-        data: getRandomFakeData(),
-        sortProperties: {}
-      };
-    }
+        this.state = {
+          data: getRandomFakeData(),
+          sortProperties: {}
+        };
+      }
 
-    onFilter = (filter) => {
-      console.log('onFilter', filter);
-      this.setState({ data: getRandomFakeData() })
-    }
+      onFilter = (filter) => {
+        console.log('onFilter', filter);
+        this.setState({ data: getRandomFakeData() })
+      }
 
-    onSort = (sortProperties) => {
-      console.log('onSort', sortProperties);
-      this.setState({
-        data: getRandomFakeData(),
-        sortProperties: {
-          something: {
-            ...sortProperties,
-            sortAscending: getRandomIntInclusive(0,1) > 0 ? true : false
+      onSort = (sortProperties) => {
+        console.log('onSort', sortProperties);
+        this.setState({
+          data: getRandomFakeData(),
+          sortProperties: {
+            something: {
+              ...sortProperties,
+              sortAscending: getRandomIntInclusive(0,1) > 0 ? true : false
+            }
           }
+         })
+      }
+
+      onNext = () => {
+        console.log('onNext');
+        this.setState({ data: getRandomFakeData() })
+      }
+
+      onPrevious = () => {
+        console.log('onPrevious');
+        this.setState({ data: getRandomFakeData() })
+      }
+
+      onGetPage = (pageNumber) => {
+        console.log('onGetPage', pageNumber);
+        this.setState({ data: getRandomFakeData() })
+      }
+
+      render() {
+        const pageProperties = {
+          currentPage: getRandomIntInclusive(1, 10),
+          recordCount: getRandomIntInclusive(1, 1000)
         }
-       })
-    }
 
-    onNext = () => {
-      console.log('onNext');
-      this.setState({ data: getRandomFakeData() })
-    }
+        // don't do things this way - fine for example storybook
+        const events = {
+          onFilter: this.onFilter,
+          onSort: this.onSort,
+          onNext: this.onNext,
+          onPrevious: this.onPrevious,
+          onGetPage: this.onGetPage
+        }
 
-    onPrevious = () => {
-      console.log('onPrevious');
-      this.setState({ data: getRandomFakeData() })
-    }
-
-    onGetPage = (pageNumber) => {
-      console.log('onGetPage', pageNumber);
-      this.setState({ data: getRandomFakeData() })
-    }
-
-    render() {
-      const pageProperties = {
-        currentPage: getRandomIntInclusive(1, 10),
-        recordCount: getRandomIntInclusive(1, 1000)
+        return <Griddle
+          data={this.state.data}
+          events={events}
+          sortProperties={this.state.sortProperties}
+          pageProperties={pageProperties} />
       }
-
-      // don't do things this way - fine for example storybook
-      const events = {
-        onFilter: this.onFilter,
-        onSort: this.onSort,
-        onNext: this.onNext,
-        onPrevious: this.onPrevious,
-        onGetPage: this.onGetPage
-      }
-
-      return <Griddle
-        data={this.state.data}
-        events={events}
-        sortProperties={this.state.sortProperties}
-        pageProperties={pageProperties} />
     }
-  }
 
-  return <Something />
-})
+    return <Something />
+  })
   .add('with custom heading component', () => {
     return (
       <div>
@@ -197,6 +198,14 @@ storiesOf('Griddle main', module)
         </RowDefinition>
       </Griddle>
       </div>
+    )
+  })
+  .add('with virtual scrolling', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin]}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
     )
   })
 
