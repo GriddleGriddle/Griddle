@@ -2,13 +2,17 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
 
-import { customComponentSelector, cellValueSelector } from '../selectors/dataSelectors';
-
 const ComposedCellContainer = OriginalComponent => compose(
-  connect((state, props) => ({
-    value: cellValueSelector(state, props),
-    customComponent: customComponentSelector(state, props),
-  })),
+  getContext({
+    selectors: PropTypes.object,
+  }),
+  connect((state, props) => {
+    const { customComponentSelector, cellValueSelector } = props.selectors;
+    return {
+      value: cellValueSelector(state, props),
+      customComponent: customComponentSelector(state, props),
+    };
+  }),
   mapProps(props => {
     return ({
     ...props,
@@ -22,7 +26,7 @@ const ComposedCellContainer = OriginalComponent => compose(
 )(({value}) => (
   <OriginalComponent
     value={value}
-  /> 
+  />
 ))
 
 export default ComposedCellContainer;

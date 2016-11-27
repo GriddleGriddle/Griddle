@@ -1,15 +1,18 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { columnIdsSelector } from '../selectors/dataSelectors';
 
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
-    components: PropTypes.object
+    components: PropTypes.object,
+    selectors: PropTypes.object,
   }),
-  connect((state) => ({
-    columnIds: columnIdsSelector(state)
-  })),
+  connect((state, props) => {
+    const { columnIdsSelector } = props.selectors;
+    return {
+      columnIds: columnIdsSelector(state),
+    };
+  }),
   mapProps(props => ({
     Cell: props.components.Cell,
     ...props

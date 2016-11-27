@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { sortPropertyByIdSelector, iconByNameSelector, customHeadingComponentSelector } from '../selectors/dataSelectors';
 import { setSortProperties } from '../utils/columnUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
@@ -22,17 +21,21 @@ console.log(sortProperty);
 }
 
 const EnhancedHeadingCell = OriginalComponent => compose(
-  connect(
-    (state, props) => ({
-      sortProperty: sortPropertyByIdSelector(state, props),
-      sortAscendingIcon: iconByNameSelector(state, { name: 'sortAscending'}),
-      sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'}),
-      customHeadingComponent: customHeadingComponentSelector(state, props)
-    })
-  ),
   getContext({
-    events: PropTypes.object
+    events: PropTypes.object,
+    selectors: PropTypes.object,
   }),
+  connect(
+    (state, props) => {
+      const { sortPropertyByIdSelector, iconByNameSelector, customHeadingComponentSelector } = props.selectors;
+      return {
+        sortProperty: sortPropertyByIdSelector(state, props),
+        sortAscendingIcon: iconByNameSelector(state, { name: 'sortAscending'}),
+        sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'}),
+        customHeadingComponent: customHeadingComponentSelector(state, props),
+      };
+    }
+  ),
   withHandlers({
     onClick: ({ events: { onSort }, columnId }) => event => {
       onSort({ id: columnId })

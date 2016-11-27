@@ -1,21 +1,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { columnTitlesSelector, columnIdsSelector } from '../selectors/dataSelectors';
+import {  } from '../selectors/dataSelectors';
 
 const ComposedContainerComponent = OriginalComponent => compose(
   getContext({
-    components: PropTypes.object
+    components: PropTypes.object,
+    selectors: PropTypes.object,
   }),
-  connect((state) => ({
-    columnTitles: columnTitlesSelector(state),
-    columnIds: columnIdsSelector(state)
-  })),
+  connect((state, props) => {
+    const { columnTitlesSelector, columnIdsSelector } = props.selectors;
+    return {
+      columnTitles: columnTitlesSelector(state),
+      columnIds: columnIdsSelector(state),
+    };
+  }),
   mapProps(props => ({
     TableHeadingCell: props.components.TableHeadingCell,
     ...props
   }))
-  // withHandlers({ 
+  // withHandlers({
   //   TableHeadingCell: props => props.components.TableHeadingCell
   // })
 )(({TableHeadingCell, columnTitles, columnIds }) => (

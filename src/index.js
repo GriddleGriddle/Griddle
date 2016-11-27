@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import * as dataReducers from '../src/reducers/dataReducer';
 import components from './components';
 import settingsComponentObjects from './settingsComponentObjects';
+import * as selectors from './selectors/dataSelectors';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
@@ -16,7 +17,8 @@ class Griddle extends Component {
   static childContextTypes = {
     components: React.PropTypes.object.isRequired,
     settingsComponentObjects: React.PropTypes.object,
-    events: React.PropTypes.object
+    events: React.PropTypes.object,
+    selectors: React.PropTypes.object,
   }
 
   constructor(props) {
@@ -36,6 +38,8 @@ class Griddle extends Component {
     this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => plugins.settingsComponentObjects));
 
     this.events = Object.assign({}, events, ...plugins.map(p => plugins.events));
+
+    this.selectors = Object.assign({}, selectors, ...plugins.map(p => plugins.selectors));
 
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
@@ -96,6 +100,7 @@ class Griddle extends Component {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
+      selectors: this.selectors,
     };
   }
 
