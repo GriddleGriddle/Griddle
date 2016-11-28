@@ -11,7 +11,27 @@ import * as selectors from './selectors/dataSelectors';
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
-import { updateState } from './actions';
+import * as actions from './actions';
+
+const defaultEvents = {
+  ...actions,
+  onFilter: actions.setFilter,
+  setSortProperties: ({setSortColumn, sortProperty, columnId}) => {
+    return function(event) {
+      if (sortProperty === null) {
+        setSortColumn({ id: columnId, sortAscending: true });
+        return;
+      }
+
+      const newSortProperty = {
+        ...sortProperty,
+        sortAscending: !sortProperty.sortAscending
+      };
+
+      setSortColumn(newSortProperty);
+    };
+  }
+};
 
 class Griddle extends Component {
   static childContextTypes = {
@@ -39,7 +59,7 @@ class Griddle extends Component {
 
     this.events = Object.assign({}, events, ...plugins.map(p => plugins.events));
 
-    this.selectors = Object.assign({}, selectors, ...plugins.map(p => plugins.selectors));
+    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
 
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
@@ -80,8 +100,9 @@ class Griddle extends Component {
           tableHeadingCellDescending: 'griddle-heading-descending',
           table: 'griddle-table',
         }
-      }
-    }
+      },
+      ...plugins.map(p => p.initialState),
+    };
 
     this.store = createStore(
       reducers,
@@ -92,7 +113,7 @@ class Griddle extends Component {
   componentWillReceiveProps(nextProps) {
     const { data, pageProperties, sortProperties } = nextProps;
 
-    this.store.dispatch(updateState({ data, pageProperties, sortProperties }));
+    this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
   }
 
   getChildContext() {
