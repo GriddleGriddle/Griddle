@@ -67,7 +67,9 @@ class Griddle extends Component {
       columnProperties
     };
 
-    const initialState = {
+    const initialState = plugins.reduce((combined, plugin) => {
+      return !!plugin.initialState ? { ...combined, ...plugin.initialState } : combined;
+    }, {
       renderProperties,
       data,
       enableSettings: true,
@@ -101,8 +103,7 @@ class Griddle extends Component {
           table: 'griddle-table',
         }
       },
-      ...plugins.map(p => p.initialState),
-    };
+    });
 
     this.store = createStore(
       reducers,

@@ -202,7 +202,7 @@ storiesOf('Griddle main', module)
   })
   .add('with virtual scrolling', () => {
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin]}>
+      <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}>
         <RowDefinition>
         </RowDefinition>
       </Griddle>
