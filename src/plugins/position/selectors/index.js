@@ -30,12 +30,12 @@ export const visibleDataLengthSelector = createSelector(
   }
 );
 
-const rowHeightSelector = state => state.getIn(['positionConfig', 'rowHeight']);
+export const rowHeightSelector = state => state.getIn(['positionConfig', 'rowHeight']);
 
-const hoizontalScrollChangeSelector = state => state.getIn(['currentPosition', 'xScrollChangePosition']) || 0;
-const verticalScrollChangeSelector = state => state.getIn(['currentPosition', 'yScrollChangePosition']) || 0;
+export const hoizontalScrollChangeSelector = state => state.getIn(['currentPosition', 'xScrollChangePosition']) || 0;
+export const verticalScrollChangeSelector = state => state.getIn(['currentPosition', 'yScrollChangePosition']) || 0;
 
-const startIndexSelector = createSelector(
+export const startIndexSelector = createSelector(
   verticalScrollChangeSelector,
   rowHeightSelector,
   visibleRecordCountSelector,
@@ -45,17 +45,32 @@ const startIndexSelector = createSelector(
   }
 );
 
-const endIndexSelector = createSelector(
+export const endIndexSelector = createSelector(
   startIndexSelector,
   visibleRecordCountSelector,
   visibleDataLengthSelector,
-  (renderedStartDisplayIndex, rowHeight, visibleDataLengthSelector) => {
+  (startDisplayIndex, rowHeight, visibleDataLengthSelector) => {
     // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
-    return Math.min(Math.floor(renderedStartDisplayIndex + visibleRecordCount * 2), visibleDataLength - 1) + 1;
+    return Math.min(Math.floor(startDisplayIndex + visibleRecordCount * 2), visibleDataLength - 1) + 1;
   }
 );
 
-const rawDataSelector = state => state.get('data');
+export const topSpacerSelector = createSelector(
+  rowHeightSelector,
+  startIndexSelector,
+  (rowHeight, startIndex) => {
+    return rowHeight * startIndex;
+  }
+);
+
+export const bottomSpacerSelector = createSelector(
+  rowHeightSelector,
+  visibleDataLengthSelector,
+  endIndexSelector,
+  (rowHeight, endIndex) => {
+    return rowHeight * (visibleDataLengthSelector - endIndex);
+  }
+);
 
 /** Gets the current page of data
  * Won't be memoized :cry:
