@@ -471,6 +471,11 @@ var Griddle = React.createClass({
             return this.props.componentDidMount();
         }
     },
+    componentDidUpdate: function componentDidUpdate() {
+        if (this.props.componentDidUpdate && typeof this.props.componentDidUpdate === "function") {
+            return this.props.componentDidUpdate(this.state);
+        }
+    },
     //todo: clean these verify methods up
     verifyExternal: function verifyExternal() {
         if (this.props.useExternal === true) {
