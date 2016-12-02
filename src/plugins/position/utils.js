@@ -1,12 +1,7 @@
 import Immutable from 'immutable';
 import initialState from '../initial-state';
 
-function getVisibleRecordCount(state) {
-  const rowHeight = state.getIn(['positionConfig', 'rowHeight']);
-  const height = state.getIn(['currentPosition', 'height']);
-
-  return Math.ceil(height / rowHeight);
-}
+import { } from '';
 
 export function shouldUpdateDrawnRows(action, state) {
   const height = state.getIn(['currentPosition', 'height']);
