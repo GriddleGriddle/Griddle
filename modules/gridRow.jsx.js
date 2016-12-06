@@ -111,7 +111,7 @@ var GridRow = React.createClass({
             if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
                 if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
                     var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-                    returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
+                    returnValue = React.createElement('td', { onClick: !meta.preventOnRowClick ? _this.handleClick : null, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
                 } else {
                     returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, _this.formatData(col[1]));
                 }
