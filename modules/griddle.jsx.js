@@ -174,14 +174,19 @@ var Griddle = React.createClass({
         });
     },
 
+    defaultColumnFilter: function defaultColumnFilter(value, filter) {
+        return _filter(deep.getObjectValues(value), function (value) {
+            return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        }).length > 0;
+    },
+
     filterByColumnFilters: function filterByColumnFilters(columnFilters) {
+        var filterFunction = this.defaultColumnFilter;
         var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
             return _filter(previous, function (item) {
-                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
-                    return true;
-                }
-
-                return false;
+                var value = deep.getAt(item, current || "");
+                var filter = columnFilters[current];
+                return filterFunction(value, filter);
             });
         }, this.props.results);
 
@@ -467,11 +472,6 @@ var Griddle = React.createClass({
             return this.props.componentDidMount();
         }
     },
-    componentDidUpdate: function componentDidUpdate() {
-        if (this.props.componentDidUpdate && typeof this.props.componentDidUpdate === "function") {
-            return this.props.componentDidUpdate(this.state);
-        }
-    },
     //todo: clean these verify methods up
     verifyExternal: function verifyExternal() {
         if (this.props.useExternal === true) {
@@ -557,10 +557,14 @@ var Griddle = React.createClass({
                         }, [this.state.sortDirection]);
                     }
                 } else {
-                    var iteratees = [(row) => (_get(row, column) || '').toString().toLowerCase()];
+                    var iteratees = [function (row) {
+                        return (_get(row, column) || '').toString().toLowerCase();
+                    }];
                     var orders = [this.state.sortDirection];
                     multiSort.columns.forEach(function (col, i) {
-                        iteratees.push((row) => (_get(row, col) || '').toString().toLowerCase());
+                        iteratees.push(function (row) {
+                            return (_get(row, col) || '').toString().toLowerCase();
+                        });
                         if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
                             orders.push(multiSort.orders[i]);
                         } else {
