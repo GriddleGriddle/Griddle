@@ -557,10 +557,14 @@ var Griddle = React.createClass({
                         }, [this.state.sortDirection]);
                     }
                 } else {
-                    var iteratees = [(row) => (_get(row, column) || '').toString().toLowerCase()];
+                    var iteratees = [function (row) {
+                        return (_get(row, column) || '').toString().toLowerCase();
+                    }];
                     var orders = [this.state.sortDirection];
                     multiSort.columns.forEach(function (col, i) {
-                        iteratees.push((row) => (_get(row, col) || '').toString().toLowerCase());
+                        iteratees.push(function (row) {
+                            return (_get(row, col) || '').toString().toLowerCase();
+                        });
                         if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
                             orders.push(multiSort.orders[i]);
                         } else {

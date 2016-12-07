@@ -530,6 +530,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return this.props.componentDidMount();
 	        }
 	    },
+	    componentDidUpdate: function componentDidUpdate() {
+	        if (this.props.componentDidUpdate && typeof this.props.componentDidUpdate === "function") {
+	            return this.props.componentDidUpdate(this.state);
+	        }
+	    },
 	    //todo: clean these verify methods up
 	    verifyExternal: function verifyExternal() {
 	        if (this.props.useExternal === true) {
@@ -615,10 +620,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        }, [this.state.sortDirection]);
 	                    }
 	                } else {
-	                    var iteratees = [_property(column)];
+	                    var iteratees = [function (row) {
+	                        return (_get(row, column) || '').toString().toLowerCase();
+	                    }];
 	                    var orders = [this.state.sortDirection];
 	                    multiSort.columns.forEach(function (col, i) {
-	                        iteratees.push(_property(col));
+	                        iteratees.push(function (row) {
+	                            return (_get(row, col) || '').toString().toLowerCase();
+	                        });
 	                        if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
 	                            orders.push(multiSort.orders[i]);
 	                        } else {
