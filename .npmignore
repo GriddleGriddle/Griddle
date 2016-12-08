@@ -2,7 +2,6 @@ images
 scripts
 docs
 examples
-Gruntfile.js
 jest
 .gitignore
 .npmignore
