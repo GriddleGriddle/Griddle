@@ -532,8 +532,8 @@ var Griddle = React.createClass({
     getDataForRender: function(data, cols, pageList){
         var that = this;
 
-            // get the correct page size
-            if(this.state.sortColumn !== "") {
+        if (!this.props.useExternal) {
+            if (this.state.sortColumn !== "") {
                 var column = this.state.sortColumn;
                 var sortColumn = _filter(this.props.columnMetadata, {columnName: column});
                 var customCompareFn;
@@ -594,8 +594,7 @@ var Griddle = React.createClass({
                   data = (dropRight || initial)(rest, rest.length-this.state.resultsPerPage);
                 }
             }
-
-        var meta = this.columnSettings.getMetadataColumns;
+        }
 
         var transformedData = [];
 
