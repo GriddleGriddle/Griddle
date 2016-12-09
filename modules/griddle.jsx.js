@@ -174,14 +174,19 @@ var Griddle = React.createClass({
         });
     },
 
+    defaultColumnFilter: function defaultColumnFilter(value, filter) {
+        return _filter(deep.getObjectValues(value), function (value) {
+            return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        }).length > 0;
+    },
+
     filterByColumnFilters: function filterByColumnFilters(columnFilters) {
+        var filterFunction = this.defaultColumnFilter;
         var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
             return _filter(previous, function (item) {
-                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
-                    return true;
-                }
-
-                return false;
+                var value = deep.getAt(item, current || "");
+                var filter = columnFilters[current];
+                return filterFunction(value, filter);
             });
         }, this.props.results);
 
@@ -465,11 +470,6 @@ var Griddle = React.createClass({
     componentDidMount: function componentDidMount() {
         if (this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
             return this.props.componentDidMount();
-        }
-    },
-    componentDidUpdate: function componentDidUpdate() {
-        if (this.props.componentDidUpdate && typeof this.props.componentDidUpdate === "function") {
-            return this.props.componentDidUpdate(this.state);
         }
     },
     //todo: clean these verify methods up
