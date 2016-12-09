@@ -164,16 +164,21 @@ var Griddle = React.createClass({
        });
     },
 
+    defaultColumnFilter(value, filter) {
+      return _filter(deep.getObjectValues(value), function(value) {
+        return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+      }).length > 0;
+    },
+
     filterByColumnFilters(columnFilters) {
+      let filterFunction = this.defaultColumnFilter;
       var filteredResults = Object.keys(columnFilters).reduce(function(previous, current) {
         return _filter(
           previous,
           function(item) {
-            if(deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
-              return true;
-            }
-
-            return false;
+            let value = deep.getAt(item, current || "");
+            let filter = columnFilters[current];
+            return filterFunction(value, filter)
           }
         )
       }, this.props.results)
