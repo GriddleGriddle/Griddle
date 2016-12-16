@@ -41,6 +41,7 @@ var initial = require('lodash/initial');
 var intersection = require('lodash/intersection');
 var isArray = require('lodash/isArray');
 var isEmpty = require('lodash/isEmpty');
+var isEqual = require('lodash.isequal');
 var isNull = require('lodash/isNull');
 var isUndefined = require('lodash/isUndefined');
 var omit = require('lodash/omit');
@@ -405,7 +406,9 @@ var Griddle = React.createClass({
         } else if (this.columnSettings.allColumns.length > 0) {
             this.columnSettings.allColumns = [];
         }
-
+        if ( !isEqual(this.props.columns.slice().sort() , nextProps.columns.slice().sort())){
+            this.setColumns(nextProps.columns);
+        }
         if (nextProps.selectedRowIds) {
             var visibleRows = this.getDataForRender(this.getCurrentResults(nextProps.results), this.columnSettings.getColumns(), true);
 
