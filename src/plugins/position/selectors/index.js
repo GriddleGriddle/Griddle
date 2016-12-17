@@ -6,6 +6,9 @@ export const positionSettingsSelector = state => state.get('positionSettings');
 export const rowHeightSelector = state => state.getIn(['positionSettings', 'rowHeight']);
 export const currentHeightSelector = state => state.getIn(['currentPosition', 'height']);
 
+export const tableHeightSelector = state => state.getIn(['positionSettings', 'tableHeight']);
+export const tableWidthSelector = state => state.getIn(['positionSettings', 'tableWidth']);
+
 // From what i can tell from the original virtual scrolling plugin...
 // 1. We want to get the visible record count
 // 2. Get the size of the dataset we're working with (whether thats local or remote)
