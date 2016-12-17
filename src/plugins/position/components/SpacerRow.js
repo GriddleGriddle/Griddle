@@ -9,6 +9,7 @@ const spacerRow = compose(
   connect((state, props) => {
     const { topSpacerSelector, bottomSpacerSelector } = props.selectors;
     const { placement } = props;
+
     return {
       spacerHeight: placement === 'top' ? topSpacerSelector(state, props) : bottomSpacerSelector(state, props),
     };
@@ -38,6 +39,8 @@ const spacerRow = compose(
     let spacerRowStyle = {
       height: `${spacerHeight}px`,
     };
+
+    console.log('spacerHeight', spacerHeight);
 
     return (
       <tr key={placement + '-' + spacerHeight} style={spacerRowStyle}></tr>

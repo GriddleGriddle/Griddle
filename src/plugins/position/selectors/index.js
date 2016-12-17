@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { sortedDataSelector, visibleColumnsSelector } from '../../../selectors/dataSelectors';
+import { sortedDataSelector, visibleColumnsSelector } from '../../local/selectors/localSelectors';
 
 export const positionSettingsSelector = state => state.get('positionSettings');
 
@@ -30,7 +30,7 @@ export const visibleDataLengthSelector = createSelector(
   }
 );
 
-export const rowHeightSelector = state => state.getIn(['positionConfig', 'rowHeight']);
+export const rowHeightSelector = state => state.getIn(['positionSettings', 'rowHeight']);
 
 export const hoizontalScrollChangeSelector = state => state.getIn(['currentPosition', 'xScrollChangePosition']) || 0;
 export const verticalScrollChangeSelector = state => state.getIn(['currentPosition', 'yScrollChangePosition']) || 0;
@@ -49,7 +49,7 @@ export const endIndexSelector = createSelector(
   startIndexSelector,
   visibleRecordCountSelector,
   visibleDataLengthSelector,
-  (startDisplayIndex, rowHeight, visibleDataLengthSelector) => {
+  (startDisplayIndex, visibleRecordCount, visibleDataLength) => {
     // Inspired by : http://jsfiddle.net/vjeux/KbWJ2/9/
     return Math.min(Math.floor(startDisplayIndex + visibleRecordCount * 2), visibleDataLength - 1) + 1;
   }
@@ -67,8 +67,8 @@ export const bottomSpacerSelector = createSelector(
   rowHeightSelector,
   visibleDataLengthSelector,
   endIndexSelector,
-  (rowHeight, endIndex) => {
-    return rowHeight * (visibleDataLengthSelector - endIndex);
+  (rowHeight, visibleDataLength, endIndex) => {
+    return rowHeight * (visibleDataLength - endIndex);
   }
 );
 
