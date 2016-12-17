@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
-import initialState from '../initial-state';
-
-import { } from '';
+import initialState from './initial-state';
 
 export function shouldUpdateDrawnRows(action, state) {
   const height = state.getIn(['currentPosition', 'height']);

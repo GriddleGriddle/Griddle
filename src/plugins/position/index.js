@@ -7,7 +7,7 @@ const PositionPlugin = (config) => {
     initialState: {
       ...initialState,
       positionSettings: {
-        initialState.positionSettings,
+        positionSettings: initialState.positionSettings,
         ...config,
       },
     },

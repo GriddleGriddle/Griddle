@@ -22,7 +22,6 @@ const initialState = {
     fixedHeader: true,
     // Disable pointer events while scrolling to improve performance
     disablePointerEvents: false,
-    ...config,
   },
 };
 

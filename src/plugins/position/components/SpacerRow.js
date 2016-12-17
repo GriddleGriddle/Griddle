@@ -26,19 +26,18 @@ const spacerRow = compose(
     placement: 'top'
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { currentPosition: oldPosition, placement: oldPlacement } = this.props;
-    const { currentPosition, placement } = nextProps;
-
-    return oldPosition !== currentPosition || oldPlacement !== placement;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   const { currentPosition: oldPosition, placement: oldPlacement } = this.props;
+  //   const { currentPosition, placement } = nextProps;
+  //
+  //   return oldPosition !== currentPosition || oldPlacement !== placement;
+  // }
 
   render() {
-    let height = 0, spacerRowStyle = {};
     const { placement, spacerHeight } = this.props;
-    const { placement, currentPosition, positionConfig, renderProperties, renderedData } = this.props;
-
-    spacerRowStyle.height = `${spacerHeight}px`;
+    let spacerRowStyle = {
+      height: `${spacerHeight}px`,
+    };
 
     return (
       <tr key={placement + '-' + spacerHeight} style={spacerRowStyle}></tr>
