@@ -3,7 +3,8 @@ import { createSelector } from 'reselect';
 import { sortedDataSelector, visibleColumnsSelector } from '../../local/selectors/localSelectors';
 
 export const positionSettingsSelector = state => state.get('positionSettings');
-
+export const rowHeightSelector = state => state.getIn(['positionSettings', 'rowHeight']);
+export const currentHeightSelector = state => state.getIn(['currentPosition', 'height']);
 
 // From what i can tell from the original virtual scrolling plugin...
 // 1. We want to get the visible record count
@@ -14,23 +15,19 @@ export const positionSettingsSelector = state => state.get('positionSettings');
 /** Gets the number of viisble rows based on the height of the container and the rowHeight
  */
 export const visibleRecordCountSelector = createSelector(
-  positionSettingsSelector,
-  (positionSettings) => {
-    const rowHeight = positionSettings.get('rowHeight');
-    const height = positionSettings.get('height');
-
-    return Math.ceil(height / rowHeight);
+  rowHeightSelector,
+  currentHeightSelector,
+  (rowHeight, tableHeight) => {
+    return Math.ceil(tableHeight / rowHeight);
   }
 );
 
 export const visibleDataLengthSelector = createSelector(
   sortedDataSelector,
   (sortedData) => {
-    return sortedData.length;
+    return sortedData.size;
   }
 );
-
-export const rowHeightSelector = state => state.getIn(['positionSettings', 'rowHeight']);
 
 export const hoizontalScrollChangeSelector = state => state.getIn(['currentPosition', 'xScrollChangePosition']) || 0;
 export const verticalScrollChangeSelector = state => state.getIn(['currentPosition', 'yScrollChangePosition']) || 0;

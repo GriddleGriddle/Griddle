@@ -40,8 +40,6 @@ const spacerRow = compose(
       height: `${spacerHeight}px`,
     };
 
-    console.log('spacerHeight', spacerHeight);
-
     return (
       <tr key={placement + '-' + spacerHeight} style={spacerRowStyle}></tr>
     );
