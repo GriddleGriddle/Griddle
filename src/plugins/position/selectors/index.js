@@ -81,7 +81,7 @@ export const currentPageDataSelector = (...args) => {
     startIndexSelector,
     endIndexSelector,
     (sortedData, startDisplayIndex, endDisplayIndex) => {
-        return sortedDataSelector
+        return sortedData
                 .skip(startDisplayIndex)
                 .take(endDisplayIndex - startDisplayIndex);
     }
