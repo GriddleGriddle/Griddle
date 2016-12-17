@@ -21,7 +21,7 @@ const spacerRow = compose(
 )(class extends Component {
   static propTypes = {
     placement: PropTypes.string,
-    spacerHeight: PropTypes.integer,
+    spacerHeight: PropTypes.number,
   }
   static defaultProps = {
     placement: 'top'
