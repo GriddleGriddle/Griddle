@@ -323,8 +323,9 @@ var Griddle = React.createClass({
                 that.setState(state);
         }
 
-		//When infinite scrolling is enabled, uncheck the "select all" checkbox, since more unchecked rows will be appended at the end
-		if(this.props.enableInfiniteScroll) {
+		//When infinite scrolling is enabled, if "select all" checkbox is checked, 
+        //we should keep it checked for appended data. 
+		if(this.props.enableInfiniteScroll && !this._getIsSelectAllChecked()) {
 			this.setState({
 				isSelectAllChecked: false
 			})
@@ -649,8 +650,13 @@ var Griddle = React.createClass({
         }
     },
     _toggleSelectAll: function () {
-        var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
-            newIsSelectAllChecked = !this.state.isSelectAllChecked,
+        var visibleRows = [];
+        if (this.props.enableInfiniteScroll) {
+            visibleRows = this.getCurrentResults();
+        } else {
+            visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
+        }
+        var newIsSelectAllChecked = !this.state.isSelectAllChecked,
             newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
 
         var self = this;
@@ -689,11 +695,8 @@ var Griddle = React.createClass({
         var isFound;
 
         if(isChecked) {
-            isFound = find(selectedRowIds, function (item) {
-                return id === item;
-            });
-
-            if(isFound === undefined) {
+            isFound = selectedRowIds.indexOf(id);
+            if (isFound < 0) {
                 selectedRowIds.push(id);
             }
         } else {
