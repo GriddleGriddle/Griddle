@@ -118,7 +118,9 @@ var GridRowContainer = React.createClass({
       });
     }
 
-    return that.props.hasChildren === false ? arr[0] : React.createElement('tbody', null, that.state.showChildren ? arr.concat(children) : arr);
+    return that.props.hasChildren ?
+        React.createElement('tbody', null, that.state.showChildren ? arr.concat(children) : arr) :
+        (that.props.anyHasChildren ? React.createElement('tbody', null, arr[0]): arr[0]);
   }
 });
 
