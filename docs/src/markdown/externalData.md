@@ -4,44 +4,55 @@ Often times it is not practical to load all of a grid's data in one request. Gri
 
 ####Wrapper Component (recommended)####
 
-Griddle comes with a handful of properties that must be set when working with external data.
+Griddle comes with a handful of required properties that must be set when working with external data.
 
 <dl>
 	<dt>useExternal</dt>
-	<dd><strong>bool</strong> - Griddle will run expecting results to be coming from an external source. This affects paging, filtering, sorting, etc. (i.e. Griddle will not sort the local data set but will tell the wrapper component to get the sorted data from the source). Default: false
+	<dd><strong>bool</strong> - Griddle will run expecting results to be coming from an external source. 
+	This affects paging, filtering, sorting, etc. (i.e. Griddle will not sort the local data set but will 
+	tell the wrapper component to get the sorted data from the source). 
+	<dd><strong>Default</strong> - false </dd>
 </dl>
 
 <dl>
 	<dt>externalSetPage</dt>
-	<dd><strong>function</strong> - The function that will be used to set the page. Default: null</dd>
+	<dd><strong>function</strong> - The function that will be used to get specific page number.</dd>
+	<dd><strong>function signature</strong> - <code>function(number)</code></dd>
 </dl>
 <dl>
 	<dt>externalChangeSort</dt>
-	<dd><strong>function</strong> - The function that will be used to change the sort. Default: null</dd>
+	<dd><strong>function</strong> - The function that will be used to change the default ascending sort order.</dd>
+	<dd><strong>function signature</strong> - <code>function (columnName, isAscending)</code></dd>
 </dl>
 <dl>
 	<dt>externalSetFilter</dt>
-	<dd><strong>function</strong> - The function that will be used to change the filter. Default: null</dd>
+	<dd><strong>function</strong> - The function that will be used to change the filter.</dd>
+	<dd><strong>function signature</strong> - <code>function (filter)</code></dd>
 </dl>
 <dl>
 	<dt>externalSetPageSize</dt>
-	<dd><strong>function</strong> - The function that will be used to change the number of results per page. Default: null</dd>
+	<dd><strong>function</strong> - The function that will be used to change the number of results per page.</dd>
+    <dd><strong>function signature</strong> - <code>function (size)</code></dd>
 </dl>
 <dl>
 	<dt>externalMaxPage</dt>
-	<dd><strong>int</strong> - The max number of pages that can be displayed for the result-set. Default: null</dd>
+	<dd><strong>int</strong> - The max number of pages that can be displayed for the result-set.</dd>
+	<dd><strong>Default</strong> - null</dd>
 </dl>
 <dl>
 	<dt>externalCurrentPage</dt>
-	<dd><strong>int</strong> - The page that is currently displayed from the result-set. Default: null</dd>
+	<dd><strong>int</strong> - The page that is currently displayed from the result-set.</dd>
+	<dd><strong>Default</strong> - null</dd>
 </dl>
 <dl>
 	<dt>externalSortColumn</dt>
 	<dd><strong>string</strong> - The column name that determines the sort of the result-set Default: null</dd>
+	<dd><strong>Default</strong> - null</dd>
 </dl>
 <dl>
 	<dt>externalSortAscending</dt>
-	<dd><strong>bool</strong> - Specifies the sort direction for the current sort column. Default: true</dd>
+	<dd><strong>bool</strong> - Specifies is the sort direction is ascending the current sort column.</dd>
+	<dd><strong>Default</strong> - true</dd>
 </dl>
 
 <hr />
@@ -103,7 +114,7 @@ The following example uses the [Star Wars API](http://swapi.co/) and the [SWAPI-
 First off, the skeleton wrapper was modified to include a get external data method. 
 
 ```javascript
-getExternalData: function(page){
+getExternalData: function (page){
   var that = this;
   page = page||1
 
@@ -138,7 +149,7 @@ var ExternalSwapiComponent = React.createClass({
     componentDidMount: function(){
       this.getExternalData();
     },
-    getExternalData: function(page){
+    getExternalData: function (page) {
    	  ...
     },
     setPage: function(index){
