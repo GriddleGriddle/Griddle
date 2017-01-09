@@ -13,7 +13,6 @@ var SomeCustomComponent = React.createClass({
 describe('Griddle', function() {
   var fakeData;
   var fakeData2;
-  var fakeData3;
   var grid;
   var multipleSelectOptions;
 
@@ -108,20 +107,6 @@ describe('Griddle', function() {
         "country": "Madagascar",
         "company": "Eventage",
         "favoriteNumber": 2
-      }
-    ];
-
-    fakeData3 = [
-      {
-        "id": 2,
-        "name": null,
-        "address": {
-          "city": null,
-          "state": null
-        },
-        "country": null,
-        "company": null,
-        "favoriteNumber": -1
       }
     ];
 
