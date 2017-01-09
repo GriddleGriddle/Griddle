@@ -109,7 +109,6 @@ describe('Griddle', function() {
         "favoriteNumber": 2
       }
     ];
-
     grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
   });
 
