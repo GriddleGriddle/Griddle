@@ -13,6 +13,7 @@ var SomeCustomComponent = React.createClass({
 describe('Griddle', function() {
   var fakeData;
   var fakeData2;
+  var fakeData3;
   var grid;
   var multipleSelectOptions;
 
@@ -109,6 +110,21 @@ describe('Griddle', function() {
         "favoriteNumber": 2
       }
     ];
+
+    fakeData3 = [
+      {
+        "id": 2,
+        "name": null,
+        "address": {
+          "city": null,
+          "state": null
+        },
+        "country": null,
+        "company": null,
+        "favoriteNumber": -1
+      }
+    ];
+
     grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} gridClassName="test" />);
   });
 
@@ -152,6 +168,11 @@ describe('Griddle', function() {
   it('sets the filteredResults when filterByColumn called', function(){
     grid.filterByColumn('Mayer', 'name');
     expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
+  it('correctly handles a null value in defaultColumnFilter', function(){
+    const test = grid.defaultColumnFilter(null, 'May');
+    expect(test).toEqual(false);
   });
 
   it('sets the filteredResults when filterByColumn called on object field', function(){

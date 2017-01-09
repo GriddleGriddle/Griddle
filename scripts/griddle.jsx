@@ -166,7 +166,9 @@ var Griddle = React.createClass({
 
     defaultColumnFilter(value, filter) {
       return _filter(deep.getObjectValues(value), function(value) {
-        return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        if (value !== null && value.toString) {
+          return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        }
       }).length > 0;
     },
 
