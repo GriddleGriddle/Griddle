@@ -4,20 +4,20 @@ import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
 import { createStructuredSelector } from 'reselect';
 
-import { hasNextSelector, hasPreviousSelector, currentPageSelector, maxPageSelector } from '../selectors/dataSelectors';
-
 const EnhancedPaginationContainer = OriginalComponent => compose(
   getContext({
-    events: PropTypes.object
+    events: PropTypes.object,
+    selectors: PropTypes.object,
   }),
-  connect(
-    createStructuredSelector({
+  connect((state, props) => {
+    const { hasNextSelector, hasPreviousSelector, currentPageSelector, maxPageSelector } = props.selectors;
+    return createStructuredSelector({
       hasNext: hasNextSelector,
       hasPrevious: hasPreviousSelector,
       maxPages: maxPageSelector,
       currentPage: currentPageSelector
-    }),
-  ),
+    })(state, props);
+  }),
   mapProps(({ events: {onNext:getNext, onPrevious:getPrevious, onGetPage:setPage }, ...props }) => ({
     getNext,
     getPrevious,

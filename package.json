@@ -20,6 +20,7 @@
     "build-storybook": "build-storybook"
   },
   "devDependencies": {
+    "@kadira/storybook": "^2.5.2",
     "ava": "^0.15.2",
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
@@ -27,10 +28,14 @@
     "babel-preset-react": "^6.0.0",
     "babel-preset-stage-0": "^6.0.0",
     "babel-register": "^6.9.0",
+    "eslint": "^3.9.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.6.0",
     "node-libs-browser": "^0.5.3",
     "webpack": "~1.9.11",
-    "webpack-dev-server": "~1.9.0",
-    "@kadira/storybook": "^2.5.2"
+    "webpack-dev-server": "~1.9.0"
   },
   "dependencies": {
     "immutable": "^3.8.1",
