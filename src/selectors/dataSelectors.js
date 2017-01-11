@@ -235,3 +235,7 @@ export const cellValueSelector = (state, { griddleKey, columnId }) => {
     .get(columnId);
 }
 
+//TODO: Needs tests and jsdoc
+export const cellPropertiesSelector = (state, { griddleKey, columnId }) => {
+  return state.getIn(['renderProperties', 'columnProperties', columnId]).toJSON();
+}

@@ -97,8 +97,8 @@ storiesOf('Griddle main', module)
         <small>Everything in the name column should be blue</small>
        <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
-          <ColumnDefinition id="name" order={2} customComponent={MakeBlueComponent} />
-          <ColumnDefinition id="state" order={1} />
+          <ColumnDefinition id="name" order={2} customComponent={MakeBlueComponent} width={800}/>
+          <ColumnDefinition id="state" order={1} width={100}/>
         </RowDefinition>
       </Griddle>
       </div>
