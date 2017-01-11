@@ -204,6 +204,8 @@ storiesOf('Griddle main', module)
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}>
         <RowDefinition>
+          <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} width={300} />
+          <ColumnDefinition id="state" order={1} width={400} />
         </RowDefinition>
       </Griddle>
     )
