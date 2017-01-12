@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Cell = ({ value, onMouseOver, onClick, className, style, onMouseOut }) => console.log('width', style) || (
+const Cell = ({ value, onMouseOver, onClick, className, style, onMouseOut }) => (
   <td
     style={style}
     onClick={onClick}
