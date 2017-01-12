@@ -9,10 +9,11 @@ const Table = OriginalComponent => compose(
     selectors: PropTypes.object,
   }),
   connect((state, props) => {
-      const { tableHeightSelector, tableWidthSelector } = props.selectors;
+      const { tableHeightSelector, tableWidthSelector, rowHeightSelector } = props.selectors;
       return {
         TableHeight: tableHeightSelector(state),
         TableWidth: tableWidthSelector(state),
+        RowHeight: rowHeightSelector(state),
       };
     },
     {
@@ -24,6 +25,11 @@ const Table = OriginalComponent => compose(
     return restProps;
   })
 )(class extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { scrollTop: 0 };
+  }
   render() {
     const { TableHeight, TableWidth } = this.props;
     const scrollStyle = {
@@ -43,8 +49,10 @@ const Table = OriginalComponent => compose(
   }
 
   _scroll = () => {
-    const { setScrollPosition } = this.props;
-    if (this._scrollable) {
+    const { setScrollPosition, RowHeight } = this.props;
+    const { scrollTop } = this.state;
+
+    if (this._scrollable && Math.abs(this._scrollable.scrollTop - scrollTop) >= RowHeight) {
       setScrollPosition(
         this._scrollable.scrollLeft,
         this._scrollable.scrollWidth,
@@ -53,6 +61,7 @@ const Table = OriginalComponent => compose(
         this._scrollable.scrollHeight,
         this._scrollable.clientHeight
       );
+      this.setState({ scrollTop: this._scrollable.scrollTop });
     }
   }
 });
