@@ -212,15 +212,21 @@ export const columnTitlesSelector = createSelector(
   dataSelector,
   renderPropertiesSelector,
   (visibleData, renderProperties) => {
-    if(visibleData.size > 0) {
-      return Object.keys(visibleData.get(0).toJSON()).map(k =>
+    const columnProperties = renderProperties.getIn(['columnProperties']);
+    const hasColumnProperties = columnProperties && columnProperties.size > 0;
+    const columns = hasColumnProperties ?
+      Object.keys(columnProperties.toJSON()) :
+      Object.keys(visibleData.get(0).toJSON());
+
+    if (visibleData.size > 0) {
+      return columns.map(k =>
         renderProperties.getIn(['columnProperties', k, 'title']) || k
-      )
+      );
     }
 
     return [];
   }
-)
+);
 
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(

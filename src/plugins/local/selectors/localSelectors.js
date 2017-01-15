@@ -169,24 +169,11 @@ export const columnIdsSelector = createSelector(
 
 /** Gets the column titles for the visible columns
  */
-export const columnTitlesSelector = createSelector(
-  visibleDataSelector,
-  renderPropertiesSelector,
-  (visibleData, renderProperties) => {
-    if(visibleData.size > 0) {
-      return Object.keys(visibleData.get(0).toJSON()).map(k =>
-        renderProperties.getIn(['columnProperties', k, 'title']) || k
-      )
-    }
-
-    return [];
-  }
-)
-
+export const columnTitlesSelector = dataSelectors.columnTitlesSelector;
 export const cellValueSelector = dataSelectors.cellValueSelector;
 
 // TODO: Needs tests and jsdoc
-export const rowDataSelector = (state, { griddleKey}) => {
+export const rowDataSelector = (state, { griddleKey }) => {
   return state.get('data')
     .find(r => r.get('griddleKey') === griddleKey).toJSON();
-}
+};
