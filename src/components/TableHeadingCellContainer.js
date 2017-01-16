@@ -11,7 +11,6 @@ const DefaultTableHeadingCellContent = ({title, icon}) => (
 )
 
 function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
-console.log(sortProperty);
   if (sortProperty) {
     return sortProperty.sortAscending ? sortAscendingIcon : sortDescendingIcon;
   }
