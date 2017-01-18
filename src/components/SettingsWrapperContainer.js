@@ -10,7 +10,6 @@ const EnhancedSettingsWrapper = OriginalComponent => compose(
     components: PropTypes.object,
   }),
   mapProps(props => ({
-    selectors: props.selectors,
     Settings: props.components.Settings,
     SettingsToggle: props.components.SettingsToggle
   })),
