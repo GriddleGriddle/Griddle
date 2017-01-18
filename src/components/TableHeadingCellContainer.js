@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
 import { setSortProperties } from '../utils/columnUtils';
 
+import { sortPropertyByIdSelector, iconByNameSelector, customHeadingComponentSelector } from '../selectors/dataSelectors';
+
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>
     { title }
@@ -25,15 +27,12 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     selectors: PropTypes.object,
   }),
   connect(
-    (state, props) => {
-      const { sortPropertyByIdSelector, iconByNameSelector, customHeadingComponentSelector } = props.selectors;
-      return {
-        sortProperty: sortPropertyByIdSelector(state, props),
-        sortAscendingIcon: iconByNameSelector(state, { name: 'sortAscending'}),
-        sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'}),
-        customHeadingComponent: customHeadingComponentSelector(state, props),
-      };
-    }
+    (state, props) => ({
+      sortProperty: sortPropertyByIdSelector(state, props),
+      sortAscendingIcon: iconByNameSelector(state, { name: 'sortAscending'}),
+      sortDescendingIcon: iconByNameSelector(state, { name: 'sortDescending'}),
+      customHeadingComponent: customHeadingComponentSelector(state, props),
+    })
   ),
   withHandlers({
     onClick: ({ events: { onSort }, columnId }) => event => {

@@ -3,24 +3,21 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { getContext, mapProps, compose } from 'recompose';
+import { isSettingsEnabledSelector, isSettingsVisibleSelector } from '../selectors/dataSelectors';
 
 const EnhancedSettingsWrapper = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
-    selectors: PropTypes.object,
   }),
   mapProps(props => ({
     selectors: props.selectors,
     Settings: props.components.Settings,
     SettingsToggle: props.components.SettingsToggle
   })),
-  connect((state, props) => {
-    const { isSettingsEnabledSelector, isSettingsVisibleSelector } = props.selectors;
-    return {
-      isEnabled: isSettingsEnabledSelector(state),
-      isVisible: isSettingsVisibleSelector(state),
-    };
-  })
+  connect((state, props) => ({
+    isEnabled: isSettingsEnabledSelector(state),
+    isVisible: isSettingsVisibleSelector(state),
+  }))
 )(({ isEnabled, isVisible, SettingsToggle, Settings }) => (
   <OriginalComponent
     Settings={Settings}

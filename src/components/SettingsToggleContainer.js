@@ -1,24 +1,17 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-
+import { isSettingsEnabledSelector, textSelector } from '../selectors/dataSelectors';
 import { toggleSettings as toggleSettingsAction } from '../actions';
 
 const enhancedSettingsToggle = OriginalComponent => compose(
-  getContext({
-    selectors: PropTypes.object,
+  connect((state, props) => ({
+    text: textSelector(state, { key: 'settingsToggle' }),
   }),
-  connect((state, props) =>
-   {
-     const { textSelector } = props.selectors;
-     return {
-       text: textSelector(state, { key: 'settingsToggle'}),
-     };
-   },
-   {
-     toggleSettings: toggleSettingsAction
-   }
+    {
+      toggleSettings: toggleSettingsAction
+    }
  ),
 )(({ text, toggleSettings }) => <OriginalComponent
   text={text}

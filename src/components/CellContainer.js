@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import { customComponentSelector, cellValueSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
 
 function hasWidthOrStyles(cellProperties) {
   return cellProperties.hasOwnProperty('width') || cellProperties.hasOwnProperty('styles');
@@ -27,7 +28,6 @@ const ComposedCellContainer = OriginalComponent => compose(
     selectors: PropTypes.object,
   }),
   connect((state, props) => {
-    const { customComponentSelector, cellValueSelector, cellPropertiesSelector } = props.selectors;
     return {
       value: cellValueSelector(state, props),
       customComponent: customComponentSelector(state, props),
