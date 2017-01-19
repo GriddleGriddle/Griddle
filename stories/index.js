@@ -84,7 +84,7 @@ storiesOf('Griddle main', module)
       <small>Sorts name by second character</small>
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
-          <ColumnDefinition id="name" order={2} sortMethod={sortBySecondCharacter} />
+          <ColumnDefinition id="name" order={2} title="NAME" sortMethod={sortBySecondCharacter} />
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>

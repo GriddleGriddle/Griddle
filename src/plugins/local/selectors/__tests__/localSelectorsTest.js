@@ -98,15 +98,15 @@ test('gets column orders', test => {
   const state = new Immutable.fromJS({
     renderProperties: {
       columnProperties: {
-        one: { id: 'one', displayName: 'One', order: 2 },
-        two: { id: 'two', displayName: 'Two', order: 1 }
+        one: { id: 'one', title: 'One', order: 2 },
+        two: { id: 'two', title: 'Two', order: 1 }
       }
     }
   });
 
   test.deepEqual(selectors.sortedColumnPropertiesSelector(state).toJSON(), {
-    two: { id: 'two', displayName: 'Two', order: 1 },
-    one: { id: 'one', displayName: 'One', order: 2 }
+    two: { id: 'two', title: 'Two', order: 1 },
+    one: { id: 'one', title: 'One', order: 2 }
   });
 });
 
@@ -117,8 +117,8 @@ test('gets visible columns when columns specified without order', test => {
     ],
     renderProperties: {
       columnProperties: {
-        one: { id: 'one', displayName: 'One' },
-        two: { id: 'two', displayName: 'Two' }
+        one: { id: 'one', title: 'One' },
+        two: { id: 'two', title: 'Two' }
       }
     }
   });
@@ -133,8 +133,8 @@ test('gets visible columns in order when columns specified', test => {
     ],
     renderProperties: {
       columnProperties: {
-        one: { id: 'one', displayName: 'One', order: 2 },
-        two: { id: 'two', displayName: 'Two', order: 1 }
+        one: { id: 'one', title: 'One', order: 2 },
+        two: { id: 'two', title: 'Two', order: 1 }
       }
     }
   });

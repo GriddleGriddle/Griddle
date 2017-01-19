@@ -238,11 +238,27 @@ test('gets metadata columns', test => {
     ],
     renderProperties: {
       columnProperties: {
-        one: { id: 'one', displayName: 'One' },
-        two: { id: 'two', displayName: 'Two', isMetadata: true }
+        one: { id: 'one', title: 'One' },
+        two: { id: 'two', title: 'Two', isMetadata: true }
       }
     }
   });
 
   test.deepEqual(selectors.metaDataColumnsSelector(state), ['two']);
+});
+
+test('it gets columnTitles in the correct order', test => {
+  const state = new Immutable.fromJS({
+    data: [
+      { one: 'hi', two: 'hello', three: 'this should not show up'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        one: { id: 'one', title: 'One', order: 2 },
+        two: { id: 'two', title: 'Two', order: 1 }
+      }
+    }
+  });
+
+  test.deepEqual(selectors.columnTitlesSelector(state), ['Two', 'One']);
 });

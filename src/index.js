@@ -44,7 +44,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={} } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, pageProperties:importedPageProperties } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -61,6 +61,13 @@ class Griddle extends Component {
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
 
+    const pageProperties = Object.assign({}, {
+        currentPage: 1,
+        pageSize: 10
+      },
+      importedPageProperties,
+    );
+
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = {
       rowProperties,
@@ -73,10 +80,7 @@ class Griddle extends Component {
       renderProperties,
       data,
       enableSettings: true,
-      pageProperties: {
-        currentPage: 1,
-        pageSize: 10
-      },
+      pageProperties,
       textProperties: {
         settingsToggle: 'Settings'
       },

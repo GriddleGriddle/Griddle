@@ -45,7 +45,6 @@ export const hasNextSelector = createSelector(
   currentPageSelector,
   maxPageSelector,
   (currentPage, maxPage) => {
-    console.log(`hasNext current: ${currentPage} max: ${maxPage}`)
     return currentPage < maxPage;
   }
 );
@@ -199,9 +198,16 @@ export const columnIdsSelector = createSelector(
   renderPropertiesSelector,
   visibleColumnsSelector,
   (visibleData, renderProperties, visibleColumns) => {
-    if(visibleData.size > 0) {
-      return Object.keys(visibleData.get(0).toJSON())
-        .map(k => renderProperties.getIn(['columnProperties', k, 'id']) || k)
+    const offset = 1000;
+    // TODO: Make this better -- This is pretty inefficient
+    if (visibleData.size > 0) {
+      return visibleColumns
+        .map((k, index) => ({
+          id: renderProperties.getIn(['columnProperties', k, 'id']) || k,
+          order: renderProperties.getIn(['columnProperties', k, 'order']) || offset + index
+        }))
+        .sort((first, second) => first.order - second.order)
+        .map(item => item.id)
         .filter(k => visibleColumns.indexOf(k) > -1);
     }
   }
@@ -210,29 +216,15 @@ export const columnIdsSelector = createSelector(
 /** Gets the column titles for the visible columns
  */
 export const columnTitlesSelector = createSelector(
-  dataSelector,
+  columnIdsSelector,
   renderPropertiesSelector,
-  (visibleData, renderProperties) => {
-    const columnProperties = renderProperties.getIn(['columnProperties']);
-    const hasColumnProperties = columnProperties && columnProperties.size > 0;
-    const columns = hasColumnProperties ?
-      Object.keys(columnProperties.toJSON()) :
-      Object.keys(visibleData.get(0).toJSON());
-
-    if (visibleData.size > 0) {
-      return columns.map(k =>
-        renderProperties.getIn(['columnProperties', k, 'title']) || k
-      );
-    }
-
-    return [];
-  }
+  (columnIds, renderProperties) => columnIds.map(k => renderProperties.getIn(['columnProperties', k, 'title']) || k)
 );
 
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
   dataSelector,
-  (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
+  currentPageData => currentPageData.map(c => c.get('griddleKey'))
 );
 
 // TODO: Needs tests and jsdoc
