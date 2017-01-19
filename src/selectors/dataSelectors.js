@@ -207,8 +207,7 @@ export const columnIdsSelector = createSelector(
           order: renderProperties.getIn(['columnProperties', k, 'order']) || offset + index
         }))
         .sort((first, second) => first.order - second.order)
-        .map(item => item.id)
-        .filter(k => visibleColumns.indexOf(k) > -1);
+        .map(item => item.id);
     }
   }
 );
