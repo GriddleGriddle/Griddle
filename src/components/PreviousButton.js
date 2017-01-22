@@ -1,8 +1,8 @@
 import React from 'react';
 
-const NextButton = ({ hasNext, onClick, style, className, text }) => hasNext ? (
+const PreviousButton = ({ hasPrevious, onClick, style, className, text }) => hasPrevious ? (
   <button type="button" onClick={onClick} style={style} className={className}>{text}</button>
 ) :
 null;
 
-export default NextButton;
+export default PreviousButton;

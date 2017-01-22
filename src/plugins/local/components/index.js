@@ -1,13 +1,17 @@
 import TableBodyContainer from './TableBodyContainer';
 import RowContainer from './RowContainer';
-import PaginationContainer from './PaginationContainer';
+import NextButtonContainer from './NextButtonContainer';
+import PreviousButtonContainer from './PreviousButtonContainer';
+import PageDropdownContainer from './PageDropdownContainer';
 import TableHeadingCellContainer from './TableHeadingCellContainer';
 import FilterContainer from './FilterContainer';
 
 export default {
   TableBodyContainer,
   RowContainer,
-  PaginationContainer,
+  NextButtonContainer,
+  PreviousButtonContainer,
+  PageDropdownContainer,
   TableHeadingCellContainer,
   FilterContainer,
 }

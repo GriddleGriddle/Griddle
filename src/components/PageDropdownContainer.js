@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
-import { createStructuredSelector } from 'reselect';
 import { currentPageSelector, maxPageSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => compose(

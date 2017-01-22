@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
-import { hasNextSelector } from '../selectors/dataSelectors';
+import { hasPreviousSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => compose(
   getContext({
     events: PropTypes.object
   }),
   connect((state, props) => ({
-    hasNext: hasNextSelector(state, props),
+    hasPrevious: hasPreviousSelector(state, props),
   })),
   mapProps(({ events: { onPrevious }, ...props }) => ({
     onClick: onPrevious,
