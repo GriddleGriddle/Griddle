@@ -1,18 +1,26 @@
 import React from 'react';
-import PageDropdown from './PageDropdown';
 
-const Pagination = ({ getPrevious, getNext, setPage, maxPages, currentPage, hasNext, hasPrevious }) => {
-  return (
-    <div>
-      { hasPrevious && <button type="button" onClick={getPrevious}>Previous</button> }
-      <PageDropdown
+const Pagination = ({ getPrevious,
+  getNext,
+  setPage,
+  maxPages,
+  currentPage,
+  hasNext,
+  hasPrevious,
+  Next=null,
+  Previous=null,
+  PageDropdown=null,
+  style,
+  className }) => (
+    <div style={style} className={className}>
+      {Previous && <Previous />}
+      {PageDropdown && <PageDropdown
         maxPages={maxPages}
         currentPage={currentPage}
         setPage={setPage}
-      />
-      { hasNext && <button type="button" onClick={getNext}>Next</button>}
+      /> }
+      {Next && <Next /> }
     </div>
   );
-}
 
 export default Pagination;

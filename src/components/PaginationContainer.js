@@ -6,21 +6,12 @@ import { hasNextSelector, hasPreviousSelector, currentPageSelector, maxPageSelec
 
 const EnhancedPaginationContainer = OriginalComponent => compose(
   getContext({
-    events: PropTypes.object,
-    selectors: PropTypes.object,
+    components: PropTypes.object,
   }),
-  connect(
-    createStructuredSelector({
-      hasNext: hasNextSelector,
-      hasPrevious: hasPreviousSelector,
-      maxPages: maxPageSelector,
-      currentPage: currentPageSelector
-    })
-  ),
-  mapProps(({ events: {onNext:getNext, onPrevious:getPrevious, onGetPage:setPage }, ...props }) => ({
-    getNext,
-    getPrevious,
-    setPage,
+  mapProps((props) => ({
+    Next: props.components.NextButton,
+    Previous: props.components.PreviousButton,
+    PageDropdown: props.components.PageDropdown,
     ...props
   }))
 )((props) => <OriginalComponent {...props} />);
