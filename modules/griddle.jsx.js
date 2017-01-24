@@ -833,6 +833,7 @@ var Griddle = React.createClass({
             useFixedLayout: this.props.useFixedLayout,
             showPager: this.props.showPager,
             pagingContent: pagingContent,
+            resultsFromFilter: !this.isNullOrUndefined(this.state.filteredResults),
             data: data,
             className: this.props.tableClassName,
             enableInfiniteScroll: this.isInfiniteScrollEnabled(),

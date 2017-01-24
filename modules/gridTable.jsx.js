@@ -24,6 +24,7 @@ var GridTable = React.createClass({
       "nextPage": null,
       "hasMorePages": false,
       "useFixedHeader": false,
+        "resultsFromFilter": false,
       "useFixedLayout": true,
       "paddingHeight": null,
       "rowHeight": null,
@@ -159,7 +160,8 @@ var GridTable = React.createClass({
           rowHeight: that.props.rowHeight,
           hasChildren: hasChildren,
           tableClassName: that.props.className,
-          onRowClick: that.props.onRowClick
+          onRowClick: that.props.onRowClick,
+            resultsFromFilter: that.props.resultsFromFilter
         });
       });
 
