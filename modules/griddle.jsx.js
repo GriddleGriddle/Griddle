@@ -529,73 +529,72 @@ var Griddle = React.createClass({
 
         var that = this;
 
-        // get the correct page size
-        if (this.state.sortColumn !== "") {
-            var column = this.state.sortColumn;
-            var sortColumn = _filter(this.props.columnMetadata, { columnName: column });
-            var customCompareFn;
-            var multiSort = {
-                columns: [],
-                orders: []
-            };
+        if (!this.props.useExternal) {
+            if (this.state.sortColumn !== "") {
+                var column = this.state.sortColumn;
+                var sortColumn = _filter(this.props.columnMetadata, { columnName: column });
+                var customCompareFn;
+                var multiSort = {
+                    columns: [],
+                    orders: []
+                };
 
-            if (sortColumn.length > 0) {
-                customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
-                if (sortColumn[0]["multiSort"]) {
-                    multiSort = sortColumn[0]["multiSort"];
-                }
-            }
-
-            if (this.state.sortDirection) {
-                if (typeof customCompareFn === 'function') {
-                    if (customCompareFn.length === 2) {
-                        data = data.sort(function (a, b) {
-                            return customCompareFn(_get(a, column), _get(b, column));
-                        });
-
-                        if (this.state.sortDirection === 'desc') {
-                            data.reverse();
-                        }
-                    } else if (customCompareFn.length === 1) {
-                        data = _orderBy(data, function (item) {
-                            return customCompareFn(_get(item, column));
-                        }, [this.state.sortDirection]);
+                if (sortColumn.length > 0) {
+                    customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
+                    if (sortColumn[0]["multiSort"]) {
+                        multiSort = sortColumn[0]["multiSort"];
                     }
-                } else {
-                    var iteratees = [function (row) {
-                        return (_get(row, column) || '').toString().toLowerCase();
-                    }];
-                    var orders = [this.state.sortDirection];
-                    multiSort.columns.forEach(function (col, i) {
-                        iteratees.push(function (row) {
-                            return (_get(row, col) || '').toString().toLowerCase();
-                        });
-                        if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
-                            orders.push(multiSort.orders[i]);
-                        } else {
-                            orders.push(_this.state.sortDirection);
-                        }
-                    });
+                }
 
-                    data = _orderBy(data, iteratees, orders);
+                if (this.state.sortDirection) {
+                    if (typeof customCompareFn === 'function') {
+                        if (customCompareFn.length === 2) {
+                            data = data.sort(function (a, b) {
+                                return customCompareFn(_get(a, column), _get(b, column));
+                            });
+
+                            if (this.state.sortDirection === 'desc') {
+                                data.reverse();
+                            }
+                        } else if (customCompareFn.length === 1) {
+                            data = _orderBy(data, function (item) {
+                                return customCompareFn(_get(item, column));
+                            }, [this.state.sortDirection]);
+                        }
+                    } else {
+                        var iteratees = [function (row) {
+                            return (_get(row, column) || '').toString().toLowerCase();
+                        }];
+                        var orders = [this.state.sortDirection];
+                        multiSort.columns.forEach(function (col, i) {
+                            iteratees.push(function (row) {
+                                return (_get(row, col) || '').toString().toLowerCase();
+                            });
+                            if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
+                                orders.push(multiSort.orders[i]);
+                            } else {
+                                orders.push(_this.state.sortDirection);
+                            }
+                        });
+
+                        data = _orderBy(data, iteratees, orders);
+                    }
+                }
+            }
+
+            var currentPage = this.getCurrentPage();
+
+            if (!this.props.useExternal && pageList && this.state.resultsPerPage * (currentPage + 1) <= this.state.resultsPerPage * this.state.maxPage && currentPage >= 0) {
+                if (this.isInfiniteScrollEnabled()) {
+                    // If we're doing infinite scroll, grab all results up to the current page.
+                    data = first(data, (currentPage + 1) * this.state.resultsPerPage);
+                } else {
+                    //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+                    var rest = drop(data, currentPage * this.state.resultsPerPage);
+                    data = (dropRight || initial)(rest, rest.length - this.state.resultsPerPage);
                 }
             }
         }
-
-        var currentPage = this.getCurrentPage();
-
-        if (!this.props.useExternal && pageList && this.state.resultsPerPage * (currentPage + 1) <= this.state.resultsPerPage * this.state.maxPage && currentPage >= 0) {
-            if (this.isInfiniteScrollEnabled()) {
-                // If we're doing infinite scroll, grab all results up to the current page.
-                data = first(data, (currentPage + 1) * this.state.resultsPerPage);
-            } else {
-                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-                var rest = drop(data, currentPage * this.state.resultsPerPage);
-                data = (dropRight || initial)(rest, rest.length - this.state.resultsPerPage);
-            }
-        }
-
-        var meta = this.columnSettings.getMetadataColumns;
 
         var transformedData = [];
 
