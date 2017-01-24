@@ -107,7 +107,8 @@ var GridRow = React.createClass({
 
             if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
               if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
-                var customComponent = <meta.customComponent data={col[1]} rowData={dataView} metadata={meta} />;
+                var customComponent = <meta.customComponent data={col[1]} rowData={dataView} metadata={meta}
+                                       hasChildren={this.props.hasChildren} showChildren={this.props.showChildren} />;
                 returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{customComponent}</td>;
               } else {
                 returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{firstColAppend}{this.formatData(col[1])}</td>;
