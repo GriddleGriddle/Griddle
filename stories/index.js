@@ -70,6 +70,11 @@ const EnhanceWithRowData = connect((state, props) => ({
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
 
 storiesOf('Griddle main', module)
+  .add('with no data', () => {
+    return (
+      <Griddle/>
+    )
+  })
   .add('with local', () => {
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
