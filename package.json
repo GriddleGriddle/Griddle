@@ -9,7 +9,8 @@
     "pagination",
     "sort"
   ],
-  "main": "build/griddle.js",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "start": "node server.js",
     "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
