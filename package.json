@@ -44,7 +44,7 @@
     "max-safe-integer": "^1.0.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.2",
     "recompose": "^0.21.2",
     "redux": "^3.5.2",
     "reselect": "^2.5.3"
