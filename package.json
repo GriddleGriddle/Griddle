@@ -9,7 +9,7 @@
     "pagination",
     "sort"
   ],
-  "main": "src/index.js",
+  "main": "lib/griddle.js",
   "types": "src/index.d.ts",
   "scripts": {
     "start": "node server.js",
@@ -18,7 +18,8 @@
     "test": "ava",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "build": "webpack --config config/webpack.config.js"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
