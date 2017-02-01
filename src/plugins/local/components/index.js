@@ -4,7 +4,6 @@ import NextButtonContainer from './NextButtonContainer';
 import PreviousButtonContainer from './PreviousButtonContainer';
 import PageDropdownContainer from './PageDropdownContainer';
 import TableHeadingCellContainer from './TableHeadingCellContainer';
-import FilterContainer from './FilterContainer';
 
 export default {
   TableBodyContainer,
@@ -13,5 +12,4 @@ export default {
   PreviousButtonContainer,
   PageDropdownContainer,
   TableHeadingCellContainer,
-  FilterContainer,
 }

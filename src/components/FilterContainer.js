@@ -13,10 +13,8 @@ const EnhancedFilter = OriginalComponent => compose(
     (state, props) => ({
       className: classNamesForComponentSelector(state, 'Filter'),
       style: stylesForComponentSelector(state, 'Filter'),
-      sortProperty: sortPropertyByIdSelector(state, props),
-      customHeadingComponent: customHeadingComponentSelector(state, props),
     })
-  )
+  ),
   mapProps(props => {
     const { events, ...otherProps } = props;
     return {
@@ -24,6 +22,6 @@ const EnhancedFilter = OriginalComponent => compose(
       ...otherProps,
     };
   })
-)(({setFilter}) => <OriginalComponent setFilter={setFilter} />);
+)(props => <OriginalComponent {...props} />);
 
 export default EnhancedFilter;

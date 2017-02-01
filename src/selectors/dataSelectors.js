@@ -157,22 +157,22 @@ export const sortPropertyByIdSelector = (state, { columnId }) => {
 
 /** Gets the icons property from styles */
 export const iconByNameSelector = (state, { name }) => {
-  return state.getIn(['styles', 'icons', name]);
+  return state.getIn(['stylesConfig', 'icons', name]);
 }
 
 /** Gets the icons for a component */
-export const iconsForComponentSelector = (state, { name }) => {
-  return state.getIn(['styleConfig', 'icons', name]);
+export const iconsForComponentSelector = (state, componentName) => {
+  return state.getIn(['styleConfig', 'icons', componentName]);
 }
 
 /** Gets a style for a component */
-export const stylesForComponentSelector = (state, { name}) => {
-  return state.getIn(['styleConfig', 'styles', name]);
+export const stylesForComponentSelector = (state, componentName) => {
+  return state.getIn(['styleConfig', 'styles', componentName]);
 }
 
 /** Gets a classname for a component */
-export const classNamesForComponentSelector = (state, { name}) => {
-  return state.getIn(['styleConfig', 'classNames', name]);
+export const classNamesForComponentSelector = (state, componentName) => {
+  return state.getIn(['styleConfig', 'classNames', componentName]);
 }
 
 /** Gets a custom component for a given column
