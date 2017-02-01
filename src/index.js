@@ -104,7 +104,6 @@ class Griddle extends Component {
           TableHeadingCell: 'griddle-table-heading-cell',
         },
         styles: {
-
         }
       },
     });
