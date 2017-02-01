@@ -44,7 +44,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, pageProperties:importedPageProperties } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -84,27 +84,49 @@ class Griddle extends Component {
       textProperties: {
         settingsToggle: 'Settings'
       },
-      styles: {
+      styleConfig: {
         icons: {
-          sortDescending: '▼',
-          sortAscending: '▲'
+          TableHeadingCell: {
+            sortDescendingIcon: '▼',
+            sortAscendingIcon: '▲'
+          },
         },
         classNames: {
-          column: 'griddle-column',
-          filter: 'griddle-filter',
-          noResults: 'griddle-noResults',
-          loading: 'griddle-loadingResults',
-          pagination: 'griddle-pagination',
-          rowDefinition: 'griddle-row-definition',
-          row: 'griddle-row',
-          settingsToggle: 'griddle-settings-toggle',
-          settings: 'griddle-settings',
-          tableBody: 'griddle-table-body',
-          tableHeading: 'griddle-table-heading',
-          tableHeadingCell: 'griddle-table-heading-cell',
-          tableHeadingCellAscending: 'griddle-heading-ascending',
-          tableHeadingCellDescending: 'griddle-heading-descending',
-          table: 'griddle-table',
+          Filter: {
+            self: 'griddle-filter',
+          }
+          Pagination: {
+            self: 'griddle-pagination',
+          },
+          Row: {
+            self: 'griddle-row',
+          },
+          RowDefinition: {
+            self: 'griddle-row-definition',
+          },
+          Settings: {
+            self: 'griddle-settings',
+          },
+          SettingsToggle: {
+            self: 'griddle-settings-toggle',
+          },
+          Table: {
+            self: 'griddle-table',
+          },
+          TableBody: {
+            self: 'griddle-table-body',
+          }
+          TableHeading: {
+            self: 'griddle-table-heading',
+          },
+          TableHeadingCell: {
+            self: 'griddle-table-heading-cell',
+            ascending: 'griddle-heading-ascending',
+            descending: 'griddle-heading-descending',
+          },
+        },
+        styles: {
+
         }
       },
     });

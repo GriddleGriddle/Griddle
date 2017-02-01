@@ -160,9 +160,14 @@ export const iconByNameSelector = (state, { name }) => {
   return state.getIn(['styles', 'icons', name]);
 }
 
-/** Gets a classname from the styles object */
-export const classNameByNameSelector = (state, { name}) => {
-  return state.getIn(['styles', 'classNames', name]);
+/** Gets the icons for a component */
+export const iconsForComponentSelector = (state, { name }) => {
+  return state.getIn(['styleConfig', 'icons', name]);
+}
+
+/** Gets a classname for a component */
+export const classNameForComponentSelector = (state, { name}) => {
+  return state.getIn(['styleConfig', 'classNames', name]);
 }
 
 /** Gets a custom component for a given column
