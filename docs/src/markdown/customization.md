@@ -535,6 +535,8 @@ var OtherPager = React.createClass({
         this.props.setPage(parseInt(event.target.getAttribute("data-value")));
     },
     render: function(){
+        console.log(`the total number of records is ${this.props.totalRecords}`)
+
         var previous = "";
         var next = "";
 
@@ -577,7 +579,7 @@ Then initialize your component as follows:
 
 ```
 <Griddle results={fakeData} tableClassName="table" useCustomRowComponent="true"
-  customRowComponent={OtherComponent} useCustomPagerComponent="true" customPagerComponent={OtherPager} />
+  customRowComponent={OtherComponent} useCustomPagerComponent="true" customPagerComponent={OtherPager} customPagerComponentOptions={{totalRecords}} />
 ```
 
 @@include('./customization/customPaging.html')

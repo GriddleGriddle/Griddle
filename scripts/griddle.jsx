@@ -84,6 +84,7 @@ var Griddle = React.createClass({
             "customRowComponent": null,
             "customGridComponent": null,
             "customPagerComponent": {},
+            "customPagerComponentOptions": {},
             "customFilterComponent": null,
             "customFilterer": null,
             "globalData": null,
