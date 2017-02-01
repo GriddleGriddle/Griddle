@@ -165,8 +165,13 @@ export const iconsForComponentSelector = (state, { name }) => {
   return state.getIn(['styleConfig', 'icons', name]);
 }
 
+/** Gets a style for a component */
+export const stylesForComponentSelector = (state, { name}) => {
+  return state.getIn(['styleConfig', 'styles', name]);
+}
+
 /** Gets a classname for a component */
-export const classNameForComponentSelector = (state, { name}) => {
+export const classNamesForComponentSelector = (state, { name}) => {
   return state.getIn(['styleConfig', 'classNames', name]);
 }
 

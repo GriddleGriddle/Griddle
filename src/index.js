@@ -92,35 +92,17 @@ class Griddle extends Component {
           },
         },
         classNames: {
-          Filter: {
-            self: 'griddle-filter',
-          }
-          Pagination: {
-            self: 'griddle-pagination',
-          },
-          Row: {
-            self: 'griddle-row',
-          },
-          RowDefinition: {
-            self: 'griddle-row-definition',
-          },
-          Settings: {
-            self: 'griddle-settings',
-          },
-          SettingsToggle: {
-            self: 'griddle-settings-toggle',
-          },
-          Table: {
-            self: 'griddle-table',
-          },
-          TableBody: {
-            self: 'griddle-table-body',
-          }
-          TableHeading: {
-            self: 'griddle-table-heading',
-          },
+          Filter: 'griddle-filter',
+          Pagination: 'griddle-pagination',
+          Row: 'griddle-row',
+          RowDefinition: 'griddle-row-definition',
+          Settings: 'griddle-settings',
+          SettingsToggle: 'griddle-settings-toggle',
+          Table: 'griddle-table',
+          TableBody: 'griddle-table-body',
+          TableHeading: 'griddle-table-heading',
           TableHeadingCell: {
-            self: 'griddle-table-heading-cell',
+            container: 'griddle-table-heading-cell',
             ascending: 'griddle-heading-ascending',
             descending: 'griddle-heading-descending',
           },
