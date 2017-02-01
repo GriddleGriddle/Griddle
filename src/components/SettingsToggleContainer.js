@@ -16,7 +16,7 @@ const enhancedSettingsToggle = OriginalComponent => compose(
  ),
 )(props => <OriginalComponent
   {...props}
-  onClick={toggleSettings}
+  onClick={props.toggleSettings}
 />);
 
 export default enhancedSettingsToggle;

@@ -8,12 +8,10 @@ const EnhancedFilter = OriginalComponent => compose(
   getContext({
     events: PropTypes.object
   }),
-  connect(
-    (state, props) => ({
-      className: classNamesForComponentSelector(state, 'Filter'),
-      style: stylesForComponentSelector(state, 'Filter'),
-    })
-  ),
+  connect((state, props) => ({
+    className: classNamesForComponentSelector(state, 'Filter'),
+    style: stylesForComponentSelector(state, 'Filter'),
+  })),
   mapProps(props => {
     const { events, ...otherProps } = props;
     return {

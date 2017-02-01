@@ -101,11 +101,7 @@ class Griddle extends Component {
           Table: 'griddle-table',
           TableBody: 'griddle-table-body',
           TableHeading: 'griddle-table-heading',
-          TableHeadingCell: {
-            container: 'griddle-table-heading-cell',
-            ascending: 'griddle-heading-ascending',
-            descending: 'griddle-heading-descending',
-          },
+          TableHeadingCell: 'griddle-table-heading-cell',
         },
         styles: {
 

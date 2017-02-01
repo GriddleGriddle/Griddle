@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const Table = ({ TableHeading, TableBody }) =>  (
-  <table>
+export const Table = ({ TableHeading, TableBody, style, className }) =>  (
+  <table style={style} className={className}>
     <TableHeading />
     <TableBody />
   </table>
