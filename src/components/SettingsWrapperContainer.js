@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
-
 import { connect } from 'react-redux';
-
 import { getContext, mapProps, compose } from 'recompose';
-import { isSettingsEnabledSelector, isSettingsVisibleSelector } from '../selectors/dataSelectors';
+
+import { isSettingsEnabledSelector, isSettingsVisibleSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const EnhancedSettingsWrapper = OriginalComponent => compose(
   getContext({
@@ -16,14 +15,11 @@ const EnhancedSettingsWrapper = OriginalComponent => compose(
   connect((state, props) => ({
     isEnabled: isSettingsEnabledSelector(state),
     isVisible: isSettingsVisibleSelector(state),
+    className: classNamesForComponentSelector(state, 'SettingsWrapper'),
+    style: stylesForComponentSelector(state, 'SettingsWrapper'),
   }))
-)(({ isEnabled, isVisible, SettingsToggle, Settings }) => (
-  <OriginalComponent
-    Settings={Settings}
-    isEnabled={isEnabled}
-    isVisible={isVisible}
-    SettingsToggle={SettingsToggle}
-  />
+)(props => (
+  <OriginalComponent {...props} />
 ));
 
 export default EnhancedSettingsWrapper;
