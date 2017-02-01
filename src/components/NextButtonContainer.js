@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
-import { hasNextSelector } from '../selectors/dataSelectors';
+import { hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => compose(
   getContext({
@@ -9,11 +9,12 @@ const enhance = OriginalComponent => compose(
   }),
   connect((state, props) => ({
     hasNext: hasNextSelector(state, props),
+    className: classNamesForComponentSelector(state, 'NextButton'),
+    style: stylesForComponentSelector(state, 'NextButton'),
   })),
   mapProps(({ events: { onNext }, ...props }) => ({
     onClick: onNext,
-    // TODO: Get this from the store
-    text: 'Next',
+    text: 'Next', // TODO: Get this from the store
     ...props }))
 )((props) => <OriginalComponent {...props} />);
 
