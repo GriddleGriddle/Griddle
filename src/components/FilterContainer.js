@@ -4,7 +4,6 @@ import { withHandlers, getContext, compose, mapProps } from 'recompose';
 
 import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
-
 const EnhancedFilter = OriginalComponent => compose(
   getContext({
     events: PropTypes.object

@@ -3,16 +3,27 @@ import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
 import { createStructuredSelector } from 'reselect';
 
+import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+
 const EnhancedPaginationContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
   }),
-  mapProps((props) => ({
-    Next: props.components.NextButton,
-    Previous: props.components.PreviousButton,
-    PageDropdown: props.components.PageDropdown,
-    ...props
-  }))
+  connect(
+    (state, props) => ({
+      className: classNamesForComponentSelector(state, 'Pagination'),
+      style: stylesForComponentSelector(state, 'Pagination'),
+    })
+  ),
+  mapProps((props) => {
+    const { components, ...otherProps } = props;
+    return {
+      Next: components.NextButton,
+      Previous: components.PreviousButton,
+      PageDropdown: components.PageDropdown,
+      ...otherProps
+    };
+  })
 )((props) => console.log('PREVIOUS', props.Previous) || <OriginalComponent {...props} />);
 
 export default EnhancedPaginationContainer;
