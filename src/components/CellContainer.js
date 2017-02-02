@@ -14,7 +14,7 @@ function hasWidthOrStyles(cellProperties) {
 }
 
 function getCellStyles(cellProperties, originalStyles) {
-  if (!hasWidthOrStyles(cellProperties)) { return null; }
+  if (!hasWidthOrStyles(cellProperties)) { return originalStyles; }
 
   let styles = {};
 
@@ -54,10 +54,11 @@ const ComposedCellContainer = OriginalComponent => compose(
       /> :
       props.value
   })})
-)(({value, style}) => (
+)(({ value, style, className }) => (
   <OriginalComponent
     value={value}
     style={style}
+    className={className}
   />
 ))
 
