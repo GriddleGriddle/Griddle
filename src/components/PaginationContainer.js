@@ -24,6 +24,6 @@ const EnhancedPaginationContainer = OriginalComponent => compose(
       ...otherProps
     };
   })
-)((props) => console.log('PREVIOUS', props.Previous) || <OriginalComponent {...props} />);
+)((props) => <OriginalComponent {...props} />);
 
 export default EnhancedPaginationContainer;

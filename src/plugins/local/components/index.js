@@ -11,5 +11,5 @@ export default {
   NextButtonContainer,
   PreviousButtonContainer,
   PageDropdownContainer,
-  // TableHeadingCellContainer,
-}
+  TableHeadingCellContainer,
+};
