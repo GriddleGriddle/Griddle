@@ -92,8 +92,14 @@ class Griddle extends Component {
           },
         },
         classNames: {
+          Cell: 'griddle-cell',
           Filter: 'griddle-filter',
+          Loading: 'griddle-loadingResults',
+          NextButton: 'griddle-next-button',
+          NoResults: 'griddle-noResults',
+          PageDropdown: 'griddle-page-select',
           Pagination: 'griddle-pagination',
+          PreviousButton: 'griddle-previous-button',
           Row: 'griddle-row',
           RowDefinition: 'griddle-row-definition',
           Settings: 'griddle-settings',
@@ -102,6 +108,8 @@ class Griddle extends Component {
           TableBody: 'griddle-table-body',
           TableHeading: 'griddle-table-heading',
           TableHeadingCell: 'griddle-table-heading-cell',
+          TableHeadingCellAscending: 'griddle-heading-ascending',
+          TableHeadingCellDescending: 'griddle-heading-descending',
         },
         styles: {
         }
