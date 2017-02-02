@@ -177,3 +177,8 @@ export const rowDataSelector = (state, { griddleKey }) => {
   return state.get('data')
     .find(r => r.get('griddleKey') === griddleKey).toJSON();
 };
+
+export const iconsForComponentSelector = dataSelectors.iconsForComponentSelector;
+export const iconsByNameSelector = dataSelectors.iconsForComponentSelector;
+export const stylesForComponentSelector = dataSelectors.stylesForComponentSelector;
+export const classNamesForComponentSelector = dataSelectors.classNamesForComponentSelector;

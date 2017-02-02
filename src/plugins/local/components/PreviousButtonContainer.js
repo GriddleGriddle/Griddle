@@ -2,12 +2,14 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { hasPreviousSelector } from '../selectors/localSelectors';
+import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
 import { getPrevious } from '../../../actions';
 
-const enhance = OriginalComponent => connect(
+const enhance = OriginalComponent => connect(state =>
   createStructuredSelector({
     hasPrevious: hasPreviousSelector,
+    className: classNamesForComponentSelector(state, 'PreviousButton'),
+    style: stylesForComponentSelector(state, 'PreviousButton'),
   }),
   {
     getPrevious
