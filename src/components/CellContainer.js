@@ -16,15 +16,15 @@ function hasWidthOrStyles(cellProperties) {
 function getCellStyles(cellProperties, originalStyles) {
   if (!hasWidthOrStyles(cellProperties)) { return originalStyles; }
 
-  let styles = {};
+  let styles = originalStyles;
 
   // we want to take griddle style object styles, cell specific styles
-  if (cellProperties.hasOwnProperty('styles')) {
-    styles = Object.assign(styles, originalStyles, cellProperties.styles);
+  if (cellProperties.hasOwnProperty('style')) {
+    styles = Object.assign({}, styles, originalStyles, cellProperties.style);
   }
 
   if (cellProperties.hasOwnProperty('width')) {
-    styles = Object.assign(styles, { width: cellProperties.width });
+    styles = Object.assign({}, styles, { width: cellProperties.width });
   }
 
   return styles;
