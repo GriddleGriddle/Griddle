@@ -5,12 +5,11 @@ import { createStructuredSelector } from 'reselect';
 import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
 import { getPrevious } from '../../../actions';
 
-const enhance = OriginalComponent => connect(state =>
-  createStructuredSelector({
-    hasPrevious: hasPreviousSelector,
-    className: classNamesForComponentSelector(state, 'PreviousButton'),
-    style: stylesForComponentSelector(state, 'PreviousButton'),
-  }),
+const enhance = OriginalComponent => connect(state => ({
+  hasPrevious: hasPreviousSelector,
+  className: classNamesForComponentSelector(state, 'PreviousButton'),
+  style: stylesForComponentSelector(state, 'PreviousButton'),
+}),
   {
     getPrevious
   }
