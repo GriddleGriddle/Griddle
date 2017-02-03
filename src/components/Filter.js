@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 
 class Filter extends Component {
   static propTypes = {
-    setFilter: PropTypes.func
+    setFilter: PropTypes.func,
+    style: PropTypes.object,
+    className: PropTypes.string
   }
 
   setFilter = (e) => {
@@ -16,6 +18,8 @@ class Filter extends Component {
         name="filter"
         placeholder="Filter"
         onChange={this.setFilter}
+        style={this.props.style}
+        className={this.props.className}
       />
     )
   }

@@ -7,7 +7,6 @@ const Cell = ({ value, onMouseOver, onClick, className, style, onMouseOut }) => 
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}
     className={className}
-    style={style}
   >
     {value}
   </td>

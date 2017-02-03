@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { columnTitlesSelector, columnIdsSelector } from '../selectors/localSelectors';
+import { columnTitlesSelector, columnIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
 
 const ComposedContainerComponent = OriginalComponent => compose(
   getContext({
@@ -9,7 +9,9 @@ const ComposedContainerComponent = OriginalComponent => compose(
   }),
   connect((state) => ({
     columnTitles: columnTitlesSelector(state),
-    columnIds: columnIdsSelector(state)
+    columnIds: columnIdsSelector(state),
+    className: classNamesForComponentSelector(state, 'TableHeading'),
+    style: stylesForComponentSelector(state, 'TableHeading'),
   })),
   mapProps(props => ({
     TableHeadingCell: props.components.TableHeadingCell,
@@ -18,11 +20,14 @@ const ComposedContainerComponent = OriginalComponent => compose(
   // withHandlers({ 
   //   TableHeadingCell: props => props.components.TableHeadingCell
   // })
-)(({TableHeadingCell, columnTitles, columnIds }) => (
+)(({TableHeadingCell, columnTitles, columnIds, className, style }) => (
   <OriginalComponent
     columnTitles={columnTitles}
     columnIds={columnIds}
-    TableHeadingCell={TableHeadingCell} />
+    TableHeadingCell={TableHeadingCell}
+    className={className}
+    style={style}
+  />
 ));
 
 export default ComposedContainerComponent;

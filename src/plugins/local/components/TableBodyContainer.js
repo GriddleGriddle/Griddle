@@ -1,31 +1,32 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import { getContext, mapProps, compose } from 'recompose';
 
-import { visibleRowIdsSelector } from '../selectors/localSelectors';
+import { visibleRowIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
 
 const ComposedTableBodyContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
     selectors: PropTypes.object,
   }),
-  connect((state, props) => {
-    const { visibleRowIdsSelector } = props.selectors;
-    return {
-      visibleRowIds: visibleRowIdsSelector(state),
-    };
-  }),
+  connect(state => ({
+    visibleRowIds: visibleRowIdsSelector(state),
+    className: classNamesForComponentSelector(state, 'TableBody'),
+    style: stylesForComponentSelector(state, 'TableBody'),
+  })),
   mapProps(props => ({
-    Row:  props.components.Row,
+    Row: props.components.Row,
     ...props
   })),
   // withHandlers({
   //   Row: props => props.components.Row
   // })
-)(({Row, visibleRowIds}) => (
+)(({ Row, visibleRowIds, style, className }) => (
   <OriginalComponent
     rowIds={visibleRowIds}
     Row={Row}
+    style={style}
+    className={className}
   />
 ));
 

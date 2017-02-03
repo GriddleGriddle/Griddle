@@ -1,22 +1,30 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
+
+import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const EnhancedLayout = OriginalComponent => compose(
   getContext({
     components: PropTypes.object
   }),
+  connect(
+    (state, props) => ({
+      className: classNamesForComponentSelector(state, 'Layout'),
+      style: stylesForComponentSelector(state, 'Layout'),
+    })
+  ),
   mapProps( props => ({
     Table: props.components.Table,
     Pagination: props.components.Pagination,
     Filter: props.components.Filter,
     SettingsWrapper: props.components.SettingsWrapper,
+    className: props.className,
+    style: props.style,
   }))
-)(({Table, Pagination, Filter, SettingsWrapper}) => (
+)(props => (
   <OriginalComponent
-    Table={Table}
-    Pagination={Pagination}
-    Filter={Filter}
-    SettingsWrapper={SettingsWrapper}
+    {...props}
   />
 ));
 

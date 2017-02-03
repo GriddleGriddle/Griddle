@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { columnIdsSelector } from '../selectors/dataSelectors';
+import { columnIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
@@ -9,16 +9,19 @@ const ComposedRowContainer = OriginalComponent => compose(
   }),
   connect((state, props) => ({
     columnIds: columnIdsSelector(state),
+    className: classNamesForComponentSelector(state, 'Row'),
+    style: stylesForComponentSelector(state, 'Row'),
   })),
-  mapProps(props => ({
-    Cell: props.components.Cell,
-    ...props
-  })),
-)(({Cell, columnIds, griddleKey}) => (
+  mapProps(props => {
+    const { components, ...otherProps } = props;
+    return {
+      Cell: components.Cell,
+      ...otherProps
+    };
+  }),
+)(props => (
   <OriginalComponent
-    griddleKey={griddleKey}
-    columnIds={columnIds}
-    Cell={Cell}
+    {...props}
   />
 ));
 

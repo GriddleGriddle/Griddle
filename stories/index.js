@@ -180,8 +180,21 @@ storiesOf('Griddle main', module)
         return <Griddle
           data={this.state.data}
           events={events}
+          styleConfig={{
+            classNames:{
+              Cell: 'hahaha',
+            },
+            styles: {
+              Cell: { fontSize: 100 }
+            }
+          }}
           sortProperties={this.state.sortProperties}
-          pageProperties={pageProperties} />
+          pageProperties={pageProperties}>
+            <RowDefinition>
+              <ColumnDefinition id="name" width={500} style={{ color: "#FAB" }} />
+              <ColumnDefinition id="state" />
+            </RowDefinition>
+          </Griddle>
       }
     }
 

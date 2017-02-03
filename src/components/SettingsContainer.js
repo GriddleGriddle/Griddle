@@ -1,6 +1,8 @@
 import React ,{ PropTypes } from 'react';
-
+import { connect } from 'react-redux';
 import { getContext, mapProps, compose } from 'recompose';
+
+import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 function getSettingsComponentsArrayFromObject(settingsObject) {
   //TODO: determine if we need to make this faster
@@ -12,12 +14,21 @@ const EnhancedSettings = OriginalComponent => compose(
   getContext({
     settingsComponentObjects: PropTypes.object
   }),
-  mapProps(props => ({
-    settingsComponents: getSettingsComponentsArrayFromObject(props.settingsComponentObjects),
-    ...props,
-  }))
-)(({ settingsComponents }) => (
-  <OriginalComponent settingsComponents={settingsComponents} />
+  connect(
+    (state, props) => ({
+      className: classNamesForComponentSelector(state, 'Settings'),
+      style: stylesForComponentSelector(state, 'Settings'),
+    })
+  ),
+  mapProps(props => {
+    const { settingsComponentObjects, ...otherProps } = props;
+    return {
+      settingsComponents: getSettingsComponentsArrayFromObject(settingsComponentObjects),
+      ...otherProps,
+    };
+  })
+)(props => (
+  <OriginalComponent {...props} />
 ));
 
 export default EnhancedSettings;

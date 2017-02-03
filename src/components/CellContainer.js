@@ -1,23 +1,30 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { customComponentSelector, cellValueSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
+import {
+  customComponentSelector,
+  cellValueSelector,
+  cellPropertiesSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
 
 function hasWidthOrStyles(cellProperties) {
   return cellProperties.hasOwnProperty('width') || cellProperties.hasOwnProperty('styles');
 }
 
-function getCellStyles(cellProperties) {
-  if(!hasWidthOrStyles(cellProperties)) { return null; }
+function getCellStyles(cellProperties, originalStyles) {
+  if (!hasWidthOrStyles(cellProperties)) { return originalStyles; }
 
-  let styles = {};
+  let styles = originalStyles;
 
-  if (cellProperties.hasOwnProperty('styles')) {
-    styles = Object.assign(styles, cellProperties.styles);
+  // we want to take griddle style object styles, cell specific styles
+  if (cellProperties.hasOwnProperty('style')) {
+    styles = Object.assign({}, styles, originalStyles, cellProperties.style);
   }
 
-  if(cellProperties.hasOwnProperty('width')) {
-    styles = Object.assign(styles, { width: cellProperties.width });
+  if (cellProperties.hasOwnProperty('width')) {
+    styles = Object.assign({}, styles, { width: cellProperties.width });
   }
 
   return styles;
@@ -32,12 +39,14 @@ const ComposedCellContainer = OriginalComponent => compose(
       value: cellValueSelector(state, props),
       customComponent: customComponentSelector(state, props),
       cellProperties: cellPropertiesSelector(state, props),
+      className: classNamesForComponentSelector(state, 'Cell'),
+      style: stylesForComponentSelector(state, 'Cell'),
     };
   }),
   mapProps(props => {
     return ({
     ...props,
-    style: getCellStyles(props.cellProperties),
+    style: getCellStyles(props.cellProperties, props.style),
     value: props.customComponent ?
       <props.customComponent
         value={props.value}
@@ -45,10 +54,11 @@ const ComposedCellContainer = OriginalComponent => compose(
       /> :
       props.value
   })})
-)(({value, style}) => (
+)(({ value, style, className }) => (
   <OriginalComponent
     value={value}
     style={style}
+    className={className}
   />
 ))
 

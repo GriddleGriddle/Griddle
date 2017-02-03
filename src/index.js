@@ -2,6 +2,7 @@ import { createStore, combineReducers, bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import { connect, Provider } from 'react-redux';
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 import * as dataReducers from '../src/reducers/dataReducer';
 import components from './components';
@@ -33,6 +34,38 @@ const defaultEvents = {
   }
 };
 
+
+const defaultStyleConfig = {
+  icons: {
+    TableHeadingCell: {
+      sortDescendingIcon: '▼',
+      sortAscendingIcon: '▲'
+    },
+  },
+  classNames: {
+    Cell: 'griddle-cell',
+    Filter: 'griddle-filter',
+    Loading: 'griddle-loadingResults',
+    NextButton: 'griddle-next-button',
+    NoResults: 'griddle-noResults',
+    PageDropdown: 'griddle-page-select',
+    Pagination: 'griddle-pagination',
+    PreviousButton: 'griddle-previous-button',
+    Row: 'griddle-row',
+    RowDefinition: 'griddle-row-definition',
+    Settings: 'griddle-settings',
+    SettingsToggle: 'griddle-settings-toggle',
+    Table: 'griddle-table',
+    TableBody: 'griddle-table-body',
+    TableHeading: 'griddle-table-heading',
+    TableHeadingCell: 'griddle-table-heading-cell',
+    TableHeadingCellAscending: 'griddle-heading-ascending',
+    TableHeadingCellDescending: 'griddle-heading-descending',
+  },
+  styles: {
+  }
+};
+
 class Griddle extends Component {
   static childContextTypes = {
     components: React.PropTypes.object.isRequired,
@@ -44,7 +77,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, pageProperties:importedPageProperties } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -61,6 +94,8 @@ class Griddle extends Component {
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
 
+    const mergedStyleConfig = _.merge({}, defaultStyleConfig, styleConfig);
+
     const pageProperties = Object.assign({}, {
         currentPage: 1,
         pageSize: 10
@@ -74,6 +109,7 @@ class Griddle extends Component {
       columnProperties
     };
 
+    // TODO: Make this its own method
     const initialState = plugins.reduce((combined, plugin) => {
       return !!plugin.initialState ? { ...combined, ...plugin.initialState } : combined;
     }, {
@@ -84,29 +120,7 @@ class Griddle extends Component {
       textProperties: {
         settingsToggle: 'Settings'
       },
-      styles: {
-        icons: {
-          sortDescending: '▼',
-          sortAscending: '▲'
-        },
-        classNames: {
-          column: 'griddle-column',
-          filter: 'griddle-filter',
-          noResults: 'griddle-noResults',
-          loading: 'griddle-loadingResults',
-          pagination: 'griddle-pagination',
-          rowDefinition: 'griddle-row-definition',
-          row: 'griddle-row',
-          settingsToggle: 'griddle-settings-toggle',
-          settings: 'griddle-settings',
-          tableBody: 'griddle-table-body',
-          tableHeading: 'griddle-table-heading',
-          tableHeadingCell: 'griddle-table-heading-cell',
-          tableHeadingCellAscending: 'griddle-heading-ascending',
-          tableHeadingCellDescending: 'griddle-heading-descending',
-          table: 'griddle-table',
-        }
-      },
+      styleConfig: mergedStyleConfig,
     });
 
     this.store = createStore(

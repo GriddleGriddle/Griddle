@@ -22,6 +22,12 @@ import SettingsWrapper from './SettingsWrapper';
 import SettingsWrapperContainer from './SettingsWrapperContainer';
 import Settings from './Settings';
 import SettingsContainer from './SettingsContainer';
+import NextButton from './NextButton';
+import NextButtonContainer from './NextButtonContainer';
+import PreviousButton from './PreviousButton';
+import PreviousButtonContainer from './PreviousButtonContainer';
+import PageDropdown from './PageDropdown.js';
+import PageDropdownContainer from './PageDropdownContainer';
 
 const components = {
   Cell,
@@ -38,8 +44,14 @@ const components = {
   TableContainer,
   Layout,
   LayoutContainer,
+  NextButton,
+  NextButtonContainer,
+  PageDropdown,
+  PageDropdownContainer,
   Pagination,
   PaginationContainer,
+  PreviousButton,
+  PreviousButtonContainer,
   Filter,
   FilterContainer,
   SettingsToggle,
