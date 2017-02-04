@@ -157,7 +157,7 @@ export const sortPropertyByIdSelector = (state, { columnId }) => {
 
 /** Gets the icons property from styles */
 export const iconByNameSelector = (state, { name }) => {
-  return state.getIn(['stylesConfig', 'icons', name]);
+  return state.getIn(['styleConfig', 'icons', name]);
 }
 
 /** Gets the icons for a component */

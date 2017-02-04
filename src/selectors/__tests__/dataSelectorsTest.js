@@ -161,7 +161,7 @@ test('allColumnsSelector: gets empty array when data is empty', test => {
 
 test('iconByNameSelector gets given icon', test => {
   const state = new Immutable.fromJS({
-    styles: {
+    styleConfig: {
       icons: {
         one: 'yo'
       }
@@ -183,28 +183,28 @@ test('iconByNameSelector gets undefined when icon not present in collection', te
   test.is(selectors.iconByNameSelector(state, { name: 'two'}), undefined)
 });
 
-test('classNameByNameSelector gets given icon', test => {
+test('classNamesForComponentSelector gets given class', test => {
   const state = new Immutable.fromJS({
-    styles: {
+    styleConfig: {
       classNames: {
         one: 'yo'
       }
     }
   });
 
-  test.is(selectors.classNameByNameSelector(state, {name: 'one'}), 'yo');
+  test.is(selectors.classNamesForComponentSelector(state, 'one'), 'yo');
 });
 
-test('classNameByNameSelector gets undefined when icon not present in collection', test => {
+test('classNameForComponentSelector gets undefined when icon not present in collection', test => {
   const state = new Immutable.fromJS({
-    styles: {
+    styleConfig: {
       classNames: {
         one: 'yo'
       }
     }
   });
 
-  test.is(selectors.classNameByNameSelector(state, { name: 'two'}), undefined)
+  test.is(selectors.classNamesForComponentSelector(state, 'two'), undefined);
 });
 
 test('isSettingsEnabled returns true when not set', test => {
