@@ -9,7 +9,6 @@ import TableHeading from './components/TableHeading';
 import { Table } from './components/Table';
 import TableContainer from './components/TableContainer';
 import { rowDataSelector } from './plugins/local/selectors/localSelectors';
-import fakeData from './fake-data';
 
 import LocalPlugin from '../src/plugins/local';
 import PositionPlugin from '../src/plugins/position';
@@ -17,8 +16,8 @@ import PositionPlugin from '../src/plugins/position';
 
 export default Griddle;
 export {
-  ColumnDefinition, 
-  RowDefinition,  
+  ColumnDefinition,
+  RowDefinition,
   Cell,
   Row,
   TableBody,
@@ -29,5 +28,4 @@ export {
   rowDataSelector,
   LocalPlugin,
   PositionPlugin,
-  fakeData
-  };
+};

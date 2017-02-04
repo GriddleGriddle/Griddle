@@ -34,3 +34,5 @@ docs/html
 .DS_Store
 
 build/
+lib/
+storybook-static/

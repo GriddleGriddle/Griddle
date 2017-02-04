@@ -10,16 +10,13 @@
     "sort"
   ],
   "main": "lib/griddle.js",
-  "types": "src/index.d.ts",
   "scripts": {
-    "start": "node server.js",
-    "dist-debug": "./node_modules/.bin/webpack --config webpack.config.js",
-    "dist": "./node_modules/.bin/webpack --config webpack-dist.config.js",
+    "start": "start-storybook -p 6006",
     "test": "ava",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "webpack --config config/webpack.config.js"
+    "build": "webpack --config webpack.config.js"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
