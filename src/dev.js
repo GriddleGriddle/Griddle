@@ -4,6 +4,6 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 /** The main griddle component */
-import Griddle from './components/GriddleContainer';
+import Griddle from './index';
 
 render(<Griddle />, document.getElementById('main'));
