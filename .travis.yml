@@ -5,10 +5,8 @@ node_js:
   - '4.1'
   - '0.12'
   - '0.10'
-before_install:
-  - 'npm install -g grunt-cli'
 install:
   - 'npm install'
 script:
-  - grunt build
-  - npm run test-single
+  - npm run build
+  - npm run test
