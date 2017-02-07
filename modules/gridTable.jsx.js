@@ -98,7 +98,7 @@ var GridTable = React.createClass({
     }
   },
   getAdjustedRowHeight: function getAdjustedRowHeight() {
-    return this.props.rowHeight + this.props.paddingHeight * 2; // account for padding.
+    return this.props.rowHeight + this.props.paddingHeight * 5; // account for padding.
   },
   getNodeContent: function getNodeContent() {
     this.verifyProps();
