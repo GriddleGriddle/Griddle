@@ -44,6 +44,7 @@ Please feel free submit any bugs or suggestions as issues. If you are having pro
 ----------
 ###Changelog:###
 
+<<<<<<< HEAD
 0.6.0
 
 **Add**
@@ -76,6 +77,8 @@ Previous you had to write ```compare``` or ```compare2``` to define your custom 
 
 Thanks @thangaduraicse, @Julusian, Yaohan Chen, and @Dem0n3D
 
+=======
+>>>>>>> parent of 26b24f8... 0.5.0
 0.4.0
 - Remove the underscore dependencies and implement the use of lodash-modularized
 - Support filter by column

@@ -1,5 +1,9 @@
 {
   "name": "griddle-react",
+<<<<<<< HEAD
+=======
+  "version": "0.4.1",
+>>>>>>> parent of 26b24f8... 0.5.0
   "homepage": "https://github.com/GriddleGriddle/Griddle",
   "authors": [
     "Ryan Lanciaux"
