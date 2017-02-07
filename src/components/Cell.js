@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Cell = ({ value, onMouseOver, onClick, className, style, onMouseOut }) => (
+const Cell = ({ value, onMouseEnter, onClick, className, style, onMouseLeave }) => (
   <td
     style={style}
     onClick={onClick}
-    onMouseOver={onMouseOver}
-    onMouseOut={onMouseOut}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
     className={className}
   >
     {value}
