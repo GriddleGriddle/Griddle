@@ -10,9 +10,12 @@ test('visible record count selector', test => {
     positionSettings: {
       rowHeight: 50,
       height: 600
-    }
+    },
+    currentPosition: {
+      height: 600
+    },
   });
 
   test.is(visibleRecordCountSelector(state), 12);
-})
+});
 

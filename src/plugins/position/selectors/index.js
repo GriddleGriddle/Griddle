@@ -20,8 +20,8 @@ export const tableWidthSelector = state => state.getIn(['positionSettings', 'tab
 export const visibleRecordCountSelector = createSelector(
   rowHeightSelector,
   currentHeightSelector,
-  (rowHeight, tableHeight) => {
-    return Math.ceil(tableHeight / rowHeight);
+  (rowHeight, currentHeight) => {
+    return Math.ceil(currentHeight / rowHeight);
   }
 );
 
