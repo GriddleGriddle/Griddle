@@ -1,7 +1,11 @@
 import React from 'react';
 
 const Row = ({Cell, griddleKey, columnIds, style, className}) => (
-  <tr>
+  <tr
+    key={griddleKey}
+    style={style}
+    className={className}
+  >
     { columnIds && columnIds.map(c => (
       <Cell
         key={`${c}-${griddleKey}`}

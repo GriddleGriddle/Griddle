@@ -5,21 +5,21 @@ import {
   XY_POSITION_CHANGED
 } from '../index';
 
-test('xy_position_changed sets position to 0 when not available', test => {
+test('xy_position_changed sets position to 0 when not available', t => {
   const state = new Immutable.Map();
   const outputState = XY_POSITION_CHANGED(state, {});
 
-  test.deepEqual(outputState.toJSON(), {
-    positionSettings: {
-      xScrollPosition: 0,
-      yScrollPosition: 0,
+  t.deepEqual(outputState.toJSON(), {
+    currentPosition: {
+      xScrollChangePosition: 0,
+      yScrollChangePosition: 0,
       height: 0,
       width: 0
     }
-  })
+  });
 });
 
-test('xy_position_changed sets position to action information', test => {
+test('xy_position_changed sets position to action information', t => {
   const state = new Immutable.Map();
   const outputState = XY_POSITION_CHANGED(state, {
     yScrollPosition: 10,
@@ -28,12 +28,12 @@ test('xy_position_changed sets position to action information', test => {
     width: 40
   });
 
-  test.deepEqual(outputState.toJSON(), {
-    positionSettings: {
-      xScrollPosition: 20,
-      yScrollPosition: 10,
+  t.deepEqual(outputState.toJSON(), {
+    currentPosition: {
+      xScrollChangePosition: 20,
+      yScrollChangePosition: 10,
       height: 30,
       width: 40
     }
-  })
+  });
 });
