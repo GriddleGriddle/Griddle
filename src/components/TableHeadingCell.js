@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TableHeadingCell = ({ title, columnId, onClick, onMouseOver, onMouseOut, icon, style, className }) => (
+const TableHeadingCell = ({ title, columnId, onClick, onMouseEnter, onMouseLeave, icon, style, className }) => (
   <th
     onClick={onClick}
-    onMouseOver={onMouseOver}
-    onMouseOut={onMouseOut}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
     style={style}
     className={className}
   >
