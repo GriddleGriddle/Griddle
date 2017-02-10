@@ -9,14 +9,15 @@ const ComposedTableBodyContainer = OriginalComponent => compose(
     components: PropTypes.object,
     selectors: PropTypes.object,
   }),
-  connect(state => ({
-    visibleRowIds: visibleRowIdsSelector(state),
-    className: classNamesForComponentSelector(state, 'TableBody'),
-    style: stylesForComponentSelector(state, 'TableBody'),
-  })),
   mapProps(props => ({
     Row: props.components.Row,
+    visibleRowIdsSelector: props.selectors.visibleRowIdsSelector,
     ...props
+  })),
+  connect((state, props) => ({
+    visibleRowIds: props.visibleRowIdsSelector(state),
+    className: classNamesForComponentSelector(state, 'TableBody'),
+    style: stylesForComponentSelector(state, 'TableBody'),
   })),
   // withHandlers({
   //   Row: props => props.components.Row
