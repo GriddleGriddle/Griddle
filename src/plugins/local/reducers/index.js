@@ -7,7 +7,7 @@ import {
 import * as dataReducers from '../../../reducers//dataReducer';
 
 export function GRIDDLE_INITIALIZED(state) {
-  return dataReducers.GRIDDLE_INITIALIZED(state)
+  return dataReducers.GRIDDLE_INITIALIZED(state);
 }
 /** Sets the Griddle data
  * @param {Immutable} state - Immutable state object

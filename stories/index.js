@@ -16,6 +16,7 @@ import RowDefinition from '../src/components/RowDefinition';
 import _ from 'lodash';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
+import {fakeData2, fakeData3} from './fakeData2';
 
 import LocalPlugin from '../src/plugins/local';
 import PositionPlugin from '../src/plugins/position';
@@ -219,6 +220,22 @@ storiesOf('Griddle main', module)
         <RowDefinition>
           <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} width={300} />
           <ColumnDefinition id="state" order={1} width={400} />
+        </RowDefinition>
+      </Griddle>
+    )
+  })
+  .add('set fakeData to constructed Objects', () => {
+    return (
+      <Griddle data={fakeData2} plugins={[LocalPlugin]}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
+  .add('set fakeData to class Objects', () => {
+    return (
+      <Griddle data={fakeData3} plugins={[LocalPlugin]}>
+        <RowDefinition>
         </RowDefinition>
       </Griddle>
     )
