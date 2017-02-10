@@ -9,6 +9,23 @@ function keyInArray(keys) {
   }
 }
 
+export function getIncrementer(startIndex) {
+  let key = startIndex;
+  return () => key++;  
+}
+
+export function transformDataToList(data, settings={}) {
+  const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
+  const localSettings = Object.assign({}, defaultSettings, settings);
+
+  const getKey = getIncrementer(localSettings.startIndex);
+
+  return new Immutable.List(data.map(row => {
+    const map = new Immutable.Map(row);
+    return localSettings.addGriddleKey ? map.set(localSettings.name, getKey()) : map;
+  }));
+}
+
 /** adds griddleKey to given collection
  * @param (List<Map>) data - data collection to work against
  * @param (object) settings - settings object -- default {}

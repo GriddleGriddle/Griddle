@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-
+import omit from 'lodash.omit';
 /*
  * State
  * ------------------
@@ -15,7 +15,8 @@ import Immutable from 'immutable';
  **/
 import {
   addKeyToCollection,
-  addColumnPropertiesWhenNoneExist
+  addColumnPropertiesWhenNoneExist,
+  transformDataToList,
 } from '../utils/dataUtils';
 
 /** Sets the default render properties
@@ -27,14 +28,13 @@ import {
 export function GRIDDLE_INITIALIZED(initialState) {
   let tempState = Object.assign({}, initialState);
   tempState = addColumnPropertiesWhenNoneExist(tempState);
-
   //TODO: could probably make this more efficient by removing data
   // making the rest of the properties initial state and
   // setting the mapped data on the new initial state immutable object
   if(initialState.hasOwnProperty('data') &&
     initialState.data.length > 0 &&
     !initialState.data[0].hasOwnProperty('griddleKey')) {
-      tempState.data = addKeyToCollection(Immutable.fromJS(initialState.data));
+      tempState.data = transformDataToList(initialState.data);
   }
 
   return Immutable.fromJS(tempState);
@@ -45,7 +45,7 @@ export function GRIDDLE_INITIALIZED(initialState) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_LOADED_DATA(state, action, helpers) {
-  return state.set('data', addKeyToCollection(Immutable.fromJS(action.data)))
+  return state.set('data', transformDataToList(action.data))
     .set('loading', false);
 }
 
@@ -109,5 +109,9 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  return state.mergeDeep(action.newState);
+  const data = transformDataToList(action.newState.data);
+  const newState = omit(action.newState, data);
+
+  return state.mergeDeep(Immutable.fromJS(newState)).set('data', data);
 }
+
