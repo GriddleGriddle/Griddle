@@ -1,31 +1,33 @@
 import Griddle from './index';
-import RowDefinition from './components/RowDefinition';
-import ColumnDefinition from './components/ColumnDefinition';
-import Cell from './components/Cell';
-import Row from './components/Row';
-import TableBody from './components/TableBody';
-import TableHeadingCell from './components/TableHeadingCell';
-import TableHeading from './components/TableHeading';
-import { Table } from './components/Table';
-import TableContainer from './components/TableContainer';
-import { rowDataSelector } from './plugins/local/selectors/localSelectors';
 
-import LocalPlugin from '../src/plugins/local';
-import PositionPlugin from '../src/plugins/position';
 
+import actions from './actions';
+import components from './components';
+import constants from './constants';
+import selectors from './selectors/dataSelectors';
+import settingsComponentObjects from './settingsComponentObjects';
+import utils from './utils';
+
+import LocalPlugin from './plugins/local';
+import PositionPlugin from './plugins/position';
+
+const plugins = {
+  LocalPlugin,
+  PositionPlugin,
+};
+
+const ColumnDefintion = components.ColumnDefintion;
+const RowDefinition = components.RowDefinition;
 
 export default Griddle;
 export {
-  ColumnDefinition,
+  actions,
+  components,
+  constants,
+  selectors,
+  settingsComponentObjects,
+  utils,
+  plugins,
+  ColumnDefintion,
   RowDefinition,
-  Cell,
-  Row,
-  TableBody,
-  TableHeadingCell,
-  TableHeading,
-  Table,
-  TableContainer,
-  rowDataSelector,
-  LocalPlugin,
-  PositionPlugin,
 };
