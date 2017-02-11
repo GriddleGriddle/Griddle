@@ -6,7 +6,7 @@ import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponent
 import { getPrevious } from '../../../actions';
 
 const enhance = OriginalComponent => connect(state => ({
-  hasPrevious: hasPreviousSelector,
+  hasPrevious: hasPreviousSelector(state),
   className: classNamesForComponentSelector(state, 'PreviousButton'),
   style: stylesForComponentSelector(state, 'PreviousButton'),
 }),
