@@ -10,6 +10,7 @@ import {
   composeReducerObjects,
   removeHooksFromObject,
   isKeyGriddleHook,
+  buildGriddleReducer,
   buildGriddleReducerObject,
   getAfterHooksFromObject,
   getBeforeHooksFromObject,
@@ -304,7 +305,7 @@ test('builds griddle reducer', test => {
     },
     REDUCE_THING_BEFORE: (state, action) => {
       return { number: state.number + 3 }
-    }
+    },
   };
 
   const reducer2 = {
@@ -329,6 +330,53 @@ test('builds griddle reducer', test => {
 
   test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING', 'REDUCE_OTHER']);
   test.deepEqual(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
+});
+
+test('builds griddle reducer with BEFORE_REDUCE and AFTER_REDUCE', (t) => {
+  const reducer1 = {
+    BEFORE_REDUCE: (state, action) => {
+      return { number: 10 }
+    },
+    REDUCE_THING: (state, action) => {
+      return state;
+    },
+    AFTER_REDUCE: (state, action) => {
+      return { number: state.number + 100 }
+    }
+  };
+
+  const reducer2 = { 
+    BEFORE_REDUCE: (state, action) => {
+      return { number: state.number - 5 }
+    },
+    AFTER_REDUCE: (state, action) => {
+      return { number: state.number - 50 }
+    }
+  }
+
+  const griddleReducer = buildGriddleReducer([reducer1, reducer2]);
+  const output = griddleReducer({number: 5}, { type: 'REDUCE_THING'});
+
+  t.deepEqual(output, { number: 55 });
+});
+
+test('builds griddle reducer without BEFORE / AFTER if they dont exist', (t) => {
+  const reducer1 = {
+    REDUCE_THING: (state) => {
+      return state;
+    },
+  };
+
+  const reducer2 = { 
+    REDUCE_THING_AFTER: (state) => {
+      return { number: state.number + 10 };
+    }
+  };
+
+  const griddleReducer = buildGriddleReducer([reducer1, reducer2]);
+  const output = griddleReducer({number: 5}, { type: 'REDUCE_THING'});
+
+  t.deepEqual(output, { number: 15 });
 });
 
 test('combineAndEnhanceComponents', test => {

@@ -165,19 +165,69 @@ export function composeReducerObjects(reducerObjects) {
 
 /** Builds a new reducer that composes hooks and extends standard reducers between reducerObjects
  * @param {Object <array>} reducers - An array of reducerObjects
+ * TODO: This method should be broken down a bit -- it's doing too much currently
  */
 export function buildGriddleReducerObject(reducerObjects) {
-  // remove the hooks and extend the object
-  const justReducerMethods = reducerObjects.map(r => removeHooksFromObject(r));
+  let reducerMethodsWithoutHooks = [];
+  let beforeHooks = [];
+  let afterHooks = [];
+
+  let beforeReduceAll = [];
+  let afterReduceAll = [];
+
+
+  if (reducerObjects.length > 0) {
+    // remove the hooks and extend the object
+    for(const key in reducerObjects) {
+      const reducer = reducerObjects[key];
+      reducerMethodsWithoutHooks.push(removeHooksFromObject(reducer));
+      beforeHooks.push(getBeforeHooksFromObject(reducer));
+      afterHooks.push(getAfterHooksFromObject(reducer));
+      beforeReduceAll.push(getBeforeReduceHooksFromObject(reducer));
+      afterReduceAll.push(getAfterReduceHooksFromObject(reducer));
+    }
+  }
+ 
+  const composedBeforeHooks = composeReducerObjects(beforeHooks);
+  const composedAfterHooks = composeReducerObjects(afterHooks);
+
+  const composedBeforeReduceAll = composeReducerObjects(beforeReduceAll);
+  const composedAfterReduceAll = composeReducerObjects(afterReduceAll);
 
   // combine the reducers without hooks
-  const combinedReducer = extendArray(justReducerMethods);
+  const combinedReducer = extendArray(reducerMethodsWithoutHooks);
 
-  const beforeHooks = composeReducerObjects(reducerObjects.map(r => getBeforeHooksFromObject(r)));
-  const afterHooks = composeReducerObjects(reducerObjects.map(r => getAfterHooksFromObject(r)));
+  const composed = composeReducerObjects([
+    composedBeforeReduceAll,
+    composedBeforeHooks,
+    combinedReducer,
+    composedAfterHooks,
+    composedAfterReduceAll
+  ]);
 
-  const composed = composeReducerObjects([beforeHooks, combinedReducer, afterHooks]);
   return composed;
+}
+
+/** Builds a composed method containing the before / after reduce calls
+ * @param {Object} reduceObject - The reducer that contains the composed reducer methods
+ * @param {Object} state - The store state
+ * @param {object} action - The action payload information
+*/
+export function callReducerWithBeforeAfterPipe(reducerObject, state, action) {
+  const noop = passThroughState => passThroughState;
+  const before = reducerObject.hasOwnProperty('BEFORE_REDUCE') ? reducerObject.BEFORE_REDUCE : noop;
+  const after = reducerObject.hasOwnProperty('AFTER_REDUCE') ? reducerObject.AFTER_REDUCE : noop;
+
+  const call = (action.type &&
+        reducerObject[action.type] &&
+        reducerObject[action.type]
+      ) || reducerObject.GRIDDLE_INITIALIZED;
+
+  const partialCall = (partialAction => partialState => call(partialState, partialAction))(action);
+
+  const method = _.flow([before, partialCall, after]);
+
+  return method(state);
 }
 
 /** Builds a griddleReducer function from a series of reducerObjects
@@ -185,13 +235,7 @@ export function buildGriddleReducerObject(reducerObjects) {
 */
 export function buildGriddleReducer(reducerObjects) {
   const reducerObject = buildGriddleReducerObject(reducerObjects);
-  return function(state, action) {
-    return (
-      (action.type &&
-        reducerObject[action.type] &&
-        reducerObject[action.type](state, action)
-      ) || reducerObject['GRIDDLE_INITIALIZED'](state, action));
-  }
+  return (state, action) => callReducerWithBeforeAfterPipe(reducerObject, state, action);
 }
 
 /** Gets all reducers by a specific wordEnding

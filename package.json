@@ -42,7 +42,9 @@
   },
   "dependencies": {
     "immutable": "^3.8.1",
+    "lodash": "^4.17.4",
     "lodash.assign": "^4.2.0",
+    "lodash.flow": "^3.5.0",
     "lodash.omit": "^4.5.0",
     "max-safe-integer": "^1.0.0",
     "react": "^15.3.2",
