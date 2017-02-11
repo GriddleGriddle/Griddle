@@ -37,4 +37,4 @@ docs/html
 .lock-wscript
 
 .DS_Store
-*.gz
+*.tgz
