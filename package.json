@@ -17,7 +17,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build": "webpack --config webpack.config.js",
-    "publish-beta": "npm run build && npm publish --tag beta"
+    "ship-it": "npm run build && npm publish --tag beta"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
