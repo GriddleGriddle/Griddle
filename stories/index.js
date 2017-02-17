@@ -214,6 +214,16 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add('with override row component', () => {
+    const NewRow = (props) => <tr><td>hi</td></tr>
+
+    return <Griddle
+      data={fakeData}
+      components={{
+        Row: NewRow
+      }}
+    />
+  })
   .add('with virtual scrolling', () => {
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}>

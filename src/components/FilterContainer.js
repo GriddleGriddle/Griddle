@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withHandlers, getContext, compose, mapProps } from 'recompose';
 
 import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import { setFilter } from '../actions';
 
 const EnhancedFilter = OriginalComponent => compose(
   getContext({
@@ -11,9 +12,10 @@ const EnhancedFilter = OriginalComponent => compose(
   connect((state, props) => ({
     className: classNamesForComponentSelector(state, 'Filter'),
     style: stylesForComponentSelector(state, 'Filter'),
-  })),
+  }), { setFilter }),
   mapProps(props => {
     const { events, ...otherProps } = props;
+
     return {
       setFilter: props.events.onFilter,
       ...otherProps,

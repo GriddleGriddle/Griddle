@@ -77,7 +77,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -86,7 +86,7 @@ class Griddle extends Component {
     const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
 
     //Combine / Compose the components to make a single component for each component type
-    this.components = buildGriddleComponents([components, ...plugins.map(p => p.components)]);
+    this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
 
     this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => plugins.settingsComponentObjects));
 

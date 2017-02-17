@@ -1,5 +1,13 @@
 # Thank you : https://github.com/github/gitignore/blob/master/Node.gitignore
 
+# source
+src
+
+# Storybook
+stories
+storybook-static
+
+
 # Logs
 logs
 *.log
@@ -29,3 +37,4 @@ docs/html
 .lock-wscript
 
 .DS_Store
+*.tgz
