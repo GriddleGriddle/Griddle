@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { compose, mapProps, getContext } from 'recompose';
+import { combineHandlers } from '../utils/compositionUtils';
 
 const enhance = OriginalComponent => compose(
   getContext({
@@ -7,7 +8,7 @@ const enhance = OriginalComponent => compose(
   }),
   mapProps(({ events: { onNext }, ...props }) => ({
     ...props,
-    onClick: (...args) => [props.onClick, onNext].forEach(func => func(args)),
+    onClick: combineHandlers([onNext, props.onClick]),
   }))
 )((props) => <OriginalComponent {...props} />);
 

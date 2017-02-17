@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { getContext, compose, mapProps } from 'recompose';
+import { combineHandlers } from '../utils/compositionUtils';
 
 const EnhancedFilter = OriginalComponent => compose(
   getContext({
@@ -7,7 +8,7 @@ const EnhancedFilter = OriginalComponent => compose(
   }),
   mapProps(({ events: { onFilter }, ...props }) => ({
     ...props,
-    setFilter: (...args) => [onFilter, props.setFilter].forEach(func => !!func && func(args)),
+    setFilter: combineHandlers([onFilter, props.setFilter]),
   }))
 )(props => <OriginalComponent {...props} />);
 

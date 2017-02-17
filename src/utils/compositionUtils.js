@@ -19,6 +19,12 @@ export function extendArray(objects) {
   return combinedObject;
 }
 
+export function combineHandlers(functionArray) {
+  return (...args) => {
+    functionArray.forEach(func => !!func && func(...args));
+  }
+}
+
 //from MDN
 if (!String.prototype.endsWith) {
   String.prototype.endsWith = function(searchString, position) {
@@ -187,7 +193,7 @@ export function buildGriddleReducerObject(reducerObjects) {
       afterReduceAll.push(getAfterReduceHooksFromObject(reducer));
     }
   }
- 
+
   const composedBeforeHooks = composeReducerObjects(beforeHooks);
   const composedAfterHooks = composeReducerObjects(afterHooks);
 

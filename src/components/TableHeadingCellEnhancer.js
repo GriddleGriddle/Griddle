@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { getContext, mapProps, compose } from 'recompose';
+import { combineHandlers } from '../utils/compositionUtils';
 
 const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
@@ -7,7 +8,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
   }),
   mapProps(({ events: { onSort }, ...props }) => ({
     ...props,
-    onClick: (...args) => [props.onClick, () => onSort({ id: props.columnId })].forEach(func => func(args)),
+    onClick: combineHandlers([() => onSort({ id: props.columnId }), props.onClick]),
   }))
 )(props => <OriginalComponent {...props} />);
 
