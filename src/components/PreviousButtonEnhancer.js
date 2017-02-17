@@ -5,9 +5,9 @@ const enhance = OriginalComponent => compose(
   getContext({
     events: PropTypes.object
   }),
-  mapProps(({ events: { onNext }, ...props }) => ({
+  mapProps(({ events: { onPrevious }, ...props }) => ({
     ...props,
-    onClick: (...args) => [props.onClick, onNext].forEach(func => func(args)),
+    onClick: (...args) => [props.onClick, onPrevious].forEach(func => func(args)),
   }))
 )((props) => <OriginalComponent {...props} />);
 

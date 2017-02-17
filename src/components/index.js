@@ -26,6 +26,7 @@ import NextButton from './NextButton';
 import NextButtonEnhancer from './NextButtonEnhancer';
 import NextButtonContainer from './NextButtonContainer';
 import PreviousButton from './PreviousButton';
+import PreviousButtonEnhancer from './PreviousButtonEnhancer';
 import PreviousButtonContainer from './PreviousButtonContainer';
 import PageDropdown from './PageDropdown.js';
 import PageDropdownContainer from './PageDropdownContainer';
@@ -53,6 +54,7 @@ const components = {
   Pagination,
   PaginationContainer,
   PreviousButton,
+  PreviousButtonEnhancer,
   PreviousButtonContainer,
   Filter,
   FilterContainer,
