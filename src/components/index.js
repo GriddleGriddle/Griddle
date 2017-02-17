@@ -23,6 +23,7 @@ import SettingsWrapperContainer from './SettingsWrapperContainer';
 import Settings from './Settings';
 import SettingsContainer from './SettingsContainer';
 import NextButton from './NextButton';
+import NextButtonEnhancer from './NextButtonEnhancer';
 import NextButtonContainer from './NextButtonContainer';
 import PreviousButton from './PreviousButton';
 import PreviousButtonContainer from './PreviousButtonContainer';
@@ -45,6 +46,7 @@ const components = {
   Layout,
   LayoutContainer,
   NextButton,
+  NextButtonEnhancer,
   NextButtonContainer,
   PageDropdown,
   PageDropdownContainer,

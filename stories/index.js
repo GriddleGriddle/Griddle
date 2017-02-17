@@ -79,6 +79,24 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with local and events', () => {
+
+    // don't do things this way - fine for example storybook
+    const events = {
+      onFilter: () => console.log('onFilter'),
+      onSort: () => console.log('onSort'),
+      onNext: () => console.log('onNext'),
+      onPrevious: () => console.log('onPrevious'),
+      onGetPage: () => console.log('onGetPage')
+    }
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} events={events}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
   .add('with custom sort on name', () => {
     return (
       <div>
