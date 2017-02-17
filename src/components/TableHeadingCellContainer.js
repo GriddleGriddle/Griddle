@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import { getContext, mapProps, compose } from 'recompose';
 import { setSortProperties } from '../utils/columnUtils';
 
 import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector } from '../selectors/dataSelectors';
@@ -23,7 +23,6 @@ function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
 
 const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
-    events: PropTypes.object,
     selectors: PropTypes.object,
   }),
   connect(
@@ -35,11 +34,6 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
     })
   ),
-  withHandlers({
-    onClick: ({ events: { onSort }, columnId }) => event => {
-      onSort({ id: columnId })
-    }
-  }),
   mapProps(props => {
     const icon = getIcon(props);
     const title = props.customHeadingComponent ?

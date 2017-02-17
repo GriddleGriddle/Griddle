@@ -9,12 +9,14 @@ import TableHeading from './TableHeading';
 import TableHeadingContainer from './TableHeadingContainer';
 import TableHeadingCell from './TableHeadingCell';
 import TableHeadingCellContainer from './TableHeadingCellContainer';
+import TableHeadingCellEnhancer from './TableHeadingCellEnhancer';
 import TableContainer from './TableContainer';
 import Layout from './Layout';
 import LayoutContainer from './LayoutContainer';
 import Pagination from './Pagination';
 import PaginationContainer from './PaginationContainer';
 import Filter from './Filter';
+import FilterEnhancer from './FilterEnhancer';
 import FilterContainer from './FilterContainer';
 import SettingsToggle from './SettingsToggle';
 import SettingsToggleContainer from './SettingsToggleContainer';
@@ -43,6 +45,7 @@ const components = {
   TableHeadingContainer,
   TableHeadingCell,
   TableHeadingCellContainer,
+  TableHeadingCellEnhancer,
   TableContainer,
   Layout,
   LayoutContainer,
@@ -57,6 +60,7 @@ const components = {
   PreviousButtonEnhancer,
   PreviousButtonContainer,
   Filter,
+  FilterEnhancer,
   FilterContainer,
   SettingsToggle,
   SettingsToggleContainer,
