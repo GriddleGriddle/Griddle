@@ -3,19 +3,11 @@ import { connect } from 'react-redux';
 import { compose, mapProps, getContext } from 'recompose';
 import { hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
-const enhance = OriginalComponent => compose(
-  getContext({
-    events: PropTypes.object
-  }),
-  connect((state, props) => ({
-    hasNext: hasNextSelector(state, props),
-    className: classNamesForComponentSelector(state, 'NextButton'),
-    style: stylesForComponentSelector(state, 'NextButton'),
-  })),
-  mapProps(({ events: { onNext }, ...props }) => ({
-    onClick: onNext,
-    text: 'Next', // TODO: Get this from the store
-    ...props }))
-)((props) => <OriginalComponent {...props} />);
+const enhance = OriginalComponent => connect((state, props) => ({
+  text: 'Next', // TODO: Get this from the store
+  hasNext: hasNextSelector(state, props),
+  className: classNamesForComponentSelector(state, 'NextButton'),
+  style: stylesForComponentSelector(state, 'NextButton'),
+}))((props) => <OriginalComponent {...props} />);
 
 export default enhance;
