@@ -77,7 +77,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents } = props;
+    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}} = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -104,10 +104,10 @@ class Griddle extends Component {
     );
 
     //TODO: This should also look at the default and plugin initial state objects
-    const renderProperties = {
+    const renderProperties = Object.assign({
       rowProperties,
       columnProperties
-    };
+    }, ...plugins.map(p => p.renderProperties), userRenderProperties);
 
     // TODO: Make this its own method
     const initialState = plugins.reduce((combined, plugin) => {
@@ -117,6 +117,7 @@ class Griddle extends Component {
       data,
       enableSettings: true,
       pageProperties,
+      sortProperties,
       textProperties: {
         settingsToggle: 'Settings'
       },
