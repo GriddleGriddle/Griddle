@@ -140,6 +140,12 @@ export const visibleRowIdsSelector = createSelector(
   (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
 );
 
+/** Gets the count of visible rows */
+export const visibleRowCountSelector = createSelector(
+  visibleRowIdsSelector,
+  (visibleRowIds) => visibleRowIds.size
+);
+
 /** Gets the columns that are not currently visible
  */
 export const hiddenColumnsSelector = createSelector(

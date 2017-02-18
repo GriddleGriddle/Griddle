@@ -216,9 +216,6 @@ storiesOf('Griddle main', module)
             classNames:{
               Cell: 'hahaha',
             },
-            styles: {
-              Cell: { fontSize: 100 }
-            }
           }}
           sortProperties={this.state.sortProperties}
           pageProperties={pageProperties}>
@@ -231,6 +228,9 @@ storiesOf('Griddle main', module)
     }
 
     return <Something />
+  })
+  .add('with controlled griddle component with no results', () => {
+    return <Griddle data={[]} />
   })
   .add('with custom heading component', () => {
     return (

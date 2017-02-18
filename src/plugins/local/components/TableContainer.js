@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 //TODO: adjust the import so we're not pulling in the whole library here'
 import { getContext, mapProps, compose } from 'recompose';
 
-import { classNamesForComponentSelector, stylesForComponentSelector, visibleRowCountSelector } from '../selectors/dataSelectors';
+import { classNamesForComponentSelector, stylesForComponentSelector, visibleRowCountSelector } from '../selectors/localSelectors';
 
 const ComposedContainerComponent = OriginalComponent => compose(
-  getContext(
-  {
+  getContext({
     components: React.PropTypes.object
   }),
-  //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
   mapProps(props => ({
     TableHeading: props.components.TableHeading,
     TableBody: props.components.TableBody,
@@ -27,3 +25,4 @@ const ComposedContainerComponent = OriginalComponent => compose(
 )(props => <OriginalComponent {...props} />);
 
 export default ComposedContainerComponent;
+
