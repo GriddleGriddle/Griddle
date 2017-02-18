@@ -1,3 +1,11 @@
 {
-  "presets": ["es2015", "stage-0", "react"]
+  "env": {
+    "development": {
+      "presets": ["es2015", "stage-0", "react"],
+      "ignore": [
+        "**/__tests__/*.js",
+        "**/fake-*"
+      ]
+    }
+  }
 }

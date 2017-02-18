@@ -5,11 +5,11 @@ module.exports = {
   devtool: 'source-map',
   entry: './src/module.js',
   output: {
-    path: __dirname + '/lib/',
+    path: __dirname + '/lib/umd/',
     filename: 'griddle.js',
     publicPath: '/build/',
     library: 'Griddle',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [

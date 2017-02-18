@@ -9,19 +9,25 @@
     "pagination",
     "sort"
   ],
-  "main": "lib/griddle.js",
+  "main": "lib/module/module.js",
   "scripts": {
     "start": "start-storybook -p 6006",
     "test": "ava",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "webpack --config webpack.config.js",
+    "build": "npm run build-modules && npm run build-umd",
+    "build-umd": "webpack --config webpack.config.js",
+    "build-modules": "babel src --out-dir lib/module ",
     "ship-it": "npm run build && npm publish --tag beta"
+  },
+  "peerDependencies": {
+    "react": ">=15"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
     "ava": "^0.17.0",
+    "babel-cli": "^6.23.0",
     "babel-core": "^6.0.0",
     "babel-loader": "^6.0.0",
     "babel-plugin-lodash": "^3.2.11",
@@ -39,7 +45,9 @@
     "jsdom-global": "^2.1.1",
     "lodash-webpack-plugin": "^0.11.0",
     "node-libs-browser": "^2.0.0",
+    "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.1",
+    "react-dom": "^15.3.2",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
@@ -50,8 +58,6 @@
     "lodash.flow": "^3.5.0",
     "lodash.omit": "^4.5.0",
     "max-safe-integer": "^1.0.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
     "react-redux": "^5.0.2",
     "recompose": "^0.21.2",
     "redux": "^3.5.2",
