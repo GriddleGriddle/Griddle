@@ -281,6 +281,85 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with nested column data', () => {
+    const localData = [
+      {
+        "id": 0,
+        "name": "Mayer Leonard",
+        "location": {
+          "country": "United Kingdom",
+          "city": "Kapowsin",
+          "state": "Hawaii",
+        },
+        "company": "Ovolo",
+        "favoriteNumber": 7
+      },
+      {
+        "id": 1,
+        "name": "Koch Becker",
+        "location": {
+          "city": "Johnsonburg",
+          "state": "New Jersey",
+          "country": "Madagascar",
+        },
+        "company": "Eventage",
+        "favoriteNumber": 2
+      },
+      {
+        "id": 2,
+        "name": "Lowery Hopkins",
+        "location": {
+          "city": "Blanco",
+          "state": "Arizona",
+          "country": "Ukraine",
+        },
+        "company": "Comtext",
+        "favoriteNumber": 3
+      },
+      {
+        "id": 3,
+        "name": "Walters Mays",
+        "location": {
+          "city": "Glendale",
+          "state": "Illinois",
+          "country": "New Zealand",
+        },
+        "company": "Corporana",
+        "favoriteNumber": 6
+      },
+      {
+        "id": 4,
+        "name": "Shaw Lowe",
+        "location": {
+          "city": "Coultervillle",
+          "state": "Wyoming",
+          "country": "Ecuador",
+        },
+        "company": "Isologica",
+        "favoriteNumber": 2
+      },
+      {
+        "id": 5,
+        "name": "Ola Fernandez",
+        "location": {
+          "city": "Deltaville",
+          "state": "Delaware",
+          "country": "Virgin Islands (US)",
+        },
+        "company": "Pawnagra",
+        "favoriteNumber": 7
+      },
+    ];
+
+    return (
+      <Griddle data={localData}>
+        <RowDefinition>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="location.state" nested={true}/>
+        </RowDefinition>
+      </Griddle>
+    );
+  })
 
 storiesOf('Cell', module)
   .add('base cell', () => {
