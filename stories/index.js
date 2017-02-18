@@ -97,6 +97,19 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with local and sort set', () => {
+    const sortProperties = [
+      { id: 'name', sortAscending: true }
+    ];
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} sortProperties={sortProperties}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
+
   .add('with custom sort on name', () => {
     return (
       <div>
