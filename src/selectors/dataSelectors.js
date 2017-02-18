@@ -249,8 +249,8 @@ export const visibleRowCountSelector = createSelector(
 export const cellValueSelector = (state, { griddleKey, columnId }) => {
   return state.get('data')
     .find(r => r.get('griddleKey') === griddleKey)
-    .get(columnId);
-}
+    .getIn(columnId.split('.'));
+};
 
 // TODO: Needs tests and jsdoc
 export const cellPropertiesSelector = (state, { griddleKey, columnId }) => {

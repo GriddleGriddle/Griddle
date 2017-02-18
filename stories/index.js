@@ -352,7 +352,7 @@ storiesOf('Griddle main', module)
     ];
 
     return (
-      <Griddle data={localData}>
+      <Griddle data={localData} plugins={[LocalPlugin]}>
         <RowDefinition>
           <ColumnDefinition id="name" />
           <ColumnDefinition id="location.state" nested={true}/>

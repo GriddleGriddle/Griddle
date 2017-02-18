@@ -21,7 +21,7 @@ export function transformDataToList(data, settings={}) {
   const getKey = getIncrementer(localSettings.startIndex);
 
   return new Immutable.List(data.map(row => {
-    const map = new Immutable.Map(row);
+    const map = Immutable.fromJS(row);
     return localSettings.addGriddleKey ? map.set(localSettings.name, getKey()) : map;
   }));
 }
