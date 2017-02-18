@@ -8,7 +8,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
   }),
   mapProps(({ events: { onSort }, ...props }) => ({
     ...props,
-    onClick: combineHandlers([() => onSort({ id: props.columnId }), props.onClick]),
+    onClick: combineHandlers([() => onSort && onSort({ id: props.columnId }), props.onClick]),
   }))
 )(props => <OriginalComponent {...props} />);
 
