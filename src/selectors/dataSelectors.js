@@ -239,6 +239,12 @@ export const visibleRowIdsSelector = createSelector(
   currentPageData => currentPageData.map(c => c.get('griddleKey'))
 );
 
+/** Gets the count of visible rows */
+export const visibleRowCountSelector = createSelector(
+  visibleRowIdsSelector,
+  (visibleRowIds) => visibleRowIds.size
+);
+
 // TODO: Needs tests and jsdoc
 export const cellValueSelector = (state, { griddleKey, columnId }) => {
   return state.get('data')

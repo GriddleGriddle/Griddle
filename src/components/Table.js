@@ -1,10 +1,14 @@
 import React from 'react';
 
-export const Table = ({ TableHeading, TableBody, style, className }) =>  (
-  <table style={style} className={className}>
-    { TableHeading && <TableHeading /> }
-    { TableBody && <TableBody /> }
-  </table>
-);
+export const Table = ({ TableHeading, TableBody, NoResults, style, className, visibleRows }) =>  visibleRows > 0 ?
+  (
+    <table style={style} className={className}>
+      { TableHeading && <TableHeading /> }
+      { TableBody && <TableBody /> }
+    </table>
+  ) :
+  (
+    <NoResults />
+  );
 
 export default Table;

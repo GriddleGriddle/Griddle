@@ -27,10 +27,12 @@ import SettingsContainer from './SettingsContainer';
 import NextButton from './NextButton';
 import NextButtonEnhancer from './NextButtonEnhancer';
 import NextButtonContainer from './NextButtonContainer';
+import NoResults from './NoResults';
+import NoResultsContainer from './NoResultsContainer';
 import PreviousButton from './PreviousButton';
 import PreviousButtonEnhancer from './PreviousButtonEnhancer';
 import PreviousButtonContainer from './PreviousButtonContainer';
-import PageDropdown from './PageDropdown.js';
+import PageDropdown from './PageDropdown';
 import PageDropdownContainer from './PageDropdownContainer';
 
 const components = {
@@ -52,6 +54,8 @@ const components = {
   NextButton,
   NextButtonEnhancer,
   NextButtonContainer,
+  NoResults,
+  NoResultsContainer,
   PageDropdown,
   PageDropdownContainer,
   Pagination,
