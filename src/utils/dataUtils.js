@@ -14,6 +14,14 @@ export function getIncrementer(startIndex) {
   return () => key++;  
 }
 
+// From https://github.com/facebook/immutable-js/wiki/Converting-from-JS-objects#custom-conversion
+function fromJSGreedy(js) {
+  return typeof js !== 'object' || js === null ? js :
+    Array.isArray(js) ?
+      Immutable.Seq(js).map(fromJSGreedy).toList() :
+      Immutable.Seq(js).map(fromJSGreedy).toMap();
+}
+
 export function transformDataToList(data, settings={}) {
   const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
   const localSettings = Object.assign({}, defaultSettings, settings);
@@ -21,7 +29,7 @@ export function transformDataToList(data, settings={}) {
   const getKey = getIncrementer(localSettings.startIndex);
 
   return new Immutable.List(data.map(row => {
-    const map = new Immutable.Map(row);
+    const map = fromJSGreedy(row);
     return localSettings.addGriddleKey ? map.set(localSettings.name, getKey()) : map;
   }));
 }
