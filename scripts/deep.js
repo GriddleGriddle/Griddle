@@ -2,6 +2,8 @@ var forEach = require('lodash/forEach');
 var isObject = require('lodash/isObject');
 var isArray = require('lodash/isArray');
 var isFunction = require('lodash/isFunction');
+var isPlainObject = require('lodash/isPlainObject');
+var forOwn = require('lodash/forOwn');
 
 // Credits: https://github.com/documentcloud/underscore-contrib
 // Sub module: underscore.object.selectors
@@ -89,7 +91,7 @@ function getKeys (obj, prefix) {
 
   forEach( obj, function(value, key) {
     var fullKey = prefix ? prefix + "." + key : key;
-    if(isObject(value) && !isArray(value) && !isFunction(value)) {
+    if(isObject(value) && !isArray(value) && !isFunction(value) && !(value instanceof Date)) {
       keys = keys.concat( getKeys(value, fullKey) );
     } else {
       keys.push(fullKey);
@@ -99,8 +101,42 @@ function getKeys (obj, prefix) {
   return keys;
 }
 
+// Recursivly traverse plain objects and arrays calling `fn` on each
+// non-object/non-array leaf node.
+function iterObject(thing, fn) {
+  if (isArray(thing)) {
+    forEach(thing, function(item) {
+      iterObject(item, fn);
+    });
+  } else if (isPlainObject(thing)) {
+    forOwn(thing, function(item) {
+      iterObject(item, fn);
+    });
+  } else {
+    fn(thing);
+  }
+}
+
+// Recursivly traverse plain objects and arrays and build a list of all
+// non-object/non-array leaf nodes.
+//
+// Input:
+// { "array": [1, "two", {"tree": 3}], "string": "a string" }
+//
+// Output:
+// [1, 'two', 3, 'a string']
+//
+function getObjectValues(thing) {
+  var results = []
+  iterObject(thing, function(value) {
+    results.push(value);
+  });
+  return results;
+}
+
 module.exports = {
   pick: powerPick,
   getAt: getPath,
-  keys: getKeys
+  keys: getKeys,
+  getObjectValues: getObjectValues
 };

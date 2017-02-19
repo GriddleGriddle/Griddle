@@ -141,19 +141,41 @@ var GridRow = React.createClass({
             return returnValue || (<td onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
-		if(nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-			var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+        // Don't compete with onRowClick, but if no onRowClick function then
+        // clicking on the row should trigger select
+        var trOnClick, tdOnClick;
+        if (this.props.onRowClick !== null && isFunction(this.props.onRowClick)) {
+            trOnClick = null;
+            tdOnClick = this.handleSelectClick;
+        } else {
+            if (this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+                trOnClick = this.handleSelectClick;
+                tdOnClick = null;
+            } else {
+                trOnClick = null;
+                tdOnClick = null;
+            }
+        }
 
-			nodes.unshift(
-              <td key="selection" style={columnStyles}>
-                <input
-                    type="checkbox"
-                    checked={this.props.multipleSelectionSettings.getIsRowChecked(dataView)}
-                    onChange={this.handleSelectionChange}
-                    ref="selected" />
-              </td>
+        if(nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+            nodes.unshift(
+                <td
+                    key="selection"
+                    style={columnStyles}
+                    className="griddle-select griddle-select-cell"
+                    onClick={tdOnClick}
+                >
+                    <input
+                        type="checkbox"
+                        checked={this.props.multipleSelectionSettings.getIsRowChecked(dataView)}
+                        onChange={this.handleSelectionChange}
+                        ref="selected"
+                    />
+                </td>
             );
-		}
+        }
 
         //Get the row from the row settings.
         var className = that.props.rowSettings&&that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
@@ -163,7 +185,8 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-        return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null} className={className}>{nodes}</tr>);
+
+        return (<tr onClick={trOnClick} className={className}>{nodes}</tr>);
     }
 });
 

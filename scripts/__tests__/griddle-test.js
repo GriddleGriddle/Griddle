@@ -149,6 +149,48 @@ describe('Griddle', function() {
     expect(grid2.state.filteredResults).toBe(fakeData);
   });
 
+  it('sets the filteredResults when filterByColumn called', function(){
+    grid.filterByColumn('Mayer', 'name');
+    expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
+  it('sets the filteredResults when filterByColumn called on object field', function(){
+    grid.filterByColumn('Hawaii', 'address');
+    expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
+
+  it('column filters are applied to nested objects values', function() {
+
+    class CustomComponent extends React.Component {
+      render() {
+        let addresses = this.props.rowData.addresses.map((address) => {
+          return <div key={ address.id } className="label label-warning">{address.state}</div>
+        });
+        return (<div>{addresses}</div>);
+      }
+    }
+
+    let fakeData = [
+      {
+        "addresses": [{
+          "id": 1,
+          "city": "Kapowsin",
+          "state": ["Hawaii"]
+        }]
+      }];
+
+    let columnMetadata = [{
+      "columnName": "addresses",
+      "customComponent": CustomComponent,
+    }];
+
+    grid = TestUtils.renderIntoDocument(<Griddle results={fakeData} columnMetadata={columnMetadata} gridClassName="test" />);
+
+    grid.filterByColumn('Hawaii', 'addresses');
+    expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
   it('removes filter when filter is called with empty string', function(){
     grid.setFilter('Mayer');
     grid.setFilter('');
@@ -156,6 +198,11 @@ describe('Griddle', function() {
   });
 
   it('adds column filter  on filterByColumn', function() {
+    grid.filterByColumn('test', 'name');
+    expect(grid.state.columnFilters).toEqual({ name: 'test' })
+  });
+
+  it('filterByColumn filters results', function() {
     grid.filterByColumn('test', 'name');
     expect(grid.state.columnFilters).toEqual({ name: 'test' })
   });

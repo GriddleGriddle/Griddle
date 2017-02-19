@@ -111,9 +111,11 @@ var GridTitle = React.createClass({
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
-            nodes.unshift(React.createElement('th', { key: 'selection', onClick: this.toggleSelectAll, style: titleStyles }, React.createElement('input', { type: 'checkbox',
+            nodes.unshift(React.createElement('th', { key: 'selection', onClick: this.toggleSelectAll, style: titleStyles, className: 'griddle-select griddle-select-title' }, React.createElement('input', {
+                type: 'checkbox',
                 checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(),
-                onChange: this.handleSelectionChange })));
+                onChange: this.handleSelectionChange
+            })));
         }
 
         //Get the row from the row settings.

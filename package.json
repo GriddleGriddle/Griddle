@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "0.6.01",
+  "version": "0.7.1",
   "description": "Griddle - A fast and flexible grid component for React.",
   "keywords": [
     "react-component",

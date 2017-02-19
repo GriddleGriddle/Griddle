@@ -38,6 +38,7 @@ var find = require('lodash/find');
 var first = require('lodash/take');
 var forEach = require('lodash/forEach');
 var initial = require('lodash/initial');
+var intersection = require('lodash/intersection');
 var isArray = require('lodash/isArray');
 var isEmpty = require('lodash/isEmpty');
 var isNull = require('lodash/isNull');
@@ -104,6 +105,7 @@ var Griddle = React.createClass({
             "noDataMessage": "There is no data to display.",
             "noDataClassName": "griddle-nodata",
             "customNoDataComponent": null,
+            "customNoDataComponentProps": null,
             "allowEmptyGrid": false,
             "showTableHeading": true,
             "showPager": true,
@@ -152,13 +154,15 @@ var Griddle = React.createClass({
             "previousIconComponent": "",
             "isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
-            "uniqueIdentifier": "id"
+            "uniqueIdentifier": "id",
+            "onSelectionChange": null
         };
     },
     propTypes: {
         isMultipleSelection: React.PropTypes.bool,
         selectedRowIds: React.PropTypes.oneOfType([React.PropTypes.arrayOf(React.PropTypes.number), React.PropTypes.arrayOf(React.PropTypes.string)]),
-        uniqueIdentifier: React.PropTypes.string
+        uniqueIdentifier: React.PropTypes.string,
+        onSelectionChange: React.PropTypes.func
     },
     defaultFilter: function defaultFilter(results, filter) {
         var that = this;
@@ -174,14 +178,19 @@ var Griddle = React.createClass({
         });
     },
 
+    defaultColumnFilter: function defaultColumnFilter(value, filter) {
+        return _filter(deep.getObjectValues(value), function (value) {
+            return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+        }).length > 0;
+    },
+
     filterByColumnFilters: function filterByColumnFilters(columnFilters) {
+        var filterFunction = this.defaultColumnFilter;
         var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
             return _filter(previous, function (item) {
-                if (deep.getAt(item, current || "").toString().toLowerCase().indexOf(columnFilters[current].toLowerCase()) >= 0) {
-                    return true;
-                }
-
-                return false;
+                var value = deep.getAt(item, current || "");
+                var filter = columnFilters[current];
+                return filterFunction(value, filter);
             });
         }, this.props.results);
 
@@ -248,10 +257,12 @@ var Griddle = React.createClass({
     },
     setPageSize: function setPageSize(size) {
         if (this.props.useExternal) {
+            this.setState({
+                resultsPerPage: size
+            });
             this.props.externalSetPageSize(size);
             return;
         }
-
         //make this better.
         this.state.resultsPerPage = size;
         this.setMaxPage();
@@ -320,10 +331,6 @@ var Griddle = React.createClass({
             this.setState({
                 isSelectAllChecked: false
             });
-        } else {
-            //When the paging is done on the server, the previously selected rows on a certain page might not
-            // coincide with the new rows on that exact page page, if moving back and forth. Better reset the selection
-            this._resetSelectedRows();
         }
     },
     setColumns: function setColumns(columns) {
@@ -351,7 +358,12 @@ var Griddle = React.createClass({
         }
 
         if (this.props.useExternal) {
-            this.props.externalChangeSort(column, this.props.externalSortColumn === column ? !this.props.externalSortAscending : true);
+            var isAscending = this.props.externalSortColumn === column ? !this.props.externalSortAscending : true;
+            this.setState({
+                sortColumn: column,
+                sortDirection: isAscending ? 'asc' : 'desc'
+            });
+            this.props.externalChangeSort(column, isAscending);
             return;
         }
         var columnMeta = find(this.props.columnMetadata, { columnName: column }) || {};
@@ -376,10 +388,6 @@ var Griddle = React.createClass({
         };
 
         this.setState(state);
-
-        //When the sorting is done on the server, the previously selected rows might not correspond with the new ones.
-        //Better reset the selection
-        this._resetSelectedRows();
     },
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
         this.setMaxPage(nextProps.results);
@@ -402,12 +410,8 @@ var Griddle = React.createClass({
             this.columnSettings.allColumns = [];
         }
 
-        if (nextProps.columns !== this.columnSettings.filteredColumns) {
-            this.columnSettings.filteredColumns = nextProps.columns;
-        }
-
         if (nextProps.selectedRowIds) {
-            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
+            var visibleRows = this.getDataForRender(this.getCurrentResults(nextProps.results), this.columnSettings.getColumns(), true);
 
             this.setState({
                 isSelectAllChecked: this._getAreAllRowsChecked(nextProps.selectedRowIds, map(visibleRows, this.props.uniqueIdentifier)),
@@ -440,7 +444,15 @@ var Griddle = React.createClass({
         this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
         if (this.props.initialSort) {
-            this.changeSort(this.props.initialSort);
+            // shouldn't change Sort on init for external
+            if (this.props.useExternal) {
+                this.setState({
+                    sortColumn: this.props.externalSortColumn,
+                    sortDirection: this.props.externalSortAscending ? 'asc' : 'desc'
+                });
+            } else {
+                this.changeSort(this.props.initialSort);
+            }
         }
         this.setMaxPage();
 
@@ -457,6 +469,16 @@ var Griddle = React.createClass({
             this.setState({
                 filteredColumns: this.columnSettings.filteredColumns
             });
+        }
+    },
+    componentDidMount: function componentDidMount() {
+        if (this.props.componentDidMount && typeof this.props.componentDidMount === "function") {
+            return this.props.componentDidMount();
+        }
+    },
+    componentDidUpdate: function componentDidUpdate() {
+        if (this.props.componentDidUpdate && typeof this.props.componentDidUpdate === "function") {
+            return this.props.componentDidUpdate(this.state);
         }
     },
     //todo: clean these verify methods up
@@ -511,69 +533,72 @@ var Griddle = React.createClass({
 
         var that = this;
 
-        // get the correct page size
-        if (this.state.sortColumn !== "") {
-            var column = this.state.sortColumn;
-            var sortColumn = _filter(this.props.columnMetadata, { columnName: column });
-            var customCompareFn;
-            var multiSort = {
-                columns: [],
-                orders: []
-            };
+        if (!this.props.useExternal) {
+            if (this.state.sortColumn !== "") {
+                var column = this.state.sortColumn;
+                var sortColumn = _filter(this.props.columnMetadata, { columnName: column });
+                var customCompareFn;
+                var multiSort = {
+                    columns: [],
+                    orders: []
+                };
 
-            if (sortColumn.length > 0) {
-                customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
-                if (sortColumn[0]["multiSort"]) {
-                    multiSort = sortColumn[0]["multiSort"];
+                if (sortColumn.length > 0) {
+                    customCompareFn = sortColumn[0].hasOwnProperty("customCompareFn") && sortColumn[0]["customCompareFn"];
+                    if (sortColumn[0]["multiSort"]) {
+                        multiSort = sortColumn[0]["multiSort"];
+                    }
                 }
-            }
 
-            if (this.state.sortDirection) {
-                if (typeof customCompareFn === 'function') {
-                    if (customCompareFn.length === 2) {
-                        data = data.sort(function (a, b) {
-                            return customCompareFn(_get(a, column), _get(b, column));
+                if (this.state.sortDirection) {
+                    if (typeof customCompareFn === 'function') {
+                        if (customCompareFn.length === 2) {
+                            data = data.sort(function (a, b) {
+                                return customCompareFn(_get(a, column), _get(b, column));
+                            });
+
+                            if (this.state.sortDirection === 'desc') {
+                                data.reverse();
+                            }
+                        } else if (customCompareFn.length === 1) {
+                            data = _orderBy(data, function (item) {
+                                return customCompareFn(_get(item, column));
+                            }, [this.state.sortDirection]);
+                        }
+                    } else {
+                        var iteratees = [function (row) {
+                            return (_get(row, column) || '').toString().toLowerCase();
+                        }];
+                        var orders = [this.state.sortDirection];
+                        multiSort.columns.forEach(function (col, i) {
+                            iteratees.push(function (row) {
+                                return (_get(row, col) || '').toString().toLowerCase();
+                            });
+                            if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
+                                orders.push(multiSort.orders[i]);
+                            } else {
+                                orders.push(_this.state.sortDirection);
+                            }
                         });
 
-                        if (this.state.sortDirection === 'desc') {
-                            data.reverse();
-                        }
-                    } else if (customCompareFn.length === 1) {
-                        data = _orderBy(data, function (item) {
-                            return customCompareFn(_get(item, column));
-                        }, [this.state.sortDirection]);
+                        data = _orderBy(data, iteratees, orders);
                     }
-                } else {
-                    var iteratees = [_property(column)];
-                    var orders = [this.state.sortDirection];
-                    multiSort.columns.forEach(function (col, i) {
-                        iteratees.push(_property(col));
-                        if (multiSort.orders[i] === 'asc' || multiSort.orders[i] === 'desc') {
-                            orders.push(multiSort.orders[i]);
-                        } else {
-                            orders.push(_this.state.sortDirection);
-                        }
-                    });
+                }
+            }
 
-                    data = _orderBy(data, iteratees, orders);
+            var currentPage = this.getCurrentPage();
+
+            if (!this.props.useExternal && pageList && this.state.resultsPerPage * (currentPage + 1) <= this.state.resultsPerPage * this.state.maxPage && currentPage >= 0) {
+                if (this.isInfiniteScrollEnabled()) {
+                    // If we're doing infinite scroll, grab all results up to the current page.
+                    data = first(data, (currentPage + 1) * this.state.resultsPerPage);
+                } else {
+                    //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
+                    var rest = drop(data, currentPage * this.state.resultsPerPage);
+                    data = (dropRight || initial)(rest, rest.length - this.state.resultsPerPage);
                 }
             }
         }
-
-        var currentPage = this.getCurrentPage();
-
-        if (!this.props.useExternal && pageList && this.state.resultsPerPage * (currentPage + 1) <= this.state.resultsPerPage * this.state.maxPage && currentPage >= 0) {
-            if (this.isInfiniteScrollEnabled()) {
-                // If we're doing infinite scroll, grab all results up to the current page.
-                data = first(data, (currentPage + 1) * this.state.resultsPerPage);
-            } else {
-                //the 'rest' is grabbing the whole array from index on and the 'initial' is getting the first n results
-                var rest = drop(data, currentPage * this.state.resultsPerPage);
-                data = (dropRight || initial)(rest, rest.length - this.state.resultsPerPage);
-            }
-        }
-
-        var meta = this.columnSettings.getMetadataColumns;
 
         var transformedData = [];
 
@@ -593,9 +618,8 @@ var Griddle = React.createClass({
         }
         return transformedData;
     },
-    //this is the current results
-    getCurrentResults: function getCurrentResults() {
-        return this.state.filteredResults || this.props.results;
+    getCurrentResults: function getCurrentResults(results) {
+        return this.state.filteredResults || results || this.props.results;
     },
     getCurrentPage: function getCurrentPage() {
         return this.props.externalCurrentPage || this.state.page;
@@ -638,18 +662,27 @@ var Griddle = React.createClass({
             isSelectAllChecked: newIsSelectAllChecked,
             selectedRowIds: newSelectedRowIds
         });
+
+        if (this.props.onSelectionChange) {
+            this.props.onSelectionChange(newSelectedRowIds, newIsSelectAllChecked);
+        }
     },
     _toggleSelectRow: function _toggleSelectRow(row, isChecked) {
-
         var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true),
             newSelectedRowIds = JSON.parse(JSON.stringify(this.state.selectedRowIds));
 
         this._updateSelectedRowIds(row[this.props.uniqueIdentifier], newSelectedRowIds, isChecked);
 
+        var newIsSelectAllChecked = this._getAreAllRowsChecked(newSelectedRowIds, map(visibleRows, this.props.uniqueIdentifier));
+
         this.setState({
-            isSelectAllChecked: this._getAreAllRowsChecked(newSelectedRowIds, map(visibleRows, this.props.uniqueIdentifier)),
+            isSelectAllChecked: newIsSelectAllChecked,
             selectedRowIds: newSelectedRowIds
         });
+
+        if (this.props.onSelectionChange) {
+            this.props.onSelectionChange(newSelectedRowIds, newIsSelectAllChecked);
+        }
     },
     _updateSelectedRowIds: function _updateSelectedRowIds(id, selectedRowIds, isChecked) {
 
@@ -673,23 +706,7 @@ var Griddle = React.createClass({
     },
     _getAreAllRowsChecked: function _getAreAllRowsChecked(selectedRowIds, visibleRowIds) {
 
-        var i, isFound;
-
-        if (selectedRowIds.length !== visibleRowIds.length) {
-            return false;
-        }
-
-        for (i = 0; i < selectedRowIds.length; i++) {
-            isFound = find(visibleRowIds, function (visibleRowId) {
-                return selectedRowIds[i] === visibleRowId;
-            });
-
-            if (isFound === undefined) {
-                return false;
-            }
-        }
-
-        return true;
+        return visibleRowIds.length === intersection(visibleRowIds, selectedRowIds).length;
     },
     _getIsRowChecked: function _getIsRowChecked(row) {
 
@@ -715,7 +732,6 @@ var Griddle = React.createClass({
             }) ? false : this.props.isMultipleSelection, //does not support subgrids
             toggleSelectAll: this._toggleSelectAll,
             getIsSelectAllChecked: this._getIsSelectAllChecked,
-
             toggleSelectRow: this._toggleSelectRow,
             getSelectedRowIds: this.getSelectedRowIds,
             getIsRowChecked: this._getIsRowChecked
@@ -855,7 +871,7 @@ var Griddle = React.createClass({
     },
     getNoDataSection: function getNoDataSection() {
         if (this.props.customNoDataComponent != null) {
-            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, null));
+            return React.createElement('div', { className: this.props.noDataClassName }, React.createElement(this.props.customNoDataComponent, this.props.customNoDataComponentProps));
         }
         return React.createElement(GridNoData, { noDataMessage: this.props.noDataMessage });
     },
@@ -886,8 +902,17 @@ var Griddle = React.createClass({
 
         var meta = this.columnSettings.getMetadataColumns();
 
-        // Grab the column keys from the first results
-        keys = deep.keys(omit(results[0], meta));
+        if (this.props.columnMetadata) {
+            // Get column keys from column metadata
+            forEach(this.props.columnMetadata, function (meta) {
+                if (!(typeof meta.visible === 'boolean' && meta.visible === false)) {
+                    keys.push(meta.columnName);
+                }
+            });
+        } else {
+            // Grab the column keys from the first results
+            keys = deep.keys(omit(results[0], meta));
+        }
 
         // sort keys by order
         keys = this.columnSettings.orderColumns(keys);
