@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.7",
   "description": "A fast and flexible grid component for React",
   "keywords": [
     "react-component",
@@ -9,7 +9,7 @@
     "pagination",
     "sort"
   ],
-  "main": "lib/module/module.js",
+  "main": "dist/module/module.js",
   "scripts": {
     "start": "start-storybook -p 6006",
     "test": "ava",
@@ -18,7 +18,7 @@
     "build-storybook": "build-storybook",
     "build": "npm run build-modules && npm run build-umd",
     "build-umd": "webpack --config webpack.config.js",
-    "build-modules": "babel src --out-dir lib/module ",
+    "build-modules": "BABEL_ENV=build babel src --out-dir dist/module ",
     "ship-it": "npm run build && npm publish --tag beta"
   },
   "peerDependencies": {
@@ -69,6 +69,6 @@
     ],
     "babel": "inherit"
   },
-  "author": "Griddle",
+  "author": "Ryan Lanciaux & Joel Lanciaux",
   "license": "MIT"
 }

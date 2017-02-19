@@ -4,7 +4,7 @@ import { connect, Provider } from 'react-redux';
 import React, { Component } from 'react';
 import _ from 'lodash';
 
-import * as dataReducers from '../src/reducers/dataReducer';
+import * as dataReducers from './reducers/dataReducer';
 import components from './components';
 import settingsComponentObjects from './settingsComponentObjects';
 import * as selectors from './selectors/dataSelectors';
