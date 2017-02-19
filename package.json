@@ -16,7 +16,8 @@
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "npm run build-modules && npm run build-umd",
+    "build": "npm run clean-dist && npm run build-modules && npm run build-umd",
+    "clean-dist": "rimraf dist",
     "build-umd": "webpack --config webpack.config.js",
     "build-modules": "BABEL_ENV=build babel src --out-dir dist/module ",
     "ship-it": "npm run build && npm publish --tag beta"
@@ -48,6 +49,7 @@
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.3.2",
+    "rimraf": "^2.6.0",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },
