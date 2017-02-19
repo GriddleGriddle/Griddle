@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 
-import { visibleColumnPropertiesSelector, hiddenColumnsSelector, hiddenColumnPropertiesSelector } from '../selectors/dataSelectors';
-import { mapProps, compose, withState, withHandlers } from 'recompose';
-import { toggleColumn as toggleColumnAction } from  '../actions';
+import { visibleColumnPropertiesSelector, hiddenColumnPropertiesSelector } from '../selectors/dataSelectors';
+import { toggleColumn as toggleColumnAction } from '../actions';
 
 const style = {
   label: { clear: 'both' }

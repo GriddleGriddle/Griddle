@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-//TODO: adjust the import so we're not pulling in the whole library here'
-import { getContext, mapProps, compose } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 
 import { classNamesForComponentSelector, stylesForComponentSelector, visibleRowCountSelector } from '../selectors/localSelectors';
 

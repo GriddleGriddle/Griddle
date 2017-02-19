@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 
 import { visibleRowIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
@@ -21,7 +23,7 @@ const ComposedTableBodyContainer = OriginalComponent => compose(
       ...otherProps,
     };
   }),
-)(({Row, visibleRowIds}) => (
+)(({Row, visibleRowIds }) => (
   <OriginalComponent
     rowIds={visibleRowIds}
     Row={Row}

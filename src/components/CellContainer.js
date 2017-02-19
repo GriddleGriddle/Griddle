@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import getContext from 'recompose/getContext';
+import mapProps from 'recompose/mapProps';
+import compose from 'recompose/compose';
+
 import {
   customComponentSelector,
   cellValueSelector,

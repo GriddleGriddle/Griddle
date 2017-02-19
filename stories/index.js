@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
-import { withContext} from 'recompose';
+import withContext from 'recompose/withContext';
 import { connect } from 'react-redux';
 
 import Griddle from '../src/index';

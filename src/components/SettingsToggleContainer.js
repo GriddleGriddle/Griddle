@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
-import { isSettingsEnabledSelector, textSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import compose from 'recompose/compose';
+import { textSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 import { toggleSettings as toggleSettingsAction } from '../actions';
 
 const enhancedSettingsToggle = OriginalComponent => compose(

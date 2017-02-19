@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
 
 import { pageSizeSelector } from '../selectors/dataSelectors';
-import { mapProps, compose, withState, withHandlers } from 'recompose';
+
 import { setPageSize as setPageSizeAction } from '../actions';
 
 const ComposedPageSizeSettings = compose(

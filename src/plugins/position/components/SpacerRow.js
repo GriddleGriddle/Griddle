@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose, withHandlers } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
+import withHandlers from 'recompose/withHandlers';
 
 const spacerRow = compose(
   getContext({

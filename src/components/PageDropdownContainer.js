@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { compose, mapProps, getContext } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import { currentPageSelector, maxPageSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => compose(

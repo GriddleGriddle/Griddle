@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getContext, mapProps, compose } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 
 import { isSettingsEnabledSelector, isSettingsVisibleSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
