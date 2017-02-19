@@ -20,7 +20,11 @@ var GridRowContainer = React.createClass({
         "parentRowCollapsedComponent": "▶",
         "parentRowExpandedComponent": "▼",
         "onRowClick": null,
-	    "multipleSelectionSettings": null
+        "onRowMouseEnter": null,
+        "onRowMouseLeave": null,
+        "onRowWillMount": null,
+        "onRowWillUnmount": null,
+        "multipleSelectionSettings": null
       };
     },
     getInitialState: function(){
@@ -74,7 +78,11 @@ var GridRowContainer = React.createClass({
           paddingHeight={that.props.paddingHeight}
           rowHeight={that.props.rowHeight}
           onRowClick={that.props.onRowClick}
-          multipleSelectionSettings={this.props.multipleSelectionSettings} />
+          onRowMouseEnter={that.props.onRowMouseEnter}
+          onRowMouseLeave={that.props.onRowMouseLeave}
+          multipleSelectionSettings={this.props.multipleSelectionSettings}
+          onRowWillMount={that.props.onRowWillMount}
+          onRowWillUnmount={that.props.onRowWillUnmount} />
       );
 
       var children = null;

@@ -34,14 +34,38 @@ var GridRow = React.createClass({
             "parentRowCollapsedComponent": "▶",
             "parentRowExpandedComponent": "▼",
             "onRowClick": null,
-            "multipleSelectionSettings": null
+            "multipleSelectionSettings": null,
+            "onRowMouseEnter": null,
+            "onRowMouseLeave": null,
+            "onRowWillMount": null,
+            "onRowWillUnmount": null
         };
+    },
+    componentWillMount: function componentWillMount() {
+        if (this.props.onRowWillMount !== null && isFunction(this.props.onRowWillMount)) {
+            this.props.onRowWillMount(this);
+        }
+    },
+    componentWillUnmount: function componentWillUnmount() {
+        if (this.props.onRowWillUnmount !== null && isFunction(this.props.onRowWillUnmount)) {
+            this.props.onRowWillUnmount(this);
+        }
     },
     handleClick: function handleClick(e) {
         if (this.props.onRowClick !== null && isFunction(this.props.onRowClick)) {
             this.props.onRowClick(this, e);
         } else if (this.props.hasChildren) {
             this.props.toggleChildren();
+        }
+    },
+    handleMouseEnter: function handleMouseEnter(e) {
+        if (this.props.onRowMouseEnter !== null && isFunction(this.props.onRowMouseEnter)) {
+            this.props.onRowMouseEnter(this, e);
+        }
+    },
+    handleMouseLeave: function handleMouseLeave(e) {
+        if (this.props.onRowMouseLeave !== null && isFunction(this.props.onRowMouseLeave)) {
+            this.props.onRowMouseLeave(this, e);
         }
     },
     handleSelectionChange: function handleSelectionChange(e) {
@@ -111,13 +135,13 @@ var GridRow = React.createClass({
             if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
                 if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
                     var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-                    returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
+                    returnValue = React.createElement('td', { onClick: _this.handleClick, onMouseEnter: _this.handleMouseEnter, onMouseLeave: _this.handleMouseLeave, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
                 } else {
-                    returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, _this.formatData(col[1]));
+                    returnValue = React.createElement('td', { onClick: _this.handleClick, onMouseEnter: _this.handleMouseEnter, onMouseLeave: _this.handleMouseLeave, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, _this.formatData(col[1]));
                 }
             }
 
-            return returnValue || React.createElement('td', { onClick: _this.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);
+            return returnValue || React.createElement('td', { onClick: _this.handleClick, onMouseEnter: _this.handleMouseEnter, onMouseLeave: _this.handleMouseLeave, key: index, style: columnStyles }, firstColAppend, col[1]);
         });
 
         // Don't compete with onRowClick, but if no onRowClick function then

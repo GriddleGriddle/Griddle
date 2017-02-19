@@ -30,7 +30,21 @@ var GridRow = React.createClass({
         "parentRowCollapsedComponent": "▶",
         "parentRowExpandedComponent": "▼",
         "onRowClick": null,
-	    "multipleSelectionSettings": null
+	      "multipleSelectionSettings": null,
+        "onRowMouseEnter": null,
+        "onRowMouseLeave": null,
+        "onRowWillMount": null,
+        "onRowWillUnmount": null
+      }
+    },
+    componentWillMount: function () {
+      if (this.props.onRowWillMount !== null && isFunction(this.props.onRowWillMount)) {
+        this.props.onRowWillMount(this);
+      }
+    },
+    componentWillUnmount: function () {
+      if (this.props.onRowWillUnmount !== null && isFunction(this.props.onRowWillUnmount)) {
+        this.props.onRowWillUnmount(this);
       }
     },
     handleClick: function(e){
@@ -39,6 +53,16 @@ var GridRow = React.createClass({
         }else if(this.props.hasChildren){
             this.props.toggleChildren();
         }
+    },
+    handleMouseEnter: function (e) {
+      if (this.props.onRowMouseEnter !== null && isFunction(this.props.onRowMouseEnter)) {
+        this.props.onRowMouseEnter(this, e);
+      }
+    },
+    handleMouseLeave: function (e) {
+      if (this.props.onRowMouseLeave !== null && isFunction(this.props.onRowMouseLeave)) {
+        this.props.onRowMouseLeave(this, e);
+      }
     },
     handleSelectionChange: function(e) {
       //hack to get around warning that's not super useful in this case
@@ -108,13 +132,13 @@ var GridRow = React.createClass({
             if (this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
               if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
                 var customComponent = <meta.customComponent data={col[1]} rowData={dataView} metadata={meta} />;
-                returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{customComponent}</td>;
+                returnValue = <td onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} className={meta.cssClassName} key={index} style={columnStyles}>{customComponent}</td>;
               } else {
-                returnValue = <td onClick={this.handleClick} className={meta.cssClassName} key={index} style={columnStyles}>{firstColAppend}{this.formatData(col[1])}</td>;
+                returnValue = <td onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} className={meta.cssClassName} key={index} style={columnStyles}>{firstColAppend}{this.formatData(col[1])}</td>;
               }
             }
 
-            return returnValue || (<td onClick={this.handleClick} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
+            return returnValue || (<td onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} key={index} style={columnStyles}>{firstColAppend}{col[1]}</td>);
         });
 
         // Don't compete with onRowClick, but if no onRowClick function then
