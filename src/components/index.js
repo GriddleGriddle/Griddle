@@ -1,7 +1,9 @@
 import Cell from './Cell';
 import CellContainer from './CellContainer';
+import ColumnDefinition from './ColumnDefinition';
 import Row from './Row';
 import RowContainer from './RowContainer';
+import RowDefinition from './RowDefinition';
 import Table from './Table';
 import TableBody from './TableBody';
 import TableBodyContainer from './TableBodyContainer';
@@ -38,8 +40,10 @@ import PageDropdownContainer from './PageDropdownContainer';
 const components = {
   Cell,
   CellContainer,
+  ColumnDefinition,
   Row,
   RowContainer,
+  RowDefinition,
   Table,
   TableBody,
   TableBodyContainer,

@@ -1,10 +1,9 @@
 import Griddle from './index';
 
-
-import actions from './actions';
+import * as actions from './actions';
 import components from './components';
-import constants from './constants';
-import selectors from './selectors/dataSelectors';
+import * as constants from './constants';
+import * as selectors from './selectors/dataSelectors';
 import settingsComponentObjects from './settingsComponentObjects';
 import utils from './utils';
 
@@ -16,7 +15,7 @@ const plugins = {
   PositionPlugin,
 };
 
-const ColumnDefintion = components.ColumnDefintion;
+const ColumnDefinition = components.ColumnDefinition;
 const RowDefinition = components.RowDefinition;
 
 export default Griddle;
@@ -28,6 +27,6 @@ export {
   settingsComponentObjects,
   utils,
   plugins,
-  ColumnDefintion,
+  ColumnDefinition,
   RowDefinition,
 };
