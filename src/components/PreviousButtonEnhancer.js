@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import { compose, mapProps, getContext } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
 
 const enhance = OriginalComponent => compose(

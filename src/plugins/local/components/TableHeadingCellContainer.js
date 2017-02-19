@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import withHandlers from 'recompose/withHandlers';
 import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector } from '../../../selectors/dataSelectors';
 import { setSortColumn } from '../../../actions';
 

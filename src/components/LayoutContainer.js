@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { compose, mapProps, getContext } from 'recompose';
+import getContext from 'recompose/getContext';
+import mapProps from 'recompose/mapProps';
+import compose from 'recompose/compose';
 
 import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 

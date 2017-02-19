@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { compose, mapProps, getContext } from 'recompose';
 import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => connect((state, props) => ({

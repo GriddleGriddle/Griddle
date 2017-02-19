@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
-import omit from 'lodash.omit';
+import _ from 'lodash';
+
 /*
  * State
  * ------------------
@@ -110,7 +111,7 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
   const data = transformDataToList(action.newState.data);
-  const newState = omit(action.newState, data);
+  const newState = _.omit(action.newState, data);
 
   return state.mergeDeep(Immutable.fromJS(newState)).set('data', data);
 }

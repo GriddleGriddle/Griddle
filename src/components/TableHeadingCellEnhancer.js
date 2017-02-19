@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import { getContext, mapProps, compose } from 'recompose';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
 
 const EnhancedHeadingCell = OriginalComponent => compose(
