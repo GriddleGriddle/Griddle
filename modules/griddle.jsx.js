@@ -631,12 +631,14 @@ var Griddle = React.createClass({
     },
     //This takes the props relating to sort and puts them in one object
     getSortObject: function getSortObject() {
+        const sortDirection = this.props.useExternal ?
+            (this.props.externalSortAscending ? 'asc' : 'desc') : this.state.sortDirection;
         return {
             enableSort: this.props.enableSort,
             changeSort: this.changeSort,
             sortColumn: this.getCurrentSort(),
             sortAscending: this.getCurrentSortAscending(),
-            sortDirection: this.state.sortDirection,
+            sortDirection: sortDirection,
             sortAscendingClassName: this.props.sortAscendingClassName,
             sortDescendingClassName: this.props.sortDescendingClassName,
             sortAscendingComponent: this.props.sortAscendingComponent,
