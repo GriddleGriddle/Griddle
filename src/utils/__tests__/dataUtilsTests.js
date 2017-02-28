@@ -3,7 +3,8 @@ import test from 'ava';
 import Immutable from 'immutable';
 
 import {
-  addKeyToCollection
+  addKeyToCollection,
+  transformData,
 } from '../dataUtils';
 
 const collection = Immutable.fromJS([
@@ -40,4 +41,22 @@ test('starts at given index', test => {
     { name: 'two', griddleKey: 6 },
     { name: 'three', griddleKey: 7 }
   ]);
+});
+
+test('transforms data', test => {
+  const data = [
+    { first: 'Luke', last: 'Skywalker' },
+    { first: 'Darth', last: 'Vader' }
+  ];
+
+  const transformedData = transformData(data);
+
+  test.deepEqual(Object.keys(transformedData), ['data', 'lookup']);
+
+  test.deepEqual(transformedData.data.toJSON(), [
+    { first: 'Luke', last: 'Skywalker', griddleKey: 0 },
+    { first: 'Darth', last: 'Vader', griddleKey: 1 }
+  ]);
+
+  test.deepEqual(transformedData.lookup.toJSON(), { 0: 0, 1: 1 });
 });

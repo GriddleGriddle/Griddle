@@ -17,6 +17,7 @@ test('it loads data', test => {
       {name: "one", griddleKey: 0},
       {name: "two", griddleKey: 1}
     ],
+    lookup: { 0: 0, 1: 1 },
     loading: false
   });
 });
