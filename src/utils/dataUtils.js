@@ -11,7 +11,7 @@ function keyInArray(keys) {
 
 export function getIncrementer(startIndex) {
   let key = startIndex;
-  return () => key++;  
+  return () => key++;
 }
 
 // From https://github.com/facebook/immutable-js/wiki/Converting-from-JS-objects#custom-conversion
@@ -22,30 +22,55 @@ function fromJSGreedy(js) {
       Immutable.Seq(js).map(fromJSGreedy).toMap();
 }
 
-export function transformData(data, settings = {}) {
-  const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
-  const localSettings = Object.assign({}, defaultSettings, settings);
+export function transformData(data, renderProperties) {
+  const transformedData = data.reduce(({ list, lookup }, rowData, index) => {
+    const map = fromJSGreedy(rowData);
+    const key = (renderProperties.rowProperties && renderProperties.rowProperties.rowKey) ?
+      rowData[renderProperties.rowProperties.rowKey] : index;
+    const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);
 
-  const getKey = getIncrementer(localSettings.startIndex);
-
-  const lookup = {};
-  const list = [];
-
-  // build up a new list of data and list lookup
-  for (let i = 0; i < data.length; i += 1) {
-    const key = getKey();
-    lookup[key] = i;
-
-    // get an Immutable map of the data item
-    const map = fromJSGreedy(data[i]);
-    list.push(localSettings.addGriddleKey ? map.set(localSettings.name, key) : map);
-  }
+    return {
+      list: [...list, keyedData],
+      lookup: {
+        ...lookup,
+        [key]: index
+      },
+    };
+  }, {
+    list: [],
+    lookup: {},
+  });
 
   return {
-    data: new Immutable.List(list),
-    lookup: new Immutable.Map(lookup),
+    data: new Immutable.List(transformedData.list),
+    lookup: new Immutable.Map(transformedData.lookup),
   };
 }
+
+// export function transformData(data, settings = {}) {
+//   const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
+//   const localSettings = Object.assign({}, defaultSettings, settings);
+//
+//   const getKey = getIncrementer(localSettings.startIndex);
+//
+//   const lookup = {};
+//   const list = [];
+//
+//   // build up a new list of data and list lookup
+//   for (let i = 0; i < data.length; i += 1) {
+//     const key = getKey();
+//     lookup[key] = i;
+//
+//     // get an Immutable map of the data item
+//     const map = fromJSGreedy(data[i]);
+//     list.push(localSettings.addGriddleKey ? map.set(localSettings.name, key) : map);
+//   }
+//
+//   return {
+//     data: new Immutable.List(list),
+//     lookup: new Immutable.Map(lookup),
+//   };
+// }
 
 /** adds griddleKey to given collection
  * @param (List<Map>) data - data collection to work against
@@ -136,5 +161,3 @@ export function addColumnPropertiesWhenNoneExist(stateObject) {
     }
   };
 }
-
-

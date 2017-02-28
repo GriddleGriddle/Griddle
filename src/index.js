@@ -124,10 +124,13 @@ class Griddle extends Component {
       styleConfig: mergedStyleConfig,
     });
 
+    console.log('renderProperties', renderProperties, initialState.renderProperties);
+
     this.store = createStore(
       reducers,
       initialState
     );
+    console.log('stoooore', this.store.getState().toJSON());
   }
 
   componentWillReceiveProps(nextProps) {

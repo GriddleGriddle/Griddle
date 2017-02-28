@@ -232,16 +232,29 @@ storiesOf('Griddle main', module)
   .add('with controlled griddle component with no results', () => {
     return <Griddle data={[]} />
   })
+  .add('with custom griddle key', () => {
+    return (
+      <div>
+        <small>The key should be the name property </small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition rowKey="name">
+            <ColumnDefinition id="name" order={2} />
+            <ColumnDefinition id="state" order={1} />
+          </RowDefinition>
+        </Griddle>
+      </div>
+    )
+  })
   .add('with custom heading component', () => {
     return (
       <div>
         <small>Name should have a green heading component -- sort icon should show up on the left of the title</small>
-       <Griddle data={fakeData} plugins={[LocalPlugin]}>
-        <RowDefinition>
-          <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} />
-          <ColumnDefinition id="state" order={1} />
-        </RowDefinition>
-      </Griddle>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition>
+            <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} />
+            <ColumnDefinition id="state" order={1} />
+          </RowDefinition>
+        </Griddle>
       </div>
     )
   })
