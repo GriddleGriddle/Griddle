@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
 import withContext from 'recompose/withContext';
 import { connect } from 'react-redux';
@@ -388,6 +388,121 @@ storiesOf('Cell', module)
         </RowDefinition>
       </Griddle>);
   });
+
+storiesOf('Bug fixes', module)
+  .add('Delete row', () => {
+     const enhanceWithOnClick = onClick => class ComputeThing extends Component {
+      static propTypes = {
+        rowData: React.PropTypes.object.isRequired,
+      }
+
+      localClick = () => {
+        const { id } = this.props.rowData;
+
+        onClick(id);
+      }
+
+      render() {
+        const { rowData: { id } } = this.props;
+
+        return (
+          <button type='button' onClick={this.localClick}>
+            Remove {id}
+          </button>
+        )
+       }
+     }
+
+
+    class SomeComponent extends Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+           data: [
+            {
+              "id": 0,
+              "name": "Mayer Leonard",
+              "country": "United Kingdom",
+              "city": "Kapowsin",
+              "state": "Hawaii",
+              "company": "Ovolo",
+              "favoriteNumber": 7
+            },
+            {
+              "id": 1,
+              "name": "Koch Becker",
+              "city": "Johnsonburg",
+              "state": "New Jersey",
+              "country": "Madagascar",
+              "company": "Eventage",
+              "favoriteNumber": 2
+            },
+            {
+              "id": 2,
+              "name": "Lowery Hopkins",
+              "city": "Blanco",
+              "state": "Arizona",
+              "country": "Ukraine",
+              "company": "Comtext",
+              "favoriteNumber": 3
+            },
+            {
+              "id": 3,
+              "name": "Walters Mays",
+              "city": "Glendale",
+              "state": "Illinois",
+              "country": "New Zealand",
+              "company": "Corporana",
+              "favoriteNumber": 6
+            },
+            {
+              "id": 4,
+              "name": "Shaw Lowe",
+              "city": "Coultervillle",
+              "state": "Wyoming",
+              "country": "Ecuador",
+              "company": "Isologica",
+              "favoriteNumber": 2
+            },
+            {
+              "id": 5,
+              "name": "Ola Fernandez",
+              "city": "Deltaville",
+              "state": "Delaware",
+              "country": "Virgin Islands (US)",
+              "company": "Pawnagra",
+              "favoriteNumber": 7
+            },
+          ]
+        }
+
+        this.Component = EnhanceWithRowData(enhanceWithOnClick(this.onRemove));
+
+      }
+
+      onRemove = (rowId) => {
+        const newData = this.state.data.filter(x => x.id !== rowId);
+        this.setState({data: newData});
+      }
+
+      render() {
+        return (
+          <Griddle data={this.state.data} plugins={[LocalPlugin]}>
+            <RowDefinition>
+              <ColumnDefinition id="id" />
+              <ColumnDefinition id="name" />
+              <ColumnDefinition id="somethingTotallyMadeUp" title="Compute thing" customComponent={this.Component} />
+            </RowDefinition>
+          </Griddle>
+        );
+       }
+     }
+
+    return (
+      <SomeComponent />
+    );
+})
 
 storiesOf('Row', module)
   .add('base row', () => {

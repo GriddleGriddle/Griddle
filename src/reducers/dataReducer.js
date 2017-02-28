@@ -18,6 +18,7 @@ import {
   addKeyToCollection,
   addColumnPropertiesWhenNoneExist,
   transformDataToList,
+  transformData,
 } from '../utils/dataUtils';
 
 /** Sets the default render properties
@@ -35,7 +36,9 @@ export function GRIDDLE_INITIALIZED(initialState) {
   if(initialState.hasOwnProperty('data') &&
     initialState.data.length > 0 &&
     !initialState.data[0].hasOwnProperty('griddleKey')) {
-      tempState.data = transformDataToList(initialState.data);
+      const transformedData = transformData(initialState.data);
+      tempState.data = transformedData.data;
+      tempState.lookup = transformedData.lookup;
   }
 
   return Immutable.fromJS(tempState);
@@ -45,8 +48,12 @@ export function GRIDDLE_INITIALIZED(initialState) {
  * @param {Immutable} state- Immutable previous state object
  * @param {Object} action - The action object to work with
 */
-export function GRIDDLE_LOADED_DATA(state, action, helpers) {
-  return state.set('data', transformDataToList(action.data))
+export function GRIDDLE_LOADED_DATA(state, action) {
+  const transformedData = transformData(action.data);
+
+  return state
+    .set('data', transformedData.data)
+    .set('lookup', transformedData.lookup)
     .set('loading', false);
 }
 
@@ -110,9 +117,13 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  const data = transformDataToList(action.newState.data);
+  const transformedData = transformData(action.newState.data);
+  const data = transformedData.data;
+  const lookup = transformedData.lookup;
   const newState = _.omit(action.newState, data);
 
-  return state.mergeDeep(Immutable.fromJS(newState)).set('data', data);
+  return state.mergeDeep(Immutable.fromJS(newState))
+    .set('data', data)
+    .set('lookup', lookup);
 }
 
