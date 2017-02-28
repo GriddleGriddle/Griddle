@@ -247,8 +247,11 @@ export const visibleRowCountSelector = createSelector(
 
 // TODO: Needs tests and jsdoc
 export const cellValueSelector = (state, { griddleKey, columnId }) => {
-  return state.get('data')
-    .find(r => r.get('griddleKey') === griddleKey)
+  //TODO: Make Griddle key a string in data utils
+  const lookup = state.getIn(['lookup', griddleKey.toString()]);
+
+  return state
+    .get('data').get(lookup)
     .getIn(columnId.split('.'));
 };
 

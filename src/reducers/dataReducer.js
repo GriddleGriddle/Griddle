@@ -117,9 +117,13 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  const data = transformDataToList(action.newState.data);
+  const transformedData = transformData(action.newState.data);
+  const data = transformedData.data;
+  const lookup = transformedData.lookup;
   const newState = _.omit(action.newState, data);
 
-  return state.mergeDeep(Immutable.fromJS(newState)).set('data', data);
+  return state.mergeDeep(Immutable.fromJS(newState))
+    .set('data', data)
+    .set('lookup', lookup);
 }
 
