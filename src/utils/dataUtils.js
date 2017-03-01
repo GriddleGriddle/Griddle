@@ -47,31 +47,6 @@ export function transformData(data, renderProperties) {
   };
 }
 
-// export function transformData(data, settings = {}) {
-//   const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
-//   const localSettings = Object.assign({}, defaultSettings, settings);
-//
-//   const getKey = getIncrementer(localSettings.startIndex);
-//
-//   const lookup = {};
-//   const list = [];
-//
-//   // build up a new list of data and list lookup
-//   for (let i = 0; i < data.length; i += 1) {
-//     const key = getKey();
-//     lookup[key] = i;
-//
-//     // get an Immutable map of the data item
-//     const map = fromJSGreedy(data[i]);
-//     list.push(localSettings.addGriddleKey ? map.set(localSettings.name, key) : map);
-//   }
-//
-//   return {
-//     data: new Immutable.List(list),
-//     lookup: new Immutable.Map(lookup),
-//   };
-// }
-
 /** adds griddleKey to given collection
  * @param (List<Map>) data - data collection to work against
  * @param (object) settings - settings object -- default {}

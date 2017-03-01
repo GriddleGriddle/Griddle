@@ -5,7 +5,7 @@ import * as reducers from '../index';
 import constants from '../../../../constants';
 
 test('it loads data', test => {
-  const state = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(), {
+  const state = reducers.GRIDDLE_LOADED_DATA(Immutable.fromJS({ renderProperties: { } }), {
     data: [
       {name: "one"},
       {name: "two"}
@@ -18,6 +18,7 @@ test('it loads data', test => {
       {name: "two", griddleKey: 1}
     ],
     lookup: { 0: 0, 1: 1 },
+    renderProperties: {},
     loading: false
   });
 });

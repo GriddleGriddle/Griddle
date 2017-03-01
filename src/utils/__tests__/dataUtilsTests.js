@@ -49,7 +49,7 @@ test('transforms data', test => {
     { first: 'Darth', last: 'Vader' }
   ];
 
-  const transformedData = transformData(data);
+  const transformedData = transformData(data, {});
 
   test.deepEqual(Object.keys(transformedData), ['data', 'lookup']);
 
