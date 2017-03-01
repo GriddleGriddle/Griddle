@@ -15,9 +15,7 @@ import _ from 'lodash';
  *  .-- sortAscending {boolean} - the direction of the sort. Index matches that of sortColumns
  **/
 import {
-  addKeyToCollection,
   addColumnPropertiesWhenNoneExist,
-  transformDataToList,
   transformData,
 } from '../utils/dataUtils';
 

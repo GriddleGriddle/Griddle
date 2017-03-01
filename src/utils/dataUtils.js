@@ -25,10 +25,15 @@ function fromJSGreedy(js) {
 export function transformData(data, renderProperties) {
   const transformedData = data.reduce(({ list, lookup }, rowData, index) => {
     const map = fromJSGreedy(rowData);
+
+    // if this has a row key use that -- otherwise use Griddle key
     const key = (renderProperties.rowProperties && renderProperties.rowProperties.rowKey) ?
       rowData[renderProperties.rowProperties.rowKey] : index;
+
+    // if our map object already has griddleKey use that -- otherwise add key as griddleKey
     const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);
 
+    // return list and lookup with the new stuff from this iteration
     return {
       list: [...list, keyedData],
       lookup: {
@@ -45,20 +50,6 @@ export function transformData(data, renderProperties) {
     data: new Immutable.List(transformedData.list),
     lookup: new Immutable.Map(transformedData.lookup),
   };
-}
-
-/** adds griddleKey to given collection
- * @param (List<Map>) data - data collection to work against
- * @param (object) settings - settings object -- default {}
- */
-export function addKeyToCollection(data, settings={}) {
-  const defaultSettings = { name: 'griddleKey', startIndex: 0 };
-  const localSettings = Object.assign({}, defaultSettings, settings);
-
-  let key = localSettings.startIndex;
-  const getKey = (() => key++);
-
-  return data.map(row => row.set(localSettings.name, getKey()));
 }
 
 /** Gets the visible data based on columns
