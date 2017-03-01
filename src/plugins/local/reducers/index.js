@@ -1,8 +1,4 @@
-import Immutable from 'immutable';
 import { maxPageSelector, currentPageSelector } from '../selectors/localSelectors';
-import {
-  addKeyToCollection,
-} from '../../../utils/dataUtils';
 
 import * as dataReducers from '../../../reducers//dataReducer';
 
