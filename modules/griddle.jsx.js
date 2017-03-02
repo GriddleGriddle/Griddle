@@ -217,7 +217,7 @@ var Griddle = React.createClass({
     },
 
     /* if we have a filter display the max page and results accordingly */
-    setFilter: function setFilter(filter) {
+    setFilter: function setFilter(filter, updatedResults=null) {
         if (this.props.useExternal) {
             this.props.externalSetFilter(filter);
             return;
@@ -230,7 +230,7 @@ var Griddle = React.createClass({
         };
 
         // Obtain the state results.
-        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
+        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(updatedResults || this.props.results, filter) : this.defaultFilter(updatedResults || this.props.results, filter);
 
         // Update the max page.
         updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -381,6 +381,11 @@ var Griddle = React.createClass({
         this.setState(state);
     },
     componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        // Check if results props changed
+        if (nextProps.results !== this.props.results) {
+          this.setFilter(this.state.filter, nextProps.results);
+        }
+
         this.setMaxPage(nextProps.results);
         if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
             this.setPageSize(nextProps.resultsPerPage);
