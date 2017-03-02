@@ -58,11 +58,19 @@ export const sortColumnsSelector = state => state.get('sortColumns') || [];
 /** Gets all the columns */
 export const allColumnsSelector = createSelector(
   dataSelector,
-  (data) => (
-    !data || data.size === 0 ?
+  renderPropertiesSelector,
+  (data, renderProperties) => {
+    const dataColumns = !data || data.size === 0 ?
       [] :
-      data.get(0).keySeq().toJSON()
-  )
+      data.get(0).keySeq().toJSON();
+
+    const columnPropertyColumns = (renderProperties && renderProperties.size > 0) ?
+      // TODO: Make this not so ugly
+      Object.keys(renderProperties.get('columnProperties').toJSON()) :
+      [];
+
+    return _.union(dataColumns, columnPropertyColumns);
+  }
 );
 
 /** Gets the column properties objects sorted by order

@@ -159,6 +159,23 @@ test('allColumnsSelector: gets empty array when data is empty', test => {
   test.deepEqual(selectors.allColumnsSelector(state), []);
 });
 
+test('allColumnsSelector accounts for made up columns', test => {
+  // this is to catch the case where someone has a column that they added through column
+  // definitions and something that's not in the data
+  const state = new Immutable.fromJS({
+    data: [
+      { one: 'one', two: 'two', three: 'three'}
+    ],
+    renderProperties: {
+      columnProperties: {
+        something: { id: 'one', title: 'One' },
+      }
+    }
+  });
+
+  test.deepEqual(selectors.allColumnsSelector(state), ['one', 'two', 'three', 'something']);
+});
+
 test('iconByNameSelector gets given icon', test => {
   const state = new Immutable.fromJS({
     styleConfig: {
