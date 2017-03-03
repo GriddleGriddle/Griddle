@@ -154,6 +154,11 @@ describe('Griddle', function() {
     expect(grid.state.filteredResults.length).toEqual(1);
   });
 
+  it('correctly handles a null value in defaultColumnFilter', function(){
+    const test = grid.defaultColumnFilter(null, 'May');
+    expect(test).toEqual(false);
+  });
+
   it('sets the filteredResults when filterByColumn called on object field', function(){
     grid.filterByColumn('Hawaii', 'address');
     expect(grid.state.filteredResults.length).toEqual(1);
