@@ -21,6 +21,24 @@ import {
   transformData,
 } from '../utils/dataUtils';
 
+function isColumnVisible(state, columnId) {
+  const hasRenderProperty = state.getIn(['renderProperties', 'columnProperties', columnId]);
+  const currentlyVisibleProperty = state.getIn(['renderProperties', 'columnProperties', columnId, 'visible']);
+
+  // if there is a render property and visible is not set, visible is true
+  if (hasRenderProperty && currentlyVisibleProperty === undefined) {
+    return true;
+  }
+
+  // if there is no render property currently and visible is not set 
+  if (!hasRenderProperty && currentlyVisibleProperty === undefined) {
+    return false;
+  }
+
+  return currentlyVisibleProperty;
+}
+
+
 /** Sets the default render properties
  * @param {Immutable} state- Immutable previous state object
  * @param {Object} action - The action object to work with
@@ -103,22 +121,6 @@ export function GRIDDLE_TOGGLE_SETTINGS(state, action) {
   const showSettings = state.get('showSettings') || false;
 
   return state.set('showSettings', !showSettings);
-}
-
-function isColumnVisible(state, columnId) {
-  const hasRenderProperty = state.getIn(['renderProperties', 'columnProperties', columnId])
-  const currentlyVisibleProperty = state.getIn(['renderProperties', 'columnProperties', columnId, 'visible']);
-
-  // if there is a render property and visible is not set, visible is true
-  if (hasRenderProperty && currentlyVisibleProperty === undefined) {
-    return true;
-  }
-
-  if (!hasRenderProperty && currentlyVisibleProperty === undefined) {
-    return false;
-  }
-
-  return currentlyVisibleProperty;
 }
 
 export function GRIDDLE_TOGGLE_COLUMN(state, action) {
