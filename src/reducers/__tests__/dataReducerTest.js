@@ -146,3 +146,23 @@ test('toggle column sets true when no columnProperty for column but other column
   const state = reducers.GRIDDLE_TOGGLE_COLUMN(initialState, { columnId: 'state' });
   test.deepEqual(state.getIn(['renderProperties', 'columnProperties', 'state']).toJSON(), { id: 'state', visible: true });
 });
+
+test('toggle column works when there is no visible property', (t) => {
+  const initialState = Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        name: { id: 'name' }
+      }
+    }
+  });
+
+  // if column isn't in renderProperties->column properties, we should set visible to true
+  const state = reducers.GRIDDLE_TOGGLE_COLUMN(initialState, { columnId: 'state' });
+  t.deepEqual(state.getIn(['renderProperties', 'columnProperties', 'state']).toJSON(), { id: 'state', visible: true });
+
+  // if column is in reducerProperties but has no visible property should set to false
+  const otherState = reducers.GRIDDLE_TOGGLE_COLUMN(initialState, { columnId: 'name' });
+  t.deepEqual(otherState.getIn(['renderProperties', 'columnProperties', 'name']).toJSON(), { id: 'name', visible: false });
+
+
+});

@@ -19,6 +19,24 @@ import {
   transformData,
 } from '../utils/dataUtils';
 
+function isColumnVisible(state, columnId) {
+  const hasRenderProperty = state.getIn(['renderProperties', 'columnProperties', columnId]);
+  const currentlyVisibleProperty = state.getIn(['renderProperties', 'columnProperties', columnId, 'visible']);
+
+  // if there is a render property and visible is not set, visible is true
+  if (hasRenderProperty && currentlyVisibleProperty === undefined) {
+    return true;
+  }
+
+  // if there is no render property currently and visible is not set 
+  if (!hasRenderProperty && currentlyVisibleProperty === undefined) {
+    return false;
+  }
+
+  return currentlyVisibleProperty;
+}
+
+
 /** Sets the default render properties
  * @param {Immutable} state- Immutable previous state object
  * @param {Object} action - The action object to work with
@@ -104,13 +122,15 @@ export function GRIDDLE_TOGGLE_SETTINGS(state, action) {
 
 export function GRIDDLE_TOGGLE_COLUMN(state, action) {
   // flips the visible state if the column property exists
+  const currentlyVisible = isColumnVisible(state, action.columnId);
+
   return state.getIn(['renderProperties', 'columnProperties', action.columnId]) ?
     state.setIn(['renderProperties', 'columnProperties', action.columnId, 'visible'],
-      !state.getIn(['renderProperties', 'columnProperties', action.columnId, 'visible'])) :
+      !currentlyVisible) :
 
-  // if the columnProperty doesn't exist, create a new one and set the property to true
+    // if the columnProperty doesn't exist, create a new one and set the property to true
     state.setIn(['renderProperties', 'columnProperties', action.columnId],
-      new Immutable.Map({ id: action.columnId, visible: true }))
+      new Immutable.Map({ id: action.columnId, visible: true }));
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {

@@ -416,6 +416,16 @@ storiesOf('Cell', module)
   });
 
 storiesOf('Bug fixes', module)
+  .add('Shared column title', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} title="Same" />
+          <ColumnDefinition id="state" order={1} title="Same" />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
   .add('Delete row', () => {
      const enhanceWithOnClick = onClick => class ComputeThing extends Component {
       static propTypes = {
