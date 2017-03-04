@@ -23,12 +23,18 @@ function fromJSGreedy(js) {
 }
 
 export function transformData(data, renderProperties) {
+  const hasCustomRowId = renderProperties.rowProperties && renderProperties.rowProperties.rowKey;
+
+  // Validate that the first item in our data has the custom Griddle key
+  if (hasCustomRowId && data.length > 0 && !data[0].hasOwnProperty(renderProperties.rowProperties.rowKey)) {
+    throw new Error(`Griddle: Property '${renderProperties.rowProperties.rowKey}' doesn't exist in row data. Please specify a rowKey that exists in <RowDefinition>`);
+  }
+
   const transformedData = data.reduce(({ list, lookup }, rowData, index) => {
     const map = fromJSGreedy(rowData);
 
     // if this has a row key use that -- otherwise use Griddle key
-    const key = (renderProperties.rowProperties && renderProperties.rowProperties.rowKey) ?
-      rowData[renderProperties.rowProperties.rowKey] : index;
+    const key = hasCustomRowId ? rowData[renderProperties.rowProperties.rowKey] : index;
 
     // if our map object already has griddleKey use that -- otherwise add key as griddleKey
     const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);

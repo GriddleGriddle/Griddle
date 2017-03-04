@@ -245,6 +245,19 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add('with custom griddle key that doesn\'t exist', () => {
+    return (
+      <div>
+        <small>The key should be the name property </small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition rowKey="garbage">
+            <ColumnDefinition id="name" order={2} />
+            <ColumnDefinition id="state" order={1} />
+          </RowDefinition>
+        </Griddle>
+      </div>
+    )
+  })
   .add('with custom heading component', () => {
     return (
       <div>
