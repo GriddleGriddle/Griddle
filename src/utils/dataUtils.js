@@ -11,7 +11,7 @@ function keyInArray(keys) {
 
 export function getIncrementer(startIndex) {
   let key = startIndex;
-  return () => key++;  
+  return () => key++;
 }
 
 // From https://github.com/facebook/immutable-js/wiki/Converting-from-JS-objects#custom-conversion
@@ -22,43 +22,40 @@ function fromJSGreedy(js) {
       Immutable.Seq(js).map(fromJSGreedy).toMap();
 }
 
-export function transformData(data, settings = {}) {
-  const defaultSettings = { name: 'griddleKey', startIndex: 0, addGriddleKey: true };
-  const localSettings = Object.assign({}, defaultSettings, settings);
+export function transformData(data, renderProperties) {
+  const hasCustomRowId = renderProperties.rowProperties && renderProperties.rowProperties.rowKey;
 
-  const getKey = getIncrementer(localSettings.startIndex);
-
-  const lookup = {};
-  const list = [];
-
-  // build up a new list of data and list lookup
-  for (let i = 0; i < data.length; i += 1) {
-    const key = getKey();
-    lookup[key] = i;
-
-    // get an Immutable map of the data item
-    const map = fromJSGreedy(data[i]);
-    list.push(localSettings.addGriddleKey ? map.set(localSettings.name, key) : map);
+  // Validate that the first item in our data has the custom Griddle key
+  if (hasCustomRowId && data.length > 0 && !data[0].hasOwnProperty(renderProperties.rowProperties.rowKey)) {
+    throw new Error(`Griddle: Property '${renderProperties.rowProperties.rowKey}' doesn't exist in row data. Please specify a rowKey that exists in <RowDefinition>`);
   }
 
+  const transformedData = data.reduce(({ list, lookup }, rowData, index) => {
+    const map = fromJSGreedy(rowData);
+
+    // if this has a row key use that -- otherwise use Griddle key
+    const key = hasCustomRowId ? rowData[renderProperties.rowProperties.rowKey] : index;
+
+    // if our map object already has griddleKey use that -- otherwise add key as griddleKey
+    const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);
+
+    // return list and lookup with the new stuff from this iteration
+    return {
+      list: [...list, keyedData],
+      lookup: {
+        ...lookup,
+        [key]: index
+      },
+    };
+  }, {
+    list: [],
+    lookup: {},
+  });
+
   return {
-    data: new Immutable.List(list),
-    lookup: new Immutable.Map(lookup),
+    data: new Immutable.List(transformedData.list),
+    lookup: new Immutable.Map(transformedData.lookup),
   };
-}
-
-/** adds griddleKey to given collection
- * @param (List<Map>) data - data collection to work against
- * @param (object) settings - settings object -- default {}
- */
-export function addKeyToCollection(data, settings={}) {
-  const defaultSettings = { name: 'griddleKey', startIndex: 0 };
-  const localSettings = Object.assign({}, defaultSettings, settings);
-
-  let key = localSettings.startIndex;
-  const getKey = (() => key++);
-
-  return data.map(row => row.set(localSettings.name, getKey()));
 }
 
 /** Gets the visible data based on columns
@@ -136,5 +133,3 @@ export function addColumnPropertiesWhenNoneExist(stateObject) {
     }
   };
 }
-
-

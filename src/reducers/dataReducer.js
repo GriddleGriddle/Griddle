@@ -15,9 +15,7 @@ import _ from 'lodash';
  *  .-- sortAscending {boolean} - the direction of the sort. Index matches that of sortColumns
  **/
 import {
-  addKeyToCollection,
   addColumnPropertiesWhenNoneExist,
-  transformDataToList,
   transformData,
 } from '../utils/dataUtils';
 
@@ -52,9 +50,8 @@ export function GRIDDLE_INITIALIZED(initialState) {
   // making the rest of the properties initial state and
   // setting the mapped data on the new initial state immutable object
   if(initialState.hasOwnProperty('data') &&
-    initialState.data.length > 0 &&
-    !initialState.data[0].hasOwnProperty('griddleKey')) {
-      const transformedData = transformData(initialState.data);
+    initialState.data.length > 0) {
+      const transformedData = transformData(initialState.data, initialState.renderProperties);
       tempState.data = transformedData.data;
       tempState.lookup = transformedData.lookup;
   }
@@ -67,7 +64,7 @@ export function GRIDDLE_INITIALIZED(initialState) {
  * @param {Object} action - The action object to work with
 */
 export function GRIDDLE_LOADED_DATA(state, action) {
-  const transformedData = transformData(action.data);
+  const transformedData = transformData(action.data, state.get('renderProperties').toJSON());
 
   return state
     .set('data', transformedData.data)
@@ -137,7 +134,7 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  const transformedData = transformData(action.newState.data);
+  const transformedData = transformData(action.newState.data, state.get('renderProperties').toJSON());
   const data = transformedData.data;
   const lookup = transformedData.lookup;
   const newState = _.omit(action.newState, data);
@@ -146,4 +143,3 @@ export function GRIDDLE_UPDATE_STATE(state, action) {
     .set('data', data)
     .set('lookup', lookup);
 }
-

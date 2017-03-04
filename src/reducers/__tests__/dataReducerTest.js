@@ -23,7 +23,8 @@ test('creates column properties if none exist for data', test => {
     data: [
       {one: 1, two: 2, three: 3},
       {one: 11, two: 22, three: 33}
-    ]
+    ],
+    renderProperties: {},
   });
 
   test.deepEqual(state.getIn(['renderProperties', 'columnProperties']).toJSON(), {
@@ -52,7 +53,7 @@ test('does not adjust column properties if exists already', test => {
 })
 
 test('sets data', test => {
-  const reducedState = reducers.GRIDDLE_LOADED_DATA(new Immutable.Map(),
+  const reducedState = reducers.GRIDDLE_LOADED_DATA(Immutable.fromJS({ renderProperties: {} }),
     { type: 'GRIDDLE_LOADED_DATA', data: [
       {name: "one"},
       {name: "two"}
@@ -64,6 +65,7 @@ test('sets data', test => {
       {name: "one", griddleKey: 0},
       {name: "two", griddleKey: 1}
     ],
+    renderProperties: {},
     lookup: { 0: 0, 1: 1 },
     loading: false
   });
