@@ -88,9 +88,9 @@ class Griddle extends Component {
     //Combine / Compose the components to make a single component for each component type
     this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
 
-    this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => plugins.settingsComponentObjects));
+    this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => p.settingsComponentObjects));
 
-    this.events = Object.assign({}, events, ...plugins.map(p => plugins.events));
+    this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
 
