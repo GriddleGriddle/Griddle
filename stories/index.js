@@ -398,8 +398,8 @@ storiesOf('Cell', module)
             className="someClass"
             style={{ fontSize: 20, color: "#FAB" }}
             onClick={() => console.log('clicked')}
-            onMouseOver={() => console.log('mouse over')}
-            onMouseOut={() => console.log('mouse out')}
+            onMouseEnter={() => console.log('mouse over')}
+            onMouseLeave={() => console.log('mouse out')}
           />
       </tr>
       </tbody>
@@ -568,20 +568,14 @@ storiesOf('Bug fixes', module)
 
 storiesOf('Row', module)
   .add('base row', () => {
-    const cells = [
-      <td>One</td>,
-      <td>Two</td>,
-      <td>Three</td>
-    ];
+    const columnIds = [ 1, 2, 3 ];
 
     return (
       <table>
         <tbody>
           <Row
-            cells={cells}
-            onClick={() => console.log('clicked')}
-            onMouseOver={() => console.log('mouse over')}
-            onMouseOut={() => console.log('mouse out')}
+            Cell={({columnId}) => <td>Cell {columnId}</td>}
+            columnIds={columnIds}
           />
         </tbody>
       </table>
@@ -644,8 +638,8 @@ storiesOf('TableHeadingCell', module)
             <TableHeadingCell
               title="New Title"
               onClick={() => console.log('clicked')}
-              onMouseOver={() => console.log('mouse over')}
-              onMouseOut={() => console.log('mouse out')}
+              onMouseEnter={() => console.log('mouse over')}
+              onMouseLeave={() => console.log('mouse out')}
             />
           </tr>
         </thead>
