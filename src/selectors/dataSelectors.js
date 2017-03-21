@@ -267,7 +267,7 @@ export const cellValueSelector = (state, props) => {
   const type = !!cellProperties ? cellProperties.type : 'string';
   switch (type) {
     case 'date':
-      return value.toString();
+      return value.toLocaleDateString();
     case 'string':
     default:
       return value;
