@@ -14,9 +14,13 @@ export function getIncrementer(startIndex) {
   return () => key++;
 }
 
+function isImmuableConvertableValue(value) {
+  return typeof value !== 'object' || value === null || value instanceof Date;
+}
+
 // From https://github.com/facebook/immutable-js/wiki/Converting-from-JS-objects#custom-conversion
 function fromJSGreedy(js) {
-  return typeof js !== 'object' || js === null ? js :
+  return isImmuableConvertableValue(js) ? js :
     Array.isArray(js) ?
       Immutable.Seq(js).map(fromJSGreedy).toList() :
       Immutable.Seq(js).map(fromJSGreedy).toMap();
