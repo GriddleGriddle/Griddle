@@ -114,6 +114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _orderBy = __webpack_require__(246);
 	var _property = __webpack_require__(119);
 	var _get = __webpack_require__(104);
+	var _some = __webpack_require__(247);
 
 	var Griddle = React.createClass({
 	    displayName: 'Griddle',
@@ -218,14 +219,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "isMultipleSelection": false, //currently does not support subgrids
 	            "selectedRowIds": [],
 	            "uniqueIdentifier": "id",
-	            "onSelectionChange": null
+	            "onSelectionChange": null,
+	            "columnFilterFunc": null
 	        };
 	    },
 	    propTypes: {
 	        isMultipleSelection: React.PropTypes.bool,
 	        selectedRowIds: React.PropTypes.oneOfType([React.PropTypes.arrayOf(React.PropTypes.number), React.PropTypes.arrayOf(React.PropTypes.string)]),
 	        uniqueIdentifier: React.PropTypes.string,
-	        onSelectionChange: React.PropTypes.func
+	        onSelectionChange: React.PropTypes.func,
+	        columnFilterFunc: React.PropTypes.func
 	    },
 	    defaultFilter: function defaultFilter(results, filter) {
 	        var that = this;
@@ -241,19 +244,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    },
 
-	    defaultColumnFilter: function defaultColumnFilter(value, filter) {
-	        return _filter(deep.getObjectValues(value), function (value) {
-	            return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
-	        }).length > 0;
+	    defaultColumnFilter: function defaultColumnFilter(columnName, value, filter) {
+	        var filters = map(isArray(filter) ? filter : [filter], function (filter) {
+	            return (filter || '').toLowerCase();
+	        });
+	        return _some(deep.getObjectValues(value), function (value) {
+	            value = value.toString().toLowerCase();
+	            return _some(filters, function (filter) {
+	                return value.indexOf(filter) >= 0;
+	            });
+	        });
 	    },
 
 	    filterByColumnFilters: function filterByColumnFilters(columnFilters) {
-	        var filterFunction = this.defaultColumnFilter;
+	        var filterFunction = this.props.columnFilterFunc || this.defaultColumnFilter;
 	        var filteredResults = Object.keys(columnFilters).reduce(function (previous, current) {
 	            return _filter(previous, function (item) {
 	                var value = deep.getAt(item, current || "");
 	                var filter = columnFilters[current];
-	                return filterFunction(value, filter);
+	                return filterFunction(current || '', value, filter);
 	            });
 	        }, this.props.results);
 
@@ -290,6 +299,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /* if we have a filter display the max page and results accordingly */
 	    setFilter: function setFilter(filter) {
+	        var updatedResults = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
 	        if (this.props.useExternal) {
 	            this.props.externalSetFilter(filter);
 	            return;
@@ -302,7 +313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 
 	        // Obtain the state results.
-	        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(this.props.results, filter) : this.defaultFilter(this.props.results, filter);
+	        updatedState.filteredResults = this.props.useCustomFilterer ? this.props.customFilterer(updatedResults || this.props.results, filter) : this.defaultFilter(updatedResults || this.props.results, filter);
 
 	        // Update the max page.
 	        updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -453,6 +464,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setState(state);
 	    },
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        // Check if results props changed
+	        if (nextProps.results !== this.props.results) {
+	            this.setFilter(this.state.filter, nextProps.results);
+	        }
+
 	        this.setMaxPage(nextProps.results);
 	        if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
 	            this.setPageSize(nextProps.resultsPerPage);
@@ -10353,6 +10369,91 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = orderBy;
+
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var arraySome = __webpack_require__(61),
+	    baseIteratee = __webpack_require__(8),
+	    baseSome = __webpack_require__(248),
+	    isArray = __webpack_require__(71),
+	    isIterateeCall = __webpack_require__(152);
+
+	/**
+	 * Checks if `predicate` returns truthy for **any** element of `collection`.
+	 * Iteration is stopped once `predicate` returns truthy. The predicate is
+	 * invoked with three arguments: (value, index|key, collection).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @since 0.1.0
+	 * @category Collection
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} [predicate=_.identity] The function invoked per iteration.
+	 * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+	 * @returns {boolean} Returns `true` if any element passes the predicate check,
+	 *  else `false`.
+	 * @example
+	 *
+	 * _.some([null, 0, 'yes', false], Boolean);
+	 * // => true
+	 *
+	 * var users = [
+	 *   { 'user': 'barney', 'active': true },
+	 *   { 'user': 'fred',   'active': false }
+	 * ];
+	 *
+	 * // The `_.matches` iteratee shorthand.
+	 * _.some(users, { 'user': 'barney', 'active': false });
+	 * // => false
+	 *
+	 * // The `_.matchesProperty` iteratee shorthand.
+	 * _.some(users, ['active', false]);
+	 * // => true
+	 *
+	 * // The `_.property` iteratee shorthand.
+	 * _.some(users, 'active');
+	 * // => true
+	 */
+	function some(collection, predicate, guard) {
+	  var func = isArray(collection) ? arraySome : baseSome;
+	  if (guard && isIterateeCall(collection, predicate, guard)) {
+	    predicate = undefined;
+	  }
+	  return func(collection, baseIteratee(predicate, 3));
+	}
+
+	module.exports = some;
+
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseEach = __webpack_require__(123);
+
+	/**
+	 * The base implementation of `_.some` without support for iteratee shorthands.
+	 *
+	 * @private
+	 * @param {Array|Object} collection The collection to iterate over.
+	 * @param {Function} predicate The function invoked per iteration.
+	 * @returns {boolean} Returns `true` if any element passes the predicate check,
+	 *  else `false`.
+	 */
+	function baseSome(collection, predicate) {
+	  var result;
+
+	  baseEach(collection, function(value, index, collection) {
+	    result = predicate(value, index, collection);
+	    return !result;
+	  });
+	  return !!result;
+	}
+
+	module.exports = baseSome;
 
 
 /***/ }
