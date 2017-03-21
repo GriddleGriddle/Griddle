@@ -1,3 +1,6 @@
+const path = require("path");
+const include = path.resolve(__dirname, '../');
+
 // you can use this file to add your custom webpack plugins, loaders and anything you like.
 // This is just the basic way to add addional webpack configurations.
 // For more information refer the docs: https://goo.gl/qPbSyX
@@ -10,13 +13,23 @@ module.exports = {
   plugins: [
     // your custom plugins
   ],
+  resolve: {
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+  },
   module: {
     loaders: [
-      { test: /\.[jt]sx?$/,
-        loader: 'babel-loader?presets[]=es2016&presets[]=stage-0&presets[]=react!ts-loader',
+      { test: /\.tsx?$/,
+        loader: 'babel-loader!ts-loader',
         exclude: /node_modules/,
         cacheDirectory: true,
+        include,
       }
     ],
+  },
+  ts: {
+    compilerOptions: {
+      noEmit: false,
+    },
   },
 };

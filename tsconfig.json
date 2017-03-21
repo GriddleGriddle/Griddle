@@ -15,5 +15,6 @@
     "forceConsistentCasingInFileNames": true
   },
   "files": [
+    "stories/index.tsx"
   ]
 }
