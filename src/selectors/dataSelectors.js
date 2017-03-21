@@ -254,13 +254,24 @@ export const visibleRowCountSelector = createSelector(
 );
 
 // TODO: Needs tests and jsdoc
-export const cellValueSelector = (state, { griddleKey, columnId }) => {
+export const cellValueSelector = (state, props) => {
+  const { griddleKey, columnId } = props;
+  const cellProperties = cellPropertiesSelector(state, props);
+
   //TODO: Make Griddle key a string in data utils
   const lookup = state.getIn(['lookup', griddleKey.toString()]);
 
-  return state
-    .get('data').get(lookup)
-    .getIn(columnId.split('.'));
+  const value = state
+                .get('data').get(lookup)
+                .getIn(columnId.split('.'));
+  const type = !!cellProperties ? cellProperties.type : 'string';
+  switch (type) {
+    case 'date':
+      return value.toString();
+    case 'string':
+    default:
+      return value;
+  }
 };
 
 // TODO: Needs tests and jsdoc
