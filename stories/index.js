@@ -426,6 +426,32 @@ storiesOf('Bug fixes', module)
       </Griddle>
     );
   })
+  .add('Date values converted to null', () => {
+    const dateData = [
+      {
+        _id: 1,
+        foo: 'hello',
+        date: new Date('2017-02-15'),
+        bar: 'world'
+      },
+      {
+        _id: 2,
+        foo: 'today',
+        date: new Date(),
+        bar: 'bar'
+      }
+    ];
+    return (
+      <Griddle data={dateData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id={'_id'} title="ID" />
+          <ColumnDefinition id={'foo'} title="Foo" />
+          <ColumnDefinition id={'date'} title="Date" type="date" />
+          <ColumnDefinition id={'bar'} title="Bar" />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
   .add('Delete row', () => {
      const enhanceWithOnClick = onClick => class ComputeThing extends Component {
       static propTypes = {
