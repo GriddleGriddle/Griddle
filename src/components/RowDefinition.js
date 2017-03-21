@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class extends Component {
+export default class RowDefinition extends Component {
   static propTypes = {
     //Children can be either a single column definition or an array
     //of column definition objects

@@ -8,27 +8,16 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
-import Griddle from '../src/index';
-import Cell from '../src/components/Cell';
-import Row from '../src/components/Row';
-import TableBody from '../src/components/TableBody';
-import TableHeadingCell from '../src/components/TableHeadingCell';
-import TableHeading from '../src/components/TableHeading';
-import { Table } from '../src/components/Table';
-import TableContainer from '../src/components/TableContainer';
-import ColumnDefinition from '../src/components/ColumnDefinition';
-import RowDefinition from '../src/components/RowDefinition';
-const { SettingsWrapper, SettingsToggle, Settings } = '../src/components';
 import _ from 'lodash';
-import * as actions from '../src/actions';
-import * as selectors from '../src/selectors/dataSelectors';
-import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
+
+import Griddle, { actions, components, selectors, plugins, ColumnDefinition, RowDefinition } from '../src/module';
+const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
+
+const { LocalPlugin, PositionPlugin } = plugins;
+const { rowDataSelector } = LocalPlugin.selectors;
+
 import fakeData from './fakeData';
 import {fakeData2, fakeData3} from './fakeData2';
-
-import LocalPlugin from '../src/plugins/local';
-import PositionPlugin from '../src/plugins/position';
 
 function sortBySecondCharacter(data, column, sortAscending = true) {
   return data.sort(
