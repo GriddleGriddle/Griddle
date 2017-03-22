@@ -660,6 +660,18 @@ storiesOf('TableHeading', module)
 
 storiesOf('Table', module)
   .add('base table', () => {
+    const noResults = props => (
+      <p>Nothing!</p>
+    );
+
+    return (
+      <Table
+        NoResults={noResults}
+      />
+    );
+  })
+
+  .add('base table with visibleRows', () => {
     const tableHeading = props => (
       <thead>
         <tr>
@@ -682,6 +694,7 @@ storiesOf('Table', module)
 
     return (
       <Table
+        visibleRows={1}
         TableHeading={tableHeading}
         TableBody={tableBody}
       />
