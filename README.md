@@ -1,11 +1,10 @@
 Griddle
 =======
+
 An ultra customizable datagrid component for React
 ----------
 
-Join us here [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Build Status](https://travis-ci.org/GriddleGriddle/Griddle.svg?branch=master)](https://travis-ci.org/GriddleGriddle/Griddle)
+[![Gitter](https://badges.gitter.im/JoinChat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/GriddleGriddle/Griddle.svg?branch=master)](https://travis-ci.org/GriddleGriddle/Griddle)
 
 ----------
 
@@ -14,6 +13,7 @@ Please check out the [documentation and examples](http://griddlegriddle.github.i
 TLDR: Griddle now has a customizable architecture that allows for one-off customizations or reusable plugins. These customization options allow for overriding everything from components, to internal datagrid state management, and more.
 
 ----------
+
 To use Griddle:
 
 `npm install griddle-react`
@@ -41,5 +41,3 @@ We would love any help at all but want to call out the following things:
 * Help maintaining 0.x
 * More tests - we have a number of tests in version 1.0 but not quite where we'd like it to be
 * More plugins
-
-----------
