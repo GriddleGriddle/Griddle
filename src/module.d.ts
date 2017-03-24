@@ -373,14 +373,22 @@ export namespace plugins {
     interface PositionSettings {
         // The height of the table
         tableHeight?: number|string;
+
         // The width of the table
         tableWidth?: number|string;
+
         // The minimum row height
         rowHeight?: number|string;
+
+        // TODO: Unused?
         // The minimum column width
         defaultColumnWidth?: number|string;
+
+        // TODO: Unused?
         // Whether or not the header should be fixed
         fixedHeader?: boolean;
+
+        // TODO: Unused?
         // Disable pointer events while scrolling to improve performance
         disablePointerEvents?: boolean;
     }
