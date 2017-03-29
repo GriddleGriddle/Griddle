@@ -16,6 +16,7 @@ import { Table } from '../src/components/Table';
 import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
+const { SettingsWrapper, SettingsToggle, Settings } = '../src/components';
 import _ from 'lodash';
 import { columnIdsSelector, stylesForComponentSelector } from '../src/selectors/dataSelectors';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
@@ -807,5 +808,40 @@ storiesOf('TableContainer', module)
       <BaseWithContext>
         <TableComposed />
       </BaseWithContext>
+    );
+  })
+
+storiesOf('SettingsWrapper', module)
+  .add('base disabled', () => {
+    return (
+      <SettingsWrapper />
+    );
+  })
+  .add('base enabled not visible', () => {
+    const toggle = (props) => <div>Toggle!</div>;
+    return (
+      <SettingsWrapper isEnabled={true} SettingsToggle={toggle} />
+    );
+  })
+  .add('base enabled and visible', () => {
+    const settings = (props) => <div>Settings!</div>;
+    return (
+      <SettingsWrapper isEnabled={true} isVisible={true} Settings={settings} />
+    );
+  })
+
+storiesOf('SettingsToggle', module)
+  .add('base', () => {
+    const onClick = () => console.log('toggle');
+    return (
+      <SettingsToggle onClick={onClick} text={"Toggle!"} />
+    );
+  })
+
+storiesOf('Settings', module)
+  .add('base', () => {
+    const components = [1,2,3].map((n, i) => (props) => <div>Settings {n}</div>);
+    return (
+      <Settings settingsComponents={components} />
     );
   })
