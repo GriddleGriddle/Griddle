@@ -40,7 +40,7 @@ return (
             type="checkbox"
             name={visibleColumns[v].id}
             checked
-            onClick={onToggle}
+            onChange={onToggle}
           />
           {visibleColumns[v].title || visibleColumns[v].id}
         </label>
@@ -57,7 +57,7 @@ return (
           <input
             type="checkbox"
             name={hiddenColumns[v].id}
-            onClick={onToggle}
+            onChange={onToggle}
             defaultChecked={false}
           />
           {hiddenColumns[v].title || hiddenColumns[v].id}
