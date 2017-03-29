@@ -845,3 +845,15 @@ storiesOf('Settings', module)
       <Settings settingsComponents={components} />
     );
   })
+  .add('remove built-in settings', () => {
+    const plugin = {
+      settingsComponentObjects: {
+        pageSizeSettings: null,
+        columnChooser: { order: 0, component: null },
+        fancy: { order: 1, component: () => <div>Fancy Settings Component</div> },
+      },
+    }
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,plugin]} />
+    );
+  })

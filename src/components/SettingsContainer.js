@@ -9,7 +9,7 @@ import { classNamesForComponentSelector, stylesForComponentSelector } from '../s
 function getSettingsComponentsArrayFromObject(settingsObject) {
   //TODO: determine if we need to make this faster
   return settingsObject ? Object.keys(settingsObject)
-    .map(key => settingsObject[key].component) : null;
+    .map(key => settingsObject[key] && settingsObject[key].component) : null;
 }
 
 const EnhancedSettings = OriginalComponent => compose(
