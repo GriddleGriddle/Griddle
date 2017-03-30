@@ -671,6 +671,42 @@ storiesOf('Table', module)
     );
   })
 
+  .add('empty with columns', () => {
+    const components = {
+      Table: ({ TableHeading, TableBody, NoResults, style, visibleRows }) => (
+        <table style={style}>
+          <TableHeading />
+          { visibleRows ? (TableBody && <TableBody />) : (NoResults && <NoResults />) }
+        </table>
+      ),
+      NoResults: ({ columnIds, style }) => (
+        <tr style={style}>
+          <td colSpan={columnIds.length}>Nothing!</td>
+        </tr>
+      ),
+    };
+    const styleConfig = {
+      styles: {
+        NoResults: {
+          backgroundColor: "#eee",
+          textAlign: "center",
+        },
+        Table: {
+          width: "80%",
+        },
+      },
+    };
+
+    return (
+      <Griddle components={components} styleConfig={styleConfig}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
+
   .add('base table with visibleRows', () => {
     const tableHeading = props => (
       <thead>
