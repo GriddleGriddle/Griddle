@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import { connect } from 'react-redux';
 
@@ -14,6 +17,7 @@ import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
 import _ from 'lodash';
+import { columnIdsSelector, stylesForComponentSelector } from '../src/selectors/dataSelectors';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 import {fakeData2, fakeData3} from './fakeData2';
@@ -678,6 +682,21 @@ storiesOf('Table', module)
           <TableHeading />
           { visibleRows ? (TableBody && <TableBody />) : (NoResults && <NoResults />) }
         </table>
+      ),
+      NoResultsContainer: compose(
+        getContext({
+          components: React.PropTypes.object,
+        }),
+        connect(
+          state => ({
+            columnIds: columnIdsSelector(state),
+            style: stylesForComponentSelector(state, 'NoResults'),
+          })
+        ),
+        mapProps(props => ({
+          NoResults: props.components.NoResults,
+          ...props
+        }))
       ),
       NoResults: ({ columnIds, style }) => (
         <tr style={style}>
