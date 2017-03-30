@@ -49,7 +49,7 @@ export function GRIDDLE_INITIALIZED(initialState) {
   //TODO: could probably make this more efficient by removing data
   // making the rest of the properties initial state and
   // setting the mapped data on the new initial state immutable object
-  if(initialState.hasOwnProperty('data') &&
+  if (initialState.data &&
     initialState.data.length > 0) {
       const transformedData = transformData(initialState.data, initialState.renderProperties);
       tempState.data = transformedData.data;

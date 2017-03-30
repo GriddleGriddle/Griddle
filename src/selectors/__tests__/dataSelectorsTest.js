@@ -279,3 +279,25 @@ test('it gets columnTitles in the correct order', test => {
 
   test.deepEqual(selectors.columnTitlesSelector(state), ['Two', 'One']);
 });
+
+[undefined, null].map(data =>
+  test(`visibleRowIds is empty if data is ${data}`, (assert) => {
+    const state = new Immutable.fromJS({
+      data
+    });
+
+    assert.deepEqual(selectors.visibleRowIdsSelector(state), new Immutable.List());
+  })
+);
+
+test('visibleRowIds gets griddleKey from data', (assert) => {
+  const state = new Immutable.fromJS({
+    data: [
+      { griddleKey: 2 },
+      { griddleKey: 4 },
+      { griddleKey: 6 },
+    ],
+  });
+
+  assert.deepEqual(selectors.visibleRowIdsSelector(state), new Immutable.List([2, 4, 6]));
+});

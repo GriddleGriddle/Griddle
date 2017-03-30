@@ -241,7 +241,7 @@ export const columnTitlesSelector = createSelector(
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
   dataSelector,
-  currentPageData => currentPageData.map(c => c.get('griddleKey'))
+  currentPageData => currentPageData ? currentPageData.map(c => c.get('griddleKey')) : new Immutable.List()
 );
 
 /** Gets the count of visible rows */
