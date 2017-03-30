@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
-
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import { columnTitlesSelector, columnIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const NoResultsContainer = OriginalComponent => compose(
   getContext({
@@ -12,6 +11,8 @@ const NoResultsContainer = OriginalComponent => compose(
   }),
   connect(
     state => ({
+      columnTitles: columnTitlesSelector(state),
+      columnIds: columnIdsSelector(state),
       className: classNamesForComponentSelector(state, 'NoResults'),
       style: stylesForComponentSelector(state, 'NoResults'),
     })
