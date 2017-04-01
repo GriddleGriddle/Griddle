@@ -5,6 +5,7 @@ import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -908,5 +909,44 @@ storiesOf('Settings', module)
 
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} />
+    );
+  })
+
+  .add('custom page size settings', () => {
+    const pageSizeSettings = ({ pageSizes }) =>
+      compose(
+        connect(
+          (state) => ({
+            pageSize: selectors.pageSizeSelector(state),
+          }),
+          {
+            setPageSize: actions.setPageSize
+          }
+        ),
+        withHandlers({
+          onChange: props => e => {
+            props.setPageSize(+e.target.value);
+          },
+        }),
+      )(({ pageSize, onChange }) => {
+      return (
+        <div>
+          <select onChange={onChange} defaultValue={pageSize}>
+            { pageSizes.map(s => <option key={s}>{s}</option>) }
+          </select>
+        </div>
+      )});
+
+    const PageSizeDropDownPlugin = (config) => ({
+      settingsComponentObjects: {
+        pageSizeSettings: { order: 1, component: pageSizeSettings(config) },
+      },
+    });
+
+    const pluginConfig = {
+      pageSizes: [5, 10, 20, 50],
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} />
     );
   })
