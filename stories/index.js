@@ -851,9 +851,10 @@ storiesOf('Settings', module)
   })
   .add('remove built-in settings', () => {
     const plugin = {
+      components: {
+        SettingsComponents: null,
+      },
       settingsComponentObjects: {
-        pageSizeSettings: null,
-        columnChooser: { order: 0, component: null },
         fancy: { order: 1, component: () => <div>Fancy Settings Component</div> },
       },
     }
@@ -902,8 +903,10 @@ storiesOf('Settings', module)
       )});
 
     const SimpleColumnChooserPlugin = {
-      settingsComponentObjects: {
-        columnChooser: { order: 2, component: columnChooser },
+      components:{
+        SettingsComponents: {
+          columnChooser,
+        },
       },
     };
 
@@ -938,8 +941,10 @@ storiesOf('Settings', module)
       )});
 
     const PageSizeDropDownPlugin = (config) => ({
-      settingsComponentObjects: {
-        pageSizeSettings: { order: 1, component: pageSizeSettings(config) },
+      components: {
+        SettingsComponents: {
+          pageSizeSettings: pageSizeSettings(config),
+        },
       },
     });
 
