@@ -4,7 +4,9 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
+import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Griddle from '../src/index';
 import Cell from '../src/components/Cell';
@@ -18,7 +20,8 @@ import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
 const { SettingsWrapper, SettingsToggle, Settings } = '../src/components';
 import _ from 'lodash';
-import { columnIdsSelector, stylesForComponentSelector } from '../src/selectors/dataSelectors';
+import * as actions from '../src/actions';
+import * as selectors from '../src/selectors/dataSelectors';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 import {fakeData2, fakeData3} from './fakeData2';
@@ -690,8 +693,8 @@ storiesOf('Table', module)
         }),
         connect(
           state => ({
-            columnIds: columnIdsSelector(state),
-            style: stylesForComponentSelector(state, 'NoResults'),
+            columnIds: selectors.columnIdsSelector(state),
+            style: selectors.stylesForComponentSelector(state, 'NoResults'),
           })
         ),
         mapProps(props => ({
@@ -855,5 +858,55 @@ storiesOf('Settings', module)
     }
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin,plugin]} />
+    );
+  })
+
+  .add('custom column chooser', () => {
+    const columnChooser =
+      compose(
+        connect(
+          (state) => ({
+            columns: createSelector(
+              selectors.sortedColumnPropertiesSelector,
+              colMap => {
+                const columns = colMap.valueSeq().toJS();
+                return columns.filter(c => !c.isMetadata);
+              }
+            )(state),
+          }),
+          {
+            toggleColumn: actions.toggleColumn
+          }
+        ),
+        withHandlers({
+          onToggle: ({toggleColumn}) => event => {
+            toggleColumn(event.target.name)
+          }
+        })
+      )(({ columns, onToggle }) => {
+      return (
+        <div>
+          { Object.keys(columns).map(c =>
+            <label key={columns[c].id}>
+              <input
+                type="checkbox"
+                name={columns[c].id}
+                defaultChecked={!columns[c].isVisible}
+                onChange={onToggle}
+              />
+              {columns[c].title || columns[c].id}
+            </label>
+          )}
+        </div>
+      )});
+
+    const SimpleColumnChooserPlugin = {
+      settingsComponentObjects: {
+        columnChooser: { order: 2, component: columnChooser },
+      },
+    };
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} />
     );
   })
