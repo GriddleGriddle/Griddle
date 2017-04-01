@@ -911,7 +911,7 @@ storiesOf('Settings', module)
     };
 
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} />
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }} />
     );
   })
 
@@ -952,6 +952,6 @@ storiesOf('Settings', module)
       pageSizes: [5, 10, 20, 50],
     };
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} />
+      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })
