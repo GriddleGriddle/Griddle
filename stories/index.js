@@ -862,6 +862,18 @@ storiesOf('Settings', module)
       <Griddle data={fakeData} plugins={[LocalPlugin,plugin]} />
     );
   })
+  .add('reorder built-in settings', () => {
+    const settingsComponentObjects = {
+      before: { order: 1, component: () => <div>Before</div> },
+      columnChooser: { order: 2 },
+      between: { order: 3, component: () => <div>Between</div> },
+      pageSizeSettings: { order: 4 },
+      after: { order: 5, component: () => <div>After</div> },
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} settingsComponentObjects={settingsComponentObjects} />
+    );
+  })
 
   .add('custom column chooser', () => {
     const columnChooser =
