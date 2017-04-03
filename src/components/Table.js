@@ -8,7 +8,7 @@ export const Table = ({ TableHeading, TableBody, NoResults, style, className, vi
     </table>
   ) :
   (
-    <NoResults />
+    NoResults && <NoResults />
   );
 
 export default Table;

@@ -50,7 +50,24 @@ test('does not adjust column properties if exists already', test => {
   test.deepEqual(state.getIn(['renderProperties', 'columnProperties']).toJSON(), {
     one: { id: 'one', visible: true }
   });
-})
+});
+
+[undefined, null].map(data =>
+  test(`does not adjust column properties if data is ${data}`, (assert) => {
+    const state = reducers.GRIDDLE_INITIALIZED({
+      data,
+      renderProperties: {
+        columnProperties: {
+          one: { id: 'one', visible: true }
+        }
+      }
+    });
+
+    assert.deepEqual(state.getIn(['renderProperties', 'columnProperties']).toJSON(), {
+      one: { id: 'one', visible: true }
+    });
+  })
+);
 
 test('sets data', test => {
   const reducedState = reducers.GRIDDLE_LOADED_DATA(Immutable.fromJS({ renderProperties: {} }),

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import { connect } from 'react-redux';
 
@@ -14,6 +17,7 @@ import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
 import _ from 'lodash';
+import { columnIdsSelector, stylesForComponentSelector } from '../src/selectors/dataSelectors';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 import {fakeData2, fakeData3} from './fakeData2';
@@ -398,8 +402,8 @@ storiesOf('Cell', module)
             className="someClass"
             style={{ fontSize: 20, color: "#FAB" }}
             onClick={() => console.log('clicked')}
-            onMouseOver={() => console.log('mouse over')}
-            onMouseOut={() => console.log('mouse out')}
+            onMouseEnter={() => console.log('mouse over')}
+            onMouseLeave={() => console.log('mouse out')}
           />
       </tr>
       </tbody>
@@ -568,20 +572,14 @@ storiesOf('Bug fixes', module)
 
 storiesOf('Row', module)
   .add('base row', () => {
-    const cells = [
-      <td>One</td>,
-      <td>Two</td>,
-      <td>Three</td>
-    ];
+    const columnIds = [ 1, 2, 3 ];
 
     return (
       <table>
         <tbody>
           <Row
-            cells={cells}
-            onClick={() => console.log('clicked')}
-            onMouseOver={() => console.log('mouse over')}
-            onMouseOut={() => console.log('mouse out')}
+            Cell={({columnId}) => <td>Cell {columnId}</td>}
+            columnIds={columnIds}
           />
         </tbody>
       </table>
@@ -644,8 +642,8 @@ storiesOf('TableHeadingCell', module)
             <TableHeadingCell
               title="New Title"
               onClick={() => console.log('clicked')}
-              onMouseOver={() => console.log('mouse over')}
-              onMouseOut={() => console.log('mouse out')}
+              onMouseEnter={() => console.log('mouse over')}
+              onMouseLeave={() => console.log('mouse out')}
             />
           </tr>
         </thead>
@@ -666,6 +664,69 @@ storiesOf('TableHeading', module)
 
 storiesOf('Table', module)
   .add('base table', () => {
+    const noResults = props => (
+      <p>Nothing!</p>
+    );
+
+    return (
+      <Table
+        NoResults={noResults}
+      />
+    );
+  })
+
+  .add('empty with columns', () => {
+    const components = {
+      Table: ({ TableHeading, TableBody, NoResults, style, visibleRows }) => (
+        <table style={style}>
+          <TableHeading />
+          { visibleRows ? (TableBody && <TableBody />) : (NoResults && <NoResults />) }
+        </table>
+      ),
+      NoResultsContainer: compose(
+        getContext({
+          components: React.PropTypes.object,
+        }),
+        connect(
+          state => ({
+            columnIds: columnIdsSelector(state),
+            style: stylesForComponentSelector(state, 'NoResults'),
+          })
+        ),
+        mapProps(props => ({
+          NoResults: props.components.NoResults,
+          ...props
+        }))
+      ),
+      NoResults: ({ columnIds, style }) => (
+        <tr style={style}>
+          <td colSpan={columnIds.length}>Nothing!</td>
+        </tr>
+      ),
+    };
+    const styleConfig = {
+      styles: {
+        NoResults: {
+          backgroundColor: "#eee",
+          textAlign: "center",
+        },
+        Table: {
+          width: "80%",
+        },
+      },
+    };
+
+    return (
+      <Griddle components={components} styleConfig={styleConfig}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
+
+  .add('base table with visibleRows', () => {
     const tableHeading = props => (
       <thead>
         <tr>
@@ -688,6 +749,7 @@ storiesOf('Table', module)
 
     return (
       <Table
+        visibleRows={1}
         TableHeading={tableHeading}
         TableBody={tableBody}
       />

@@ -109,11 +109,9 @@ export function hasColumnProperties(stateObject) {
 
 /** Does this initial state object have data?
  * @param (object) stateObject - a non-immutable state object for initialization
- *
- * TODO: Needs tests
  */
 export function hasData(stateObject) {
-  return stateObject.hasOwnProperty('data') && stateObject.data.length > 0;
+  return !!stateObject.data && stateObject.data.length > 0;
 }
 
 /** Gets a new state object (not immutable) that has columnProperties if none exist

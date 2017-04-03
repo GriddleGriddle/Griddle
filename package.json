@@ -19,7 +19,7 @@
     "build": "npm run clean-dist && npm run build-modules && npm run build-umd",
     "clean-dist": "rimraf dist",
     "build-umd": "webpack --config webpack.config.js",
-    "build-modules": "BABEL_ENV=build babel src --out-dir dist/module ",
+    "build-modules": "cross-env BABEL_ENV=build babel src --out-dir dist/module ",
     "ship-it": "npm run build && npm publish --tag next"
   },
   "peerDependencies": {
@@ -36,6 +36,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.0.0",
     "babel-register": "^6.9.0",
+    "cross-env": "^3.2.4",
     "enzyme": "^2.7.1",
     "eslint": "^3.9.1",
     "eslint-config-airbnb": "^14.0.0",

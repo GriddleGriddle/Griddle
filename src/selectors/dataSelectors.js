@@ -215,21 +215,18 @@ export const textSelector = (state, { key}) => {
 /** Gets the column ids for the visible columns
 */
 export const columnIdsSelector = createSelector(
-  dataSelector,
   renderPropertiesSelector,
   visibleColumnsSelector,
-  (visibleData, renderProperties, visibleColumns) => {
+  (renderProperties, visibleColumns) => {
     const offset = 1000;
     // TODO: Make this better -- This is pretty inefficient
-    if (visibleData.size > 0) {
-      return visibleColumns
-        .map((k, index) => ({
-          id: renderProperties.getIn(['columnProperties', k, 'id']) || k,
-          order: renderProperties.getIn(['columnProperties', k, 'order']) || offset + index
-        }))
-        .sort((first, second) => first.order - second.order)
-        .map(item => item.id);
-    }
+    return visibleColumns
+      .map((k, index) => ({
+        id: renderProperties.getIn(['columnProperties', k, 'id']) || k,
+        order: renderProperties.getIn(['columnProperties', k, 'order']) || offset + index
+      }))
+      .sort((first, second) => first.order - second.order)
+      .map(item => item.id);
   }
 );
 
@@ -244,7 +241,7 @@ export const columnTitlesSelector = createSelector(
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
   dataSelector,
-  currentPageData => currentPageData.map(c => c.get('griddleKey'))
+  currentPageData => currentPageData ? currentPageData.map(c => c.get('griddleKey')) : new Immutable.List()
 );
 
 /** Gets the count of visible rows */

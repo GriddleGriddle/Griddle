@@ -27,8 +27,8 @@ test('onClick works', (t) => {
 test('onMouseEnter works', (t) => {
   let over = false;
 
-  const onMouseOver = () => { over = true; };
-  const wrapper = shallow(<Cell onMouseEnter={onMouseOver} />);
+  const onMouseEnter = () => { over = true; };
+  const wrapper = shallow(<Cell onMouseEnter={onMouseEnter} />);
   wrapper.simulate('mouseEnter');
 
   t.true(over);
