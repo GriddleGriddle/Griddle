@@ -4,7 +4,10 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import Griddle from '../src/index';
 import Cell from '../src/components/Cell';
@@ -16,8 +19,10 @@ import { Table } from '../src/components/Table';
 import TableContainer from '../src/components/TableContainer';
 import ColumnDefinition from '../src/components/ColumnDefinition';
 import RowDefinition from '../src/components/RowDefinition';
+const { SettingsWrapper, SettingsToggle, Settings } = '../src/components';
 import _ from 'lodash';
-import { columnIdsSelector, stylesForComponentSelector } from '../src/selectors/dataSelectors';
+import * as actions from '../src/actions';
+import * as selectors from '../src/selectors/dataSelectors';
 import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
 import fakeData from './fakeData';
 import {fakeData2, fakeData3} from './fakeData2';
@@ -689,8 +694,8 @@ storiesOf('Table', module)
         }),
         connect(
           state => ({
-            columnIds: columnIdsSelector(state),
-            style: stylesForComponentSelector(state, 'NoResults'),
+            columnIds: selectors.columnIdsSelector(state),
+            style: selectors.stylesForComponentSelector(state, 'NoResults'),
           })
         ),
         mapProps(props => ({
@@ -807,5 +812,158 @@ storiesOf('TableContainer', module)
       <BaseWithContext>
         <TableComposed />
       </BaseWithContext>
+    );
+  })
+
+storiesOf('SettingsWrapper', module)
+  .add('base disabled', () => {
+    return (
+      <SettingsWrapper />
+    );
+  })
+  .add('base enabled not visible', () => {
+    const toggle = (props) => <div>Toggle!</div>;
+    return (
+      <SettingsWrapper isEnabled={true} SettingsToggle={toggle} />
+    );
+  })
+  .add('base enabled and visible', () => {
+    const settings = (props) => <div>Settings!</div>;
+    return (
+      <SettingsWrapper isEnabled={true} isVisible={true} Settings={settings} />
+    );
+  })
+
+storiesOf('SettingsToggle', module)
+  .add('base', () => {
+    const onClick = () => console.log('toggle');
+    return (
+      <SettingsToggle onClick={onClick} text={"Toggle!"} />
+    );
+  })
+
+storiesOf('Settings', module)
+  .add('base', () => {
+    const components = [1,2,3].map((n, i) => (props) => <div>Settings {n}</div>);
+    return (
+      <Settings settingsComponents={components} />
+    );
+  })
+  .add('remove built-in settings', () => {
+    const plugin = {
+      components: {
+        SettingsComponents: null,
+      },
+      settingsComponentObjects: {
+        fancy: { order: 1, component: () => <div>Fancy Settings Component</div> },
+      },
+    }
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,plugin]} />
+    );
+  })
+  .add('reorder built-in settings', () => {
+    const settingsComponentObjects = {
+      before: { order: 1, component: () => <div>Before</div> },
+      columnChooser: { order: 2 },
+      between: { order: 3, component: () => <div>Between</div> },
+      pageSizeSettings: { order: 4 },
+      after: { order: 5, component: () => <div>After</div> },
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} settingsComponentObjects={settingsComponentObjects} />
+    );
+  })
+
+  .add('custom column chooser', () => {
+    const columnChooser =
+      compose(
+        connect(
+          (state) => ({
+            columns: createSelector(
+              selectors.sortedColumnPropertiesSelector,
+              colMap => {
+                const columns = colMap.valueSeq().toJS();
+                return columns.filter(c => !c.isMetadata);
+              }
+            )(state),
+          }),
+          {
+            toggleColumn: actions.toggleColumn
+          }
+        ),
+        withHandlers({
+          onToggle: ({toggleColumn}) => event => {
+            toggleColumn(event.target.name)
+          }
+        })
+      )(({ columns, onToggle }) => {
+      return (
+        <div>
+          { Object.keys(columns).map(c =>
+            <label key={columns[c].id}>
+              <input
+                type="checkbox"
+                name={columns[c].id}
+                defaultChecked={!columns[c].isVisible}
+                onChange={onToggle}
+              />
+              {columns[c].title || columns[c].id}
+            </label>
+          )}
+        </div>
+      )});
+
+    const SimpleColumnChooserPlugin = {
+      components:{
+        SettingsComponents: {
+          columnChooser,
+        },
+      },
+    };
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }} />
+    );
+  })
+
+  .add('custom page size settings', () => {
+    const pageSizeSettings = ({ pageSizes }) =>
+      compose(
+        connect(
+          (state) => ({
+            pageSize: selectors.pageSizeSelector(state),
+          }),
+          {
+            setPageSize: actions.setPageSize
+          }
+        ),
+        withHandlers({
+          onChange: props => e => {
+            props.setPageSize(+e.target.value);
+          },
+        }),
+      )(({ pageSize, onChange }) => {
+      return (
+        <div>
+          <select onChange={onChange} defaultValue={pageSize}>
+            { pageSizes.map(s => <option key={s}>{s}</option>) }
+          </select>
+        </div>
+      )});
+
+    const PageSizeDropDownPlugin = (config) => ({
+      components: {
+        SettingsComponents: {
+          pageSizeSettings: pageSizeSettings(config),
+        },
+      },
+    });
+
+    const pluginConfig = {
+      pageSizes: [5, 10, 20, 50],
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })

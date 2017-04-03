@@ -31,3 +31,10 @@ test('renders each settings component', (t) => {
   t.true(one.matchesElement(<div className="one">One</div>));
   t.true(two.matchesElement(<div className="two">Two</div>));
 });
+
+test('ignores missing components', (t) => {
+  const settingsComponents = [null, undefined];
+  const wrapper = shallow(<Settings settingsComponents={settingsComponents} />);
+
+  t.true(wrapper.matchesElement(<div />));
+});

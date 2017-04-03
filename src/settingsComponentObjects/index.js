@@ -1,9 +1,12 @@
 import PageSizeSettings from './PageSizeSettings';
 import ColumnChooser from './ColumnChooser';
 
-const components = {
-  pageSizeSettings: { order: 1, component: PageSizeSettings },
-  columnChooser: { order: 2, component: ColumnChooser }
+export const components = {
+  pageSizeSettings: PageSizeSettings,
+  columnChooser: ColumnChooser,
 };
 
-export default components;
+export default {
+  pageSizeSettings: { order: 1 },
+  columnChooser: { order: 2 },
+};

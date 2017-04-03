@@ -6,14 +6,19 @@ import getContext from 'recompose/getContext';
 
 import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
-function getSettingsComponentsArrayFromObject(settingsObject) {
+function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents) {
   //TODO: determine if we need to make this faster
   return settingsObject ? Object.keys(settingsObject)
-    .map(key => settingsObject[key].component) : null;
+    .sort((a, b) => {
+      var oa = settingsObject[a], ob = settingsObject[b];
+      return ((oa && oa.order) || 0) - ((ob && ob.order) || 0);
+    })
+    .map(key => (settingsObject[key] && settingsObject[key].component) || (settingsComponents && settingsComponents[key])) : null;
 }
 
 const EnhancedSettings = OriginalComponent => compose(
   getContext({
+    components: PropTypes.object,
     settingsComponentObjects: PropTypes.object
   }),
   connect(
@@ -23,9 +28,9 @@ const EnhancedSettings = OriginalComponent => compose(
     })
   ),
   mapProps(props => {
-    const { settingsComponentObjects, ...otherProps } = props;
+    const { components, settingsComponentObjects, ...otherProps } = props;
     return {
-      settingsComponents: getSettingsComponentsArrayFromObject(settingsComponentObjects),
+      settingsComponents: getSettingsComponentsArrayFromObject(settingsComponentObjects, components.SettingsComponents),
       ...otherProps,
     };
   })
