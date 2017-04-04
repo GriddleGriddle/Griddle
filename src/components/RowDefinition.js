@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class extends Component {
+export default class RowDefinition extends Component {
   static propTypes = {
     //Children can be either a single column definition or an array
     //of column definition objects
@@ -11,7 +11,7 @@ export default class extends Component {
     ]),*/
     //The column value that should be used as the key for the row
     //if this is not set it will make one up (not efficient)
-    keyColumn: React.PropTypes.string,
+    rowKey: React.PropTypes.string,
 
     //The column that will be known used to track child data
     //By default this will be "children"

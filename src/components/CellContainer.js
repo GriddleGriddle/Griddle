@@ -51,10 +51,7 @@ const ComposedCellContainer = OriginalComponent => compose(
     ...props,
     style: getCellStyles(props.cellProperties, props.style),
     value: props.customComponent ?
-      <props.customComponent
-        value={props.value}
-        griddleKey={props.griddleKey}
-      /> :
+      <props.customComponent {...props} /> :
       props.value
   })})
 )(({ value, style, className }) => (

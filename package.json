@@ -10,14 +10,16 @@
     "sort"
   ],
   "main": "dist/module/module.js",
+  "types": "dist/module/module.d.ts",
   "scripts": {
     "start": "start-storybook -p 6006",
     "test": "ava",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "npm run clean-dist && npm run build-modules && npm run build-umd",
+    "build": "npm run clean-dist && npm run build-modules && npm run build-umd && npm run build-ts",
     "clean-dist": "rimraf dist",
+    "build-ts": "cp src/module.d.ts dist/module/",
     "build-umd": "webpack --config webpack.config.js",
     "build-modules": "cross-env BABEL_ENV=build babel src --out-dir dist/module ",
     "ship-it": "npm run build && npm publish --tag next"
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
+    "@types/react": "^15.0.17",
     "ava": "^0.17.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.0.0",
@@ -51,6 +54,8 @@
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.3.2",
     "rimraf": "^2.6.0",
+    "ts-loader": "^2.0.2",
+    "typescript": "^2.2.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"
   },

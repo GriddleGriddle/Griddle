@@ -24,7 +24,7 @@ export default class ColumnDefinition extends Component {
     customComponent: React.PropTypes.object,
 
     //The component that should be used instead of the normal title
-    customHeaderComponent: React.PropTypes.object,
+    customHeadingComponent: React.PropTypes.object,
 
     //Can this column be sorted
     sortable: React.PropTypes.bool,

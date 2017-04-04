@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { storiesOf, action, linkTo } from '@kadira/storybook';
+import * as React from 'react';
+import { module, storiesOf, action, linkTo } from '@kadira/storybook';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
@@ -8,27 +8,20 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
-import Griddle from '../src/index';
-import Cell from '../src/components/Cell';
-import Row from '../src/components/Row';
-import TableBody from '../src/components/TableBody';
-import TableHeadingCell from '../src/components/TableHeadingCell';
-import TableHeading from '../src/components/TableHeading';
-import { Table } from '../src/components/Table';
-import TableContainer from '../src/components/TableContainer';
-import ColumnDefinition from '../src/components/ColumnDefinition';
-import RowDefinition from '../src/components/RowDefinition';
-const { SettingsWrapper, SettingsToggle, Settings } = '../src/components';
 import _ from 'lodash';
-import * as actions from '../src/actions';
-import * as selectors from '../src/selectors/dataSelectors';
-import { rowDataSelector } from '../src/plugins/local/selectors/localSelectors';
-import fakeData from './fakeData';
-import {fakeData2, fakeData3} from './fakeData2';
 
-import LocalPlugin from '../src/plugins/local';
-import PositionPlugin from '../src/plugins/position';
+import GenericGriddle, { actions, components, selectors, plugins, ColumnDefinition, RowDefinition } from '../src/module';
+const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
+const { SettingsWrapper, SettingsToggle, Settings } = components;
+
+const { LocalPlugin, PositionPlugin } = plugins;
+const { rowDataSelector } = LocalPlugin.selectors;
+
+import fakeData, { FakeData } from './fakeData';
+import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
+
+type Griddle = new () => GenericGriddle<FakeData>;
+const Griddle = GenericGriddle as Griddle;
 
 function sortBySecondCharacter(data, column, sortAscending = true) {
   return data.sort(
@@ -160,7 +153,7 @@ storiesOf('Griddle main', module)
   })
   .add('with controlled griddle component', () => {
 
-    class Something extends React.Component {
+    class Something extends React.Component<void, any> {
       constructor() {
         super();
 
@@ -301,6 +294,9 @@ storiesOf('Griddle main', module)
     )
   })
   .add('set fakeData to constructed Objects', () => {
+    type Griddle = new () => GenericGriddle<person>;
+    const Griddle = GenericGriddle as Griddle;
+
     return (
       <Griddle data={fakeData2} plugins={[LocalPlugin]}>
         <RowDefinition>
@@ -309,6 +305,9 @@ storiesOf('Griddle main', module)
     )
   })
   .add('set fakeData to class Objects', () => {
+    type Griddle = new () => GenericGriddle<personClass>;
+    const Griddle = GenericGriddle as Griddle;
+
     return (
       <Griddle data={fakeData3} plugins={[LocalPlugin]}>
         <RowDefinition>
@@ -317,7 +316,22 @@ storiesOf('Griddle main', module)
     )
   })
   .add('with nested column data', () => {
-    const localData = [
+    interface NestedData {
+        id: number,
+        name: string,
+        location: {
+            country: string,
+            city: string,
+            state: string,
+        },
+        company: string,
+        favoriteNumber: number,
+    }
+
+    type Griddle = new () => GenericGriddle<NestedData>;
+    const Griddle = GenericGriddle as Griddle;
+
+    const localData: NestedData[] = [
       {
         "id": 0,
         "name": "Mayer Leonard",
@@ -436,6 +450,16 @@ storiesOf('Bug fixes', module)
     );
   })
   .add('Date values converted to null', () => {
+    interface DateData {
+        _id: number,
+        foo: string,
+        date: Date,
+        bar: string,
+    }
+
+    type Griddle = new () => GenericGriddle<DateData>;
+    const Griddle = GenericGriddle as Griddle;
+
     const dateData = [
       {
         _id: 1,
@@ -462,7 +486,7 @@ storiesOf('Bug fixes', module)
     );
   })
   .add('Delete row', () => {
-     const enhanceWithOnClick = onClick => class ComputeThing extends Component {
+     const enhanceWithOnClick = onClick => class ComputeThing extends React.Component<any, any> {
       static propTypes = {
         rowData: React.PropTypes.object.isRequired,
       }
@@ -485,7 +509,9 @@ storiesOf('Bug fixes', module)
      }
 
 
-    class SomeComponent extends Component {
+    class SomeComponent extends React.Component<void, {data: FakeData[]}> {
+      private Component;
+
       constructor(props) {
         super(props);
 
@@ -783,7 +809,7 @@ storiesOf('TableContainer', module)
       </tbody>
     );
 
-    class BaseWithContext extends React.Component {
+    class BaseWithContext extends React.Component<any, void> {
       static childContextTypes = {
         components: React.PropTypes.object.isRequired
       }
