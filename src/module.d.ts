@@ -364,7 +364,17 @@ export namespace utils {
     const compositionUtils: PropertyBag<Function>;
     const dataUtils: PropertyBag<Function>;
     const rowUtils: PropertyBag<Function>;
-    const sortUtils: PropertyBag<Function>;
+
+    interface SortProperties{
+      setSortColumn(sortProperties: ((GriddleSortKey) => void));
+      sortProperty: GriddleSortKey;
+      columnId: string;
+    }
+
+    namespace sortUtils {
+      function defaultSort(data: any[], column: string, sortAscending?: boolean);
+      function setSortProperties(sortProperties: SortProperties);
+    }
 }
 
 export namespace plugins {
