@@ -1,8 +1,8 @@
-import columnUtils from './columnUtils';
-import compositionUtils from './compositionUtils';
-import dataUtils from './dataUtils';
-import rowUtils from './rowUtils';
-import sortUtils from './sortUtils';
+import * as columnUtils from './columnUtils';
+import * as compositionUtils from './compositionUtils';
+import * as dataUtils from './dataUtils';
+import * as rowUtils from './rowUtils';
+import * as sortUtils from './sortUtils';
 
 export default {
   columnUtils,
