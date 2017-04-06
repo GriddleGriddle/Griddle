@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
-import GenericGriddle, { actions, components, selectors, plugins, ColumnDefinition, RowDefinition } from '../src/module';
+import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition } from '../src/module';
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
@@ -119,6 +119,33 @@ storiesOf('Griddle main', module)
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
           <ColumnDefinition id="name" order={2} title="NAME" sortMethod={sortBySecondCharacter} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
+  .add('with sort disabled on name', () => {
+    const { setSortProperties } = utils.sortUtils;
+    const disableSortPlugin = (...columnsWithSortDisabled) => ({
+      events: {
+        setSortProperties: (sortProperties) => {
+          const { columnId } = sortProperties;
+          if (columnsWithSortDisabled.findIndex(c => c === columnId) >= 0) {
+            return () => {};
+          }
+
+          return setSortProperties(sortProperties);
+        }
+      },
+    });
+
+    return (
+      <div>
+      <small>Sorts name by second character</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin,disableSortPlugin('name')]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
           <ColumnDefinition id="state" order={1} />
         </RowDefinition>
       </Griddle>

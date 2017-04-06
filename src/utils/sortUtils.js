@@ -23,3 +23,19 @@ export function defaultSort(data, column, sortAscending = true) {
       }
     });
 }
+
+export function setSortProperties({ setSortColumn, sortProperty, columnId }) {
+  return () => {
+    if (sortProperty === null) {
+      setSortColumn({ id: columnId, sortAscending: true });
+      return;
+    }
+
+    const newSortProperty = {
+      ...sortProperty,
+      sortAscending: !sortProperty.sortAscending
+    };
+
+    setSortColumn(newSortProperty);
+  };
+}

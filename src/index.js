@@ -12,26 +12,13 @@ import * as selectors from './selectors/dataSelectors';
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
+import { setSortProperties } from './utils/sortUtils';
 import * as actions from './actions';
 
 const defaultEvents = {
   ...actions,
   onFilter: actions.setFilter,
-  setSortProperties: ({setSortColumn, sortProperty, columnId}) => {
-    return function(event) {
-      if (sortProperty === null) {
-        setSortColumn({ id: columnId, sortAscending: true });
-        return;
-      }
-
-      const newSortProperty = {
-        ...sortProperty,
-        sortAscending: !sortProperty.sortAscending
-      };
-
-      setSortColumn(newSortProperty);
-    };
-  }
+  setSortProperties
 };
 
 
