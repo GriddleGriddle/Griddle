@@ -5,6 +5,7 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector } from '../../../selectors/dataSelectors';
 import { setSortColumn } from '../../../actions';
+import { setSortProperties } from '../../../utils/sortUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>
@@ -12,22 +13,6 @@ const DefaultTableHeadingCellContent = ({title, icon}) => (
     { icon && <span>{icon}</span> }
   </span>
 )
-
-function setSortProperties({setSortColumn, sortProperty, columnId}) {
-  return function(event) {
-    if (sortProperty === null) {
-      setSortColumn({ id: columnId, sortAscending: true });
-      return;
-    }
-
-    const newSortProperty = {
-      ...sortProperty,
-      sortAscending: !sortProperty.sortAscending
-    };
-
-    setSortColumn(newSortProperty);
-  };
-}
 
 function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
   if (sortProperty) {
