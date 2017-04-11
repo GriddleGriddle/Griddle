@@ -9,10 +9,12 @@ import utils from './utils';
 
 import LocalPlugin from './plugins/local';
 import PositionPlugin from './plugins/position';
+import HoverPlugin from './plugins/hover';
 
 const plugins = {
   LocalPlugin,
   PositionPlugin,
+  HoverPlugin
 };
 
 const ColumnDefinition = components.ColumnDefinition;
