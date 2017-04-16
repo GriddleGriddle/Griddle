@@ -4,7 +4,7 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector } from '../selectors/dataSelectors';
+import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>
@@ -30,6 +30,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     (state, props) => ({
       sortProperty: sortPropertyByIdSelector(state, props),
       customHeadingComponent: customHeadingComponentSelector(state, props),
+      cellProperties: cellPropertiesSelector(state, props),
       className: classNamesForComponentSelector(state, 'TableHeadingCell'),
       style: stylesForComponentSelector(state, 'TableHeadingCell'),
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
@@ -40,11 +41,13 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     const title = props.customHeadingComponent ?
       <props.customHeadingComponent {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
+    const className = props.cellProperties.headerCssClassName || props.className;
 
     return {
       ...props,
       icon,
-      title
+      title,
+      className
     };
   })
 )((props) => {
