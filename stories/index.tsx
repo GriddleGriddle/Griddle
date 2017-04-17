@@ -152,6 +152,31 @@ storiesOf('Griddle main', module)
       </div>
     );
   })
+  .add('with custom css-class names on state', () => {
+    const css = `
+    tr:nth-child(2n+1) .customClassName {
+      background-color: #eee;
+    }
+
+    .customHeaderClassName {
+      color: red;
+    }
+    `;
+    return (
+      <div>
+      <style type="text/css">
+        {css}
+      </style>
+      <small>Sets css-class names on state column (different for header and body), for example to use css rules defined elsewhere</small>
+      <Griddle data={fakeData}>
+        <RowDefinition>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="state" cssClassName="customClassName" headerCssClassName="customHeaderClassName"/>
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
   .add('with custom component on name', () => {
     return (
       <div>
