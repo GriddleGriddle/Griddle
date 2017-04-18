@@ -403,6 +403,8 @@ export namespace plugins {
         disablePointerEvents?: boolean;
     }
     var PositionPlugin : (settings: PositionSettings) => GriddlePlugin;
+
+    var HoverPlugin : GriddlePlugin;
 }
 
 export const ColumnDefinition;

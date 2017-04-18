@@ -14,7 +14,7 @@ import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnD
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { LocalPlugin, PositionPlugin } = plugins;
+const { LocalPlugin, PositionPlugin, HoverPlugin } = plugins;
 const { rowDataSelector } = LocalPlugin.selectors;
 
 import fakeData, { FakeData } from './fakeData';
@@ -1045,3 +1045,19 @@ storiesOf('Settings', module)
       <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })
+
+  storiesOf('HoverPlugin', module)
+    .add('base', () => {
+      const ButtonsColumn = ({griddleKey,hoveredRowKey}) =>
+        (griddleKey === hoveredRowKey) ? <button>Edit</button> : null;
+
+      return <Griddle data={fakeData} plugins={[LocalPlugin,HoverPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id='name'/>
+          <ColumnDefinition id='city'/>
+          <ColumnDefinition id='state'/>
+          <ColumnDefinition id='country'/>
+          <ColumnDefinition id='button' title=' ' visible={true} locked={true} sortable={false} width='100px' customComponent={ButtonsColumn}/>
+        </RowDefinition>
+      </Griddle>;
+    });
