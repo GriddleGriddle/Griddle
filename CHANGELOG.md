@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased (npm install griddle-react@next)] - 2017-04-04
+## [1.3.1] - 2017-04-18
+- Fix for cssClassName and headerCssClassName
+- Thanks @zeusi83!
+
+## [1.3.0] - 2017-04-04
 - Add type definitions to Griddle
 - Settings Component customization [See this PR for more info](https://github.com/GriddleGriddle/Griddle/pull/628)
 - Table / No result improvements [See this PR for more info](https://github.com/GriddleGriddle/Griddle/pull/624)
