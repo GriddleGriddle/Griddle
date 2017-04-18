@@ -168,7 +168,7 @@ storiesOf('Griddle main', module)
         {css}
       </style>
       <small>Sets css-class names on state column (different for header and body), for example to use css rules defined elsewhere</small>
-      <Griddle data={fakeData}>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
           <ColumnDefinition id="name" />
           <ColumnDefinition id="state" cssClassName="customClassName" headerCssClassName="customHeaderClassName"/>
