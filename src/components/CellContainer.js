@@ -49,6 +49,7 @@ const ComposedCellContainer = OriginalComponent => compose(
   mapProps(props => {
     return ({
     ...props,
+    className: props.cellProperties.cssClassName || props.className,
     style: getCellStyles(props.cellProperties, props.style),
     value: props.customComponent ?
       <props.customComponent {...props} /> :
