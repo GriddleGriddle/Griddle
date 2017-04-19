@@ -271,6 +271,14 @@ export const cellValueSelector = (state, props) => {
   }
 };
 
+/** Gets the row render properties
+ */
+export const rowPropertiesSelector = (state) => {
+  const row = state.getIn(['renderProperties', 'rowProperties']);
+
+  return (row && row.toJSON()) || {};
+};
+
 /** Gets the column render properties for the specified columnId
  */
 export const cellPropertiesSelector = (state, { columnId }) => {
