@@ -15,7 +15,6 @@ const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingC
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
 const { LocalPlugin, PositionPlugin } = plugins;
-const { rowDataSelector } = LocalPlugin.selectors;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -67,7 +66,7 @@ const MakeBlueComponent = (props) => (
 )
 
 const EnhanceWithRowData = connect((state, props) => ({
-  rowData: rowDataSelector(state, props)
+  rowData: selectors.rowDataSelector(state, props)
 }));
 
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);

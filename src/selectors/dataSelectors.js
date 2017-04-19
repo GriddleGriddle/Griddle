@@ -271,6 +271,12 @@ export const cellValueSelector = (state, props) => {
   }
 };
 
+// TODO: Needs tests and jsdoc
+export const rowDataSelector = (state, { griddleKey }) => {
+  return state.get('data')
+    .find(r => r.get('griddleKey') === griddleKey).toJSON();
+};
+
 /** Gets the row render properties
  */
 export const rowPropertiesSelector = (state) => {
