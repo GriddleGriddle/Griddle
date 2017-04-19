@@ -177,6 +177,27 @@ storiesOf('Griddle main', module)
       </div>
     );
   })
+  .add('with cssFunction on RowDefinition', () => {
+    const css = `
+      .row-1 { background-color: #ccc; }
+      .row-2 { background-color: #999; }
+      .lucky { background-color: #cfc; color: #060; }
+      `;
+    return (
+      <div>
+      <style type="text/css">
+        {css}
+      </style>
+      <small>Uses cssFunction to apply calculated class names</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition cssFunction={(d, i) => d && d.favoriteNumber === 7 ? 'lucky' : `row-${i%3}`}>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="state" />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
   .add('with custom component on name', () => {
     return (
       <div>

@@ -188,3 +188,6 @@ export const iconsForComponentSelector = dataSelectors.iconsForComponentSelector
 export const iconsByNameSelector = dataSelectors.iconsForComponentSelector;
 export const stylesForComponentSelector = dataSelectors.stylesForComponentSelector;
 export const classNamesForComponentSelector = dataSelectors.classNamesForComponentSelector;
+
+export const rowPropertiesSelector = dataSelectors.rowPropertiesSelector;
+export const cellPropertiesSelector = dataSelectors.cellPropertiesSelector;

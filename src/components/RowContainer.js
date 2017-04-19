@@ -3,7 +3,13 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
-import { columnIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+
+import {
+  columnIdsSelector,
+  rowPropertiesSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector,
+} from '../selectors/dataSelectors';
 
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
@@ -11,14 +17,16 @@ const ComposedRowContainer = OriginalComponent => compose(
   }),
   connect((state, props) => ({
     columnIds: columnIdsSelector(state),
+    rowProperties: rowPropertiesSelector(state),
     className: classNamesForComponentSelector(state, 'Row'),
     style: stylesForComponentSelector(state, 'Row'),
   })),
   mapProps(props => {
-    const { components, ...otherProps } = props;
+    const { components, rowProperties, className, ...otherProps } = props;
     return {
       Cell: components.Cell,
-      ...otherProps
+      className: (rowProperties.cssFunction && rowProperties.cssFunction(props.rowData, props.index)) || props.className,
+      ...otherProps,
     };
   }),
 )(props => (

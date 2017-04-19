@@ -3,21 +3,36 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
-import { columnIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
+
+import {
+  columnIdsSelector,
+  rowDataSelector,
+  rowPropertiesSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector,
+} from '../selectors/localSelectors';
 
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object
   }),
   connect((state) => ({
+    rowProperties: rowPropertiesSelector(state),
+  })),
+  connect((state, props) => ({
     columnIds: columnIdsSelector(state),
+    rowData: props.rowProperties.cssFunction ? rowDataSelector(state, props) : null,
     className: classNamesForComponentSelector(state, 'Row'),
     style: stylesForComponentSelector(state, 'Row'),
   })),
-  mapProps(props => ({
-    Cell: props.components.Cell,
-    ...props
-  })),
+  mapProps((props) => {
+    const { components, rowProperties, className, ...otherProps } = props;
+    return {
+      Cell: components.Cell,
+      className: (rowProperties.cssFunction && rowProperties.cssFunction(props.rowData, props.index)) || props.className,
+      ...otherProps,
+    };
+  }),
 )(({Cell, columnIds, griddleKey, style, className }) => (
   <OriginalComponent
     griddleKey={griddleKey}

@@ -17,10 +17,9 @@ export interface RowDefinitionProps {
     //By default this will be "children"
     childColumnName?: string;
 
-    // TODO: Unused?
     //This property allows an to set a css class on a row based on
     //the data within. This should return a css-class name
-    cssFunction?: Function;
+    cssFunction?: (rowData: any, index?: number) => string;
 
     // Allow custom plugin props
     [x: string]: any,
@@ -295,6 +294,7 @@ export interface GriddlePageProperties {
 interface RowRenderProperties {
     rowKey?: string;
     childColumnName?: string;
+    cssFunction?: (rowData: any, index?: number) => string;
     props?: {
         children: components.ColumnDefinition[];
     };
