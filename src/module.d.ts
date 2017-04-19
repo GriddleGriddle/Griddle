@@ -13,7 +13,6 @@ export interface RowDefinitionProps {
     //if this is not set it will make one up (not efficient)
     rowKey?: string;
 
-    // TODO: Unused?
     //The column that will be known used to track child data
     //By default this will be "children"
     childColumnName?: string;
