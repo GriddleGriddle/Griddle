@@ -189,7 +189,7 @@ storiesOf('Griddle main', module)
       </style>
       <small>Uses cssFunction to apply calculated class names</small>
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
-        <RowDefinition cssFunction={(d, i) => d && d.favoriteNumber === 7 ? 'lucky' : `row-${i%3}`}>
+        <RowDefinition cssFunction={({ rowData: d, index: i }) => d && d.favoriteNumber === 7 ? 'lucky' : `row-${i%3}`}>
           <ColumnDefinition id="name" />
           <ColumnDefinition id="state" />
         </RowDefinition>

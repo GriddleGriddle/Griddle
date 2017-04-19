@@ -27,7 +27,7 @@ const ComposedRowContainer = OriginalComponent => compose(
     const { components, rowProperties, className, ...otherProps } = props;
     return {
       Cell: components.Cell,
-      className: (rowProperties.cssFunction && rowProperties.cssFunction(props.rowData, props.index)) || props.className,
+      className: (rowProperties.cssFunction && rowProperties.cssFunction(props)) || props.className,
       ...otherProps,
     };
   }),

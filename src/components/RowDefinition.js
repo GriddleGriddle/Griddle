@@ -18,7 +18,7 @@ export default class RowDefinition extends Component {
     childColumnName: React.PropTypes.string,
 
     //This property allows an to set a css class on a row based on
-    //the data within. This should return a css-class name
+    //its props. This should return a css-class name
     cssFunction: React.PropTypes.func
   }
 
