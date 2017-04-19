@@ -41,11 +41,9 @@ export interface ColumnDefinitionProps {
     //Determines whether or not the user can disable this column from the settings.
     locked?: boolean,
 
-    // TODO: Unused? Rename to headingCssClassName?
     //The css class name to apply to the header for the column
     headerCssClassName?: string,
 
-    // TODO: Unused?
     //The css class name to apply to this column.
     cssClassName?: string,
 
