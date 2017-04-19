@@ -271,11 +271,10 @@ export const cellValueSelector = (state, props) => {
   }
 };
 
-// TODO: Needs tests and jsdoc
-export const cellPropertiesSelector = (state, { griddleKey, columnId }) => {
+/** Gets the column render properties for the specified columnId
+ */
+export const cellPropertiesSelector = (state, { columnId }) => {
   const item = state.getIn(['renderProperties', 'columnProperties', columnId]);
 
-  return item ?
-    item.toJSON() :
-    null;
-}
+  return (item && item.toJSON()) || {};
+};
