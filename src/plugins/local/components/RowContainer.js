@@ -16,12 +16,10 @@ const ComposedRowContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object
   }),
-  connect((state) => ({
-    rowProperties: rowPropertiesSelector(state),
-  })),
   connect((state, props) => ({
     columnIds: columnIdsSelector(state),
-    rowData: props.rowProperties.cssFunction ? rowDataSelector(state, props) : null,
+    rowProperties: rowPropertiesSelector(state),
+    rowData: rowDataSelector(state, props),
     className: classNamesForComponentSelector(state, 'Row'),
     style: stylesForComponentSelector(state, 'Row'),
   })),

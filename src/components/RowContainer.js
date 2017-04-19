@@ -6,6 +6,7 @@ import getContext from 'recompose/getContext';
 
 import {
   columnIdsSelector,
+  rowDataSelector,
   rowPropertiesSelector,
   classNamesForComponentSelector,
   stylesForComponentSelector,
@@ -18,6 +19,7 @@ const ComposedRowContainer = OriginalComponent => compose(
   connect((state, props) => ({
     columnIds: columnIdsSelector(state),
     rowProperties: rowPropertiesSelector(state),
+    rowData: rowDataSelector(state, props),
     className: classNamesForComponentSelector(state, 'Row'),
     style: stylesForComponentSelector(state, 'Row'),
   })),
