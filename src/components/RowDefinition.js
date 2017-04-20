@@ -17,9 +17,8 @@ export default class RowDefinition extends Component {
     //By default this will be "children"
     childColumnName: React.PropTypes.string,
 
-    //This property allows an to set a css class on a row based on
-    //its props. This should return a css-class name
-    cssFunction: React.PropTypes.func
+    //The css class name, or a function to generate a class name from props, to apply to this row.
+    cssClassName: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
   }
 
   render () {

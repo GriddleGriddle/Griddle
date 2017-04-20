@@ -11,6 +11,7 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector,
 } from '../selectors/dataSelectors';
+import { valueOrResult } from '../utils/valueUtils';
 
 const ComposedRowContainer = OriginalComponent => compose(
   getContext({
@@ -27,7 +28,7 @@ const ComposedRowContainer = OriginalComponent => compose(
     const { components, rowProperties, className, ...otherProps } = props;
     return {
       Cell: components.Cell,
-      className: (rowProperties.cssFunction && rowProperties.cssFunction(props)) || props.className,
+      className: valueOrResult(rowProperties.cssClassName, props) || props.className,
       ...otherProps,
     };
   }),

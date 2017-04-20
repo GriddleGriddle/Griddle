@@ -11,6 +11,7 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
+import { valueOrResult } from '../utils/valueUtils';
 
 function hasWidthOrStyles(cellProperties) {
   return cellProperties.hasOwnProperty('width') || cellProperties.hasOwnProperty('styles');
@@ -49,7 +50,7 @@ const ComposedCellContainer = OriginalComponent => compose(
   mapProps(props => {
     return ({
     ...props,
-    className: props.cellProperties.cssClassName || props.className,
+    className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
     style: getCellStyles(props.cellProperties, props.style),
     value: props.customComponent ?
       <props.customComponent {...props} /> :

@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers';
 import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector, cellPropertiesSelector } from '../../../selectors/dataSelectors';
 import { setSortColumn } from '../../../actions';
 import { setSortProperties } from '../../../utils/sortUtils';
+import { valueOrResult } from '../../../utils/valueUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>
@@ -49,7 +50,7 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     const title = props.customHeadingComponent ?
       <props.customHeadingComponent {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
-    const className = props.cellProperties.headerCssClassName || props.className;
+    const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
 
     return {
       ...props,

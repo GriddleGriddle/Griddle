@@ -17,9 +17,8 @@ export interface RowDefinitionProps {
     //By default this will be "children"
     childColumnName?: string;
 
-    //This property allows an to set a css class on a row based on
-    //its props. This should return a css-class name
-    cssFunction?: (props: any) => string;
+    //The css class name, or a function to generate a class name from props, to apply to this row.
+    cssClassName?: string | ((props: any) => string);
 
     // Allow custom plugin props
     [x: string]: any,
@@ -39,11 +38,11 @@ export interface ColumnDefinitionProps {
     //Determines whether or not the user can disable this column from the settings.
     locked?: boolean,
 
-    //The css class name to apply to the header for the column
-    headerCssClassName?: string,
+    //The css class name, or a function to generate a class name from props, to apply to the header for the column.
+    headerCssClassName?: string | ((props: any) => string);
 
-    //The css class name to apply to this column.
-    cssClassName?: string,
+    //The css class name, or a function to generate a class name from props, to apply to this column.
+    cssClassName?: string | ((props: any) => string);
 
     //The display name for the column. This is used when the name in the column heading and settings should be different from the data passed in to the Griddle component.
     title?: string,
@@ -294,7 +293,7 @@ export interface GriddlePageProperties {
 interface RowRenderProperties {
     rowKey?: string;
     childColumnName?: string;
-    cssFunction?: (props: any) => string;
+    cssClassName?: string | ((props: any) => string);
     props?: {
         children: components.ColumnDefinition[];
     };
