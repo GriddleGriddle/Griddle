@@ -11,11 +11,11 @@ export default class ColumnDefinition extends Component {
     //Determines whether or not the user can disable this column from the settings.
     locked: React.PropTypes.bool,
 
-    //The css class name to apply to the header for the column
-    headerCssClassName: React.PropTypes.string,
+    //The css class name, or a function to generate a class name from props, to apply to the header for the column.
+    headerCssClassName: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
 
-    //The css class name to apply to this column.
-    cssClassName: React.PropTypes.string,
+    //The css class name, or a function to generate a class name from props, to apply to this column.
+    cssClassName: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
 
     //The display name for the column. This is used when the name in the column heading and settings should be different from the data passed in to the Griddle component.
     title: React.PropTypes.string,

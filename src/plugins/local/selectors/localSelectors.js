@@ -177,14 +177,11 @@ export const columnIdsSelector = createSelector(
  */
 export const columnTitlesSelector = dataSelectors.columnTitlesSelector;
 export const cellValueSelector = dataSelectors.cellValueSelector;
-
-// TODO: Needs tests and jsdoc
-export const rowDataSelector = (state, { griddleKey }) => {
-  return state.get('data')
-    .find(r => r.get('griddleKey') === griddleKey).toJSON();
-};
-
+export const rowDataSelector = dataSelectors.rowDataSelector;
 export const iconsForComponentSelector = dataSelectors.iconsForComponentSelector;
 export const iconsByNameSelector = dataSelectors.iconsForComponentSelector;
 export const stylesForComponentSelector = dataSelectors.stylesForComponentSelector;
 export const classNamesForComponentSelector = dataSelectors.classNamesForComponentSelector;
+
+export const rowPropertiesSelector = dataSelectors.rowPropertiesSelector;
+export const cellPropertiesSelector = dataSelectors.cellPropertiesSelector;

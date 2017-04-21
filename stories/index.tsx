@@ -15,7 +15,6 @@ const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingC
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
 const { LocalPlugin, PositionPlugin } = plugins;
-const { rowDataSelector } = LocalPlugin.selectors;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -67,7 +66,7 @@ const MakeBlueComponent = (props) => (
 )
 
 const EnhanceWithRowData = connect((state, props) => ({
-  rowData: rowDataSelector(state, props)
+  rowData: selectors.rowDataSelector(state, props)
 }));
 
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
@@ -161,17 +160,63 @@ storiesOf('Griddle main', module)
     .customHeaderClassName {
       color: red;
     }
+    .blue { color: blue; }
+    .asc { background-color: #666; color: white; }
+    .desc { background-color: #999; color: black; }
     `;
     return (
       <div>
       <style type="text/css">
         {css}
       </style>
-      <small>Sets css-class names on state column (different for header and body), for example to use css rules defined elsewhere</small>
+      <small>Sets dynamic (name - click to sort) and static (state) class names on header and body cells</small>
       <Griddle data={fakeData} plugins={[LocalPlugin]}>
         <RowDefinition>
-          <ColumnDefinition id="name" />
+          <ColumnDefinition id="name"
+            headerCssClassName={({sortProperty}) => sortProperty && (sortProperty.sortAscending ? 'asc' : 'desc')}
+            cssClassName={({value}) => value.startsWith('L') && 'blue'}
+            />
           <ColumnDefinition id="state" cssClassName="customClassName" headerCssClassName="customHeaderClassName"/>
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
+  .add('with cssClassName string on RowDefinition', () => {
+    const css = `
+      .lucky { background-color: #cfc; color: #060; }
+      `;
+    return (
+      <div>
+      <style type="text/css">
+        {css}
+      </style>
+      <small>Uses cssClassName to apply static class name</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition cssClassName="lucky">
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="state" />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
+  .add('with cssClassName function on RowDefinition', () => {
+    const css = `
+      .row-1 { background-color: #ccc; }
+      .row-2 { background-color: #999; }
+      .lucky { background-color: #cfc; color: #060; }
+      `;
+    return (
+      <div>
+      <style type="text/css">
+        {css}
+      </style>
+      <small>Uses cssClassName to apply calculated class names</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition cssClassName={({ rowData: d, index: i }) => d && d.favoriteNumber === 7 ? 'lucky' : `row-${i%3}`}>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="state" />
         </RowDefinition>
       </Griddle>
       </div>
