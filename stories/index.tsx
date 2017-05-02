@@ -250,7 +250,7 @@ storiesOf('Griddle main', module)
   })
   .add('with controlled griddle component', () => {
 
-    class Something extends React.Component<void, any> {
+    class Something extends React.Component<{}, any> {
       constructor() {
         super();
 
@@ -606,7 +606,7 @@ storiesOf('Bug fixes', module)
      }
 
 
-    class SomeComponent extends React.Component<void, {data: FakeData[]}> {
+    class SomeComponent extends React.Component<{}, {data: FakeData[]}> {
       private Component;
 
       constructor(props) {
