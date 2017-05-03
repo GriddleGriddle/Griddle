@@ -42,7 +42,8 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     }
   ),
   withHandlers(props => ({
-    onClick: props.events.setSortProperties || setSortProperties
+    onClick: props.cellProperties.sortable === false ? (() => () => {}) :
+      props.events.setSortProperties || setSortProperties,
   })),
   //TODO: use with props on change or something more performant here
   mapProps(props => {

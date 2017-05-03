@@ -124,7 +124,20 @@ storiesOf('Griddle main', module)
       </div>
     );
   })
-  .add('with sort disabled on name', () => {
+  .add('with sortable set to true/false', () => {
+    return (
+      <div>
+      <small>Using ColumnDefinition sortable (false on name, true on state).</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} sortable={false} />
+          <ColumnDefinition id="state" order={1} sortable={true} />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
+  .add('with sort disabled on name via plugin', () => {
     const { setSortProperties } = utils.sortUtils;
     const disableSortPlugin = (...columnsWithSortDisabled) => ({
       events: {
@@ -141,7 +154,7 @@ storiesOf('Griddle main', module)
 
     return (
       <div>
-      <small>Sorts name by second character</small>
+      <small>Using custom plugin to disable sort</small>
       <Griddle data={fakeData} plugins={[LocalPlugin,disableSortPlugin('name')]}>
         <RowDefinition>
           <ColumnDefinition id="name" order={2} />
