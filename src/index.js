@@ -2,6 +2,7 @@ import { createStore, combineReducers, bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import { connect, Provider } from 'react-redux';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import * as dataReducers from './reducers/dataReducer';
@@ -55,10 +56,10 @@ const defaultStyleConfig = {
 
 class Griddle extends Component {
   static childContextTypes = {
-    components: React.PropTypes.object.isRequired,
-    settingsComponentObjects: React.PropTypes.object,
-    events: React.PropTypes.object,
-    selectors: React.PropTypes.object,
+    components: PropTypes.object.isRequired,
+    settingsComponentObjects: PropTypes.object,
+    events: PropTypes.object,
+    selectors: PropTypes.object,
   }
 
   constructor(props) {

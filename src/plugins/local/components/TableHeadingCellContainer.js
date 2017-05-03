@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -26,7 +27,7 @@ function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
 }
 const EnhancedHeadingCell = (OriginalComponent => compose(
   getContext({
-    events: React.PropTypes.object,
+    events: PropTypes.object,
   }),
   connect(
     (state, props) => ({
