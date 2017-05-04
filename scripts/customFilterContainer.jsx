@@ -6,7 +6,8 @@ var React = require('react');
 var CustomFilterContainer = React.createClass({
   getDefaultProps: function(){
     return {
-      "placeholderText": ""
+      "placeholderText": "",
+      "customFilterComponentOptions": {}
     }
   },
   render: function(){
@@ -18,6 +19,7 @@ var CustomFilterContainer = React.createClass({
       }
 
       return <that.props.customFilterComponent
+        {...this.props.customFilterComponentOptions}
         changeFilter={this.props.changeFilter}
         results={this.props.results}
         currentResults={this.props.currentResults}

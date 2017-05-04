@@ -445,6 +445,21 @@ var TestLineChart = React.createClass({
 
 Griddle supports custom filtering and custom filter components. In order to use a custom filter function set the property `useCustomFilterer` to true and pass in a function to the  `customFilterer` property. To use a custom filter component set `useCustomFilterComponent` to true and pass a component to `customFilterComponent`.
 
+<dl>
+  <dt>useCustomFilterComponent</dt>
+  <dd><strong>bool</strong> - Use custom filter component rather than default filter. default: false</dd>
+</dl>
+
+<dl>
+  <dt>customFilterComponent</dt>
+  <dd><strong>object</strong> - The custom filter component. default: {}</dd>
+</dl>
+
+<dl>
+  <dt>customFilterComponentOptions</dt>
+  <dd><strong>object</strong> - Any options to be passed to the custom filter component. default: {}</dd>
+</dl>
+
 #####Example:#####
 
 This example shows how to make a custom filter component with a custom filter function that does a case-insensitive search through the items. The component must call `this.props.changeFilter(val)` when the filter should be updated. In the example below we pass a string but any variable type can be used as long as the filter function is expecting it, for example an advanced query could be passed in using an object. The filter function signature takes the items to be filtered and the query to filter them by.
