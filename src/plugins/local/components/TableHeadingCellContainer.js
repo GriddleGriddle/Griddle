@@ -43,7 +43,8 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     }
   ),
   withHandlers(props => ({
-    onClick: props.events.setSortProperties || setSortProperties
+    onClick: props.cellProperties.sortable === false ? (() => () => {}) :
+      props.events.setSortProperties || setSortProperties,
   })),
   //TODO: use with props on change or something more performant here
   mapProps(props => {
@@ -52,11 +53,16 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
       <props.customHeadingComponent {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
     const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
+    const style = {
+      ...(props.cellProperties.sortable === false || { cursor: 'pointer' }),
+      ...props.style,
+    };
 
     return {
       ...props,
       icon,
       title,
+      style,
       className
     };
   })

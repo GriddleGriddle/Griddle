@@ -44,11 +44,16 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       <props.customHeadingComponent {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
     const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
+    const style = {
+      ...(props.cellProperties.sortable === false || { cursor: 'pointer' }),
+      ...props.style,
+    };
 
     return {
       ...props,
       icon,
       title,
+      style,
       className
     };
   })
