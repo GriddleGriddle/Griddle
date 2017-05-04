@@ -63,6 +63,7 @@
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "max-safe-integer": "^1.0.0",
+    "prop-types": "^15.5.8",
     "react-redux": "^5.0.2",
     "recompose": "^0.21.2",
     "redux": "^3.5.2",

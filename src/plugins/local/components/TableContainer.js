@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -8,7 +9,7 @@ import { classNamesForComponentSelector, stylesForComponentSelector, visibleRowC
 
 const ComposedContainerComponent = OriginalComponent => compose(
   getContext({
-    components: React.PropTypes.object
+    components: PropTypes.object
   }),
   mapProps(props => ({
     TableHeading: props.components.TableHeading,
@@ -25,4 +26,3 @@ const ComposedContainerComponent = OriginalComponent => compose(
 )(props => <OriginalComponent {...props} />);
 
 export default ComposedContainerComponent;
-

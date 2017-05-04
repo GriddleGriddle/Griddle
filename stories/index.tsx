@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { module, storiesOf, action, linkTo } from '@kadira/storybook';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -585,7 +586,7 @@ storiesOf('Bug fixes', module)
   .add('Delete row', () => {
      const enhanceWithOnClick = onClick => class ComputeThing extends React.Component<any, any> {
       static propTypes = {
-        rowData: React.PropTypes.object.isRequired,
+        rowData: PropTypes.object.isRequired,
       }
 
       localClick = () => {
@@ -813,7 +814,7 @@ storiesOf('Table', module)
       ),
       NoResultsContainer: compose(
         getContext({
-          components: React.PropTypes.object,
+          components: PropTypes.object,
         }),
         connect(
           state => ({
@@ -908,7 +909,7 @@ storiesOf('TableContainer', module)
 
     class BaseWithContext extends React.Component<any, void> {
       static childContextTypes = {
-        components: React.PropTypes.object.isRequired
+        components: PropTypes.object.isRequired
       }
 
       getChildContext() {
