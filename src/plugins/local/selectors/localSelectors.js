@@ -67,15 +67,7 @@ export const allColumnsSelector = createSelector(
 
 /** Gets the column properties objects sorted by order
  */
-export const sortedColumnPropertiesSelector = createSelector(
-  renderPropertiesSelector,
-  (renderProperties) => (
-    renderProperties && renderProperties.get('columnProperties') && renderProperties.get('columnProperties').size !== 0 ?
-      renderProperties.get('columnProperties')
-        .sortBy(col => (col && col.get('order'))||MAX_SAFE_INTEGER) :
-      null
-  )
-);
+export const sortedColumnPropertiesSelector = dataSelectors.sortedColumnPropertiesSelector;
 
 /** Gets the visible columns either obtaining the sorted column properties or all columns
  */

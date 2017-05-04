@@ -1,9 +1,11 @@
+const offset = 1000;
+
 /** Gets a column properties object from an array of columnNames
  * @param {Array<string>} columns - array of column names
  */
-export function getColumnPropertiesFromColumnArray(columnProperties, columns) {
-  return columns.reduce((previous, current) => {
-    previous[current] = {id: current};
+function getColumnPropertiesFromColumnArray(columnProperties, columns) {
+  return columns.reduce((previous, current, i) => {
+    previous[current] = { id: current, order: offset + i };
     return previous;
   },
   columnProperties);
@@ -21,14 +23,14 @@ export function getColumnProperties(rowProperties, allColumns=[]) {
   // Working against an array of columnProperties
   if (Array.isArray(children)) {
     // build one object that contains all of the column properties keyed by id
-    children.reduce((previous, current) => {
-      previous[current.props.id] = current.props;
+    children.reduce((previous, current, i) => {
+      previous[current.props.id] = { order: offset + i, ...current.props };
       return previous;
     }, columnProperties);
 
   // Working against a lone, columnProperties object
   } else if (children && children.props) {
-    columnProperties[children.props.id] = children.props;
+    columnProperties[children.props.id] = { order: offset, ...children.props };
   }
 
   if(Object.keys(columnProperties).length === 0 && allColumns) {

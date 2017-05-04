@@ -1,24 +1,13 @@
 import test from 'ava';
 
-import { getColumnProperties, getColumnPropertiesFromColumnArray } from '../columnUtils';
-
-test('get column properties from array returns object', test => {
-  const columns = ['one', 'two', 'three'];
-  const columnProperties = getColumnPropertiesFromColumnArray(columns);
-
-  test.deepEqual(columnProperties, {
-    one: { id: 'one' },
-    two: { id: 'two' },
-    three: { id: 'three' }
-  });
-});
+import { getColumnProperties } from '../columnUtils';
 
 test('get column properties works with array', test => {
   const rowProperties = {
     props: {
       children: [
         { props: { id: 1, name: "one"}},
-        { props: { id: 2, name: "two"}}
+        { props: { id: 2, name: "two", order: 5 }}
       ]
     }
   };
@@ -26,22 +15,22 @@ test('get column properties works with array', test => {
   const columnProperties = getColumnProperties(rowProperties);
 
   test.deepEqual(columnProperties, {
-    1: { id: 1, name: "one"},
-    2: { id: 2, name: "two"}
+    1: { id: 1, name: "one", order: 1000 },
+    2: { id: 2, name: "two", order: 5 },
   });
 });
 
 test('get column properties works with single column property object', test => {
   const rowProperties = {
     props: {
-      children: { props: { id: 1, name: 'one' }}
+      children: { props: { id: 1, name: 'one' }},
     }
   };
 
   const columnProperties = getColumnProperties(rowProperties);
 
   test.deepEqual(columnProperties, {
-    1: { id: 1, name: 'one' }
+    1: { id: 1, name: 'one', order: 1000 },
   });
 });
 
@@ -55,8 +44,8 @@ test('get column properties returns all columns when no property columns specifi
   const columnProperties = getColumnProperties(rowProperties, allColumns);
 
   test.deepEqual(columnProperties, {
-    one: { id: 'one' },
-    two: { id: 'two' },
-    three: { id: 'three' }
+    one: { id: 'one', order: 1000 },
+    two: { id: 'two', order: 1001 },
+    three: { id: 'three', order: 1002 }
   })
 })

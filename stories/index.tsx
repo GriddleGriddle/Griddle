@@ -384,6 +384,29 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add('with many columns', () => {
+    return (
+      <div>
+        <small>
+          State should be first, name should be last, and the rest should be in order.
+          Default order increments from 1000.
+        </small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition>
+            <ColumnDefinition id="name" order={2000} />
+            <ColumnDefinition id="col1" />
+            <ColumnDefinition id="col2" />
+            <ColumnDefinition id="col3" />
+            <ColumnDefinition id="col4" />
+            <ColumnDefinition id="col5" />
+            <ColumnDefinition id="col6" />
+            <ColumnDefinition id="col7" />
+            <ColumnDefinition id="state" order={1} />
+          </RowDefinition>
+        </Griddle>
+      </div>
+    );
+  })
   .add('with override row component', () => {
     const NewRow = (props) => <tr><td>hi</td></tr>
 
