@@ -159,6 +159,30 @@ describe('Griddle', function() {
     expect(grid.state.filteredResults.length).toEqual(1);
   });
 
+  it('sets the filteredResults when filterByColumn called with array of values', function(){
+    grid.filterByColumn(['Mayer', 'Smith'], 'name');
+    expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
+  it('sets the filteredResults when filterByColumn called on object field with array of values', function(){
+    grid.filterByColumn(['Hawaii', 'Texas'], 'address');
+    expect(grid.state.filteredResults.length).toEqual(1);
+  });
+
+  it('uses columnFilterFunc to filter column values', function() {
+    let callCount = 0;
+
+    let columnFilterFunc = function(columnName, value, filter) {
+        callCount++;
+        return columnName === 'country' && value === 'Madagascar';
+    };
+
+    let columnFilterGrid = TestUtils.renderIntoDocument(<Griddle results={fakeData} columnFilterFunc={columnFilterFunc} gridClassName="test" />);
+    columnFilterGrid.filterByColumn('Some Value', 'country');
+    expect(columnFilterGrid.state.filteredResults.length).toEqual(1);
+    expect(callCount).toEqual(2);
+  });
+
 
   it('column filters are applied to nested objects values', function() {
 

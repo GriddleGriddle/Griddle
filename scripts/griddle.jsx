@@ -39,6 +39,7 @@ var _filter = require('lodash/filter');
 var _orderBy = require('lodash/orderBy');
 var _property = require('lodash/property');
 var _get = require('lodash/get');
+var _some = require('lodash/some');
 
 var Griddle = React.createClass({
     statics: {
@@ -141,7 +142,8 @@ var Griddle = React.createClass({
             "isMultipleSelection": false, //currently does not support subgrids
             "selectedRowIds": [],
             "uniqueIdentifier": "id",
-            "onSelectionChange": null
+            "onSelectionChange": null,
+            "columnFilterFunc": null
         };
     },
     propTypes: {
@@ -151,7 +153,8 @@ var Griddle = React.createClass({
             React.PropTypes.arrayOf(React.PropTypes.string)
         ]),
         uniqueIdentifier: React.PropTypes.string,
-        onSelectionChange: React.PropTypes.func
+        onSelectionChange: React.PropTypes.func,
+        columnFilterFunc: React.PropTypes.func
     },
     defaultFilter: function(results, filter) {
       var that = this;
@@ -168,21 +171,25 @@ var Griddle = React.createClass({
        });
     },
 
-    defaultColumnFilter(value, filter) {
-      return _filter(deep.getObjectValues(value), function(value) {
-        return value.toString().toLowerCase().indexOf(filter.toLowerCase()) >= 0;
-      }).length > 0;
+    defaultColumnFilter(columnName, value, filter) {
+      var filters = map(isArray(filter) ? filter : [filter], function (filter) { return (filter||'').toLowerCase() });
+      return _some(deep.getObjectValues(value), function(value) {
+        value = value.toString().toLowerCase();
+        return _some(filters, function(filter) {
+            return value.indexOf(filter) >= 0;
+        });
+      });
     },
 
     filterByColumnFilters(columnFilters) {
-      let filterFunction = this.defaultColumnFilter;
+      let filterFunction = this.props.columnFilterFunc || this.defaultColumnFilter;
       var filteredResults = Object.keys(columnFilters).reduce(function(previous, current) {
         return _filter(
           previous,
           function(item) {
             let value = deep.getAt(item, current || "");
             let filter = columnFilters[current];
-            return filterFunction(value, filter)
+            return filterFunction(current || '', value, filter)
           }
         )
       }, this.props.results)
@@ -221,7 +228,7 @@ var Griddle = React.createClass({
     },
 
     /* if we have a filter display the max page and results accordingly */
-    setFilter: function(filter) {
+    setFilter: function(filter, updatedResults = null) {
         if(this.props.useExternal) {
             this.props.externalSetFilter(filter);
             return;
@@ -235,8 +242,8 @@ var Griddle = React.createClass({
 
         // Obtain the state results.
         updatedState.filteredResults = this.props.useCustomFilterer ?
-          this.props.customFilterer(this.props.results, filter) :
-          this.defaultFilter(this.props.results, filter);
+          this.props.customFilterer(updatedResults || this.props.results, filter) :
+          this.defaultFilter(updatedResults || this.props.results, filter);
 
         // Update the max page.
         updatedState.maxPage = that.getMaxPage(updatedState.filteredResults);
@@ -385,13 +392,17 @@ var Griddle = React.createClass({
         this.setState(state);
     },
     componentWillReceiveProps: function(nextProps) {
+        // Check if results props changed
+        if (nextProps.results !== this.props.results) {
+          this.setFilter(this.state.filter, nextProps.results);
+        }
+        
         this.setMaxPage(nextProps.results);
         if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
             this.setPageSize(nextProps.resultsPerPage);
         }
 	    //This will updaet the column Metadata
         this.columnSettings.columnMetadata = nextProps.columnMetadata;
-	    this.rowSettings.rowMetadata = nextProps.rowMetadata;
         if(nextProps.results.length > 0)
         {
             var deepKeys = deep.keys(nextProps.results[0]);
