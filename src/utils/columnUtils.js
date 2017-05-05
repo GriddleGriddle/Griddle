@@ -1,23 +1,14 @@
-function containsColumnPropertiesArray(rowProperties) {
-  return (rowProperties &&
-    rowProperties.props &&
-    rowProperties.props.children &&
-    Array.isArray(rowProperties.props.children));
-}
-
-function containsColumnPropertiesObject(rowProperties) {
-  return rowProperties && rowProperties.props && rowProperties.props.children;
-}
+const offset = 1000;
 
 /** Gets a column properties object from an array of columnNames
  * @param {Array<string>} columns - array of column names
  */
-export function getColumnPropertiesFromColumnArray(columns) {
-  return columns.reduce((previous, current) => {
-    previous[current] = {id: current};
+function getColumnPropertiesFromColumnArray(columnProperties, columns) {
+  return columns.reduce((previous, current, i) => {
+    previous[current] = { id: current, order: offset + i };
     return previous;
   },
-  {});
+  columnProperties);
 }
 
 /** Gets the column properties object from a react component (rowProperties) that contains child component(s) for columnProperties.
@@ -26,22 +17,24 @@ export function getColumnPropertiesFromColumnArray(columns) {
  * @param {Array<string> optional} allColumns - An optional array of colummn names. This will be used to generate the columnProperties when they are not defined in rowProperties
  */
 export function getColumnProperties(rowProperties, allColumns=[]) {
-  let columnProperties = {};
+  const children = rowProperties && rowProperties.props && rowProperties.props.children;
+  const columnProperties = {};
+
   // Working against an array of columnProperties
-  if (containsColumnPropertiesArray(rowProperties)) {
+  if (Array.isArray(children)) {
     // build one object that contains all of the column properties keyed by id
-    columnProperties = rowProperties.props.children.reduce((previous, current) => {
-      previous[current.props.id] = current.props;
+    children.reduce((previous, current, i) => {
+      previous[current.props.id] = { order: offset + i, ...current.props };
       return previous;
-    }, {});
+    }, columnProperties);
 
   // Working against a lone, columnProperties object
-  } else if (containsColumnPropertiesObject(rowProperties)) {
-    columnProperties[rowProperties.props.children.props.id] = rowProperties.props.children.props;
+  } else if (children && children.props) {
+    columnProperties[children.props.id] = { order: offset, ...children.props };
   }
 
   if(Object.keys(columnProperties).length === 0 && allColumns) {
-    columnProperties = getColumnPropertiesFromColumnArray(allColumns);
+    getColumnPropertiesFromColumnArray(columnProperties, allColumns);
   }
 
   return columnProperties; 
