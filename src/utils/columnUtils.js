@@ -24,7 +24,9 @@ export function getColumnProperties(rowProperties, allColumns=[]) {
   if (Array.isArray(children)) {
     // build one object that contains all of the column properties keyed by id
     children.reduce((previous, current, i) => {
-      previous[current.props.id] = { order: offset + i, ...current.props };
+      if (current) {
+        previous[current.props.id] = {order: offset + i, ...current.props};
+      }
       return previous;
     }, columnProperties);
 

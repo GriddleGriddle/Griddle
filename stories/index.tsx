@@ -407,6 +407,21 @@ storiesOf('Griddle main', module)
       </div>
     );
   })
+  .add('with conditional columns', () => {
+    return (
+      <div>
+        <small>
+          The first column should be visible, the second ignored.
+        </small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition>
+            {true && <ColumnDefinition id="col1" />}
+            {false && <ColumnDefinition id="col2" />}
+          </RowDefinition>
+        </Griddle>
+      </div>
+    );
+  })
   .add('with override row component', () => {
     const NewRow = (props) => <tr><td>hi</td></tr>
 
