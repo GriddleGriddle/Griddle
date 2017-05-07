@@ -37,7 +37,7 @@ test('get column properties works with single column property object', test => {
 test('get column properties returns all columns when no property columns specified', test => {
   const rowProperties = {
     props: {}
-  }
+  };
 
   const allColumns = ['one', 'two', 'three'];
 
@@ -47,5 +47,23 @@ test('get column properties returns all columns when no property columns specifi
     one: { id: 'one', order: 1000 },
     two: { id: 'two', order: 1001 },
     three: { id: 'three', order: 1002 }
-  })
-})
+  });
+});
+
+test('get column properties ignores falsy values in array', test => {
+  const rowProperties = {
+    props: {
+      children: [
+        { props: { id: 1, name: "one"}},
+        0,
+        undefined,
+        null,
+        false,
+      ]
+    }
+  };
+
+  const columnProperties = getColumnProperties(rowProperties);
+
+  test.is(Object.keys(columnProperties).length, 1);
+});
