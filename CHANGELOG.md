@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2017-05-08
+- Update to PropTypes library instead of using deprecated React version
+- Respect sortable columns
+- Add lodash babel plugin (for smaller builds)
+- Column ordering
+- Conditional columns
+- Thanks @followbl, @dahlbyk, @bpugh, @andreme!
+
+## [1.4.0] - 2017-04-21
+- CSS class name can be a function (to generate the name)
+
 ## [1.3.1] - 2017-04-18
 - Fix for cssClassName and headerCssClassName
 - Thanks @zeusi83!
