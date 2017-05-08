@@ -361,14 +361,14 @@ export namespace utils {
     const rowUtils: PropertyBag<Function>;
 
     interface SortProperties{
-      setSortColumn(sortProperties: ((GriddleSortKey : any) => void)) : any;
+      setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;
       sortProperty: GriddleSortKey;
       columnId: string;
     }
 
     namespace sortUtils {
-      function defaultSort(data: any[], column: string, sortAscending?: boolean) : any;
-      function setSortProperties(sortProperties: SortProperties) : any;
+      function defaultSort(data: any[], column: string, sortAscending?: boolean) : number;
+      function setSortProperties(sortProperties: SortProperties) : () => void;
     }
 }
 
