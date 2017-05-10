@@ -361,14 +361,14 @@ export namespace utils {
     const rowUtils: PropertyBag<Function>;
 
     interface SortProperties{
-      setSortColumn(sortProperties: ((GriddleSortKey) => void));
+      setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;
       sortProperty: GriddleSortKey;
       columnId: string;
     }
 
     namespace sortUtils {
-      function defaultSort(data: any[], column: string, sortAscending?: boolean);
-      function setSortProperties(sortProperties: SortProperties);
+      function defaultSort(data: any[], column: string, sortAscending?: boolean) : number;
+      function setSortProperties(sortProperties: SortProperties) : () => void;
     }
 }
 
@@ -400,7 +400,7 @@ export namespace plugins {
     var PositionPlugin : (settings: PositionSettings) => GriddlePlugin;
 }
 
-export const ColumnDefinition;
-export const RowDefinition;
+export const ColumnDefinition : typeof components.ColumnDefinition;
+export const RowDefinition : typeof components.RowDefinition;
 
 export default Griddle;
