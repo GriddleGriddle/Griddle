@@ -400,7 +400,7 @@ export namespace plugins {
     var PositionPlugin : (settings: PositionSettings) => GriddlePlugin;
 }
 
-export const ColumnDefinition : any;
-export const RowDefinition : any;
+export const ColumnDefinition : typeof components.ColumnDefinition;
+export const RowDefinition : typeof components.RowDefinition;
 
 export default Griddle;
