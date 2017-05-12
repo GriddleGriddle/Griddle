@@ -1142,3 +1142,58 @@ storiesOf('Settings', module)
       <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })
+
+  .add('relocate page size setting near pagination', () => {
+    const pageSizeSettings = ({ pageSizes }) =>
+      compose(
+        connect(
+          (state) => ({
+            pageSize: selectors.pageSizeSelector(state),
+          }),
+          {
+            setPageSize: actions.setPageSize
+          }
+        ),
+        withHandlers({
+          onChange: props => e => {
+            props.setPageSize(+e.target.value);
+          },
+        }),
+      )(({ pageSize, onChange, style }) => {
+      return (
+        <select onChange={onChange} defaultValue={pageSize} style={style}>
+          { pageSizes.map(s => <option key={s}>{s}</option>) }
+        </select>
+      )});
+
+    const PageSizeDropDownInPaginationPlugin = (config) => {
+      const PageSizeSettings = pageSizeSettings(config);
+      return {
+        components: {
+          Pagination: ({ Next, Previous, PageDropdown }) => (
+            <div>
+              <span>
+                Rows Per Page:
+                <PageSizeSettings style={{ marginLeft: '0.5em', marginRight: '1em' }} />
+              </span>
+              {Previous && <Previous />}
+              {PageDropdown && <PageDropdown /> }
+              {Next && <Next /> }
+            </div>
+          ),
+        },
+      };
+    };
+
+    const pluginConfig = {
+      pageSizes: [5, 10, 20, 50],
+    };
+    return (
+      <Griddle
+        data={fakeData}
+        plugins={[LocalPlugin,PageSizeDropDownInPaginationPlugin(pluginConfig)]}
+        settingsComponentObjects={{
+          pageSizeSettings: { order: 0, component: () => null }
+        }} />
+    );
+  })
