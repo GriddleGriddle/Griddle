@@ -1193,7 +1193,7 @@ storiesOf('Settings', module)
         data={fakeData}
         plugins={[LocalPlugin,PageSizeDropDownInPaginationPlugin(pluginConfig)]}
         settingsComponentObjects={{
-          pageSizeSettings: { order: 0, component: () => null }
+          pageSizeSettings: null
         }} />
     );
   })
