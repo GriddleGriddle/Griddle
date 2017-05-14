@@ -1,9 +1,10 @@
 import { createStore, combineReducers, bindActionCreators } from 'redux';
 import Immutable from 'immutable';
-import { connect, Provider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { createProvider } from 'react-redux-custom-store'
+
 
 import * as dataReducers from './reducers/dataReducer';
 import components from './components';
@@ -60,12 +61,13 @@ class Griddle extends Component {
     settingsComponentObjects: PropTypes.object,
     events: PropTypes.object,
     selectors: PropTypes.object,
+    griddleStoreName: PropTypes.string,
   }
 
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
+    const { storeName='store', plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -81,6 +83,10 @@ class Griddle extends Component {
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+
+    // Add handler for custom store name
+    this.storeName = storeName;
+    this.provider = createProvider(storeName);
 
     const mergedStyleConfig = _.merge({}, defaultStyleConfig, styleConfig);
 
@@ -130,14 +136,15 @@ class Griddle extends Component {
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
       selectors: this.selectors,
+      storeName: this.storeName,
     };
   }
 
   render() {
     return (
-      <Provider store={this.store}>
+      <this.provider store={this.store}>
         <this.components.Layout />
-      </Provider>
+      </this.provider>
     )
 
   }

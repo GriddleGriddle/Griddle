@@ -81,6 +81,14 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with custom store name', () => {
+    return (
+      <Griddle storeName='somethingCrazy' data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
   .add('with local and events', () => {
 
     // don't do things this way - fine for example storybook
