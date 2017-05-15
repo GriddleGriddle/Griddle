@@ -1,14 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux-custom-store'
 import getContext from 'recompose/getContext';
 import compose from 'recompose/compose';
 
 const GriddleConnect = getContext({
-  storeName: PropTypes.object,
-})({ storeName }) => {
-  return (mapStateToProps, mapDispatchToProps) => (component) => {
-    return connect(mapStateToProps, mapDispatchToProps)(component, storeName);
+  griddleStoreName: PropTypes.string,
+  components: PropTypes.object
+})(props => {
+  const { griddleStoreName } = props;
+  return (...args) => {
+    return (component) => {
+      debugger;
+      //  griddleStoreName
+      return connect(...args)(component, 'store');
+    }
   }
-};
+});
 
 export default GriddleConnect;

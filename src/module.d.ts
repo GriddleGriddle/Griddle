@@ -341,6 +341,7 @@ export interface GriddleProps<T> {
     components?: GriddleComponents;
     renderProperties?: GriddleRenderProperties;
     settingsComponentObjects?: PropertyBag<SettingsComponentObject>;
+    storeName?: string;
 }
 
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {

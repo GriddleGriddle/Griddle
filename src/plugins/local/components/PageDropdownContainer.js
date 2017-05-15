@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import connect from '../../../components/GriddleConnect';
 import { createStructuredSelector } from 'reselect';
 
 import { currentPageSelector, maxPageSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
@@ -17,4 +17,3 @@ const enhance = OriginalComponent => connect(state => ({
 )(props => <OriginalComponent {...props} />);
 
 export default enhance;
-

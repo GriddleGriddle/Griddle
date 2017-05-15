@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import connect from '../../../components/GriddleConnect';
 import { createStructuredSelector } from 'reselect';
 
 import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';

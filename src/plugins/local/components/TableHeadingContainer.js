@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import connect from '../../../components/GriddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
@@ -20,7 +20,7 @@ const ComposedContainerComponent = OriginalComponent => compose(
     TableHeadingCell: props.components.TableHeadingCell,
     ...props
   }))
-  // withHandlers({ 
+  // withHandlers({
   //   TableHeadingCell: props => props.components.TableHeadingCell
   // })
 )(({TableHeadingCell, columnTitles, columnIds, className, style }) => (

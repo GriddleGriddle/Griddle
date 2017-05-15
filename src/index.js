@@ -131,12 +131,13 @@ class Griddle extends Component {
   }
 
   getChildContext() {
+    console.log('store name yeah', this.storeName);
     return {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
       selectors: this.selectors,
-      storeName: this.storeName,
+      griddleStoreName: this.storeName,
     };
   }
 
