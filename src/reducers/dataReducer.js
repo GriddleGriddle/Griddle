@@ -154,6 +154,6 @@ export function GRIDDLE_UPDATE_STATE(state, action) {
   // Update state with eligible properties.
   return dataUpdatedState.mergeDeep(Immutable.fromJS(propertyUpdates))
                          .setIn(['renderProperties', 'layoutProperties'],
-                           _.omit(otherProps, handledProperties)
+                           Immutable.fromJS(_.omit(otherProps, handledProperties))
                          );
 }
