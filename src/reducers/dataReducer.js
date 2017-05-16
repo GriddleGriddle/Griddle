@@ -149,12 +149,11 @@ export function GRIDDLE_UPDATE_STATE(state, action) {
   // Update the state from other Griddle properties
   const propertyUpdates = updatableProperties.reduce((combined, key) => {
     return !!otherProps[key] ? { ...combined, [key]: otherProps[key] } : combined;
-  }, {
-    renderProperties: {
-      layoutProperties: _.omit(otherProps, handledProperties)
-    }
-  });
+  }, {});
 
   // Update state with eligible properties.
-  return dataUpdatedState.mergeDeep(Immutable.fromJS(propertyUpdates));
+  return dataUpdatedState.mergeDeep(Immutable.fromJS(propertyUpdates))
+                         .setIn(['renderProperties', 'layoutProperties'],
+                           _.omit(otherProps, handledProperties)
+                         );
 }
