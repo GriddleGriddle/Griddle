@@ -20,6 +20,7 @@ import PaginationContainer from './PaginationContainer';
 import Filter from './Filter';
 import FilterEnhancer from './FilterEnhancer';
 import FilterContainer from './FilterContainer';
+import GriddleConnect from './GriddleConnect';
 import SettingsToggle from './SettingsToggle';
 import SettingsToggleContainer from './SettingsToggleContainer';
 import SettingsWrapper from './SettingsWrapper';

@@ -135,3 +135,19 @@ export function addColumnPropertiesWhenNoneExist(stateObject) {
     }
   };
 }
+
+export function updateDataFromProps(state, newProps, oldProps) {
+  const { data: newData } = newProps;
+  const { data: oldData } = oldProps;
+
+  if (newData !== oldData) {
+    const transformedData = transformData(newData, state.get('renderProperties').toJSON());
+    const data = transformedData.data;
+    const lookup = transformedData.lookup;
+
+    return state.set('data', data)
+                .set('lookup', lookup);
+  }
+
+  return state;
+}

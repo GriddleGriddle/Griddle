@@ -17,6 +17,7 @@ import _ from 'lodash';
 import {
   addColumnPropertiesWhenNoneExist,
   transformData,
+  updateDataFromProps
 } from '../utils/dataUtils';
 
 function isColumnVisible(state, columnId) {
@@ -28,7 +29,7 @@ function isColumnVisible(state, columnId) {
     return true;
   }
 
-  // if there is no render property currently and visible is not set 
+  // if there is no render property currently and visible is not set
   if (!hasRenderProperty && currentlyVisibleProperty === undefined) {
     return false;
   }
@@ -133,13 +134,27 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
       new Immutable.Map({ id: action.columnId, visible: true }));
 }
 
-export function GRIDDLE_UPDATE_STATE(state, action) {
-  const transformedData = transformData(action.newState.data, state.get('renderProperties').toJSON());
-  const data = transformedData.data;
-  const lookup = transformedData.lookup;
-  const newState = _.omit(action.newState, data);
 
-  return state.mergeDeep(Immutable.fromJS(newState))
-    .set('data', data)
-    .set('lookup', lookup);
+
+const updatableProperties = ['pageProperties', 'sortProperties'];
+const staticProperties = ['plugins', 'children', 'events', 'styleConfig', 'components', 'renderProperties', 'settingsComponentObjects'];
+const handledProperties = [...updatableProperties, ...staticProperties];
+export function GRIDDLE_UPDATE_STATE(state, action) {
+  const { newProps, oldProps } = action.update;
+  const { data, ...otherProps } = newProps;
+
+  // Update griddle data, if necessary
+  const dataUpdatedState = updateDataFromProps(state, newProps, oldProps);
+
+  // Update the state from other Griddle properties
+  const propertyUpdates = updatableProperties.reduce((combined, key) => {
+    return !!otherProps[key] ? { ...combined, [key]: otherProps[key] } : combined;
+  }, {
+    renderProperties: {
+      layoutProperties: _.omit(otherProps, handledProperties)
+    }
+  });
+
+  // Update state with eligible properties.
+  return dataUpdatedState.mergeDeep(Immutable.fromJS(propertyUpdates));
 }

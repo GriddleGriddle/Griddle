@@ -67,7 +67,20 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { storeName='griddle-store', plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
+    const {
+      storeName='griddle-store',
+      plugins=[],
+      data,
+      children:rowPropertiesComponent,
+      events={},
+      sortProperties={},
+      styleConfig={},
+      pageProperties:importedPageProperties,
+      components:userComponents,
+      renderProperties:userRenderProperties={},
+      settingsComponentObjects:userSettingsComponentObjects,
+      ...layoutProperties
+    } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -100,7 +113,8 @@ class Griddle extends Component {
     //TODO: This should also look at the default and plugin initial state objects
     const renderProperties = Object.assign({
       rowProperties,
-      columnProperties
+      columnProperties,
+      layoutProperties
     }, ...plugins.map(p => p.renderProperties), userRenderProperties);
 
     // TODO: Make this its own method
@@ -125,9 +139,13 @@ class Griddle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { data: oldData, pageProperties: oldPageProperties, sortProperties: oldSortProperties } = this.props;
     const { data, pageProperties, sortProperties } = nextProps;
 
-    this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
+    this.store.dispatch(actions.updateState({
+      newProps: nextProps,
+      oldProps: { ...this.props }
+    }));
   }
 
   getChildContext() {
