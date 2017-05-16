@@ -229,6 +229,7 @@ export interface GriddleComponents {
     Filter?: any;
     FilterEnhancer?: any;
     FilterContainer?: any;
+    GriddleConnect?: any;
     SettingsToggle?: any;
     SettingsToggleContainer?: any;
     SettingsWrapper?: any;

@@ -72,6 +72,7 @@ const components = {
   Filter,
   FilterEnhancer,
   FilterContainer,
+  GriddleConnect,
   SettingsToggle,
   SettingsToggleContainer,
   SettingsWrapper,
