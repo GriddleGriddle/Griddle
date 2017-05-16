@@ -67,7 +67,7 @@ class Griddle extends Component {
   constructor(props) {
     super(props);
 
-    const { storeName='store', plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
+    const { storeName='griddle-store', plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -131,7 +131,6 @@ class Griddle extends Component {
   }
 
   getChildContext() {
-    console.log('store name yeah', this.storeName);
     return {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
