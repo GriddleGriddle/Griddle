@@ -24,6 +24,21 @@ function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
   return null;
 }
 
+function getCellStyles(cellProperties, originalStyles) {
+  let styles = {
+    ...(cellProperties.sortable === false || { cursor: 'pointer' }),
+    ...originalStyles,
+  };
+
+  if (!cellProperties.hasOwnProperty('width')) { return styles; }
+
+  if (cellProperties.hasOwnProperty('width')) {
+    styles = Object.assign({}, styles, { width: cellProperties.width });
+  }
+
+  return styles;
+}
+
 const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
     selectors: PropTypes.object,
@@ -53,7 +68,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       ...props,
       icon,
       title,
-      style,
+      style: getCellStyles(props.cellProperties, props.style),
       className
     };
   })
