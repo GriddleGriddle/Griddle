@@ -60,22 +60,10 @@ var GridTable = React.createClass({
   gridScroll: function gridScroll() {
     if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
-      var scrollable = this.refs.scrollable;
+      var scrollable = this.refs.griddleScrollable;
       var scrollTop = scrollable.scrollTop;
       var scrollHeight = scrollable.scrollHeight;
       var clientHeight = scrollable.clientHeight;
-
-      // If the scroll position changed and the difference is greater than a row height
-      if (this.props.rowHeight !== null && this.state.scrollTop !== scrollTop && Math.abs(this.state.scrollTop - scrollTop) >= this.getAdjustedRowHeight()) {
-        var newState = {
-          scrollTop: scrollTop,
-          scrollHeight: scrollHeight,
-          clientHeight: clientHeight
-        };
-
-        // Set the state to the new state
-        this.setState(newState);
-      }
 
       // Determine the diff by subtracting the amount scrolled by the total height, taking into consideratoin
       // the spacer's height.
@@ -84,8 +72,23 @@ var GridTable = React.createClass({
       // Make sure that we load results a little before reaching the bottom.
       var compareHeight = scrollHeightDiff * 0.6;
 
-      if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
-        this.props.nextPage();
+      // Only update when scroll does not hit or pass virtual scroll bar bottom
+      if (compareHeight >= 0) {
+        // If the scroll position changed and the difference is greater than a row height
+        if (this.props.rowHeight !== null && this.state.scrollTop !== scrollTop && Math.abs(this.state.scrollTop - scrollTop) >= this.getAdjustedRowHeight()) {
+          var newState = {
+            scrollTop: scrollTop,
+            scrollHeight: scrollHeight,
+            clientHeight: clientHeight
+          };
+
+          // Set the state to the new state
+          this.setState(newState);
+        }
+
+        if (compareHeight <= this.props.infiniteScrollLoadTreshold) {
+          this.props.nextPage();
+        }
       }
     }
   },
@@ -270,10 +273,10 @@ var GridTable = React.createClass({
         tableStyle.tableLayout = "fixed";
       }
 
-      return React.createElement('div', null, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent, pagingContent)));
+      return React.createElement('div', null, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), React.createElement('div', { ref: 'griddleScrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent, pagingContent)));
     }
 
-    return React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent, pagingContent));
+    return React.createElement('div', { ref: 'griddleScrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent, pagingContent));
   }
 });
 
