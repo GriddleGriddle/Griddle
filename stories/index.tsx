@@ -1142,3 +1142,47 @@ storiesOf('Settings', module)
       <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })
+
+  .add('relocate page size setting near pagination', () => {
+    const PageSizeSettings = components.SettingsComponents.pageSizeSettings;
+
+    const PageSizeDropDownInPaginationPlugin = {
+      components: {
+        Pagination: ({ Next, Previous, PageDropdown }) => (
+          <div>
+            <PageSizeSettings />
+            {Previous && <Previous />}
+            {PageDropdown && <PageDropdown /> }
+            {Next && <Next /> }
+          </div>
+        ),
+      },
+    };
+
+    return (
+      <Griddle
+        data={fakeData}
+        plugins={[LocalPlugin,PageSizeDropDownInPaginationPlugin]}
+        settingsComponentObjects={{
+          pageSizeSettings: null
+        }} />
+    );
+  })
+
+storiesOf('TypeScript', module)
+  .add('GriddleComponent accepts expected types', () => {
+    class Custom extends React.Component<{ value }, void> {
+      render() {
+        return this.props.value;
+      }
+    }
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" customComponent={({ value }) => <em>{value}</em>} />
+          <ColumnDefinition id="state" customComponent={Custom} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })

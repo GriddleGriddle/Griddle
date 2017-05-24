@@ -14,7 +14,7 @@ function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents
       var oa = settingsObject[a], ob = settingsObject[b];
       return ((oa && oa.order) || 0) - ((ob && ob.order) || 0);
     })
-    .map(key => (settingsObject[key] && settingsObject[key].component) || (settingsComponents && settingsComponents[key])) : null;
+    .map(key => settingsObject[key] && (settingsObject[key].component || (settingsComponents && settingsComponents[key]))) : null;
 }
 
 const EnhancedSettings = OriginalComponent => compose(
