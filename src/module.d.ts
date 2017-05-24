@@ -4,7 +4,7 @@ interface PropertyBag<T> {
     [propName: string]: T;
 }
 
-type GriddleComponent<T> = (props: T) => string | JSX.Element | React.ComponentClass<T> | React.StatelessComponent<T>
+type GriddleComponent<T> = React.ComponentClass<T> | React.StatelessComponent<T>;
 
 export namespace components {
 

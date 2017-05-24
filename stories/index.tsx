@@ -1197,3 +1197,21 @@ storiesOf('Settings', module)
         }} />
     );
   })
+
+storiesOf('TypeScript', module)
+  .add('GriddleComponent accepts expected types', () => {
+    class Custom extends React.Component<{ value }, void> {
+      render() {
+        return this.props.value;
+      }
+    }
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" customComponent={({ value }) => <em>{value}</em>} />
+          <ColumnDefinition id="state" customComponent={Custom} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
