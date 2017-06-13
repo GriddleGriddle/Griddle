@@ -41,7 +41,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
   mapProps(props => {
     const icon = getIcon(props);
     const title = props.customHeadingComponent ?
-      <props.customHeadingComponent {...props} icon={icon} /> :
+      <props.customHeadingComponent {...props.cellProperties.extraData} {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
     const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
     const style = {
@@ -50,6 +50,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     };
 
     return {
+      ...props.cellProperties.extraData,
       ...props,
       icon,
       title,

@@ -48,10 +48,10 @@ export interface ColumnDefinitionProps {
     title?: string,
 
     //The component that should be rendered instead of the standard column data. This component will still be rendered inside of a TD element.
-    customComponent?: GriddleComponent<CellProps>,
+    customComponent?: GriddleComponent<CellProps & any>,
 
     //The component that should be used instead of the normal title
-    customHeadingComponent?: GriddleComponent<TableHeadingCellProps>,
+    customHeadingComponent?: GriddleComponent<TableHeadingCellProps & any>,
 
     //Can this column be sorted
     sortable?: boolean,
@@ -60,7 +60,6 @@ export interface ColumnDefinitionProps {
     //What sort type this column uses - magic string :shame:
     sortType?: string,
 
-    // TODO: Unused?
     //Any extra data that should be passed to each instance of this column
     extraData?: any,
 
