@@ -345,6 +345,35 @@ storiesOf('Griddle main', module)
   .add('with controlled griddle component with no results', () => {
     return <Griddle data={[]} />
   })
+  .add('with extraData', () => {
+    const customHeadingComponent =
+      ({ title, extra }) =>
+        <span>{title} {extra && <em> {extra}</em>}</span>;
+
+    const customComponent =
+      ({ value, extra }) =>
+        <span>{value} {extra && <em> {extra}</em>}</span>;
+
+    const components = {
+      Cell: ({value, extra}) =>
+        <td>{value} {extra && <strong> {extra}</strong>}</td>,
+      TableHeadingCell: ({title, extra}) =>
+        <th>{title} {extra && <strong> {extra}</strong>}</th>,
+    };
+
+    return (
+      <div>
+        <small><em>extra</em> from <code>custom(Heading)Component</code>; <strong>extra</strong> from <code>(TableHeading)Cell</code></small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]} components={components}>
+          <RowDefinition rowKey="name">
+            <ColumnDefinition id="name" order={2} extraData={{extra: 'extra'}}
+              customHeadingComponent={customHeadingComponent} customComponent={customComponent} />
+            <ColumnDefinition id="state" order={1} />
+          </RowDefinition>
+        </Griddle>
+      </div>
+    )
+  })
   .add('with custom griddle key', () => {
     return (
       <div>

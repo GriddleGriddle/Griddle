@@ -25,7 +25,7 @@ function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
   // return null so we don't render anything if no sortProperty
   return null;
 }
-const EnhancedHeadingCell = (OriginalComponent => compose(
+const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
     events: PropTypes.object,
   }),
@@ -50,7 +50,7 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
   mapProps(props => {
     const icon = getIcon(props);
     const title = props.customHeadingComponent ?
-      <props.customHeadingComponent {...props} icon={icon} /> :
+      <props.customHeadingComponent {...props.cellProperties.extraData} {...props} icon={icon} /> :
       <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
     const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
     const style = {
@@ -59,6 +59,7 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
     };
 
     return {
+      ...props.cellProperties.extraData,
       ...props,
       icon,
       title,
@@ -66,10 +67,10 @@ const EnhancedHeadingCell = (OriginalComponent => compose(
       className
     };
   })
-)((props) => (
+)(props =>
   <OriginalComponent
     {...props}
-    onClick={props.onClick} />
-)));
+  />
+);
 
 export default EnhancedHeadingCell;

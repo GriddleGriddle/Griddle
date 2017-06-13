@@ -50,19 +50,18 @@ const ComposedCellContainer = OriginalComponent => compose(
   }),
   mapProps(props => {
     return ({
+    ...props.cellProperties.extraData,
     ...props,
     className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
     style: getCellStyles(props.cellProperties, props.style),
     value: props.customComponent ?
-      <props.customComponent {...props} /> :
+      <props.customComponent {...props.cellProperties.extraData} {...props} /> :
       props.value
   })})
-)(({ value, style, className }) => (
+)(props =>
   <OriginalComponent
-    value={value}
-    style={style}
-    className={className}
+    {...props}
   />
-))
+);
 
 export default ComposedCellContainer;
