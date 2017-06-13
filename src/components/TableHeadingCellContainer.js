@@ -57,10 +57,10 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       className
     };
   })
-)((props) => {
-  return (
-    <OriginalComponent {...props} />
-  );
-});
+)(props =>
+  <OriginalComponent
+    {...props}
+  />
+);
 
 export default EnhancedHeadingCell;

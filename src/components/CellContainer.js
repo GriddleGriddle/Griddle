@@ -57,12 +57,10 @@ const ComposedCellContainer = OriginalComponent => compose(
       <props.customComponent {...props} /> :
       props.value
   })})
-)(({ value, style, className }) => (
+)(props =>
   <OriginalComponent
-    value={value}
-    style={style}
-    className={className}
+    {...props}
   />
-))
+);
 
 export default ComposedCellContainer;
