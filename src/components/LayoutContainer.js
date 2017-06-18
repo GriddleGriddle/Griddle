@@ -22,6 +22,7 @@ const EnhancedLayout = OriginalComponent => compose(
     Pagination: props.components.Pagination,
     Filter: props.components.Filter,
     SettingsWrapper: props.components.SettingsWrapper,
+    Style: props.components.Style,
     className: props.className,
     style: props.style,
   }))

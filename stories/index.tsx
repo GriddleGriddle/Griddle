@@ -591,6 +591,20 @@ storiesOf('Griddle main', module)
 storiesOf('Plugins', module)
   .add('styleConfig', () => {
     const stylePlugin = {
+      components: {
+        Style: () =>
+          <style type="text/css">
+            {`
+              .plugin-layout {
+                border: 5px solid green;
+                padding: 5px;
+              }
+              .plugin-row:nth-child(2n+1) {
+                background-color: #eee;
+              }
+            `}
+          </style>
+      },
       styleConfig: {
         icons: {
           TableHeadingCell: {
@@ -599,7 +613,8 @@ storiesOf('Plugins', module)
           },
         },
         classNames: {
-          Row: 'plugin-row'
+          Layout: 'plugin-layout',
+          Row: 'plugin-row',
         },
         styles: {
           Filter: {
@@ -611,16 +626,8 @@ storiesOf('Plugins', module)
       }
     };
 
-    const css = `
-      .plugin-row:nth-child(2n+1) {
-        background-color: #eee;
-      }
-    `;
     return (
       <div>
-        <style type="text/css">
-          {css}
-        </style>
         <small>Uses styles from plugin unless overridden (filter should be black).</small>
         <Griddle data={fakeData} plugins={[LocalPlugin, stylePlugin]}
           styleConfig={{
