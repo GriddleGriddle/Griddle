@@ -373,6 +373,8 @@ export namespace utils {
 }
 
 export namespace plugins {
+    var LegacyStylePlugin : GriddlePlugin;
+
     var LocalPlugin : GriddlePlugin;
 
     interface PositionSettings {

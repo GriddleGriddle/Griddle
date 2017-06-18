@@ -15,7 +15,7 @@ import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnD
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { LocalPlugin, PositionPlugin } = plugins;
+const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -79,6 +79,11 @@ storiesOf('Griddle main', module)
         <RowDefinition>
         </RowDefinition>
       </Griddle>
+    )
+  })
+  .add('with local and legacy (v0) styles', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin, LegacyStylePlugin]} />
     )
   })
   .add('with local and events', () => {
