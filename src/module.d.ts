@@ -328,6 +328,7 @@ export interface GriddlePlugin {
     reducer?: PropertyBag<Reducer>,
     selectors?: PropertyBag<Selector>,
     settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
+    styleConfig?: GriddleStyleConfig,
 }
 
 export interface GriddleProps<T> {

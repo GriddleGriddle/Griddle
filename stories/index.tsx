@@ -588,6 +588,49 @@ storiesOf('Griddle main', module)
     );
   })
 
+storiesOf('Plugins', module)
+  .add('styleConfig', () => {
+    const stylePlugin = {
+      styleConfig: {
+        icons: {
+          TableHeadingCell: {
+            sortDescendingIcon: ' (desc)',
+            sortAscendingIcon: ' (asc)'
+          },
+        },
+        classNames: {
+          Row: 'plugin-row'
+        },
+        styles: {
+          Filter: {
+            backgroundColor: 'blue',
+            color: 'white',
+            fontSize: '200%',
+          }
+        }
+      }
+    };
+
+    const css = `
+      .plugin-row:nth-child(2n+1) {
+        background-color: #eee;
+      }
+    `;
+    return (
+      <div>
+        <style type="text/css">
+          {css}
+        </style>
+        <small>Uses styles from plugin unless overridden (filter should be black).</small>
+        <Griddle data={fakeData} plugins={[LocalPlugin, stylePlugin]}
+          styleConfig={{
+            styles: { Filter: { backgroundColor: 'black', fontStyle: 'italic' } }
+          }}
+        />
+      </div>
+    );
+  })
+
 storiesOf('Cell', module)
   .add('base cell', () => {
     const someValue = "hi from storybook"
