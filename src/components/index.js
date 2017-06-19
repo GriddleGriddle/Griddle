@@ -78,6 +78,7 @@ const components = {
   Settings,
   SettingsContainer,
   SettingsComponents,
+  Style: () => null,
 };
 
 export default components;

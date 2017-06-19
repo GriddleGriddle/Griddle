@@ -15,7 +15,7 @@ import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnD
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { LocalPlugin, PositionPlugin } = plugins;
+const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -79,6 +79,11 @@ storiesOf('Griddle main', module)
         <RowDefinition>
         </RowDefinition>
       </Griddle>
+    )
+  })
+  .add('with local and legacy (v0) styles', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin, LegacyStylePlugin]} />
     )
   })
   .add('with local and events', () => {
@@ -640,6 +645,56 @@ storiesOf('Griddle main', module)
           <ColumnDefinition id="location.state" nested={true}/>
         </RowDefinition>
       </Griddle>
+    );
+  })
+
+storiesOf('Plugins', module)
+  .add('styleConfig', () => {
+    const stylePlugin = {
+      components: {
+        Style: () =>
+          <style type="text/css">
+            {`
+              .plugin-layout {
+                border: 5px solid green;
+                padding: 5px;
+              }
+              .plugin-row:nth-child(2n+1) {
+                background-color: #eee;
+              }
+            `}
+          </style>
+      },
+      styleConfig: {
+        icons: {
+          TableHeadingCell: {
+            sortDescendingIcon: ' (desc)',
+            sortAscendingIcon: ' (asc)'
+          },
+        },
+        classNames: {
+          Layout: 'plugin-layout',
+          Row: 'plugin-row',
+        },
+        styles: {
+          Filter: {
+            backgroundColor: 'blue',
+            color: 'white',
+            fontSize: '200%',
+          }
+        }
+      }
+    };
+
+    return (
+      <div>
+        <small>Uses styles from plugin unless overridden (filter should be black).</small>
+        <Griddle data={fakeData} plugins={[LocalPlugin, stylePlugin]}
+          styleConfig={{
+            styles: { Filter: { backgroundColor: 'black', fontStyle: 'italic' } }
+          }}
+        />
+      </div>
     );
   })
 

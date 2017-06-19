@@ -82,7 +82,7 @@ class Griddle extends Component {
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
 
-    const mergedStyleConfig = _.merge({}, defaultStyleConfig, styleConfig);
+    const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
 
     const pageProperties = Object.assign({}, {
         currentPage: 1,
