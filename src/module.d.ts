@@ -196,45 +196,92 @@ const SettingsComponents: PropertyBag<GriddleComponent<any>>;
 } // namespace components
 
 export interface GriddleComponents {
-    Cell?: any;
-    CellContainer?: any;
-    ColumnDefinition?: any;
-    Row?: any;
-    RowContainer?: any;
-    RowDefinition?: any;
-    Table?: any;
-    TableBody?: any;
-    TableBodyContainer?: any;
-    TableHeading?: any;
-    TableHeadingContainer?: any;
-    TableHeadingCell?: any;
-    TableHeadingCellContainer?: any;
-    TableHeadingCellEnhancer?: any;
-    TableContainer?: any;
-    Layout?: any;
-    LayoutContainer?: any;
-    NextButton?: any;
-    NextButtonEnhancer?: any;
-    NextButtonContainer?: any;
-    NoResults?: any;
-    NoResultsContainer?: any;
-    PageDropdown?: any;
-    PageDropdownContainer?: any;
-    Pagination?: any;
-    PaginationContainer?: any;
-    PreviousButton?: any;
-    PreviousButtonEnhancer?: any;
-    PreviousButtonContainer?: any;
-    Filter?: any;
-    FilterEnhancer?: any;
-    FilterContainer?: any;
-    SettingsToggle?: any;
-    SettingsToggleContainer?: any;
-    SettingsWrapper?: any;
-    SettingsWrapperContainer?: any;
-    Settings?: any;
-    SettingsContainer?: any;
+    Layout?: GriddleComponent<any>;
+    LayoutEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    LayoutContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    LayoutContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    Style?: GriddleComponent<any>;
+    StyleEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    StyleContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    StyleContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    Filter?: GriddleComponent<any>;
+    FilterEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    FilterContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    FilterContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    SettingsWrapper?: GriddleComponent<components.SettingsWrapperProps>;
+    SettingsWrapperEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+    SettingsWrapperContainer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+    SettingsWrapperContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+
+    SettingsToggle?: GriddleComponent<components.SettingsToggleProps>;
+    SettingsToggleEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+    SettingsToggleContainer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+    SettingsToggleContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+
+    Settings?: GriddleComponent<components.SettingsProps>;
+    SettingsEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+    SettingsContainer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+    SettingsContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+
     SettingsComponents?: PropertyBag<GriddleComponent<any>>;
+
+    Table?: GriddleComponent<components.TableProps>;
+    TableEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+    TableContainer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+    TableContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+
+    TableHeading?: GriddleComponent<components.TableHeadingProps>;
+    TableHeadingEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+    TableHeadingContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+    TableHeadingContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+
+    TableHeadingCell?: GriddleComponent<components.TableHeadingCellProps>;
+    TableHeadingCellEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+    TableHeadingCellContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+    TableHeadingCellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+
+    TableBody?: GriddleComponent<components.TableBodyProps>;
+    TableBodyEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+    TableBodyContainer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+    TableBodyContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+
+    Row?: GriddleComponent<components.RowProps>;
+    RowEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+    RowContainer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+    RowContainerEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+
+    Cell?: GriddleComponent<components.CellProps>;
+    CellEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+    CellContainer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+    CellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+
+    NoResults?: GriddleComponent<any>;
+    NoResultsEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    NoResultsContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    NoResultsContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    Pagination?: GriddleComponent<any>;
+    PaginationEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PaginationContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PaginationContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    NextButton?: GriddleComponent<any>;
+    NextButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    NextButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    NextButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    PageDropDown?: GriddleComponent<any>;
+    PageDropDownEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PageDropDownContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PageDropDownContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+
+    PreviousButton?: GriddleComponent<any>;
+    PreviousButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PreviousButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
 export interface GriddleEvents {
