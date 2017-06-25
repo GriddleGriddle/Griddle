@@ -85,9 +85,9 @@ export class ColumnDefinition extends React.Component<ColumnDefinitionProps, any
 
 export interface CellProps {
     value?: any;
-    onClick?: Function;
-    onMouseEnter?: Function;
-    onMouseLeave?: Function;
+    onClick?: React.MouseEventHandler<Element>;
+    onMouseEnter?: React.MouseEventHandler<Element>;
+    onMouseLeave?: React.MouseEventHandler<Element>;
     className?: string;
     style?: React.CSSProperties;
 }
@@ -99,9 +99,9 @@ export interface RowProps {
     Cell?: any;
     griddleKey?: string;
     columnIds?: number[];
-    onClick?: Function;
-    onMouseEnter?: Function;
-    onMouseLeave?: Function;
+    onClick?: React.MouseEventHandler<Element>;
+    onMouseEnter?: React.MouseEventHandler<Element>;
+    onMouseLeave?: React.MouseEventHandler<Element>;
     className?: string;
     style?: React.CSSProperties;
 }
@@ -141,9 +141,9 @@ class TableHeading extends React.Component<TableHeadingProps, any> {
 export interface TableHeadingCellProps {
     title?: string;
     columnId?: number;
-    onClick?: Function;
-    onMouseEnter?: Function;
-    onMouseLeave?: Function;
+    onClick?: React.MouseEventHandler<Element>;
+    onMouseEnter?: React.MouseEventHandler<Element>;
+    onMouseLeave?: React.MouseEventHandler<Element>;
     icon?: any;
     className?: string;
     style?: React.CSSProperties;
@@ -169,7 +169,7 @@ class SettingsWrapper extends React.Component<SettingsWrapperProps, any> {
 const SettingsWrapperContainer: (OriginalComponent: any) => any;
 
 export interface SettingsToggleProps {
-    onClick?: Function;
+    onClick?: React.MouseEventHandler<Element>;
     text?: any;
     className?: string;
     style?: React.CSSProperties;
