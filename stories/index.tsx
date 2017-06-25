@@ -104,6 +104,25 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with Cell events', () => {
+    return (
+      <Griddle
+        data={fakeData}
+        plugins={[LocalPlugin]}
+        components={{
+          CellEnhancer: OriginalComponent =>
+            props => (
+              <OriginalComponent
+                {...props}
+                onClick={() => console.log(`Click ${props.value}`)}
+                onMouseEnter={() => console.log(`MouseEnter ${props.value}`)}
+                onMouseLeave={() => console.log(`MouseLeave ${props.value}`)}
+                />
+            ),
+        }}
+        />
+    );
+  })
   .add('with local and sort set', () => {
     const sortProperties = [
       { id: 'name', sortAscending: true }
