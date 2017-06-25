@@ -104,12 +104,21 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
-  .add('with Cell events', () => {
+  .add('with Row & Cell events', () => {
     return (
       <Griddle
         data={fakeData}
         plugins={[LocalPlugin]}
         components={{
+          RowEnhancer: OriginalComponent =>
+            props => (
+              <OriginalComponent
+                {...props}
+                onClick={() => console.log(`Click Row ${props.griddleKey}`)}
+                onMouseEnter={() => console.log(`MouseEnter Row ${props.griddleKey}`)}
+                onMouseLeave={() => console.log(`MouseLeave Row ${props.griddleKey}`)}
+                />
+            ),
           CellEnhancer: OriginalComponent =>
             props => (
               <OriginalComponent
@@ -119,6 +128,11 @@ storiesOf('Griddle main', module)
                 onMouseLeave={() => console.log(`MouseLeave ${props.value}`)}
                 />
             ),
+        }}
+        styleConfig={{
+          styles: {
+            Table: { borderCollapse: 'collapse' }, // To prevent Row enter/leave between cells
+          },
         }}
         />
     );
