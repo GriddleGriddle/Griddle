@@ -104,6 +104,39 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with Row & Cell events', () => {
+    return (
+      <Griddle
+        data={fakeData}
+        plugins={[LocalPlugin]}
+        components={{
+          RowEnhancer: OriginalComponent =>
+            props => (
+              <OriginalComponent
+                {...props}
+                onClick={() => console.log(`Click Row ${props.griddleKey}`)}
+                onMouseEnter={() => console.log(`MouseEnter Row ${props.griddleKey}`)}
+                onMouseLeave={() => console.log(`MouseLeave Row ${props.griddleKey}`)}
+                />
+            ),
+          CellEnhancer: OriginalComponent =>
+            props => (
+              <OriginalComponent
+                {...props}
+                onClick={() => console.log(`Click ${props.value}`)}
+                onMouseEnter={() => console.log(`MouseEnter ${props.value}`)}
+                onMouseLeave={() => console.log(`MouseLeave ${props.value}`)}
+                />
+            ),
+        }}
+        styleConfig={{
+          styles: {
+            Table: { borderCollapse: 'collapse' }, // To prevent Row enter/leave between cells
+          },
+        }}
+        />
+    );
+  })
   .add('with local and sort set', () => {
     const sortProperties = [
       { id: 'name', sortAscending: true }
