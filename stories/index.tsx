@@ -1252,7 +1252,7 @@ storiesOf('Settings', module)
               <input
                 type="checkbox"
                 name={columns[c].id}
-                defaultChecked={!columns[c].isVisible}
+                defaultChecked={columns[c].visible !== false}
                 onChange={onToggle}
               />
               {columns[c].title || columns[c].id}
