@@ -1270,7 +1270,14 @@ storiesOf('Settings', module)
     };
 
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }} />
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }}>
+        <RowDefinition>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="company" />
+          <ColumnDefinition id="state" />
+          <ColumnDefinition id="country" visible={false} />
+        </RowDefinition>
+      </Griddle>
     );
   })
 
