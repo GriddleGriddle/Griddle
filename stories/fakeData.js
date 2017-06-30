@@ -76,7 +76,7 @@ export default [
     "name": "Lizzie Nelson",
     "city": "Chumuckla",
     "state": "Montana",
-    "country": "Turks &amp; Caicos",
+    "country": "Turks & Caicos",
     "company": "Everest",
     "favoriteNumber": 2
   },
@@ -526,7 +526,7 @@ export default [
     "name": "Jodie Martinez",
     "city": "Edneyville",
     "state": "Rhode Island",
-    "country": "Antigua &amp; Barbuda",
+    "country": "Antigua & Barbuda",
     "company": "Satiance",
     "favoriteNumber": 7
   },
@@ -1237,7 +1237,7 @@ export default [
     "name": "Mathews Sharpe",
     "city": "Glenshaw",
     "state": "California",
-    "country": "Trinidad &amp; Tobago",
+    "country": "Trinidad & Tobago",
     "company": "Quilk",
     "favoriteNumber": 4
   },
@@ -1246,7 +1246,7 @@ export default [
     "name": "Debra Skinner",
     "city": "Leming",
     "state": "New York",
-    "country": "Saint Pierre &amp; Miquelon",
+    "country": "Saint Pierre & Miquelon",
     "company": "Billmed",
     "favoriteNumber": 1
   },
@@ -1336,7 +1336,7 @@ export default [
     "name": "Laura Bryant",
     "city": "Chicopee",
     "state": "New Jersey",
-    "country": "Bosnia &amp; Herzegovina",
+    "country": "Bosnia & Herzegovina",
     "company": "Poshome",
     "favoriteNumber": 0
   },
@@ -1723,7 +1723,7 @@ export default [
     "name": "Alison Eaton",
     "city": "Wauhillau",
     "state": "South Carolina",
-    "country": "St Kitts &amp; Nevis",
+    "country": "St Kitts & Nevis",
     "company": "Buzzmaker",
     "favoriteNumber": 7
   },
@@ -1912,7 +1912,7 @@ export default [
     "name": "Leon Rivera",
     "city": "Gibbsville",
     "state": "North Dakota",
-    "country": "Turks &amp; Caicos",
+    "country": "Turks & Caicos",
     "company": "Micronaut",
     "favoriteNumber": 3
   },
@@ -2362,7 +2362,7 @@ export default [
     "name": "Jackson Sherman",
     "city": "Waterview",
     "state": "Arkansas",
-    "country": "Antigua &amp; Barbuda",
+    "country": "Antigua & Barbuda",
     "company": "Viagreat",
     "favoriteNumber": 2
   },
