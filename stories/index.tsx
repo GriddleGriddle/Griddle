@@ -1252,7 +1252,7 @@ storiesOf('Settings', module)
               <input
                 type="checkbox"
                 name={columns[c].id}
-                defaultChecked={!columns[c].isVisible}
+                defaultChecked={columns[c].visible !== false}
                 onChange={onToggle}
               />
               {columns[c].title || columns[c].id}
@@ -1270,7 +1270,14 @@ storiesOf('Settings', module)
     };
 
     return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }} />
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }}>
+        <RowDefinition>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="company" />
+          <ColumnDefinition id="state" />
+          <ColumnDefinition id="country" visible={false} />
+        </RowDefinition>
+      </Griddle>
     );
   })
 
