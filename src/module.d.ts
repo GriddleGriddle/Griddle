@@ -286,12 +286,16 @@ export interface GriddleComponents {
     PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
-export interface GriddleEvents {
-    onFilter?: (filterText: string) => void;
+export interface GriddleActions extends PropertyBag<Function> {
     onSort?: (sortProperties: any) => void;
     onNext?: () => void;
     onPrevious?: () => void;
     onGetPage?: (pageNumber: number) => void;
+    setFilter?: (filterText: string) => void;
+}
+
+export interface GriddleEvents extends GriddleActions {
+    onFilter?: (filterText: string) => void;
     setSortProperties?: (sortProperties: utils.SortProperties) => () => void;
 }
 
@@ -397,7 +401,7 @@ export interface GriddleProps<T> {
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {
 }
 
-export const actions: PropertyBag<Function>;
+export const actions: GriddleActions;
 
 export const constants: PropertyBag<string>;
 
