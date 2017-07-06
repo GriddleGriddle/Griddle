@@ -84,6 +84,8 @@ export class ColumnDefinition extends React.Component<ColumnDefinitionProps, any
 }
 
 export interface CellProps {
+    griddleKey?: number;
+    columnId?: string;
     value?: any;
     onClick?: React.MouseEventHandler<Element>;
     onMouseEnter?: React.MouseEventHandler<Element>;
@@ -290,6 +292,7 @@ export interface GriddleEvents {
     onNext?: () => void;
     onPrevious?: () => void;
     onGetPage?: (pageNumber: number) => void;
+    setSortProperties?: (sortProperties: utils.SortProperties) => () => void;
 }
 
 export interface GriddleSortKey {
@@ -370,6 +373,7 @@ interface SettingsComponentObject {
 
 export interface GriddlePlugin {
     components?: GriddleComponents,
+    events?: GriddleEvents;
     renderProperties?: GriddleRenderProperties;
     initialState?: PropertyBag<any>,
     reducer?: PropertyBag<Reducer>,
