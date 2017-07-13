@@ -522,7 +522,7 @@ storiesOf('Griddle main', module)
     // We could use this entirely if we wanted and connect and map over visible rows but 
     // Using this + tableBody to take advantange of code that Griddle LocalPlugin already has
     const CustomTableComponent = OriginalComponent =>
-      class CustomTableComponent extends React.Component<{}, void> {
+      class CustomTableComponent extends React.Component<{}> {
         static contextTypes = {
           components: React.PropTypes.object
         }
@@ -1130,7 +1130,7 @@ storiesOf('TableContainer', module)
       </tbody>
     );
 
-    class BaseWithContext extends React.Component<any, void> {
+    class BaseWithContext extends React.Component<any> {
       static childContextTypes = {
         components: PropTypes.object.isRequired
       }
@@ -1350,7 +1350,7 @@ storiesOf('Settings', module)
 
 storiesOf('TypeScript', module)
   .add('GriddleComponent accepts expected types', () => {
-    class Custom extends React.Component<{ value }, void> {
+    class Custom extends React.Component<{ value }> {
       render() {
         return this.props.value;
       }
