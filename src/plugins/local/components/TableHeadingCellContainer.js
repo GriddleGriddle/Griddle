@@ -27,6 +27,8 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       customHeadingComponent: customHeadingComponentSelector(state, props),
       cellProperties: cellPropertiesSelector(state, props),
       className: classNamesForComponentSelector(state, 'TableHeadingCell'),
+      sortAscendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellAscending'),
+      sortDescendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellDescending'),
       style: stylesForComponentSelector(state, 'TableHeadingCell'),
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
     }),
