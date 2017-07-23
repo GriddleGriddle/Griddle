@@ -53,7 +53,7 @@ function getRandomFakeData() {
 }
 const GreenLeftSortIconComponent = (props) => (
   <span style={{ color: "#00ff00" }}>
-    {props.icon && <span>{props.icon}</span>}
+    {props.icon && <span className={props.iconClassName}>{props.icon}</span>}
     {props.title}
   </span>
 )
@@ -441,6 +441,10 @@ storiesOf('Griddle main', module)
   .add('with custom heading component', () => {
     return (
       <div>
+        <style type="text/css">{`
+          .griddle-heading-ascending:before { content: '↑'; }
+          .griddle-heading-descending:before { content: '↓'; }
+        `}</style>
         <small>Name should have a green heading component -- sort icon should show up on the left of the title</small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>

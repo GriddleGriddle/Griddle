@@ -6,6 +6,7 @@ import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
 import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
+import { getSortIconProps } from '../utils/sortUtils';
 import { valueOrResult } from '../utils/valueUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
@@ -14,15 +15,6 @@ const DefaultTableHeadingCellContent = ({title, icon}) => (
     { icon && <span>{icon}</span> }
   </span>
 )
-
-function getIcon({sortProperty, sortAscendingIcon, sortDescendingIcon}) {
-  if (sortProperty) {
-    return sortProperty.sortAscending ? sortAscendingIcon : sortDescendingIcon;
-  }
-
-  // return null so we don't render anything if no sortProperty
-  return null;
-}
 
 const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
@@ -39,10 +31,10 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     })
   ),
   mapProps(props => {
-    const icon = getIcon(props);
+    const iconProps = getSortIconProps(props);
     const title = props.customHeadingComponent ?
-      <props.customHeadingComponent {...props.cellProperties.extraData} {...props} icon={icon} /> :
-      <DefaultTableHeadingCellContent title={props.title} icon={icon} />;
+      <props.customHeadingComponent {...props.cellProperties.extraData} {...props} {...iconProps} /> :
+      <DefaultTableHeadingCellContent title={props.title} {...iconProps} />;
     const className = valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
     const style = {
       ...(props.cellProperties.sortable === false || { cursor: 'pointer' }),
@@ -52,7 +44,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     return {
       ...props.cellProperties.extraData,
       ...props,
-      icon,
+      ...iconProps,
       title,
       style,
       className

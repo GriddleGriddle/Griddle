@@ -39,3 +39,23 @@ export function setSortProperties({ setSortColumn, sortProperty, columnId }) {
     setSortColumn(newSortProperty);
   };
 }
+
+export function getSortIconProps(props) {
+  const { sortProperty, sortAscendingIcon, sortDescendingIcon } = props;
+  const { sortAscendingClassName, sortDescendingClassName } = props;
+
+  if (sortProperty) {
+    return sortProperty.sortAscending ?
+    {
+      icon: sortAscendingIcon,
+      iconClassName: sortAscendingClassName,
+    } :
+    {
+      icon: sortDescendingIcon,
+      iconClassName: sortDescendingClassName,
+    };
+  }
+
+  // return null so we don't render anything if no sortProperty
+  return null;
+}
