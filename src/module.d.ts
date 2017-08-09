@@ -53,6 +53,9 @@ export interface ColumnDefinitionProps {
     //The component that should be used instead of the normal title
     customHeadingComponent?: GriddleComponent<TableHeadingCellProps & any>,
 
+    //Can this column be filtered
+    filterable?: boolean,
+
     //Can this column be sorted
     sortable?: boolean,
 

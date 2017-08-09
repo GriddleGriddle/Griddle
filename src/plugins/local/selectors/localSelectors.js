@@ -31,16 +31,23 @@ export const renderPropertiesSelector = state => (state.get('renderProperties'))
 
 export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 
+const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
+
 /** Gets the data filtered by the current filter
  */
 export const filteredDataSelector = createSelector(
   dataSelector,
   filterSelector,
-  (data, filter) => {
+  columnPropertiesSelector,
+  (data, filter, columnProperties) => {
     const filterToLower = filter.toLowerCase();
     return data.filter(row =>
       row.keySeq()
         .some((key) => {
+          const filterable = columnProperties.getIn([key, 'filterable']);
+          if (filterable === false) {
+            return false;
+          }
           const value = row.get(key);
           return value &&
             value.toString().toLowerCase().indexOf(filterToLower) > -1;
