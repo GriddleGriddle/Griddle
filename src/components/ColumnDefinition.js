@@ -27,6 +27,9 @@ export default class ColumnDefinition extends Component {
     //The component that should be used instead of the normal title
     customHeadingComponent: PropTypes.object,
 
+    //Can this column be filtered
+    filterable: PropTypes.bool,
+
     //Can this column be sorted
     sortable: PropTypes.bool,
 
