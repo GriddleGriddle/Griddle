@@ -40,6 +40,10 @@ export const filteredDataSelector = createSelector(
   filterSelector,
   columnPropertiesSelector,
   (data, filter, columnProperties) => {
+    if (!filter) {
+      return data;
+    }
+
     const filterToLower = filter.toLowerCase();
     return data.filter(row =>
       row.keySeq()
