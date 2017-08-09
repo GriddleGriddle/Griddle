@@ -37,12 +37,14 @@ export const filteredDataSelector = createSelector(
   dataSelector,
   filterSelector,
   (data, filter) => {
-    return data.filter(row  => {
-      return Object.keys(row.toJSON())
-        .some(key => {
-          return row.get(key) && row.get(key).toString().toLowerCase().indexOf(filter.toLowerCase()) > -1
-        })
-      })
+    const filterToLower = filter.toLowerCase();
+    return data.filter(row =>
+      row.keySeq()
+        .some((key) => {
+          const value = row.get(key);
+          return value &&
+            value.toString().toLowerCase().indexOf(filterToLower) > -1;
+        }));
   }
 );
 
