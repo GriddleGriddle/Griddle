@@ -242,6 +242,27 @@ test('filteredDataSelector filters data when filter string present', test => {
   ]);
 });
 
+test('filteredDataSelector filters data respecting filterable', test => {
+  const state = new Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        name: {
+          filterable: false,
+        },
+      }
+    },
+    filter: 'H',
+    data: [
+      { id: '1', name: 'luke skywalker', weapon: 'light saber' },
+      { id: '2', name: 'han solo', weapon: 'blaster' }
+    ]
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker', weapon: 'light saber' }
+  ]);
+});
+
 test('sortedDataSelector uses default sort if no sort method specifed for column', test => {
   const state = new Immutable.fromJS({
     data: [

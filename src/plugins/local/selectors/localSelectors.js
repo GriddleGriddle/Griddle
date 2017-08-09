@@ -48,7 +48,7 @@ export const filteredDataSelector = createSelector(
     return data.filter(row =>
       row.keySeq()
         .some((key) => {
-          const filterable = columnProperties.getIn([key, 'filterable']);
+          const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
           if (filterable === false) {
             return false;
           }
