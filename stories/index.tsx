@@ -7,7 +7,9 @@ import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { connect } from 'react-redux';
+import { Provider } from 'react-redux';
+import { connect } from 'react-redux-custom-store';
+import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
@@ -71,6 +73,19 @@ const EnhanceWithRowData = connect((state, props) => ({
 }));
 
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
+
+function testReducer(state = { count: 1}, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { ...state, count: state.count + 1};
+    case 'DECREMENT':
+      return { ...state, count: state.count -1};
+    default:
+      return state;
+  }
+}
+
+let testStore = createStore(testReducer);
 
 storiesOf('Griddle main', module)
   .add('with local', () => {
@@ -699,6 +714,91 @@ storiesOf('Griddle main', module)
     );
   })
 
+  .add('with child of another redux container', () => {
+    // basically the demo redux stuff
+    const countSelector = (state) => state.count;
+
+    const CountComponent = (props) => console.log('PROPS', props) || (
+      <div>
+        {props.count}
+        <button type="button" onClick={props.increment}>
+          +
+        </button>
+        <button type="button" onClick={props.decrement}>
+          -
+        </button>
+      </div>
+    )
+
+    // should get count from other store
+    const ConnectedComponent = connect(
+      state => ({
+        count: countSelector(state)
+      }),
+      (dispatch) => ({
+        increment: () => {
+          dispatch({
+            type: 'INCREMENT'
+          })
+        },
+        decrement: () => {
+          dispatch({
+            type: 'DECREMENT'
+          })
+        }
+      })
+    )(CountComponent);
+
+    class Other extends React.Component {
+      render() {
+        console.log('OTHER', this.props)
+        return (
+          <ConnectedComponent
+            {...this.props}
+            store={testStore}
+          />
+        );
+      }
+    }
+
+    class ProvidedComponent extends React.Component { 
+      render() {
+
+        return (
+          <div>
+            <Other />
+            <Griddle data={fakeData} plugins={[LocalPlugin]}>
+              <RowDefinition>
+                <ColumnDefinition id="name" />
+                <ColumnDefinition id="state" />
+                <ColumnDefinition id="customCount" customComponent={Other}/>
+              </RowDefinition>
+            </Griddle>
+          </div>
+        )
+      }
+    }
+
+    return (
+      <div>
+        <Provider store={testStore}>
+          <div>
+            <h2>This</h2>
+            <Griddle data={fakeData} plugins={[LocalPlugin]} storeName="griddleStore">
+              <RowDefinition>
+                <ColumnDefinition id="name" />
+                <ColumnDefinition id="state" />
+                <ColumnDefinition id="customCount" customComponent={ConnectedComponent}/>
+              </RowDefinition>
+            </Griddle>
+
+            <h2>Should look like this...</h2>
+            <ProvidedComponent />
+          </div>
+        </Provider>
+      </div>
+    );
+  })
 storiesOf('Plugins', module)
   .add('styleConfig', () => {
     const stylePlugin = {

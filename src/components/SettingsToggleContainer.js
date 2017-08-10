@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from './griddleConnect';
 import compose from 'recompose/compose';
 import { textSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 import { toggleSettings as toggleSettingsAction } from '../actions';

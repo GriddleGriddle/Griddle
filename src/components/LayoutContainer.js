@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect } from './griddleConnect';
 import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
@@ -9,7 +9,7 @@ import { classNamesForComponentSelector, stylesForComponentSelector } from '../s
 
 const EnhancedLayout = OriginalComponent => compose(
   getContext({
-    components: PropTypes.object
+    components: PropTypes.object,
   }),
   connect(
     (state, props) => ({
@@ -25,7 +25,7 @@ const EnhancedLayout = OriginalComponent => compose(
     Style: props.components.Style,
     className: props.className,
     style: props.style,
-  }))
+  })),
 )(props => (
   <OriginalComponent
     {...props}
