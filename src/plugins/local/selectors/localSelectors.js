@@ -27,6 +27,8 @@ export const filterSelector = state => (state.get('filter') || '');
 
 export const sortPropertiesSelector = state => (state.get('sortProperties'));
 
+export const sortMethodSelector = state => state.get('sortMethod');
+
 export const renderPropertiesSelector = state => (state.get('renderProperties'));
 
 export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
@@ -105,13 +107,14 @@ export const sortedDataSelector = createSelector(
   filteredDataSelector,
   sortPropertiesSelector,
   renderPropertiesSelector,
-  (filteredData, sortProperties, renderProperties) => {
+  sortMethodSelector,
+  (filteredData, sortProperties, renderProperties, sortMethod = defaultSort) => {
     if (!sortProperties) { return filteredData; }
 
     return sortProperties.reverse().reduce((data, sortColumnOptions) => {
       const columnProperties = renderProperties && renderProperties.get('columnProperties').get(sortColumnOptions.get('id'));
 
-      const sortFunction = (columnProperties && columnProperties.get('sortMethod')) || defaultSort;
+      const sortFunction = (columnProperties && columnProperties.get('sortMethod')) || sortMethod;
 
       return sortFunction(data, sortColumnOptions.get('id'), sortColumnOptions.get('sortAscending'));
     }, filteredData);

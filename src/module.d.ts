@@ -379,6 +379,7 @@ interface GriddleExtensibility {
 
 interface GriddleInitialState {
     enableSettings?: boolean;
+    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
     textProperties?: {
       settingsToggle?: string,
     }

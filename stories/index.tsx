@@ -164,6 +164,19 @@ storiesOf('Griddle main', module)
     )
   })
 
+  .add('with custom default sort', () => {
+    return (
+      <div>
+      <small>Sorts all columns by second character</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]} sortMethod={sortBySecondCharacter}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
   .add('with custom sort on name', () => {
     return (
       <div>
