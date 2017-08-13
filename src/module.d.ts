@@ -59,6 +59,9 @@ export interface ColumnDefinitionProps {
     //Can this column be sorted
     sortable?: boolean,
 
+    //What sort method this column uses
+    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
+
     // TODO: Unused?
     //What sort type this column uses - magic string :shame:
     sortType?: string,
@@ -345,24 +348,10 @@ export interface GriddlePageProperties {
     recordCount?: number;
 }
 
-interface RowRenderProperties {
-    rowKey?: string;
-    childColumnName?: string;
-    cssClassName?: string | ((props: any) => string);
-    props?: {
-        children: components.ColumnDefinition[];
-    };
+interface RowRenderProperties extends components.RowDefinitionProps {
 }
 
-interface ColumnRenderProperties {
-    id: string;
-    title?: string;
-    isMetadata?: boolean;
-    order?: number;
-    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
-    visible?: boolean;
-    customComponent?: GriddleComponent<any>;
-    customHeadingComponent?: GriddleComponent<any>;
+interface ColumnRenderProperties extends components.ColumnDefinitionProps {
 }
 
 export interface GriddleRenderProperties {
