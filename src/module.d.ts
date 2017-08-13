@@ -367,27 +367,34 @@ interface SettingsComponentObject {
     component?: GriddleComponent<any>;
 }
 
-export interface GriddlePlugin {
+interface GriddleExtensibility {
     components?: GriddleComponents,
     events?: GriddleEvents;
-    renderProperties?: GriddleRenderProperties;
-    initialState?: PropertyBag<any>,
     reducer?: PropertyBag<Reducer>,
+    renderProperties?: GriddleRenderProperties;
     selectors?: PropertyBag<Selector>,
     settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
     styleConfig?: GriddleStyleConfig,
 }
 
-export interface GriddleProps<T> {
+interface GriddleInitialState {
+    enableSettings?: boolean;
+    textProperties?: {
+      settingsToggle?: string,
+    }
+
+    [x: string]: any;
+}
+
+export interface GriddlePlugin extends GriddleExtensibility {
+    initialState?: GriddleInitialState;
+}
+
+export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
     plugins?: GriddlePlugin[];
     data?: T[];
-    events?: GriddleEvents;
     sortProperties?: GriddleSortKey[];
-    styleConfig?: GriddleStyleConfig;
     pageProperties?: GriddlePageProperties;
-    components?: GriddleComponents;
-    renderProperties?: GriddleRenderProperties;
-    settingsComponentObjects?: PropertyBag<SettingsComponentObject>;
 }
 
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {

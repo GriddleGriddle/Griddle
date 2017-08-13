@@ -1214,6 +1214,20 @@ storiesOf('Settings', module)
       <Settings settingsComponents={components} />
     );
   })
+  .add('disable settings', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}
+        enableSettings={false}
+        />
+    );
+  })
+  .add('change settings toggle button text', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}
+        textProperties={{ settingsToggle: 'Toggle!' }}
+        />
+    );
+  })
   .add('remove built-in settings', () => {
     const plugin = {
       components: {
