@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 
 /// This method appends options onto existing connect parameters
-const mergeConnectParametersWithOptions = (originalConnect, newOptions) => {
+export const mergeConnectParametersWithOptions = (originalConnect, newOptions) => {
   const [mapStateFromProps, mapDispatchFromProps, mergeProps, options] = originalConnect;
 
   return [
