@@ -381,6 +381,8 @@ interface GriddleInitialState {
     enableSettings?: boolean;
     sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
     textProperties?: {
+      next?: string,
+      previous?: string,
       settingsToggle?: string,
     }
 

@@ -1381,6 +1381,12 @@ storiesOf('Settings', module)
           </div>
         ),
       },
+      initialState: {
+        textProperties: {
+          next: '▶',
+          previous: '◀',
+        },
+      },
     };
 
     return (

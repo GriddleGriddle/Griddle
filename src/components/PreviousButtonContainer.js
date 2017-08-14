@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import { textSelector, hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const enhance = OriginalComponent => connect((state, props) => ({
-  text: 'Previous', // TODO: Get this from the store
+  text: textSelector(state, { key: 'previous' }),
   hasPrevious: hasPreviousSelector(state, props),
   className: classNamesForComponentSelector(state, 'PreviousButton'),
   style: stylesForComponentSelector(state, 'PreviousButton'),

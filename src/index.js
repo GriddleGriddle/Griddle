@@ -114,6 +114,8 @@ class Griddle extends Component {
       {
         enableSettings: true,
         textProperties: {
+          next: 'Next',
+          previous: 'Previous',
           settingsToggle: 'Settings'
         },
       },

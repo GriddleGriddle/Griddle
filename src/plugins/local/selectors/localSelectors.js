@@ -193,3 +193,4 @@ export const classNamesForComponentSelector = dataSelectors.classNamesForCompone
 
 export const rowPropertiesSelector = dataSelectors.rowPropertiesSelector;
 export const cellPropertiesSelector = dataSelectors.cellPropertiesSelector;
+export const textSelector = dataSelectors.textSelector;
