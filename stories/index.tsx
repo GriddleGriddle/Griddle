@@ -7,8 +7,7 @@ import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { Provider } from 'react-redux';
-import { connect } from 'react-redux-custom-store';
+import { Provider, connect } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
@@ -749,40 +748,10 @@ storiesOf('Griddle main', module)
       })
     )(CountComponent);
 
-    class Other extends React.Component {
-      render() {
-        return (
-          <ConnectedComponent
-            {...this.props}
-            store={testStore}
-          />
-        );
-      }
-    }
-
-    class ProvidedComponent extends React.Component { 
-      render() {
-
-        return (
-          <div>
-            <Other />
-            <Griddle data={fakeData} plugins={[LocalPlugin]}>
-              <RowDefinition>
-                <ColumnDefinition id="name" />
-                <ColumnDefinition id="state" />
-                <ColumnDefinition id="customCount" customComponent={Other}/>
-              </RowDefinition>
-            </Griddle>
-          </div>
-        )
-      }
-    }
-
     return (
       <div>
         <Provider store={testStore}>
           <div>
-            <h2>This</h2>
             <Griddle data={fakeData} plugins={[LocalPlugin]} storeKey="griddleStore">
               <RowDefinition>
                 <ColumnDefinition id="name" />
@@ -791,8 +760,8 @@ storiesOf('Griddle main', module)
               </RowDefinition>
             </Griddle>
 
-            <h2>Should look like this...</h2>
-            <ProvidedComponent />
+          Component outside of Griddle that's sharing state
+          <ConnectedComponent />
           </div>
         </Provider>
       </div>
