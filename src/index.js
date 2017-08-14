@@ -60,7 +60,7 @@ class Griddle extends Component {
     settingsComponentObjects: PropTypes.object,
     events: PropTypes.object,
     selectors: PropTypes.object,
-    storeName: PropTypes.string,
+    storeKey: PropTypes.string,
   }
 
   constructor(props) {
@@ -77,7 +77,7 @@ class Griddle extends Component {
       components:userComponents,
       renderProperties:userRenderProperties={},
       settingsComponentObjects:userSettingsComponentObjects,
-      storeName = 'store',
+      storeKey = 'store',
     } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
@@ -130,7 +130,7 @@ class Griddle extends Component {
       initialState
     );
 
-    this.provider = createProvider(storeName);
+    this.provider = createProvider(storeKey);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -139,8 +139,8 @@ class Griddle extends Component {
     this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
   }
 
-  getStoreName = () => {
-    return this.props.storeName || 'store';
+  getStoreKey = () => {
+    return this.props.storeKey || 'store';
   }
 
   getChildContext() {
@@ -149,7 +149,7 @@ class Griddle extends Component {
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
       selectors: this.selectors,
-      storeName: this.getStoreName(),
+      storeKey: this.getStoreKey(),
     };
   }
 
