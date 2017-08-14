@@ -90,11 +90,11 @@ storiesOf('Griddle main', module)
 
     // don't do things this way - fine for example storybook
     const events = {
-      onFilter: () => console.log('onFilter'),
-      onSort: () => console.log('onSort'),
+      onFilter: filter => console.log('onFilter', filter),
+      onSort: sortProperties => console.log('onSort', sortProperties),
       onNext: () => console.log('onNext'),
       onPrevious: () => console.log('onPrevious'),
-      onGetPage: () => console.log('onGetPage')
+      onGetPage: pageNumber => console.log('onGetPage', pageNumber),
     }
 
     return (
