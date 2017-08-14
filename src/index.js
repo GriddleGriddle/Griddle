@@ -1,6 +1,6 @@
 import { createStore, combineReducers, bindActionCreators } from 'redux';
 import Immutable from 'immutable';
-import { createProvider, connect } from 'react-redux-custom-store';
+import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
