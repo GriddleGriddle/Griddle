@@ -65,7 +65,6 @@
     "max-safe-integer": "^1.0.0",
     "prop-types": "^15.5.8",
     "react-redux": "^5.0.6",
-    "react-redux-custom-store": "^1.0.0",
     "recompose": "^0.21.2",
     "redux": "^3.5.2",
     "reselect": "^2.5.3"

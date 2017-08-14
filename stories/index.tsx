@@ -718,7 +718,7 @@ storiesOf('Griddle main', module)
     // basically the demo redux stuff
     const countSelector = (state) => state.count;
 
-    const CountComponent = (props) => console.log('PROPS', props) || (
+    const CountComponent = (props) => (
       <div>
         {props.count}
         <button type="button" onClick={props.increment}>
@@ -751,7 +751,6 @@ storiesOf('Griddle main', module)
 
     class Other extends React.Component {
       render() {
-        console.log('OTHER', this.props)
         return (
           <ConnectedComponent
             {...this.props}
@@ -784,7 +783,7 @@ storiesOf('Griddle main', module)
         <Provider store={testStore}>
           <div>
             <h2>This</h2>
-            <Griddle data={fakeData} plugins={[LocalPlugin]} storeName="griddleStore">
+            <Griddle data={fakeData} plugins={[LocalPlugin]} storeKey="griddleStore">
               <RowDefinition>
                 <ColumnDefinition id="name" />
                 <ColumnDefinition id="state" />
