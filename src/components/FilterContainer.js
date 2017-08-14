@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from './griddleConnect';
+import { connect } from '../utils/griddleConnect';
 
 import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 import { setFilter } from '../actions';
