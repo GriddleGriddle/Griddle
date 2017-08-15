@@ -7,7 +7,8 @@ import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { connect } from 'react-redux';
+import { Provider, connect } from 'react-redux';
+import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
@@ -72,6 +73,19 @@ const EnhanceWithRowData = connect((state, props) => ({
 
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
 
+function testReducer(state = { count: 1}, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { ...state, count: state.count + 1};
+    case 'DECREMENT':
+      return { ...state, count: state.count -1};
+    default:
+      return state;
+  }
+}
+
+let testStore = createStore(testReducer);
+
 storiesOf('Griddle main', module)
   .add('with local', () => {
     return (
@@ -90,11 +104,11 @@ storiesOf('Griddle main', module)
 
     // don't do things this way - fine for example storybook
     const events = {
-      onFilter: () => console.log('onFilter'),
-      onSort: () => console.log('onSort'),
+      onFilter: filter => console.log('onFilter', filter),
+      onSort: sortProperties => console.log('onSort', sortProperties),
       onNext: () => console.log('onNext'),
       onPrevious: () => console.log('onPrevious'),
-      onGetPage: () => console.log('onGetPage')
+      onGetPage: pageNumber => console.log('onGetPage', pageNumber),
     }
 
     return (
@@ -712,6 +726,60 @@ storiesOf('Griddle main', module)
     );
   })
 
+  .add('with child of another redux container', () => {
+    // basically the demo redux stuff
+    const countSelector = (state) => state.count;
+
+    const CountComponent = (props) => (
+      <div>
+        {props.count}
+        <button type="button" onClick={props.increment}>
+          +
+        </button>
+        <button type="button" onClick={props.decrement}>
+          -
+        </button>
+      </div>
+    )
+
+    // should get count from other store
+    const ConnectedComponent = connect(
+      state => ({
+        count: countSelector(state)
+      }),
+      (dispatch) => ({
+        increment: () => {
+          dispatch({
+            type: 'INCREMENT'
+          })
+        },
+        decrement: () => {
+          dispatch({
+            type: 'DECREMENT'
+          })
+        }
+      })
+    )(CountComponent);
+
+    return (
+      <div>
+        <Provider store={testStore}>
+          <div>
+            <Griddle data={fakeData} plugins={[LocalPlugin]} storeKey="griddleStore">
+              <RowDefinition>
+                <ColumnDefinition id="name" />
+                <ColumnDefinition id="state" />
+                <ColumnDefinition id="customCount" customComponent={ConnectedComponent}/>
+              </RowDefinition>
+            </Griddle>
+
+          Component outside of Griddle that's sharing state
+          <ConnectedComponent />
+          </div>
+        </Provider>
+      </div>
+    );
+  })
 storiesOf('Plugins', module)
   .add('styleConfig', () => {
     const stylePlugin = {

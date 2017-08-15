@@ -398,6 +398,7 @@ export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
     data?: T[];
     sortProperties?: GriddleSortKey[];
     pageProperties?: GriddlePageProperties;
+    storeKey?: string;
 }
 
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {
