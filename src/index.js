@@ -1,6 +1,6 @@
 import { createStore, combineReducers, bindActionCreators } from 'redux';
 import Immutable from 'immutable';
-import { connect, Provider } from 'react-redux';
+import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -60,12 +60,25 @@ class Griddle extends Component {
     settingsComponentObjects: PropTypes.object,
     events: PropTypes.object,
     selectors: PropTypes.object,
+    storeKey: PropTypes.string,
   }
 
   constructor(props) {
     super(props);
 
-    const { plugins=[], data, children:rowPropertiesComponent, events={}, sortProperties={}, styleConfig={}, pageProperties:importedPageProperties, components:userComponents, renderProperties:userRenderProperties={}, settingsComponentObjects:userSettingsComponentObjects } = props;
+    const {
+      plugins=[],
+      data,
+      children:rowPropertiesComponent,
+      events={},
+      sortProperties={},
+      styleConfig={},
+      pageProperties:importedPageProperties,
+      components:userComponents,
+      renderProperties:userRenderProperties={},
+      settingsComponentObjects:userSettingsComponentObjects,
+      storeKey = 'store',
+    } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
@@ -116,6 +129,8 @@ class Griddle extends Component {
       reducers,
       initialState
     );
+
+    this.provider = createProvider(storeKey);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,20 +139,25 @@ class Griddle extends Component {
     this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
   }
 
+  getStoreKey = () => {
+    return this.props.storeKey || 'store';
+  }
+
   getChildContext() {
     return {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
       selectors: this.selectors,
+      storeKey: this.getStoreKey(),
     };
   }
 
   render() {
     return (
-      <Provider store={this.store}>
+      <this.provider store={this.store}>
         <this.components.Layout />
-      </Provider>
+      </this.provider>
     )
 
   }
