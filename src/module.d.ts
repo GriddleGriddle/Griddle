@@ -59,6 +59,9 @@ export interface ColumnDefinitionProps {
     //Can this column be sorted
     sortable?: boolean,
 
+    //What sort method this column uses
+    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
+
     // TODO: Unused?
     //What sort type this column uses - magic string :shame:
     sortType?: string,
@@ -345,24 +348,10 @@ export interface GriddlePageProperties {
     recordCount?: number;
 }
 
-interface RowRenderProperties {
-    rowKey?: string;
-    childColumnName?: string;
-    cssClassName?: string | ((props: any) => string);
-    props?: {
-        children: components.ColumnDefinition[];
-    };
+interface RowRenderProperties extends components.RowDefinitionProps {
 }
 
-interface ColumnRenderProperties {
-    id: string;
-    title?: string;
-    isMetadata?: boolean;
-    order?: number;
-    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
-    visible?: boolean;
-    customComponent?: GriddleComponent<any>;
-    customHeadingComponent?: GriddleComponent<any>;
+interface ColumnRenderProperties extends components.ColumnDefinitionProps {
 }
 
 export interface GriddleRenderProperties {
@@ -378,27 +367,37 @@ interface SettingsComponentObject {
     component?: GriddleComponent<any>;
 }
 
-export interface GriddlePlugin {
+interface GriddleExtensibility {
     components?: GriddleComponents,
     events?: GriddleEvents;
-    renderProperties?: GriddleRenderProperties;
-    initialState?: PropertyBag<any>,
     reducer?: PropertyBag<Reducer>,
+    renderProperties?: GriddleRenderProperties;
     selectors?: PropertyBag<Selector>,
     settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
     styleConfig?: GriddleStyleConfig,
 }
 
-export interface GriddleProps<T> {
+interface GriddleInitialState {
+    enableSettings?: boolean;
+    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
+    textProperties?: {
+      next?: string,
+      previous?: string,
+      settingsToggle?: string,
+    }
+
+    [x: string]: any;
+}
+
+export interface GriddlePlugin extends GriddleExtensibility {
+    initialState?: GriddleInitialState;
+}
+
+export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
     plugins?: GriddlePlugin[];
     data?: T[];
-    events?: GriddleEvents;
     sortProperties?: GriddleSortKey[];
-    styleConfig?: GriddleStyleConfig;
     pageProperties?: GriddlePageProperties;
-    components?: GriddleComponents;
-    renderProperties?: GriddleRenderProperties;
-    settingsComponentObjects?: PropertyBag<SettingsComponentObject>;
     storeKey?: string;
 }
 

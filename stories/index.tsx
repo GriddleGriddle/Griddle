@@ -178,6 +178,19 @@ storiesOf('Griddle main', module)
     )
   })
 
+  .add('with custom default sort', () => {
+    return (
+      <div>
+      <small>Sorts all columns by second character</small>
+      <Griddle data={fakeData} plugins={[LocalPlugin]} sortMethod={sortBySecondCharacter}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} />
+          <ColumnDefinition id="state" order={1} />
+        </RowDefinition>
+      </Griddle>
+      </div>
+    );
+  })
   .add('with custom sort on name', () => {
     return (
       <div>
@@ -1282,6 +1295,20 @@ storiesOf('Settings', module)
       <Settings settingsComponents={components} />
     );
   })
+  .add('disable settings', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}
+        enableSettings={false}
+        />
+    );
+  })
+  .add('change settings toggle button text', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}
+        textProperties={{ settingsToggle: 'Toggle!' }}
+        />
+    );
+  })
   .add('remove built-in settings', () => {
     const plugin = {
       components: {
@@ -1421,6 +1448,12 @@ storiesOf('Settings', module)
             {Next && <Next /> }
           </div>
         ),
+      },
+      initialState: {
+        textProperties: {
+          next: '▶',
+          previous: '◀',
+        },
       },
     };
 

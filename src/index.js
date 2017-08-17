@@ -78,6 +78,7 @@ class Griddle extends Component {
       renderProperties:userRenderProperties={},
       settingsComponentObjects:userSettingsComponentObjects,
       storeKey = 'store',
+      ...userInitialState
     } = props;
 
     const rowProperties = getRowProperties(rowPropertiesComponent);
@@ -111,19 +112,25 @@ class Griddle extends Component {
     }, ...plugins.map(p => p.renderProperties), userRenderProperties);
 
     // TODO: Make this its own method
-    const initialState = plugins.reduce((combined, plugin) => {
-      return !!plugin.initialState ? { ...combined, ...plugin.initialState } : combined;
-    }, {
-      renderProperties,
-      data,
-      enableSettings: true,
-      pageProperties,
-      sortProperties,
-      textProperties: {
-        settingsToggle: 'Settings'
+    const initialState = _.merge(
+      {
+        enableSettings: true,
+        textProperties: {
+          next: 'Next',
+          previous: 'Previous',
+          settingsToggle: 'Settings'
+        },
       },
-      styleConfig: mergedStyleConfig,
-    });
+      ...plugins.map(p => p.initialState),
+      userInitialState,
+      {
+        data,
+        pageProperties,
+        renderProperties,
+        sortProperties,
+        styleConfig: mergedStyleConfig,
+      }
+    );
 
     this.store = createStore(
       reducers,

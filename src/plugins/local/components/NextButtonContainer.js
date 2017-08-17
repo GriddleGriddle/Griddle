@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from '../../../utils/griddleConnect';
-import { createStructuredSelector } from 'reselect';
 
-import { hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
+import { textSelector, hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
 import { getNext } from '../../../actions';
 
 const enhance = OriginalComponent => connect(state => ({
+  text: textSelector(state, { key: 'next' }),
   hasNext: hasNextSelector(state),
   className: classNamesForComponentSelector(state, 'NextButton'),
   style: stylesForComponentSelector(state, 'NextButton'),
@@ -13,6 +13,6 @@ const enhance = OriginalComponent => connect(state => ({
   {
     getNext
   }
-)(props => <OriginalComponent {...props} onClick={props.getNext} text="Next" />);
+)(props => <OriginalComponent {...props} onClick={props.getNext} />);
 
 export default enhance;
