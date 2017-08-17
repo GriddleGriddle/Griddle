@@ -24,10 +24,12 @@ const ComposedTableBodyContainer = OriginalComponent => compose(
       ...otherProps,
     };
   }),
-)(({Row, visibleRowIds }) => (
+)(({Row, visibleRowIds, style, className}) => (
   <OriginalComponent
     rowIds={visibleRowIds}
     Row={Row}
+    style={style}
+    className={className}
   />
 ));
 
