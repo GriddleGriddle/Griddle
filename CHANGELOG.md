@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.8.0] - 2017-08-20
+- Add custom store
+- Fix for table styles
+- Updates to pull more information from textProperties
+- Better sorting, filtering
+- Add components.Style for better plugins
+- Various bug fixes and improvements
+- Thanks @JesseFarebro, @dahlbyk, @Jermorin, @andreme
+
 ## [1.5.0] - 2017-05-08
 - Update to PropTypes library instead of using deprecated React version
 - Respect sortable columns
