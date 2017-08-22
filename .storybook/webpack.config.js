@@ -1,3 +1,4 @@
+const failPlugin = require('webpack-fail-plugin');
 const path = require("path");
 const include = path.resolve(__dirname, '../');
 
@@ -15,7 +16,7 @@ module.exports = {
     filename: include + '/dist/examples/storybook.js'
   },
   plugins: [
-    // your custom plugins
+    failPlugin
   ],
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
