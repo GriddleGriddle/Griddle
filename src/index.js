@@ -136,7 +136,7 @@ class Griddle extends Component {
     this.store = createStore(
       reducers,
       initialState,
-      applyMiddleware(...reduxMiddleware)
+      applyMiddleware(..._.compact(plugins.map(p => p.reduxMiddleware)), ...reduxMiddleware) 
     );
 
     this.provider = createProvider(storeKey);
