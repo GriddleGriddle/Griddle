@@ -19,6 +19,7 @@
     "build-storybook": "build-storybook",
     "build": "npm run clean-dist && npm run build-modules && npm run build-umd && npm run build-ts",
     "clean-dist": "rimraf dist",
+    "build-examples": "webpack --config .storybook/webpack.config.js",
     "build-ts": "cp src/module.d.ts dist/module/",
     "build-umd": "webpack --config webpack.config.js",
     "build-modules": "cross-env BABEL_ENV=build babel src --out-dir dist/module ",
