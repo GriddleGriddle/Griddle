@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactRedux from 'react-redux';
+import { ActionCreator } from 'redux';
 
 interface PropertyBag<T> {
     [propName: string]: T;
@@ -293,7 +294,7 @@ export interface GriddleComponents {
     PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
-export interface GriddleActions extends PropertyBag<Function> {
+export interface GriddleActions extends PropertyBag<ActionCreator<any>> {
     onSort?: (sortProperties: any) => void;
     onNext?: () => void;
     onPrevious?: () => void;
