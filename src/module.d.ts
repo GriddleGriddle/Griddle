@@ -419,15 +419,7 @@ export namespace utils {
     const dataUtils: PropertyBag<Function>;
     const rowUtils: PropertyBag<Function>;
 
-    // TODO: Not a fan of this but was trying to avoid 
-    // wholesale copying the 11 or so types out of definitely-typed's connect
-    // not immediately seeing how to say for this thing, just reference their types
-    function connect(
-        mapStateToProps?: ReactRedux.MapStateToPropsParam<any, any>,
-        mapDispatchToProps?: ReactRedux.MapDispatchToPropsParam<any, any>,
-        mergeProps?: ReactRedux.MergeProps<any, any, any, any>,
-        options?: ReactRedux.Options
-    ) : ReactRedux.InferableComponentEnhancerWithProps<any, any>;
+    export const connect : typeof ReactRedux.connect;
 
     interface SortProperties{
       setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;
