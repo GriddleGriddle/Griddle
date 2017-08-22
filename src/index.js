@@ -1,4 +1,4 @@
-import { createStore, combineReducers, bindActionCreators } from 'redux';
+import { createStore, combineReducers, bindActionCreators, applyMiddleware } from 'redux';
 import Immutable from 'immutable';
 import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
@@ -78,6 +78,7 @@ class Griddle extends Component {
       renderProperties:userRenderProperties={},
       settingsComponentObjects:userSettingsComponentObjects,
       storeKey = 'store',
+      reduxMiddleware = [],
       ...userInitialState
     } = props;
 
@@ -134,7 +135,8 @@ class Griddle extends Component {
 
     this.store = createStore(
       reducers,
-      initialState
+      initialState,
+      applyMiddleware(...reduxMiddleware)
     );
 
     this.provider = createProvider(storeKey);
