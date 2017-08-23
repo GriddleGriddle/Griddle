@@ -301,3 +301,18 @@ test('visibleRowIds gets griddleKey from data', (assert) => {
 
   assert.deepEqual(selectors.visibleRowIdsSelector(state), new Immutable.List([2, 4, 6]));
 });
+
+test('rowDataSelector gets row data', (assert) => {
+  const state = new Immutable.fromJS({
+    data: [
+      { griddleKey: 2, id: 2 },
+      { griddleKey: 6, id: 1 },
+    ],
+    lookup: {
+      "2": 0,
+      "6": 1,
+    },
+  });
+
+  assert.deepEqual(selectors.rowDataSelector(state, { griddleKey: 6 }), { griddleKey: 6, id: 1 });
+});

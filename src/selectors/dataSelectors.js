@@ -271,10 +271,10 @@ export const cellValueSelector = (state, props) => {
   }
 };
 
-// TODO: Needs tests and jsdoc
+// TODO: Needs jsdoc
 export const rowDataSelector = (state, { griddleKey }) => {
-  return state.get('data')
-    .find(r => r.get('griddleKey') === griddleKey).toJSON();
+  const rowIndex = state.getIn(['lookup', griddleKey.toString()]);
+  return state.get('data').get(rowIndex).toJSON();
 };
 
 /** Gets the row render properties

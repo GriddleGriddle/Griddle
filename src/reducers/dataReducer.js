@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import _ from 'lodash';
 
 /*
  * State
@@ -134,12 +133,10 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 }
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
-  const transformedData = transformData(action.newState.data, state.get('renderProperties').toJSON());
-  const data = transformedData.data;
-  const lookup = transformedData.lookup;
-  const newState = _.omit(action.newState, data);
+  const { data, ...newState } = action.newState;
+  const transformedData = transformData(data, state.get('renderProperties').toJSON());
 
   return state.mergeDeep(Immutable.fromJS(newState))
-    .set('data', data)
-    .set('lookup', lookup);
+    .set('data', transformedData.data)
+    .set('lookup', transformedData.lookup);
 }
