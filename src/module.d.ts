@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect as originalConnect } from 'react-redux';
 import { ActionCreator } from 'redux';
 
 interface PropertyBag<T> {
@@ -420,7 +420,7 @@ export namespace utils {
     const dataUtils: PropertyBag<Function>;
     const rowUtils: PropertyBag<Function>;
 
-    export const connect : typeof ReactRedux.connect;
+    const connect : typeof originalConnect;
 
     interface SortProperties{
       setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;
