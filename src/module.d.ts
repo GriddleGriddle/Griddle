@@ -293,7 +293,7 @@ export interface GriddleComponents {
     PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
-export interface GriddleActions extends PropertyBag<Function> {
+export interface GriddleActions extends PropertyBag<Function | undefined> {
     onSort?: (sortProperties: any) => void;
     onNext?: () => void;
     onPrevious?: () => void;
