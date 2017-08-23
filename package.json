@@ -14,6 +14,7 @@
   "scripts": {
     "start": "start-storybook -p 6006",
     "test": "ava",
+    "check-ts": "tsc --strict src/module.d.ts",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
