@@ -392,6 +392,7 @@ interface GriddleInitialState {
 
 export interface GriddlePlugin extends GriddleExtensibility {
     initialState?: GriddleInitialState;
+    reduxMiddleware?: ReactRedux.Middleware[];
 }
 
 export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
