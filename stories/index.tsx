@@ -7,12 +7,13 @@ import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
 import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition } from '../src/module';
+const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 

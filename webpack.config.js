@@ -1,5 +1,6 @@
 var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 var webpack = require('webpack');
+const failPlugin = require('webpack-fail-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -29,6 +30,7 @@ module.exports = {
     ]
   },
   plugins: [
+    failPlugin,
     new LodashModuleReplacementPlugin,
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.optimize.UglifyJsPlugin

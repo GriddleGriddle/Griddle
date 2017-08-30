@@ -1,3 +1,4 @@
+const failPlugin = require('webpack-fail-plugin');
 const path = require("path");
 const include = path.resolve(__dirname, '../');
 
@@ -10,8 +11,12 @@ const include = path.resolve(__dirname, '../');
 // to "React Create App". This only has babel loader to load JavaScript.
 
 module.exports = {
+  entry: './stories/index.tsx',
+  output: {
+    filename: include + '/dist/examples/storybook.js'
+  },
   plugins: [
-    // your custom plugins
+    failPlugin
   ],
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.

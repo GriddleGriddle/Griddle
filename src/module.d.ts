@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as ReactRedux from 'react-redux';
+import { connect as originalConnect } from 'react-redux';
+import { ActionCreator } from 'redux';
 
 interface PropertyBag<T> {
     [propName: string]: T;
@@ -293,7 +294,7 @@ export interface GriddleComponents {
     PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
-export interface GriddleActions extends PropertyBag<Function> {
+export interface GriddleActions extends PropertyBag<ActionCreator<any> | undefined> {
     onSort?: (sortProperties: any) => void;
     onNext?: () => void;
     onPrevious?: () => void;
@@ -420,15 +421,7 @@ export namespace utils {
     const dataUtils: PropertyBag<Function>;
     const rowUtils: PropertyBag<Function>;
 
-    // TODO: Not a fan of this but was trying to avoid 
-    // wholesale copying the 11 or so types out of definitely-typed's connect
-    // not immediately seeing how to say for this thing, just reference their types
-    function connect(
-        mapStateToProps?: ReactRedux.MapStateToPropsParam<any, any>,
-        mapDispatchToProps?: ReactRedux.MapDispatchToPropsParam<any, any>,
-        mergeProps?: ReactRedux.MergeProps<any, any, any, any>,
-        options?: ReactRedux.Options
-    ) : ReactRedux.InferableComponentEnhancerWithProps<any, any>;
+    const connect : typeof originalConnect;
 
     interface SortProperties{
       setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;

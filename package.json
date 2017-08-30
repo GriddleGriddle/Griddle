@@ -14,11 +14,13 @@
   "scripts": {
     "start": "start-storybook -p 6006",
     "test": "ava",
+    "check-ts": "tsc --strict src/module.d.ts",
     "watch-test": "ava --watch",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build": "npm run clean-dist && npm run build-modules && npm run build-umd && npm run build-ts",
     "clean-dist": "rimraf dist",
+    "build-examples": "webpack --config .storybook/webpack.config.js",
     "build-ts": "cp src/module.d.ts dist/module/",
     "build-umd": "webpack --config webpack.config.js",
     "build-modules": "cross-env BABEL_ENV=build babel src --out-dir dist/module ",
@@ -58,7 +60,8 @@
     "ts-loader": "^2.0.2",
     "typescript": "^2.4.1",
     "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack-dev-server": "^1.16.2",
+    "webpack-fail-plugin": "^1.0.6"
   },
   "dependencies": {
     "immutable": "^3.8.1",
