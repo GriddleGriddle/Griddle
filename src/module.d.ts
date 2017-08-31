@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect as originalConnect } from 'react-redux';
-import { ActionCreator } from 'redux';
+import { ActionCreator, Middleware } from 'redux';
 
 interface PropertyBag<T> {
     [propName: string]: T;
@@ -393,7 +393,7 @@ interface GriddleInitialState {
 
 export interface GriddlePlugin extends GriddleExtensibility {
     initialState?: GriddleInitialState;
-    reduxMiddleware?: ReactRedux.Middleware[];
+    reduxMiddleware?: Middleware[];
 }
 
 export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
