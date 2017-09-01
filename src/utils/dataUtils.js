@@ -44,12 +44,12 @@ export function transformData(data, renderProperties) {
     const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);
 
     // return list and lookup with the new stuff from this iteration
+    lookup[key] = index;
+    list.push(keyedData);
+
     return {
-      list: [...list, keyedData],
-      lookup: {
-        ...lookup,
-        [key]: index
-      },
+      list,
+      lookup,
     };
   }, {
     list: [],
