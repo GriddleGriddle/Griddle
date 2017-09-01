@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.8.1] - 2017-08-31
+- Fixes for TypeScript definitions
+- Add redux middleware to Griddle through plugins
+- Thanks Jesse Farebrother, Short, James, and @Errorific
+
 ## [1.8.0] - 2017-08-20
 - Add custom store
 - Fix for table styles
