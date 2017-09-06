@@ -140,6 +140,24 @@ class Griddle extends Component {
     );
 
     this.provider = createProvider(storeKey);
+
+    this.listeners = plugins.reduce((combined, plugin) => ({...combined, ...plugin.listeners}), {});
+
+    const observeStore = (store, onChange, otherArgs) => {
+      let oldState;
+    
+      const handleChange = () => {
+        const newState = store.getState();
+        onChange({oldState, newState, ...otherArgs});
+          oldState = newState;
+      }
+    
+      return store.subscribe(handleChange);
+    }
+
+    _.forIn(this.listeners, (value, key) => {
+      observeStore(this.store, value, {events: this.events, selectors: this.selectors});
+    });
   }
 
   componentWillReceiveProps(nextProps) {
