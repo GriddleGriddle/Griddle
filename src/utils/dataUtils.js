@@ -14,13 +14,13 @@ export function getIncrementer(startIndex) {
   return () => key++;
 }
 
-function isImmuableConvertableValue(value) {
+function isImmutableConvertibleValue(value) {
   return typeof value !== 'object' || value === null || value instanceof Date;
 }
 
 // From https://github.com/facebook/immutable-js/wiki/Converting-from-JS-objects#custom-conversion
 function fromJSGreedy(js) {
-  return isImmuableConvertableValue(js) ? js :
+  return isImmutableConvertibleValue(js) ? js :
     Array.isArray(js) ?
       Immutable.Seq(js).map(fromJSGreedy).toList() :
       Immutable.Seq(js).map(fromJSGreedy).toMap();
@@ -34,7 +34,10 @@ export function transformData(data, renderProperties) {
     throw new Error(`Griddle: Property '${renderProperties.rowProperties.rowKey}' doesn't exist in row data. Please specify a rowKey that exists in <RowDefinition>`);
   }
 
-  const transformedData = data.reduce(({ list, lookup }, rowData, index) => {
+  const list = [];
+  const lookup = {};
+
+  data.forEach((rowData, index) => {
     const map = fromJSGreedy(rowData);
 
     // if this has a row key use that -- otherwise use Griddle key
@@ -43,22 +46,13 @@ export function transformData(data, renderProperties) {
     // if our map object already has griddleKey use that -- otherwise add key as griddleKey
     const keyedData = map.has('griddleKey') ? map : map.set('griddleKey', key);
 
-    // return list and lookup with the new stuff from this iteration
-    return {
-      list: [...list, keyedData],
-      lookup: {
-        ...lookup,
-        [key]: index
-      },
-    };
-  }, {
-    list: [],
-    lookup: {},
+    list.push(keyedData);
+    lookup[key] = index;
   });
 
   return {
-    data: new Immutable.List(transformedData.list),
-    lookup: new Immutable.Map(transformedData.lookup),
+    data: new Immutable.List(list),
+    lookup: new Immutable.Map(lookup),
   };
 }
 
