@@ -1,0 +1,16 @@
+{
+  "env": {
+    "development": {
+      "presets": ["es2015", "stage-0", "react"]
+    },
+    "build": {
+      "plugins": ["lodash"],
+      "presets": ["es2015", "stage-0", "react"],
+      "ignore": [
+        "**/__tests__/*.js",
+        "**/fake-*"
+      ]
+    }
+
+  }
+}
