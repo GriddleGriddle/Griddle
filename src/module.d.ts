@@ -363,6 +363,7 @@ export interface GriddleRenderProperties {
 
 type Reducer = (state: any, action?: any) => void;
 type Selector = (state: any, props?: any) => any;
+type Listener = (prevState: any, nextState: any, otherArgs?: any) => any;
 
 interface SettingsComponentObject {
     order: number;
@@ -377,6 +378,7 @@ interface GriddleExtensibility {
     selectors?: PropertyBag<Selector>,
     settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
     styleConfig?: GriddleStyleConfig,
+    listeners?: PropertyBag<Listener>,
 }
 
 interface GriddleInitialState {

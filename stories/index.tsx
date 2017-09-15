@@ -781,6 +781,21 @@ storiesOf('Griddle main', module)
       </div>
     );
   })
+
+  .add('with custom store listener (check the console!)', () => {
+    const paginationListener = (prevState, nextState) => {
+      const page = nextState.getIn(['pageProperties', 'currentPage']);
+      page % 2 ? console.log("pageProperties->currentPage is odd!") : console.log("pageProperties->currentPage is even!");
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} listeners={{anExternalListener: paginationListener}}>
+        <RowDefinition>
+          <ColumnDefinition id="name" order={2} customHeadingComponent={GreenLeftSortIconComponent} width={300} />
+          <ColumnDefinition id="state" order={1} width={400} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
 storiesOf('Plugins', module)
   .add('styleConfig', () => {
     const stylePlugin = {

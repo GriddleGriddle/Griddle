@@ -14,6 +14,7 @@ import { buildGriddleReducer, buildGriddleComponents } from './utils/composition
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
+import { StoreListener } from './utils/listenerUtils';
 import * as actions from './actions';
 
 const defaultEvents = {
@@ -61,6 +62,7 @@ class Griddle extends Component {
     events: PropTypes.object,
     selectors: PropTypes.object,
     storeKey: PropTypes.string,
+    storeListener: PropTypes.object
   }
 
   constructor(props) {
@@ -79,6 +81,7 @@ class Griddle extends Component {
       settingsComponentObjects:userSettingsComponentObjects,
       storeKey = 'store',
       reduxMiddleware = [],
+      listeners = {},
       ...userInitialState
     } = props;
 
@@ -140,6 +143,13 @@ class Griddle extends Component {
     );
 
     this.provider = createProvider(storeKey);
+
+    const sanitizedListeners = _.pickBy(listeners, (value, key) => typeof value === "function");
+    this.listeners = plugins.reduce((combined, plugin) => ({...combined, ..._.pickBy(plugin.listeners, (value, key) => typeof value === "function")}), {...sanitizedListeners});
+    this.storeListener = new StoreListener(this.store);
+    _.forIn(this.listeners, (listener, name) => {
+      this.storeListener.addListener(listener, name, {events: this.events, selectors: this.selectors});
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -159,6 +169,7 @@ class Griddle extends Component {
       events: this.events,
       selectors: this.selectors,
       storeKey: this.getStoreKey(),
+      storeListener: this.storeListener
     };
   }
 
