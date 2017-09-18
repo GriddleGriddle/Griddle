@@ -10,17 +10,24 @@ import { isSettingsEnabledSelector, isSettingsVisibleSelector, classNamesForComp
 const EnhancedSettingsWrapper = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
+    selectors: PropTypes.object,
   }),
-  mapProps(props => ({
-    Settings: props.components.Settings,
-    SettingsToggle: props.components.SettingsToggle
-  })),
-  connect((state, props) => ({
-    isEnabled: isSettingsEnabledSelector(state),
-    isVisible: isSettingsVisibleSelector(state),
-    className: classNamesForComponentSelector(state, 'SettingsWrapper'),
-    style: stylesForComponentSelector(state, 'SettingsWrapper'),
-  }))
+  connect(
+    (state, props) => ({
+      isEnabled: props.selectors.isSettingsEnabledSelector(state),
+      isVisible: props.selectors.isSettingsVisibleSelector(state),
+      className: props.selectors.classNamesForComponentSelector(state, 'SettingsWrapper'),
+      style: props.selectors.stylesForComponentSelector(state, 'SettingsWrapper'),
+    })
+  ),
+  mapProps(props => {
+    const { components, ...otherProps } = props;
+    return {
+      Settings: components.Settings,
+      SettingsToggle: components.SettingsToggle,
+      ...otherProps
+    }
+  })
 )(props => (
   <OriginalComponent {...props} />
 ));

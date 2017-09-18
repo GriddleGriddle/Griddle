@@ -5,16 +5,17 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+//import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const NoResultsContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
+    selectors: PropTypes.object
   }),
   connect(
-    state => ({
-      className: classNamesForComponentSelector(state, 'NoResults'),
-      style: stylesForComponentSelector(state, 'NoResults'),
+    (state, props) => ({
+      className: props.selectors.classNamesForComponentSelector(state, 'NoResults'),
+      style: props.selectors.stylesForComponentSelector(state, 'NoResults'),
     })
   ),
   mapProps((props) => {
