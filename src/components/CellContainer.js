@@ -5,13 +5,13 @@ import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-import {
-  customComponentSelector,
-  cellValueSelector,
-  cellPropertiesSelector,
-  classNamesForComponentSelector,
-  stylesForComponentSelector
-} from '../selectors/dataSelectors';
+//import {
+//  customComponentSelector,
+//  cellValueSelector,
+//  cellPropertiesSelector,
+//  classNamesForComponentSelector,
+//  stylesForComponentSelector
+//} from '../selectors/dataSelectors';
 import { valueOrResult } from '../utils/valueUtils';
 
 function hasWidthOrStyles(cellProperties) {
@@ -41,11 +41,11 @@ const ComposedCellContainer = OriginalComponent => compose(
   }),
   connect((state, props) => {
     return {
-      value: cellValueSelector(state, props),
-      customComponent: customComponentSelector(state, props),
-      cellProperties: cellPropertiesSelector(state, props),
-      className: classNamesForComponentSelector(state, 'Cell'),
-      style: stylesForComponentSelector(state, 'Cell'),
+      value: props.selectors.cellValueSelector(state, props),
+      customComponent: props.selectors.customComponentSelector(state, props),
+      cellProperties: props.selectors.cellPropertiesSelector(state, props),
+      className: props.selectors.classNamesForComponentSelector(state, 'Cell'),
+      style: props.selectors.stylesForComponentSelector(state, 'Cell'),
     };
   }),
   mapProps(props => {

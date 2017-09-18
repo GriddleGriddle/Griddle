@@ -5,16 +5,17 @@ import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+//import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const EnhancedLayout = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
+    selectors: PropTypes.object
   }),
   connect(
     (state, props) => ({
-      className: classNamesForComponentSelector(state, 'Layout'),
-      style: stylesForComponentSelector(state, 'Layout'),
+      className: props.selectors.classNamesForComponentSelector(state, 'Layout'),
+      style: props.selectors.stylesForComponentSelector(state, 'Layout'),
     })
   ),
   mapProps( props => ({
