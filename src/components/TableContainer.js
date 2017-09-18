@@ -5,12 +5,10 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector, dataLoadingSelector, visibleRowCountSelector } from '../selectors/dataSelectors';
-
 const ComposedContainerComponent = OriginalComponent => compose(
-  getContext(
-  {
-    components: PropTypes.object
+  getContext({
+    components: PropTypes.object,
+    selectors: PropTypes.object
   }),
   //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
   mapProps(props => ({
@@ -21,12 +19,22 @@ const ComposedContainerComponent = OriginalComponent => compose(
   })),
   connect(
     (state, props) => ({
-      dataLoading: dataLoadingSelector(state),
-      visibleRows: visibleRowCountSelector(state),
-      className: classNamesForComponentSelector(state, 'Table'),
-      style: stylesForComponentSelector(state, 'Table'),
+      dataLoading: props.selectors.dataLoadingSelector(state),
+      visibleRows: props.selectors.visibleRowCountSelector(state),
+      className: props.selectors.classNamesForComponentSelector(state, 'Table'),
+      style: props.selectors.stylesForComponentSelector(state, 'Table'),
     })
   ),
+  //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
+  mapProps(props => {
+    const { components, ...otherProps } = props;
+    return {
+      TableHeading: components.TableHeading,
+      TableBody: components.TableBody,
+      NoResults: components.NoResults,
+      ...otherProps
+    }
+  })
 )(props => <OriginalComponent {...props} />);
 
 export default ComposedContainerComponent;

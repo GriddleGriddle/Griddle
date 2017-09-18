@@ -5,7 +5,7 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+//import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents) {
   //TODO: determine if we need to make this faster
@@ -20,12 +20,13 @@ function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents
 const EnhancedSettings = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
+    selectors: PropTypes.object,
     settingsComponentObjects: PropTypes.object
   }),
   connect(
     (state, props) => ({
-      className: classNamesForComponentSelector(state, 'Settings'),
-      style: stylesForComponentSelector(state, 'Settings'),
+      className: props.selectors.classNamesForComponentSelector(state, 'Settings'),
+      style: props.selectors.stylesForComponentSelector(state, 'Settings'),
     })
   ),
   mapProps(props => {

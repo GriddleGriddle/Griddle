@@ -5,16 +5,17 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+//import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 
 const EnhancedPaginationContainer = OriginalComponent => compose(
   getContext({
     components: PropTypes.object,
+    selectors: PropTypes.object
   }),
   connect(
     (state, props) => ({
-      className: classNamesForComponentSelector(state, 'Pagination'),
-      style: stylesForComponentSelector(state, 'Pagination'),
+      className: props.selectors.classNamesForComponentSelector(state, 'Pagination'),
+      style: props.selectors.stylesForComponentSelector(state, 'Pagination'),
     })
   ),
   mapProps((props) => {
