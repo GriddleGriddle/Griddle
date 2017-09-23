@@ -11,6 +11,7 @@ const include = path.resolve(__dirname, '../');
 // to "React Create App". This only has babel loader to load JavaScript.
 
 module.exports = {
+  devtool: 'source-map',
   entry: './stories/index.tsx',
   output: {
     filename: include + '/dist/examples/storybook.js'
