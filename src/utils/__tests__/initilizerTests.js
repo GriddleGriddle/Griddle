@@ -138,3 +138,19 @@ test('init returns expected initialState.renderProperties given props (children,
     user: true,
   });
 });
+
+test('init returns expected initialState.sortProperties given props (user)', (assert) => {
+  const ctx = {
+    props: {
+      sortProperties: { user: true },
+    },
+  };
+  const defaults = {};
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState.sortProperties, {
+    user: true,
+  });
+});
