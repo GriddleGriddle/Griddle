@@ -171,9 +171,10 @@ export function composeReducerObjects(reducerObjects) {
 
 /** Builds a new reducer that composes hooks and extends standard reducers between reducerObjects
  * @param {Object <array>} reducers - An array of reducerObjects
+ * Note: this used to be exported, but the same properties are available from buildGriddleReducer.
  * TODO: This method should be broken down a bit -- it's doing too much currently
  */
-export function buildGriddleReducerObject(reducerObjects) {
+function buildGriddleReducerObject(reducerObjects) {
   let reducerMethodsWithoutHooks = [];
   let beforeHooks = [];
   let afterHooks = [];
@@ -241,7 +242,9 @@ export function callReducerWithBeforeAfterPipe(reducerObject, state, action) {
 */
 export function buildGriddleReducer(reducerObjects) {
   const reducerObject = buildGriddleReducerObject(reducerObjects);
-  return (state, action) => callReducerWithBeforeAfterPipe(reducerObject, state, action);
+  const reducer = (state, action) => callReducerWithBeforeAfterPipe(reducerObject, state, action);
+  Object.assign(reducer, reducerObject);
+  return reducer;
 }
 
 /** Gets all reducers by a specific wordEnding

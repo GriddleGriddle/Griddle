@@ -60,6 +60,7 @@ test('init returns defaults given minimum props', (assert) => {
   });
 
   assert.is(typeof res.reducers, 'function');
+  assert.deepEqual(Object.keys(res.reducers), Object.keys(defaults.reducers));
   assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), { reduced: true });
 
   assert.deepEqual(res.reduxMiddleware, []);
