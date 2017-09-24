@@ -2,6 +2,9 @@ import test from 'ava';
 
 import init from '../initializer';
 
+import { getColumnProperties } from '../columnUtils';
+import { getRowProperties } from '../rowUtils';
+
 test('init succeeds given empty defaults and props', (assert) => {
   const ctx = { props: {} };
   const defaults = {};
@@ -84,4 +87,32 @@ test('init returns expected initialState.data given props.data', (assert) => {
   assert.truthy(res);
 
   assert.deepEqual(res.initialState.data, ctx.props.data);
+});
+
+test('init returns expected initialState.renderProperties given props (children, plugins, user)', (assert) => {
+  const ctx = {
+    props: {
+      children: {
+        props: {
+          children: [{ props: { id: 'foo', order: 1 } }],
+        }
+      },
+      plugins: [
+        { renderProperties: { plugin: 0, user: false } },
+        { renderProperties: { plugin: 1 } },
+      ],
+      renderProperties: { user: true },
+    },
+  };
+  const defaults = {};
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState.renderProperties, {
+    rowProperties: getRowProperties(ctx.props.children),
+    columnProperties: getColumnProperties(ctx.props.children),
+    plugin: 1,
+    user: true,
+  });
 });
