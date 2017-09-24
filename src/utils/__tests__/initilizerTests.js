@@ -89,6 +89,28 @@ test('init returns expected initialState.data given props.data', (assert) => {
   assert.deepEqual(res.initialState.data, ctx.props.data);
 });
 
+test('init returns expected initialState.pageProperties given props (user)', (assert) => {
+  const ctx = {
+    props: {
+      pageProperties: { user: true },
+    },
+  };
+  const defaults = {
+    pageProperties: {
+      defaults: true,
+      user: false,
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState.pageProperties, {
+    defaults: true,
+    user: true,
+  });
+});
+
 test('init returns expected initialState.renderProperties given props (children, plugins, user)', (assert) => {
   const ctx = {
     props: {
