@@ -154,3 +154,35 @@ test('init returns expected initialState.sortProperties given props (user)', (as
     user: true,
   });
 });
+
+test('init returns merged initialState.styleConfig given props (plugins, user)', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { styleConfig: { styles: { plugin: 0, user: false } } },
+        { styleConfig: { styles: { plugin: 1, defaults: false } } },
+      ],
+      styleConfig: {
+        styles: { user: true },
+      },
+    },
+  };
+  const defaults = {
+    styleConfig: {
+      classNames: { defaults: true },
+      styles: { defaults: true, plugin: false, user: false },
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState.styleConfig, {
+    classNames: { defaults: true },
+    styles: {
+      defaults: false,
+      plugin: 1,
+      user: true,
+    },
+  });
+});
