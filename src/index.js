@@ -75,11 +75,11 @@ class Griddle extends Component {
       settingsComponentObjects,
       selectors,
       styleConfig: defaultStyleConfig,
+
       pageProperties: {
         currentPage: 1,
         pageSize: 10
       },
-
       enableSettings: true,
       textProperties: {
         next: 'Next',

@@ -7,7 +7,6 @@ import { getRowProperties } from '../rowUtils';
 
 const expectedDefaultInitialState = {
   data: [],
-  pageProperties: {},
   renderProperties: {
     rowProperties: null,
     columnProperties: {},

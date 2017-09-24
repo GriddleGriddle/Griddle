@@ -383,6 +383,7 @@ interface GriddleExtensibility {
 
 interface GriddleInitialState {
     enableSettings?: boolean;
+    pageProperties?: GriddlePageProperties;
     sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
     textProperties?: {
       next?: string,
@@ -402,7 +403,6 @@ export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
     plugins?: GriddlePlugin[];
     data?: T[];
     sortProperties?: GriddleSortKey[];
-    pageProperties?: GriddlePageProperties;
     storeKey?: string;
 }
 

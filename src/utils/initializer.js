@@ -12,7 +12,6 @@ module.exports = function initializer(defaults) {
     settingsComponentObjects,
     selectors,
     styleConfig: defaultStyleConfig,
-    pageProperties: defaultPageProperties,
     ...defaultInitialState
   } = defaults;
 
@@ -23,7 +22,6 @@ module.exports = function initializer(defaults) {
     events: userEvents = {},
     sortProperties = {},
     styleConfig: userStyleConfig = {},
-    pageProperties: userPageProperties,
     components: userComponents,
     renderProperties: userRenderProperties = {},
     settingsComponentObjects: userSettingsComponentObjects,
@@ -61,7 +59,6 @@ module.exports = function initializer(defaults) {
     ...plugins.map(p => p.styleConfig),
     userStyleConfig);
 
-  const pageProperties = Object.assign({}, defaultPageProperties, userPageProperties);
 
   // TODO: This should also look at the default and plugin initial state objects
   const renderProperties = Object.assign({
@@ -76,7 +73,6 @@ module.exports = function initializer(defaults) {
     userInitialState,
     {
       data,
-      pageProperties,
       renderProperties,
       sortProperties,
       styleConfig,
