@@ -227,7 +227,7 @@ export function callReducerWithBeforeAfterPipe(reducerObject, state, action) {
   const call = (action.type &&
         reducerObject[action.type] &&
         reducerObject[action.type]
-      ) || reducerObject.GRIDDLE_INITIALIZED;
+      ) || reducerObject.GRIDDLE_INITIALIZED || noop;
 
   const partialCall = (partialAction => partialState => call(partialState, partialAction))(action);
 

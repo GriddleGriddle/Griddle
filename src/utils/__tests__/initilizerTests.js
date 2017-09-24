@@ -21,6 +21,7 @@ test('init succeeds given empty defaults and props', (assert) => {
   });
 
   assert.is(typeof res.reducers, 'function');
+  assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), {});
 
   assert.deepEqual(res.reduxMiddleware, []);
 

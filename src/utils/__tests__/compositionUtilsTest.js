@@ -379,6 +379,21 @@ test('builds griddle reducer without BEFORE / AFTER if they dont exist', (t) => 
   t.deepEqual(output, { number: 15 });
 });
 
+test('builds griddle reducer that calls GRIDDLE_INITIALIZED for missing action type, if it exists', (assert) => {
+  const initReducer = { GRIDDLE_INITIALIZED: () => ({ init: true }) };
+  const griddleReducer = buildGriddleReducer([initReducer]);
+  const output = griddleReducer({}, { type: 'MISSING' });
+
+  assert.deepEqual(output, { init: true });
+});
+
+test('builds griddle reducer that does noop for missing action type, if GRIDDLE_INITIALIZED is also missing', (assert) => {
+  const griddleReducer = buildGriddleReducer([]);
+  const output = griddleReducer({}, { type: 'MISSING' });
+
+  assert.deepEqual(output, {});
+});
+
 test('combineAndEnhanceComponents', test => {
   const initial = { one: (someNumber) => (someNumber + 5)}
   const enhancing = { oneEnhancer: originalMethod => (someNumber) => originalMethod(someNumber * 5)};
