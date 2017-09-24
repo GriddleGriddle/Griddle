@@ -71,3 +71,17 @@ test('init returns defaults given minimum props', (assert) => {
   assert.deepEqual(ctx.selectors, defaults.selectors);
   assert.deepEqual(ctx.listeners, {});
 });
+
+test('init returns expected initialState.data given props.data', (assert) => {
+  const ctx = {
+    props: {
+      data: [{ foo: 'bar' }],
+    },
+  };
+  const defaults = {};
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState.data, ctx.props.data);
+});
