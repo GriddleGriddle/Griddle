@@ -18,7 +18,7 @@ module.exports = function initializer(defaults) {
 
   const {
     plugins = [],
-    data,
+    data = [],
     children: rowPropertiesComponent,
     events: userEvents = {},
     sortProperties = {},
