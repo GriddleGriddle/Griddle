@@ -5,6 +5,17 @@ import init from '../initializer';
 import { getColumnProperties } from '../columnUtils';
 import { getRowProperties } from '../rowUtils';
 
+const expectedDefaultInitialState = {
+  data: [],
+  pageProperties: {},
+  renderProperties: {
+    rowProperties: null,
+    columnProperties: {},
+  },
+  sortProperties: {},
+  styleConfig: {},
+};
+
 test('init succeeds given empty defaults and props', (assert) => {
   const ctx = { props: {} };
   const defaults = {};
@@ -12,16 +23,7 @@ test('init succeeds given empty defaults and props', (assert) => {
   const res = init.call(ctx, defaults);
   assert.truthy(res);
 
-  assert.deepEqual(res.initialState, {
-    data: [],
-    pageProperties: {},
-    renderProperties: {
-      rowProperties: null,
-      columnProperties: {},
-    },
-    sortProperties: {},
-    styleConfig: {},
-  });
+  assert.deepEqual(res.initialState, expectedDefaultInitialState);
 
   assert.is(typeof res.reducers, 'function');
   assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), {});
@@ -51,14 +53,11 @@ test('init returns defaults given minimum props', (assert) => {
   assert.truthy(res);
 
   assert.deepEqual(res.initialState, {
+    ...expectedDefaultInitialState,
+
     init: true,
     data: ctx.props.data,
     pageProperties: defaults.pageProperties,
-    renderProperties: {
-      rowProperties: null,
-      columnProperties: {},
-    },
-    sortProperties: {},
     styleConfig: defaults.styleConfig,
   });
 
@@ -184,5 +183,35 @@ test('init returns merged initialState.styleConfig given props (plugins, user)',
       plugin: 1,
       user: true,
     },
+  });
+});
+
+test('init returns expected extra initialState given props (plugins, user)', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { initialState: { plugin: 0, user: false } },
+        { initialState: { plugin: 1 } },
+      ],
+      user: true,
+    },
+  };
+  const defaults = {
+    initialState: {
+      defaults: true,
+      user: false,
+      plugin: false,
+    }
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState, {
+    ...expectedDefaultInitialState,
+
+    defaults: true,
+    user: true,
+    plugin: 1,
   });
 });
