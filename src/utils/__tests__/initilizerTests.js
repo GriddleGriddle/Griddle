@@ -46,7 +46,7 @@ test('init returns defaults given minimum props', (assert) => {
     selectors: { aSelector: () => null },
     styleConfig: { classNames: {} },
     pageProperties: { pageSize: 100 },
-    initialState: { init: true },
+    init: true,
   };
 
   const res = init.call(ctx, defaults);
@@ -197,11 +197,9 @@ test('init returns expected extra initialState given props (plugins, user)', (as
     },
   };
   const defaults = {
-    initialState: {
-      defaults: true,
-      user: false,
-      plugin: false,
-    }
+    defaults: true,
+    user: false,
+    plugin: false,
   };
 
   const res = init.call(ctx, defaults);

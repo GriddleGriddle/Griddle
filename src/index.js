@@ -79,13 +79,12 @@ class Griddle extends Component {
         currentPage: 1,
         pageSize: 10
       },
-      initialState: {
-        enableSettings: true,
-        textProperties: {
-          next: 'Next',
-          previous: 'Previous',
-          settingsToggle: 'Settings'
-        },
+
+      enableSettings: true,
+      textProperties: {
+        next: 'Next',
+        previous: 'Previous',
+        settingsToggle: 'Settings'
       },
     });
 

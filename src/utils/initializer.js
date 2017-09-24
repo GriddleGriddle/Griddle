@@ -13,7 +13,7 @@ module.exports = function initializer(defaults) {
     selectors,
     styleConfig: defaultStyleConfig,
     pageProperties: defaultPageProperties,
-    initialState: defaultInitialState,
+    ...defaultInitialState
   } = defaults;
 
   const {
