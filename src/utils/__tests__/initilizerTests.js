@@ -286,3 +286,30 @@ test('init sets context.components as expected given plugins', (assert) => {
     User: true,
   });
 });
+
+test('init sets context.settingsComponentObjects as expected given plugins', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { settingsComponentObjects: { Plugin: 0, User: false } },
+        { settingsComponentObjects: { Plugin: 1 } },
+      ],
+      settingsComponentObjects: { User: true },
+    },
+  };
+  const defaults = {
+    settingsComponentObjects: {
+      Defaults: true,
+      Plugin: false,
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(ctx.settingsComponentObjects, {
+    Defaults: true,
+    Plugin: 1,
+    User: true,
+  });
+});
