@@ -211,3 +211,28 @@ test('init returns expected extra initialState given props (plugins, user)', (as
     plugin: 1,
   });
 });
+
+test('init returns composed reducer given plugins', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { reducer: { PLUGIN: () => ({ plugin: 0 }) } },
+        { reducer: { PLUGIN: () => ({ plugin: 1 }) } },
+      ],
+    },
+  };
+  const defaults = {
+    reducers: {
+      DEFAULTS: () => ({ defaults: true }),
+      PLUGIN: () => ({ plugin: false }),
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.is(typeof res.reducers, 'function');
+  assert.deepEqual(Object.keys(res.reducers), ['DEFAULTS', 'PLUGIN']);
+  assert.deepEqual(res.reducers({}, { type: 'DEFAULTS' }), { defaults: true });
+  assert.deepEqual(res.reducers({}, { type: 'PLUGIN' }), { plugin: 1 });
+});
