@@ -259,3 +259,30 @@ test('init returns flattened/compacted reduxMiddleware given plugins', (assert) 
 
   assert.deepEqual(res.reduxMiddleware, mw);
 });
+
+test('init sets context.components as expected given plugins', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { components: { Plugin: 0, User: false } },
+        { components: { Plugin: 1 } },
+      ],
+      components: { User: true },
+    },
+  };
+  const defaults = {
+    components: {
+      Defaults: true,
+      Plugin: false,
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(ctx.components, {
+    Defaults: true,
+    Plugin: 1,
+    User: true,
+  });
+});
