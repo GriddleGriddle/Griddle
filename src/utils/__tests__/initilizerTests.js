@@ -1,4 +1,5 @@
 import test from 'ava';
+import _ from 'lodash';
 
 import init from '../initializer';
 
@@ -235,4 +236,26 @@ test('init returns composed reducer given plugins', (assert) => {
   assert.deepEqual(Object.keys(res.reducers), ['DEFAULTS', 'PLUGIN']);
   assert.deepEqual(res.reducers({}, { type: 'DEFAULTS' }), { defaults: true });
   assert.deepEqual(res.reducers({}, { type: 'PLUGIN' }), { plugin: 1 });
+});
+
+test('init returns flattened/compacted reduxMiddleware given plugins', (assert) => {
+  const mw = _.range(0, 4).map(i => () => i);
+  const ctx = {
+    props: {
+      plugins: [
+        {},
+        { reduxMiddleware: [mw[0]] },
+        {},
+        { reduxMiddleware: [null, mw[1], undefined, mw[2], null] },
+        {},
+      ],
+      reduxMiddleware: [mw[3]],
+    },
+  };
+  const defaults = {};
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.reduxMiddleware, mw);
 });
