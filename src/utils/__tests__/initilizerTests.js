@@ -337,3 +337,28 @@ test('init sets context.events as expected given plugins', (assert) => {
     User2: true,
   });
 });
+
+test('init sets context.selectors as expected given plugins', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { selectors: { Plugin: 0 } },
+        { selectors: { Plugin: 1 } },
+      ],
+    },
+  };
+  const defaults = {
+    selectors: {
+      Defaults: true,
+      Plugin: false,
+    },
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(ctx.selectors, {
+    Defaults: true,
+    Plugin: 1,
+  });
+});
