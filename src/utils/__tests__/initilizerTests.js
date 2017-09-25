@@ -11,7 +11,6 @@ const expectedDefaultInitialState = {
     rowProperties: null,
     columnProperties: {},
   },
-  sortProperties: {},
   styleConfig: {},
 };
 

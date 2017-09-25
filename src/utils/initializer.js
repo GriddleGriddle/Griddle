@@ -20,7 +20,6 @@ module.exports = function initializer(defaults) {
     data = [],
     children: rowPropertiesComponent,
     events: userEvents = {},
-    sortProperties = {},
     styleConfig: userStyleConfig = {},
     components: userComponents,
     renderProperties: userRenderProperties = {},
@@ -74,7 +73,6 @@ module.exports = function initializer(defaults) {
     {
       data,
       renderProperties,
-      sortProperties,
       styleConfig,
     }
   );
