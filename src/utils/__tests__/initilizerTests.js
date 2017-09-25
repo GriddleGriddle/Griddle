@@ -313,3 +313,27 @@ test('init sets context.settingsComponentObjects as expected given plugins', (as
     User: true,
   });
 });
+
+test('init sets context.events as expected given plugins', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { events: { Plugin: 0, User: false } },
+        { events: { Plugin: 1 } },
+      ],
+      events: { User: true, User2: true },
+    },
+  };
+  const defaults = {
+    // TODO: bug that defaultEvents is not used?
+  };
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(ctx.events, {
+    Plugin: 1,
+    User: false, // TODO: bug that plugins overwrite user events?
+    User2: true,
+  });
+});
