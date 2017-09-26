@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
-import { createSelector } from 'reselect';
 import _ from 'lodash';
+import { createSelector } from '../utils/selectorUtils';
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 //import { createSelector } from 'reselect';

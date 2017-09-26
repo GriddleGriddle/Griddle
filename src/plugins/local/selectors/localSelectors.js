@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { createSelector } from 'reselect';
+import { createSelector } from '../../../utils/selectorUtils';
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 
 import { defaultSort } from '../../../utils/sortUtils';

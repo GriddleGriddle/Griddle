@@ -15,6 +15,7 @@ import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
+import { composeSelectors } from './utils/selectorUtils';
 import * as actions from './actions';
 
 const defaultEvents = {
@@ -98,7 +99,7 @@ class Griddle extends Component {
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+    this.selectors = composeSelectors(selectors, plugins);
 
     const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
 

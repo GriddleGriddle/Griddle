@@ -1,4 +1,6 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '../../../utils/selectorUtils';
+
+import { getVisibleDataForColumns } from '../../../utils/dataUtils';
 
 import { sortedDataSelector, visibleColumnsSelector } from '../../local/selectors/localSelectors';
 
