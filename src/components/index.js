@@ -30,6 +30,8 @@ import { components as SettingsComponents } from '../settingsComponentObjects';
 import NextButton from './NextButton';
 import NextButtonEnhancer from './NextButtonEnhancer';
 import NextButtonContainer from './NextButtonContainer';
+import Loading from './Loading';
+import LoadingContainer from './LoadingContainer';
 import NoResults from './NoResults';
 import NoResultsContainer from './NoResultsContainer';
 import PreviousButton from './PreviousButton';
@@ -59,6 +61,8 @@ const components = {
   NextButton,
   NextButtonEnhancer,
   NextButtonContainer,
+  Loading,
+  LoadingContainer,
   NoResults,
   NoResultsContainer,
   PageDropdown,

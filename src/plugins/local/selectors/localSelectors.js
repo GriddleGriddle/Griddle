@@ -11,6 +11,8 @@ import * as dataSelectors from '../../../selectors/dataSelectors';
  */
 export const dataSelector = state => state.get('data');
 
+export const dataLoadingSelector = dataSelectors.dataLoadingSelector;
+
 /** Gets the current page from pageProperties
  * @param {Immutable} state - state object
  */

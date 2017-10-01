@@ -12,7 +12,7 @@ import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
-import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition } from '../src/module';
+import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
 const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
@@ -95,6 +95,33 @@ storiesOf('Griddle main', module)
         </RowDefinition>
       </Griddle>
     )
+  })
+  .add('with local, delayed data', () => {
+    class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
+      constructor(props) {
+        super(props);
+        this.state = {};
+        this.resetData();
+      }
+
+      resetData = () => {
+        this.setState({ data: null });
+
+        setTimeout(() => {
+          this.setState({ data: this.props.data });
+        }, 2000);
+      }
+
+      render() {
+        return (
+          <div>
+            <p><button onClick={this.resetData}>Reload Data</button></p>
+            <Griddle {...this.props} data={this.state.data} />
+          </div>
+        );
+      }
+    }
+    return <DeferredGriddle data={fakeData} plugins={[LocalPlugin]} />
   })
   .add('with local and legacy (v0) styles', () => {
     return (
