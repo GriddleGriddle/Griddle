@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
-import MAX_SAFE_INTEGER from 'max-safe-integer'
+import _ from 'lodash';
 
 import { defaultSort } from '../../../utils/sortUtils';
 import { getVisibleDataForColumns } from '../../../utils/dataUtils';
@@ -42,7 +42,7 @@ export const filteredDataSelector = createSelector(
   filterSelector,
   columnPropertiesSelector,
   (data, filter, columnProperties) => {
-    if (!filter) {
+    if (!filter || !data) {
       return data;
     }
 
@@ -68,16 +68,18 @@ export const maxPageSelector = createSelector(
   pageSizeSelector,
   filteredDataSelector,
   (pageSize, data) => {
-    const total = data.size;
+    const total = data ? data.size : 0;
     const calc = total / pageSize;
 
-    return calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
+    const result = calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
+
+    return _.isFinite(result) ? result : 1;
   }
 )
 
 export const allColumnsSelector = createSelector(
   dataSelector,
-  (data) => (data.size === 0 ? [] : data.get(0).keySeq().toJSON())
+  data => (!data || data.size === 0 ? [] : data.get(0).keySeq().toJSON())
 );
 
 /** Gets the column properties objects sorted by order
@@ -128,6 +130,10 @@ export const currentPageDataSelector = createSelector(
   pageSizeSelector,
   currentPageSelector,
   (sortedData, pageSize, currentPage) => {
+    if (!sortedData) {
+      return [];
+    }
+
     return sortedData
       .skip(pageSize * (currentPage - 1))
       .take(pageSize);
@@ -145,7 +151,7 @@ export const visibleDataSelector = createSelector(
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
   currentPageDataSelector,
-  (currentPageData) => currentPageData.map(c => c.get('griddleKey'))
+  currentPageData => (currentPageData ? currentPageData.map(c => c.get('griddleKey')) : new Immutable.List())
 );
 
 /** Gets the count of visible rows */

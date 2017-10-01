@@ -846,6 +846,40 @@ storiesOf('Plugins', module)
     );
   })
 
+storiesOf('Data Missing', module)
+  .add('base (data=undefined)', () => {
+    return (
+      <Griddle />
+    )
+  })
+  .add('base (data=null)', () => {
+    return (
+      <Griddle data={null} />
+    )
+  })
+  .add('local (data=undefined)', () => {
+    return (
+      <Griddle plugins={[LocalPlugin]} />
+    )
+  })
+  .add('local (data=null)', () => {
+    return (
+      <Griddle data={null} plugins={[LocalPlugin]} />
+    )
+  })
+
+storiesOf('Data Empty', module)
+  .add('base', () => {
+    return (
+      <Griddle data={[]} />
+    )
+  })
+  .add('local', () => {
+    return (
+      <Griddle data={[]} plugins={[LocalPlugin]} />
+    )
+  })
+
 storiesOf('Cell', module)
   .add('base cell', () => {
     const someValue = "hi from storybook"
