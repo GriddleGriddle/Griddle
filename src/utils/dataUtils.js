@@ -27,6 +27,10 @@ function fromJSGreedy(js) {
 }
 
 export function transformData(data, renderProperties) {
+  if (!data) {
+    return {};
+  }
+
   const hasCustomRowId = renderProperties.rowProperties && renderProperties.rowProperties.rowKey;
 
   // Validate that the first item in our data has the custom Griddle key
