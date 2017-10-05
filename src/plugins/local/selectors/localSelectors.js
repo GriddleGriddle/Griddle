@@ -185,7 +185,7 @@ export const columnIdsSelector = createSelector(
   visibleDataSelector,
   renderPropertiesSelector,
   (visibleData, renderProperties) => {
-    if(visibleData.size > 0) {
+    if (visibleData.size > 0) {
       return Object.keys(visibleData.get(0).toJSON()).map(k =>
         renderProperties.getIn(['columnProperties', k, 'id']) || k
       )
