@@ -240,6 +240,54 @@ test('filteredDataSelector filters data when filter string present', test => {
   ]);
 });
 
+test('filteredDataSelector filters data when filter function present', test => {
+  const state = new Immutable.fromJS({
+    filter: function (row) {
+      return row.get("name") === 'luke skywalker';
+    },
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker' },
+  ]);
+});
+
+test('filteredDataSelector filters data when filter object present', test => {
+  const state = Immutable.Map({
+    filter: { name: 'luke' },
+    data: Immutable.List.of(
+      Immutable.Map({ id: '1', name: 'luke skywalker' }),
+      Immutable.Map({ id: '2', name: 'han solo' }),
+    ),
+  });
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker' },
+  ]);
+});
+
+test('filteredDataSelector filters data when filter object with filter function', test => {
+  const state = Immutable.Map({
+    filter: {
+      name: function (rowName) {
+        return rowName.length === 14
+      },
+    },
+    data: Immutable.List.of(
+      Immutable.Map({ id: '1', name: 'luke skywalker' }),
+      Immutable.Map({ id: '2', name: 'han solo' }),
+    ),
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker' },
+  ]);
+});
+
+
 test('filteredDataSelector filters data respecting filterable', test => {
   const state = new Immutable.fromJS({
     renderProperties: {

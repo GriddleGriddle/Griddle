@@ -37,6 +37,43 @@ export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 
 const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
 
+const substringSearch = (value, filter) => {
+  const filterToLower = filter.toLowerCase();
+  return value && value.toString().toLowerCase().indexOf(filterToLower) > -1;
+};
+
+const textFilterRowSearch = (row, columnProperties, filter) => {
+  return row.keySeq()
+    .some((key) => {
+      const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
+      if (filterable === false) {
+        return false;
+      }
+      return substringSearch(row.get(key), filter);
+    });
+};
+
+const objectFilterRowSearch = (row, columnProperties, filter) => {
+  return row.keySeq().some((key) => {
+    const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
+    if (filterable === false) {
+      return false;
+    }
+    const keyFilter = filter[key];
+    switch (typeof (keyFilter)) {
+      case 'string':
+        return substringSearch(row.get(key), keyFilter)
+        break;
+      case 'function':
+        return keyFilter(row.get(key))
+        break;
+      default:
+        return false
+        break;
+    }
+  })
+}
+
 /** Gets the data filtered by the current filter
  */
 export const filteredDataSelector = createSelector(
@@ -48,22 +85,21 @@ export const filteredDataSelector = createSelector(
       return data;
     }
 
-    const filterToLower = filter.toLowerCase();
-    return data.filter(row =>
-      row.keySeq()
-        .some((key) => {
-          if (key === 'griddleKey') {
-            return false;
-          } else if (columnProperties) {
-            if (columnProperties.get(key) === undefined ||
-              columnProperties.getIn([key, 'filterable']) === false) {
-              return false;
-            }
-          }
-          const value = row.get(key);
-          return value &&
-            value.toString().toLowerCase().indexOf(filterToLower) > -1;
-        }));
+    return data.filter(row => {
+      switch (typeof (filter)) {
+        case 'string':
+          return textFilterRowSearch(row, columnProperties, filter)
+          break;
+        case 'object':
+          return objectFilterRowSearch(row, columnProperties, filter)
+        case 'function':
+          return filter(row)
+        default:
+          return data;
+          break;
+      }
+
+    });
   }
 );
 
