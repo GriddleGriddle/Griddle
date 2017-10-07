@@ -22,15 +22,15 @@ export const renderPropertiesSelector = state => (state.get('renderProperties'))
 
 /** Determines if there are previous pages */
 export const hasPreviousSelector = createSelector(
-  currentPageSelector,
+  'currentPageSelector',
   (currentPage) => (currentPage > 1)
 );
 
 /** Gets the max page size
  */
 export const maxPageSelector = createSelector(
-  pageSizeSelector,
-  recordCountSelector,
+  'pageSizeSelector',
+  'recordCountSelector',
   (pageSize, recordCount) => {
     const calc = recordCount / pageSize;
 
@@ -42,8 +42,8 @@ export const maxPageSelector = createSelector(
 
 /** Determines if there are more pages available. Assumes pageProperties.maxPage is set by the container */
 export const hasNextSelector = createSelector(
-  currentPageSelector,
-  maxPageSelector,
+  'currentPageSelector',
+  'maxPageSelector',
   (currentPage, maxPage) => {
     return currentPage < maxPage;
   }
@@ -57,8 +57,8 @@ export const sortColumnsSelector = state => state.get('sortColumns') || [];
 
 /** Gets all the columns */
 export const allColumnsSelector = createSelector(
-  dataSelector,
-  renderPropertiesSelector,
+  'dataSelector',
+  'renderPropertiesSelector',
   (data, renderProperties) => {
     const dataColumns = !data || data.size === 0 ?
       [] :
@@ -76,7 +76,7 @@ export const allColumnsSelector = createSelector(
 /** Gets the column properties objects sorted by order
  */
 export const sortedColumnPropertiesSelector = createSelector(
-  renderPropertiesSelector,
+  'renderPropertiesSelector',
   (renderProperties) => (
     renderProperties && renderProperties.get('columnProperties') && renderProperties.get('columnProperties').size !== 0 ?
       renderProperties.get('columnProperties')
@@ -88,7 +88,7 @@ export const sortedColumnPropertiesSelector = createSelector(
 /** Gets metadata column ids
  */
 export const metaDataColumnsSelector = createSelector(
-  sortedColumnPropertiesSelector,
+  'sortedColumnPropertiesSelector',
   (sortedColumnProperties) => (
     sortedColumnProperties ? sortedColumnProperties
       .filter(c => c.get('isMetadata'))
@@ -101,8 +101,8 @@ export const metaDataColumnsSelector = createSelector(
 /** Gets the visible columns either obtaining the sorted column properties or all columns
  */
 export const visibleColumnsSelector = createSelector(
-  sortedColumnPropertiesSelector,
-  allColumnsSelector,
+  'sortedColumnPropertiesSelector',
+  'allColumnsSelector',
   (sortedColumnProperties, allColumns) => (
     sortedColumnProperties ? sortedColumnProperties
       .filter(c => {
@@ -119,8 +119,8 @@ export const visibleColumnsSelector = createSelector(
 /** TODO: add tests and docs
  */
 export const visibleColumnPropertiesSelector = createSelector(
-  visibleColumnsSelector,
-  renderPropertiesSelector,
+  'visibleColumnsSelector',
+  'renderPropertiesSelector',
   (visibleColumns=[], renderProperties) => (
     visibleColumns.map(c => {
       const columnProperty = renderProperties.getIn(['columnProperties', c]);
@@ -131,9 +131,9 @@ export const visibleColumnPropertiesSelector = createSelector(
 
 /** Gets the possible columns that are currently hidden */
 export const hiddenColumnsSelector = createSelector(
-  visibleColumnsSelector,
-  allColumnsSelector,
-  metaDataColumnsSelector,
+  'visibleColumnsSelector',
+  'allColumnsSelector',
+  'metaDataColumnsSelector',
   (visibleColumns, allColumns, metaDataColumns) => {
     const removeColumns = [...visibleColumns, ...metaDataColumns];
 
@@ -144,8 +144,8 @@ export const hiddenColumnsSelector = createSelector(
 /** TODO: add tests and docs
  */
 export const hiddenColumnPropertiesSelector = createSelector(
-  hiddenColumnsSelector,
-  renderPropertiesSelector,
+  'hiddenColumnsSelector',
+  'renderPropertiesSelector',
   (hiddenColumns=[], renderProperties) => (
     hiddenColumns.map(c => {
       const columnProperty = renderProperties.getIn(['columnProperties', c]);
@@ -215,8 +215,8 @@ export const textSelector = (state, { key}) => {
 /** Gets the column ids for the visible columns
 */
 export const columnIdsSelector = createSelector(
-  renderPropertiesSelector,
-  visibleColumnsSelector,
+  'renderPropertiesSelector',
+  'visibleColumnsSelector',
   (renderProperties, visibleColumns) => {
     const offset = 1000;
     // TODO: Make this better -- This is pretty inefficient
@@ -233,20 +233,20 @@ export const columnIdsSelector = createSelector(
 /** Gets the column titles for the visible columns
  */
 export const columnTitlesSelector = createSelector(
-  columnIdsSelector,
-  renderPropertiesSelector,
+  'columnIdsSelector',
+  'renderPropertiesSelector',
   (columnIds, renderProperties) => columnIds.map(k => renderProperties.getIn(['columnProperties', k, 'title']) || k)
 );
 
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
-  dataSelector,
+  'dataSelector',
   currentPageData => currentPageData ? currentPageData.map(c => c.get('griddleKey')) : new Immutable.List()
 );
 
 /** Gets the count of visible rows */
 export const visibleRowCountSelector = createSelector(
-  visibleRowIdsSelector,
+  'visibleRowIdsSelector',
   (visibleRowIds) => visibleRowIds.size
 );
 
