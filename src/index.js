@@ -79,7 +79,7 @@ class Griddle extends Component {
       components:userComponents,
       renderProperties:userRenderProperties={},
       settingsComponentObjects:userSettingsComponentObjects,
-      storeKey = 'store',
+      storeKey = Griddle.storeKey || 'store',
       reduxMiddleware = [],
       listeners = {},
       ...userInitialState
@@ -162,7 +162,7 @@ class Griddle extends Component {
   }
 
   getStoreKey = () => {
-    return this.props.storeKey || 'store';
+    return this.props.storeKey || Griddle.storeKey || 'store';
   }
 
   getChildContext() {
@@ -185,5 +185,7 @@ class Griddle extends Component {
 
   }
 }
+
+Griddle.storeKey = 'store';
 
 export default Griddle;

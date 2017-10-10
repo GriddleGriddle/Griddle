@@ -407,6 +407,7 @@ export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
 }
 
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {
+  static storeKey: string;
 }
 
 export const actions: GriddleActions;
