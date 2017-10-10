@@ -4,9 +4,11 @@ import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
-
+import withHandlers from 'recompose/withHandlers';
 import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
-import { getSortIconProps } from '../utils/sortUtils';
+import { setSortColumn } from '../actions';
+import { combineHandlers } from '../utils/compositionUtils';
+import { getSortIconProps, setSortProperties } from '../utils/sortUtils';
 import { valueOrResult } from '../utils/valueUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
@@ -28,8 +30,18 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       className: classNamesForComponentSelector(state, 'TableHeadingCell'),
       style: stylesForComponentSelector(state, 'TableHeadingCell'),
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
+    }),
+    (dispatch, { events: { onSort } }) => ({
+      setSortColumn: combineHandlers([
+        onSort,
+        sp => dispatch(setSortColumn(sp)),
+      ]),
     })
   ),
+  withHandlers(props => ({
+    onClick: props.cellProperties.sortable === false ? (() => () => {}) :
+      props.events.setSortProperties || setSortProperties,
+  })),
   mapProps(props => {
     const iconProps = getSortIconProps(props);
     const title = props.customHeadingComponent ?

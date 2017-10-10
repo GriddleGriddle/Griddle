@@ -7,6 +7,7 @@ import getContext from 'recompose/getContext';
 import withHandlers from 'recompose/withHandlers';
 import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector, cellPropertiesSelector } from '../../../selectors/dataSelectors';
 import { setSortColumn } from '../../../actions';
+import { combineHandlers } from '../../../utils/compositionUtils';
 import { getSortIconProps, setSortProperties } from '../../../utils/sortUtils';
 import { valueOrResult } from '../../../utils/valueUtils';
 
@@ -32,9 +33,12 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       style: stylesForComponentSelector(state, 'TableHeadingCell'),
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
     }),
-    {
-      setSortColumn
-    }
+    (dispatch, { events: { onSort } }) => ({
+      setSortColumn: combineHandlers([
+        onSort,
+        sp => dispatch(setSortColumn(sp)),
+      ]),
+    })
   ),
   withHandlers(props => ({
     onClick: props.cellProperties.sortable === false ? (() => () => {}) :
