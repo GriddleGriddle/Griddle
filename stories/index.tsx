@@ -12,8 +12,7 @@ import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
-import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
-const { connect } = utils;
+import GenericGriddle, { connect, actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 

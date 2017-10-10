@@ -417,6 +417,8 @@ export const selectors: PropertyBag<Selector>;
 
 export const settingsComponentObjects: PropertyBag<SettingsComponentObject>;
 
+export const connect : typeof originalConnect;
+
 export namespace utils {
     const columnUtils: PropertyBag<Function>;
     const compositionUtils: PropertyBag<Function>;

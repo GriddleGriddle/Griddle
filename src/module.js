@@ -20,6 +20,8 @@ const plugins = {
 const ColumnDefinition = components.ColumnDefinition;
 const RowDefinition = components.RowDefinition;
 
+const connect = utils.connect;
+
 export default Griddle;
 export {
   actions,
@@ -31,4 +33,5 @@ export {
   plugins,
   ColumnDefinition,
   RowDefinition,
+  connect,
 };
