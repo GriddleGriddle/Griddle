@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var TestUtils = require('react-addons-test-utils');
 var GridFilter = require('../gridFilter.jsx');
 

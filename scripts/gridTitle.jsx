@@ -2,16 +2,17 @@
  See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
  */
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ColumnProperties = require('./columnProperties.js');
 var assign = require('lodash/assign');
 
-var DefaultHeaderComponent = React.createClass({
+var DefaultHeaderComponent = createReactClass({
     render: function () {
         return (<span>{this.props.displayName}</span>);
     }
 });
 
-var GridTitle = React.createClass({
+var GridTitle = createReactClass({
     getDefaultProps: function () {
         return {
             "columnSettings": null,

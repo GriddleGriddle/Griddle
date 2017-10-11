@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var GridRow = require('../gridRow.jsx');
 var ColumnProperties = require('../columnProperties.js');
 var RowProperties = require('../rowProperties.js');
@@ -226,7 +227,7 @@ describe('GridRow', function(){
 
 		var mock = jasmine.createSpy();
 
-    const FakeTable = React.createClass({
+    const FakeTable = createReactClass({
       render() {
         return (<table>
           <tbody>
@@ -278,7 +279,7 @@ describe('GridRow', function(){
 
 		var mock = jasmine.createSpy();
 
-    const FakeTable = React.createClass({
+    const FakeTable = createReactClass({
       render() {
         return (<table>
           <tbody>

@@ -1,13 +1,12 @@
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-"use strict";
+'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var GridFilter = React.createClass({
-    displayName: "GridFilter",
-
+var GridFilter = createReactClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "placeholderText": ""
@@ -17,7 +16,7 @@ var GridFilter = React.createClass({
         this.props.changeFilter(event.target.value);
     },
     render: function render() {
-        return React.createElement("div", { className: "filter-container" }, React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }));
+        return React.createElement('div', { className: 'filter-container' }, React.createElement('input', { type: 'text', name: 'filter', placeholder: this.props.placeholderText, className: 'form-control', onChange: this.handleChange }));
     }
 });
 

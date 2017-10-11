@@ -2,10 +2,11 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ColumnProperties = require('./columnProperties.js');
 var pick = require('lodash/pick');
 
-var GridRowContainer = React.createClass({
+var GridRowContainer = createReactClass({
     getDefaultProps: function(){
       return {
         "useGriddleStyles": true,

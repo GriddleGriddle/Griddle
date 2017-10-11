@@ -1,13 +1,12 @@
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-"use strict";
+'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var GridNoData = React.createClass({
-    displayName: "GridNoData",
-
+var GridNoData = createReactClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "noDataMessage": "No Data"
@@ -16,7 +15,7 @@ var GridNoData = React.createClass({
     render: function render() {
         var that = this;
 
-        return React.createElement("div", null, this.props.noDataMessage);
+        return React.createElement('div', null, this.props.noDataMessage);
     }
 });
 

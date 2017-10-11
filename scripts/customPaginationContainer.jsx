@@ -6,8 +6,9 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var CustomPaginationContainer = React.createClass({
+var CustomPaginationContainer = createReactClass({
   getDefaultProps: function(){
     return{
       "maxPage": 0,

@@ -61,7 +61,7 @@ Griddle comes with a handful of required properties that must be set when workin
 Below is a skeleton wrapper component for dealing with external results in Griddle. This wrapper does not need to be used but it could serve as a decent starting point. 
 
 ```
-var ExternalComponent = React.createClass({
+var ExternalComponent = createReactClass({
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,
@@ -131,7 +131,7 @@ getExternalData: function (page){
 The component was then modified to use getExternalData method for changing the pages and obtaining the initial data. Notice that filtering, sorting, etc are not enabled on this example (the next example has all of these options turned on). 
 
 ```javascript
-var ExternalSwapiComponent = React.createClass({
+var ExternalSwapiComponent = createReactClass({
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,
@@ -184,7 +184,7 @@ Please keep in mind that a good deal of this code is to simulate the type of act
 ```javascript
 var externalData = fakeData.slice(0, 53);
  
-var SimulatedExternalComponent = React.createClass({
+var SimulatedExternalComponent = createReactClass({
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,

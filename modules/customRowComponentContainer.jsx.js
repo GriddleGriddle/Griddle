@@ -5,13 +5,12 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-"use strict";
+'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var CustomRowComponentContainer = React.createClass({
-  displayName: "CustomRowComponentContainer",
-
+var CustomRowComponentContainer = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       "data": [],
@@ -26,7 +25,7 @@ var CustomRowComponentContainer = React.createClass({
 
     if (typeof that.props.customComponent !== 'function') {
       console.log("Couldn't find valid template.");
-      return React.createElement("div", { className: this.props.className });
+      return React.createElement('div', { className: this.props.className });
     }
 
     var nodes = this.props.data.map(function (row, index) {
@@ -34,7 +33,7 @@ var CustomRowComponentContainer = React.createClass({
     });
 
     var footer = this.props.showPager && this.props.pagingContent;
-    return React.createElement("div", { className: this.props.className, style: this.props.style }, nodes);
+    return React.createElement('div', { className: this.props.className, style: this.props.style }, nodes);
   }
 });
 

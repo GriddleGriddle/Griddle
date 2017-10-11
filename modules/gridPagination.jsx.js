@@ -4,12 +4,11 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var assign = require('lodash/assign');
 
 //needs props maxPage, currentPage, nextFunction, prevFunction
-var GridPagination = React.createClass({
-    displayName: 'GridPagination',
-
+var GridPagination = createReactClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "maxPage": 0,

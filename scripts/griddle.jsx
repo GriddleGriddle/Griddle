@@ -6,6 +6,8 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var PropTypes = require('prop-types');
+var createReactClass = require('create-react-class');
 var GridTable = require('./gridTable.jsx');
 var GridFilter = require('./gridFilter.jsx');
 var GridPagination = require('./gridPagination.jsx');
@@ -41,7 +43,7 @@ var _property = require('lodash/property');
 var _get = require('lodash/get');
 var _some = require('lodash/some');
 
-var Griddle = React.createClass({
+var Griddle = createReactClass({
     statics: {
         GridTable: GridTable,
         GridFilter: GridFilter,
@@ -147,14 +149,14 @@ var Griddle = React.createClass({
         };
     },
     propTypes: {
-        isMultipleSelection: React.PropTypes.bool,
-        selectedRowIds: React.PropTypes.oneOfType([
-            React.PropTypes.arrayOf(React.PropTypes.number),
-            React.PropTypes.arrayOf(React.PropTypes.string)
+        isMultipleSelection: PropTypes.bool,
+        selectedRowIds: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.number),
+            PropTypes.arrayOf(PropTypes.string)
         ]),
-        uniqueIdentifier: React.PropTypes.string,
-        onSelectionChange: React.PropTypes.func,
-        columnFilterFunc: React.PropTypes.func
+        uniqueIdentifier: PropTypes.string,
+        onSelectionChange: PropTypes.func,
+        columnFilterFunc: PropTypes.func
     },
     defaultFilter: function(results, filter) {
       var that = this;

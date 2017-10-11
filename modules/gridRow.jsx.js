@@ -4,6 +4,7 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ColumnProperties = require('./columnProperties.js');
 var deep = require('./deep.js');
 var isFunction = require('lodash/isFunction');
@@ -13,9 +14,7 @@ var defaults = require('lodash/defaults');
 var toPairs = require('lodash/toPairs');
 var without = require('lodash/without');
 
-var GridRow = React.createClass({
-    displayName: 'GridRow',
-
+var GridRow = createReactClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "isChildRow": false,

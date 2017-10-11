@@ -2,11 +2,12 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 var includes = require('lodash/includes');
 var without = require('lodash/without');
 var find = require('lodash/find');
 
-var GridSettings = React.createClass({
+var GridSettings = createReactClass({
     getDefaultProps: function(){
         return {
             "columns": [],

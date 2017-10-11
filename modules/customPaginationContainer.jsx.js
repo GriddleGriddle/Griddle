@@ -5,7 +5,7 @@
 
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-"use strict";
+'use strict';
 
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -18,10 +18,9 @@ var _extends = Object.assign || function (target) {
 };
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var CustomPaginationContainer = React.createClass({
-  displayName: "CustomPaginationContainer",
-
+var CustomPaginationContainer = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       "maxPage": 0,
@@ -37,7 +36,7 @@ var CustomPaginationContainer = React.createClass({
 
     if (typeof that.props.customPagerComponent !== 'function') {
       console.log("Couldn't find valid template.");
-      return React.createElement("div", null);
+      return React.createElement('div', null);
     }
 
     return React.createElement(that.props.customPagerComponent, _extends({}, this.props.customPagerComponentOptions, { maxPage: this.props.maxPage, nextText: this.props.nextText, previousText: this.props.previousText, currentPage: this.props.currentPage, setPage: this.props.setPage, previous: this.props.previous, next: this.props.next }));
