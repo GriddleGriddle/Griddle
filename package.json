@@ -61,7 +61,8 @@
     "typescript": "^2.4.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
-    "webpack-fail-plugin": "^1.0.6"
+    "webpack-fail-plugin": "^1.0.6",
+    "redux-logger": "^3.0.6"
   },
   "dependencies": {
     "immutable": "^3.8.1",

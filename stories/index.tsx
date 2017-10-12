@@ -11,11 +11,14 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
+import { createLogger } from 'redux-logger';
 
 import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition } from '../src/module';
 const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
+
+const { griddleCreateSelector } = utils.selectorUtils;
 
 const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
 
@@ -844,6 +847,129 @@ storiesOf('Plugins', module)
         />
       </div>
     );
+  })
+  .add('Overridable selectors in plugin', () => {
+
+    const getNext = () => {
+        return {
+            type: "GRIDDLE_NEXT_PAGE"
+        };
+    };
+
+    const getPrevious = () => {
+        return {
+            type: "GRIDDLE_PREVIOUS_PAGE"
+        };
+    };
+
+    const setPage = (pageNumber) => {
+        return {
+            type: "GRIDDLE_SET_PAGE",
+            pageNumber
+        };
+    };
+
+    const GRIDDLE_NEXT_PAGE = (state, action) => {
+      const currentPage = state.getIn(["pageProperties", "currentPage"]);
+      const pageSize = state.getIn(["pageProperties", "pageSize"]);
+      const recordCount = state.get("data").size;
+      const maxPage = Math.ceil(recordCount/pageSize);
+
+      if (currentPage + 1 <= maxPage) {
+        return state.setIn(["pageProperties", "currentPage"], currentPage + 1);
+      } else {
+        return state;
+      }
+    };
+
+    const GRIDDLE_PREVIOUS_PAGE = (state, action) => {
+      const currentPage = state.getIn(["pageProperties", "currentPage"]);
+      const minPage = 1;
+
+      if (currentPage - 1 >= minPage) {
+        return state.setIn(["pageProperties", "currentPage"], currentPage - 1);
+      } else {
+        return state;
+      }
+    };
+
+    const GRIDDLE_SET_PAGE = (state, action) => {
+      const pageNumber = action.pageNumber;
+      const pageSize = state.getIn(["pageProperties", "pageSize"]);
+      const recordCount = state.get("data").size;
+      const maxPage = Math.ceil(recordCount/pageSize);
+      const minPage = 1;
+
+      if (pageNumber >= minPage && pageNumber <= maxPage) {
+        return state.setIn(["pageProperties", "currentPage"], pageNumber);
+      } else {
+        return state;
+      }
+    };
+
+    const allDataSelector = (state) => state.get("data");
+
+    const recordCountSelector = state => state.get("data").size;
+
+    const dataSelector = griddleCreateSelector (
+      "allDataSelector", 
+      "pageSizeSelector", 
+      "currentPageSelector", 
+      "recordCountSelector",
+      (data, pageSize, currentPage, recordCount) => {
+        currentPage = currentPage - 1;
+        const first = currentPage * pageSize;
+        const last = Math.min((currentPage + 1) * pageSize, recordCount);
+        return data.slice(first, last);
+      }
+    );
+
+    const NextButtonEnhancer = OriginalComponent => compose(
+      connect(
+        null,
+        (dispatch, props) => {
+          return {
+            getNext: () => dispatch(getNext())
+          }
+        }
+      )
+    )((props) => <OriginalComponent {...props} onClick={props.getNext} />);
+
+    const PageDropdownEnhancer = OriginalComponent => compose(
+      connect(
+        null,
+        (dispatch, props) => {
+          return {
+            setPage: (page) => dispatch(setPage(page))
+          }
+        }
+      )
+    )((props) => <OriginalComponent {...props} />);
+
+
+
+    const OverridableSelectorsPlugin = {
+      components: {
+        NextButtonEnhancer,
+        PageDropdownEnhancer
+      },
+      reducer: {
+        GRIDDLE_NEXT_PAGE,
+        GRIDDLE_PREVIOUS_PAGE,
+        GRIDDLE_SET_PAGE
+      },
+      selectors: {
+        allDataSelector,
+        recordCountSelector
+      },
+      composedSelectors: {
+        dataSelector
+      }
+    }
+
+  return (
+    <Griddle data={fakeData} plugins={[OverridableSelectorsPlugin]} reduxMiddleware={[createLogger()]} />
+  );
   })
 
 storiesOf('Cell', module)

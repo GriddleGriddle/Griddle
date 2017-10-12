@@ -422,6 +422,7 @@ export namespace utils {
     const compositionUtils: PropertyBag<Function>;
     const dataUtils: PropertyBag<Function>;
     const rowUtils: PropertyBag<Function>;
+    const selectorUtils: PropertyBag<Function>;
 
     const connect : typeof originalConnect;
 
