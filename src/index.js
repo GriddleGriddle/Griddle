@@ -161,6 +161,12 @@ class Griddle extends Component {
     this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
   }
 
+  shouldComponentUpdate() {
+    // As relevant property updates are captured in `componentWillReceiveProps`.
+    // return false to prevent the the entire root node from being deleted.
+    return false;
+  }
+
   getStoreKey = () => {
     return this.props.storeKey || 'store';
   }
