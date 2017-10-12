@@ -7,13 +7,12 @@ import getContext from 'recompose/getContext';
 import withContext from 'recompose/withContext';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { Provider } from 'react-redux';
+import { Provider, connect as reduxConnect } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
 import _ from 'lodash';
 
-import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
-const { connect } = utils;
+import GenericGriddle, { connect, actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
@@ -754,24 +753,20 @@ storiesOf('Griddle main', module)
     );
   })
 
-  .add('with child of another redux container', () => {
+  .add('with custom storeKey and child connected to another Redux store', () => {
     // basically the demo redux stuff
     const countSelector = (state) => state.count;
 
     const CountComponent = (props) => (
       <div>
-        {props.count}
-        <button type="button" onClick={props.increment}>
-          +
-        </button>
-        <button type="button" onClick={props.decrement}>
-          -
-        </button>
+        <button type="button" onClick={props.increment}>+</button>
+        <input value={props.count} readOnly style={{ width: '2em', textAlign: 'center' }} />
+        <button type="button" onClick={props.decrement}>−</button>
       </div>
     )
 
     // should get count from other store
-    const ConnectedComponent = connect(
+    const ConnectedComponent = reduxConnect(
       state => ({
         count: countSelector(state)
       }),
@@ -801,8 +796,8 @@ storiesOf('Griddle main', module)
               </RowDefinition>
             </Griddle>
 
-          Component outside of Griddle that's sharing state
-          <ConnectedComponent />
+            Component outside of Griddle that's sharing state
+            <ConnectedComponent />
           </div>
         </Provider>
       </div>
