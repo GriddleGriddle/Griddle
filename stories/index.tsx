@@ -481,6 +481,79 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add('with extra re-render', () => {
+    let data = fakeData;
+
+    class customComponent extends React.PureComponent<any, any> {
+      render() {
+        const { value, extra } = this.props;
+
+        console.log('rerender!');
+        return (
+          <span>{value} {extra && <em> {extra}</em>}</span>
+        );
+      }
+    }
+    let interval = null;
+
+    class UpdatingDataTable extends React.Component<any, any> {
+      constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+          data: this.updateDataWithProgress(props.data, 0),
+          progressValue: 0,
+        };
+      }
+
+      updateDataWithProgress(data, progressValue) {
+        return data.map(item => ({
+          ...item,
+          progress: progressValue,
+        }));
+      }
+
+      componentDidMount() {
+        interval = setInterval(() => {
+          this.setState(state => {
+            const newProgressValue = state.progressValue + 1;
+            return {
+              data: this.updateDataWithProgress(state.data, newProgressValue),
+              progressValue: newProgressValue,
+            }
+          })
+        }, 5000)
+      }
+
+      componentWillUnmount() {
+        console.log('unmount!');
+        clearInterval(interval);
+      }
+
+      render() {
+        const { data } = this.state;
+
+        return (
+          <div>
+            <small><em>extra</em> from <code>custom(Heading)Component</code>; <strong>extra</strong> from <code>(TableHeading)Cell</code></small>
+            <Griddle data={data} plugins={[LocalPlugin]} >
+              <RowDefinition rowKey="name">
+                <ColumnDefinition id="name" order={2} extraData={{extra: 'extra'}}
+                  customComponent={customComponent} />
+                <ColumnDefinition id="state" order={1} />
+                <ColumnDefinition id="progress" />
+              </RowDefinition>
+            </Griddle>
+          </div>
+        )
+      }
+    }
+
+
+    return (
+      <UpdatingDataTable data={fakeData} />
+    )
+  })
   .add('with custom griddle key', () => {
     return (
       <div>
@@ -592,7 +665,7 @@ storiesOf('Griddle main', module)
     ));
 
     // HoC for overriding Table component to just render the default TableBody component
-    // We could use this entirely if we wanted and connect and map over visible rows but 
+    // We could use this entirely if we wanted and connect and map over visible rows but
     // Using this + tableBody to take advantange of code that Griddle LocalPlugin already has
     const CustomTableComponent = OriginalComponent =>
       class CustomTableComponent extends React.Component<{}> {
