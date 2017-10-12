@@ -62,7 +62,8 @@ class Griddle extends Component {
     events: PropTypes.object,
     selectors: PropTypes.object,
     storeKey: PropTypes.string,
-    storeListener: PropTypes.object
+    storeListener: PropTypes.object,
+    actions: PropTypes.object,
   }
 
   constructor(props) {
@@ -99,6 +100,8 @@ class Griddle extends Component {
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
     this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+
+    this.actions = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.actions }), {...actions});
 
     const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
 
@@ -172,7 +175,8 @@ class Griddle extends Component {
       events: this.events,
       selectors: this.selectors,
       storeKey: this.getStoreKey(),
-      storeListener: this.storeListener
+      storeListener: this.storeListener,
+      actions: this.actions,
     };
   }
 
