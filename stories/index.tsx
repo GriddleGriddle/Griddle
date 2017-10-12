@@ -973,12 +973,23 @@ storiesOf('Plugins', module)
       )
     )((props) => <OriginalComponent {...props} />);
 
+    const PreviousButtonEnhancer = OriginalComponent => compose(
+      connect(
+        null,
+        (dispatch, props) => {
+          return {
+            getPrevious: () => dispatch(getPrevious())
+          }
+        }
+      )
+    )((props) => <OriginalComponent {...props} onClick={props.getPrevious} />);
 
 
     const OverridableSelectorsPlugin = {
       components: {
         NextButtonEnhancer,
-        PageDropdownEnhancer
+        PageDropdownEnhancer,
+        PreviousButtonEnhancer
       },
       reducer: {
         GRIDDLE_NEXT_PAGE,
@@ -992,7 +1003,7 @@ storiesOf('Plugins', module)
       composedSelectors: {
         dataSelector
       }
-    }
+    };
 
   return (
     <Griddle data={fakeData} plugins={[OverridableSelectorsPlugin]} reduxMiddleware={[createLogger()]} />
