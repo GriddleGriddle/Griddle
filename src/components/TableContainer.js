@@ -11,12 +11,6 @@ const ComposedContainerComponent = OriginalComponent => compose(
     selectors: PropTypes.object
   }),
   //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
-  mapProps(props => ({
-    TableHeading: props.components.TableHeading,
-    TableBody: props.components.TableBody,
-    Loading: props.components.Loading,
-    NoResults: props.components.NoResults,
-  })),
   connect(
     (state, props) => ({
       dataLoading: props.selectors.dataLoadingSelector(state),
@@ -27,12 +21,16 @@ const ComposedContainerComponent = OriginalComponent => compose(
   ),
   //TODO: Should we use withHandlers here instead? I realize that's not 100% the intent of that method
   mapProps(props => {
-    const { components, ...otherProps } = props;
+    const { components, dataLoading, visibleRows, className, style } = props;
     return {
       TableHeading: components.TableHeading,
       TableBody: components.TableBody,
+      Loading: components.Loading,
       NoResults: components.NoResults,
-      ...otherProps
+      dataLoading,
+      visibleRows,
+      className,
+      style
     }
   })
 )(props => <OriginalComponent {...props} />);
