@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import compose from 'recompose/compose';
 import getContext from 'recompose/getContext';
-import { connect } from '../utils/griddleConnect';
 
-//import { textSelector, hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import { connect } from '../utils/griddleConnect';
 
 const enhance = OriginalComponent => compose(
   getContext({

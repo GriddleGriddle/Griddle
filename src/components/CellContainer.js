@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from '../utils/griddleConnect';
 import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-//import {
-//  customComponentSelector,
-//  cellValueSelector,
-//  cellPropertiesSelector,
-//  classNamesForComponentSelector,
-//  stylesForComponentSelector
-//} from '../selectors/dataSelectors';
+import { connect } from '../utils/griddleConnect';
 import { valueOrResult } from '../utils/valueUtils';
 
 function hasWidthOrStyles(cellProperties) {
