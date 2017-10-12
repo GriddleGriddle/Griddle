@@ -465,9 +465,6 @@ export namespace plugins {
         disablePointerEvents?: boolean;
     }
     var PositionPlugin : (settings: PositionSettings) => GriddlePlugin;
-
-    var APlugin: GriddlePlugin;
-    var BPlugin: GriddlePlugin;
 }
 
 export const ColumnDefinition : typeof components.ColumnDefinition;

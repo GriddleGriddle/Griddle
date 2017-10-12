@@ -17,7 +17,7 @@ const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { LegacyStylePlugin, LocalPlugin, PositionPlugin, APlugin, BPlugin } = plugins;
+const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -1541,16 +1541,6 @@ storiesOf('Settings', module)
         settingsComponentObjects={{
           pageSizeSettings: null
         }} />
-    );
-  })
-
-  .add('multi-enhancer-test', () => {
-
-    return (
-      <Griddle
-        data={fakeData}
-        plugins={[BPlugin, APlugin]}
-      />
     );
   })
 
