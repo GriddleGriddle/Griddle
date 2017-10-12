@@ -1,15 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Cell = ({ value, onClick, onMouseEnter, onMouseLeave, style, className }) => (
-  <td
-    onClick={onClick}
-    onMouseEnter={onMouseEnter}
-    onMouseLeave={onMouseLeave}
-    style={style}
-    className={className}
-  >
-    {value}
-  </td>
-);
+class Cell extends Component {
+  componentWillUnmount() {
+    console.log('unmounting!');
+  }
+  render() {
+    const { value, onClick, onMouseEnter, onMouseLeave, style, className } = this.props;
+
+    return (
+      <td
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        style={style}
+        className={className}
+      >
+        {value}
+      </td>
+    );
+  }
+}
 
 export default Cell;

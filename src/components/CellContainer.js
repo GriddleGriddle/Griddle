@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from '../utils/griddleConnect';
+// import { connect } from '../utils/griddleConnect';
 import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
+import shouldUpdate from 'recompose/shouldUpdate';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { connect } from 'react-redux';
 
 import {
   customComponentSelector,
@@ -47,7 +50,7 @@ const ComposedCellContainer = OriginalComponent => compose(
       className: classNamesForComponentSelector(state, 'Cell'),
       style: stylesForComponentSelector(state, 'Cell'),
     };
-  }),
+  }, null, null, { storeKey: 'store' }),
   mapProps(props => {
     return ({
     ...props.cellProperties.extraData,
@@ -57,7 +60,19 @@ const ComposedCellContainer = OriginalComponent => compose(
     value: props.customComponent ?
       <props.customComponent {...props.cellProperties.extraData} {...props} /> :
       props.value
-  })})
+  })}),
+  shouldUpdate((props, nextProps) => {
+    console.log('diffs', Object.keys(nextProps).reduce((diffs, key) => {
+      return nextProps[key] !== props[key] ? [...diffs, {
+        key,
+        oldValue: props[key],
+        newValue: nextProps[key],
+      }] : diffs;
+    }, []));
+
+    return true;
+  }),
+  onlyUpdateForKeys(['value']),
 )(props =>
   <OriginalComponent
     {...props}
