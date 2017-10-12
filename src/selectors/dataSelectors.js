@@ -8,6 +8,8 @@ import MAX_SAFE_INTEGER from 'max-safe-integer'
 /** Gets the full dataset currently tracked by Griddle */
 export const dataSelector = state => state.get('data');
 
+export const dataLoadingSelector = createSelector(dataSelector, data => !data);
+
 /** Gets the page size */
 export const pageSizeSelector = state => state.getIn(['pageProperties', 'pageSize']);
 

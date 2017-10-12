@@ -63,7 +63,7 @@ export function setPageSize(pageSize) {
   }
 }
 
-export function updateState({ data = [], pageProperties = {}, sortProperties = {} }) {
+export function updateState({ data, pageProperties = {}, sortProperties = {} }) {
   return {
     type: GRIDDLE_UPDATE_STATE,
     newState: { data, pageProperties, sortProperties }

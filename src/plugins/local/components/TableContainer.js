@@ -5,7 +5,7 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector, visibleRowCountSelector } from '../selectors/localSelectors';
+import { classNamesForComponentSelector, stylesForComponentSelector, dataLoadingSelector, visibleRowCountSelector } from '../selectors/localSelectors';
 
 const ComposedContainerComponent = OriginalComponent => compose(
   getContext({
@@ -14,10 +14,12 @@ const ComposedContainerComponent = OriginalComponent => compose(
   mapProps(props => ({
     TableHeading: props.components.TableHeading,
     TableBody: props.components.TableBody,
+    Loading: props.components.Loading,
     NoResults: props.components.NoResults,
   })),
   connect(
     (state, props) => ({
+      dataLoading: dataLoadingSelector(state),
       visibleRows: visibleRowCountSelector(state),
       className: classNamesForComponentSelector(state, 'Table'),
       style: stylesForComponentSelector(state, 'Table'),

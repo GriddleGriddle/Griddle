@@ -1,4 +1,4 @@
-import { createStore, combineReducers, bindActionCreators, applyMiddleware } from 'redux';
+import { createStore, combineReducers, bindActionCreators, applyMiddleware, compose } from 'redux';
 import Immutable from 'immutable';
 import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
@@ -138,10 +138,13 @@ class Griddle extends Component {
       }
     );
 
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     this.store = createStore(
       reducers,
       initialState,
-      applyMiddleware(..._.compact(_.flatten(plugins.map(p => p.reduxMiddleware))), ...reduxMiddleware) 
+      composeEnhancers(
+        applyMiddleware(..._.compact(_.flatten(plugins.map(p => p.reduxMiddleware))), ...reduxMiddleware)
+      )
     );
 
     this.provider = createProvider(storeKey);

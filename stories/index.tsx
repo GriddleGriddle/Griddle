@@ -13,7 +13,7 @@ import { createSelector } from 'reselect';
 import _ from 'lodash';
 import { createLogger } from 'redux-logger';
 
-import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition } from '../src/module';
+import GenericGriddle, { actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
 const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
@@ -98,6 +98,33 @@ storiesOf('Griddle main', module)
         </RowDefinition>
       </Griddle>
     )
+  })
+  .add('with local, delayed data', () => {
+    class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
+      constructor(props) {
+        super(props);
+        this.state = {};
+        this.resetData();
+      }
+
+      resetData = () => {
+        this.setState({ data: null });
+
+        setTimeout(() => {
+          this.setState({ data: this.props.data });
+        }, 2000);
+      }
+
+      render() {
+        return (
+          <div>
+            <p><button onClick={this.resetData}>Reload Data</button></p>
+            <Griddle {...this.props} data={this.state.data} />
+          </div>
+        );
+      }
+    }
+    return <DeferredGriddle data={fakeData} plugins={[LocalPlugin]} />
   })
   .add('with local and legacy (v0) styles', () => {
     return (
@@ -970,6 +997,40 @@ storiesOf('Plugins', module)
   return (
     <Griddle data={fakeData} plugins={[OverridableSelectorsPlugin]} reduxMiddleware={[createLogger()]} />
   );
+  })
+
+storiesOf('Data Missing', module)
+  .add('base (data=undefined)', () => {
+    return (
+      <Griddle />
+    )
+  })
+  .add('base (data=null)', () => {
+    return (
+      <Griddle data={null} />
+    )
+  })
+  .add('local (data=undefined)', () => {
+    return (
+      <Griddle plugins={[LocalPlugin]} />
+    )
+  })
+  .add('local (data=null)', () => {
+    return (
+      <Griddle data={null} plugins={[LocalPlugin]} />
+    )
+  })
+
+storiesOf('Data Empty', module)
+  .add('base', () => {
+    return (
+      <Griddle data={[]} />
+    )
+  })
+  .add('local', () => {
+    return (
+      <Griddle data={[]} plugins={[LocalPlugin]} />
+    )
   })
 
 storiesOf('Cell', module)
