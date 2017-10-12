@@ -4,6 +4,11 @@ import _ from 'lodash';
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 import { griddleCreateSelector } from '../utils/selectorUtils';
 
+export const dataLoadingSelector = griddleCreateSelector(
+  "dataSelector",
+  data => !data
+);
+
 export const hasPreviousSelector = griddleCreateSelector(
   "currentPageSelector",
   (currentPage) => (currentPage > 1)
