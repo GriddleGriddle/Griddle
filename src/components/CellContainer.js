@@ -58,22 +58,7 @@ const ComposedCellContainer = OriginalComponent => compose(
     ...props,
     className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
     style: getCellStyles(props.cellProperties, props.style),
-    value: props.customComponent ?
-      <props.customComponent {...props.cellProperties.extraData} {...props} /> :
-      props.value
   })}),
-  shouldUpdate((props, nextProps) => {
-    console.log('diffs', Object.keys(nextProps).reduce((diffs, key) => {
-      return nextProps[key] !== props[key] ? [...diffs, {
-        key,
-        oldValue: props[key],
-        newValue: nextProps[key],
-      }] : diffs;
-    }, []));
-
-    return true;
-  }),
-  onlyUpdateForKeys(['value']),
 )(props =>
   <OriginalComponent
     {...props}

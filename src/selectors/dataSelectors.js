@@ -2,13 +2,9 @@ import Immutable from 'immutable';
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
 import _ from 'lodash';
 
-const createShallowSelector = createSelectorCreator(
+const createDeepEqualSelector = createSelectorCreator(
   defaultMemoize,
-  (value, other) => {
-    return value === other || Object.keys(value).reduce((diff, key) => {
-      return diff && value[key] === other[key];
-    }, true)
-  }
+  _.isEqual,
 )
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
@@ -305,7 +301,7 @@ export const cellPropertiesSelectorFactory = () => {
     return (item && item.toJSON()) || {};
   };
 
-  return createShallowSelector(
+  return createDeepEqualSelector(
     immutableCellPropertiesSelector,
     item => item,
   );

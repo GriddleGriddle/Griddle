@@ -503,6 +503,7 @@ storiesOf('Griddle main', module)
         this.state = {
           data: this.updateDataWithProgress(props.data, 0),
           progressValue: 0,
+          extraData: {extra: 'extra'},
         };
       }
 
@@ -531,14 +532,14 @@ storiesOf('Griddle main', module)
       }
 
       render() {
-        const { data } = this.state;
+        const { data, extraData } = this.state;
 
         return (
           <div>
             <small><em>extra</em> from <code>custom(Heading)Component</code>; <strong>extra</strong> from <code>(TableHeading)Cell</code></small>
             <Griddle data={data} plugins={[LocalPlugin]} >
               <RowDefinition rowKey="name">
-                <ColumnDefinition id="name" order={2} extraData={{extra: 'extra'}}
+                <ColumnDefinition id="name" order={2} extraData={extraData}
                   customComponent={customComponent} />
                 <ColumnDefinition id="state" order={1} />
                 <ColumnDefinition id="progress" />
