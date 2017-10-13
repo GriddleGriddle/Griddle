@@ -5,23 +5,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import * as dataReducers from './reducers/dataReducer';
-import components from './components';
+//import * as dataReducers from './reducers/dataReducer';
+//import components from './components';
 import settingsComponentObjects from './settingsComponentObjects';
-import * as selectors from './selectors/dataSelectors';
+//import * as selectors from './selectors/dataSelectors';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
-import * as actions from './actions';
+//import * as actions from './actions';
 
-const defaultEvents = {
-  ...actions,
-  onFilter: actions.setFilter,
-  setSortProperties
-};
+import CorePlugin from './plugins/core';
+
+//const defaultEvents = {
+//  ...actions,
+//  onFilter: actions.setFilter,
+//  setSortProperties
+//};
 
 
 const defaultStyleConfig = {
@@ -69,6 +71,7 @@ class Griddle extends Component {
     super(props);
 
     const {
+      baselinePlugin=CorePlugin,
       plugins=[],
       data,
       children:rowPropertiesComponent,
@@ -85,20 +88,24 @@ class Griddle extends Component {
       ...userInitialState
     } = props;
 
+    this.baselinePlugin = baselinePlugin;
+
     const rowProperties = getRowProperties(rowPropertiesComponent);
     const columnProperties = getColumnProperties(rowPropertiesComponent);
 
     //Combine / compose the reducers to make a single, unified reducer
-    const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
+    //const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
+    const reducers = buildGriddleReducer([baselinePlugin.reducer, ...plugins.map(p => p.reducer)]);
 
     //Combine / Compose the components to make a single component for each component type
-    this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
+    //this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
+    this.components = buildGriddleComponents([baselinePlugin.components, ...plugins.map(p => p.components), userComponents]);
 
     this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => p.settingsComponentObjects), userSettingsComponentObjects);
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...baselinePlugin.selectors});
 
     const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
 
@@ -158,7 +165,7 @@ class Griddle extends Component {
   componentWillReceiveProps(nextProps) {
     const { data, pageProperties, sortProperties } = nextProps;
 
-    this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
+    this.store.dispatch(this.baselinePlugin.actions.updateState({ data, pageProperties, sortProperties }));
   }
 
   getStoreKey = () => {

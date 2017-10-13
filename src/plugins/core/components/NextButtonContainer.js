@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from '../utils/griddleConnect';
+import { connect } from '../../../utils/griddleConnect';
 
 import { textSelector, hasNextSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from '../utils/griddleConnect';
+import { connect } from '../../../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
 import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
-import { getSortIconProps } from '../utils/sortUtils';
-import { valueOrResult } from '../utils/valueUtils';
+import { getSortIconProps } from '../../../utils/sortUtils';
+import { valueOrResult } from '../../../utils/valueUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>

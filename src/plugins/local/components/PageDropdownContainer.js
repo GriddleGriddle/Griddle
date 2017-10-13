@@ -3,7 +3,7 @@ import { connect } from '../../../utils/griddleConnect';
 import { createStructuredSelector } from 'reselect';
 
 import { currentPageSelector, maxPageSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
-import { setPage } from '../../../actions';
+import { setPage } from '../../core/actions';
 
 const enhance = OriginalComponent => connect(state => ({
   maxPages: maxPageSelector(state),

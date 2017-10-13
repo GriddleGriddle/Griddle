@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { defaultSort } from '../../../utils/sortUtils';
 import { getVisibleDataForColumns } from '../../../utils/dataUtils';
-import * as dataSelectors from '../../../selectors/dataSelectors';
+import * as dataSelectors from '../../core/selectors/dataSelectors';
 
 /** Gets the entire data set
  * @param {Immutable} state - state object
