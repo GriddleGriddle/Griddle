@@ -484,16 +484,31 @@ storiesOf('Griddle main', module)
   .add('with extra re-render', () => {
     let data = fakeData;
 
-    class customComponent extends React.PureComponent<any, any> {
+    class customComponent extends React.Component<any, any> {
+      state = {
+        timesRendered: 1,
+      }
+
+      componentWillReceiveProps() {
+        this.setState(state => ({
+          timesRendered: state.timesRendered + 1,
+        }));
+      }
+
       render() {
         const { value, extra } = this.props;
+        const { timesRendered } = this.state;
 
-        console.log('rerender!');
         return (
-          <span>{value} {extra && <em> {extra}</em>}</span>
+          <span>
+            {value}
+            {extra && <em> {extra}</em>}
+            {timesRendered}
+          </span>
         );
       }
     }
+
     let interval = null;
 
     class UpdatingDataTable extends React.Component<any, any> {
@@ -503,7 +518,7 @@ storiesOf('Griddle main', module)
         this.state = {
           data: this.updateDataWithProgress(props.data, 0),
           progressValue: 0,
-          extraData: {extra: 'extra'},
+          extraData: {extra: 'times re-rendered: '},
         };
       }
 
@@ -527,7 +542,6 @@ storiesOf('Griddle main', module)
       }
 
       componentWillUnmount() {
-        console.log('unmount!');
         clearInterval(interval);
       }
 
