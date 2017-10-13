@@ -1,5 +1,10 @@
-import { forOwn } from 'lodash';
+import { forOwn, size, values } from 'lodash';
 import { createSelector } from 'reselect'
+
+const DEP = "D";
+const FUNC = "F";
+
+const globalSelectors = {};
 
 /*
  * Wrapped 'createSelector' that allows for building the selector
@@ -24,7 +29,7 @@ import { createSelector } from 'reselect'
  * When the selectors are finally generated, the actual dependency selectors
  * are passed to the createSelector function.
  */
-export const griddleCreateSelector = (...args) => {
+const griddleCreateSelector = (...args) => {
 
   // All selectors that use createSelector must have a minimum of one
   // dependency and the selector function itself
@@ -34,10 +39,60 @@ export const griddleCreateSelector = (...args) => {
 
   // The first n - 1 args are the dependencies, they must
   // all be strings.
-  const dependencies = args.slice(0, args.length - 1);
-  for (let dependency of dependencies) {
-    if (typeof dependency !== "string") {
-      throw new Error("Args 0..n-1 must be strings");
+  //const dependencies = args.slice(0, args.length - 1);
+
+
+  // The first n - 1 args are selector functions AND/OR
+  // selector dependencies.
+  //
+  // If all arguments are selector functions, this would be
+  // considered a 'legacy' style hard-coded createSelector
+  // invocation. We can immediately delegate to createSelector
+  // and return the selector function.
+  //
+  // If all of the arguments are selector dependencies --
+  // which are strings naming the to-be-resolved selector functions --
+  // then we need to return a selector generator function. This will
+  // later be provided with a list of fully resolved selector
+  // functions that can then be used to generate this selector
+  // using createSelector.
+  //
+  // If there is a MIXTURE of both selector functions and
+  // selector dependency strings, then we still need a
+  // selector generator but only a portion of the functions
+  // need to be resolved for later. We save the provided selector
+  // functions and will merge them with the resolved selectors
+  // when the generator function is called. This could be used
+  // to force a particular dependency from being overridden.
+  // This should be considered an advanced feature, you should
+  // only prevent dependent selector overriding if there is a
+  // very good reason for it.
+  //
+  // As this griddleCreateSelector function can return either the
+  // output of reselect's 'createSelector', or a selector generator
+  // function, the distinguishing feature will be that the selector
+  // generator will have as a prop the .dependencies field which
+  // is a list of the string names of the dependencies for this
+  // generator. If this is a mixed type generator, the length of
+  // the dependencies will be smaller than args.length - 1 based
+  // on how many selector function args were provided.
+  const depsOrFuncs = args.slice(0, args.length - 1);
+  const dofTypeMap = [];
+  const dependencies = {};
+  const functions = {};
+  for (const index in depsOrFuncs) {
+    const depOrFunc = depsOrFuncs[index];
+    switch(typeof depOrFunc) {
+      case "function": 
+        dofTypeMap[index] = FUNC;
+        functions[index] = depOrFunc;
+        break;
+      case "string":
+        dofTypeMap[index] = DEP;
+        dependencies[index] = depOrFunc;
+        break;
+      default:
+        throw new Error("The first n - 1 arguments of griddleCreateSelector must be either strings or functions");
     }
   }
 
@@ -48,122 +103,95 @@ export const griddleCreateSelector = (...args) => {
     throw new Error("Last argument must be a function");
   }
 
-  return {
-    // the creator function is called to generate the
-    // selector function. It is passed the object containing all
-    // of the static/generated selector functions to be potentially
-    // used as dependencies
-    creator: (selectors) => {
+  // If there are a number of function arguments equal to the
+  // first n - 1 arguments, this is a fully hard coded selector,
+  // call createSelector and return.
+  if (size(functions) === args.length - 1) {
+    return createSelector(...args);
+  }
 
-      // extract the dependency selectors using the list
-      // of dependencies
-      const createSelectorFuncs = [];
-      for (let dependency of dependencies) {
-        createSelectorFuncs.push(selectors[dependency]);
+  // Otherwise, this is either a mixed or fully string dependency
+  // selector. Create a selector generator.
+
+  const selectorGenerator = (() => {
+    let generatedSelector;
+    return (...args) => {
+      if (!generatedSelector) {
+        // Legacy components might call this selector directly with state
+        // so use global cache of selectors instead
+        //const dependencySelectors = selectors._dependencies ? selectors : globalSelectors;
+
+        const resolvedSelectors = args[0];
+
+        const createSelectorFuncs = [];
+        for (const index in dofTypeMap) {
+          const dofType = dofTypeMap[index];
+          switch(dofType) {
+            case FUNC:
+              createSelectorFuncs.push(functions[index]);
+              break;
+            case DEP:
+              if (resolvedSelectors.hasOwnProperty(dependencies[index])) {
+                createSelectorFuncs.push(resolvedSelectors[dependencies[index]]);
+              } else {
+                throw new Error(`Dependency ${dependencies[index]} not found!`);
+              }
+              break;
+          }
+        }
+
+        // add this selector
+        createSelectorFuncs.push(selector);
+
+        // call createSelector with the final list of args
+        generatedSelector = createSelector(...createSelectorFuncs);
+        selectorGenerator.generated = true;
+        return generatedSelector;
+
+        // Selector was called directly in legacy code
+        //return createSelector(...createSelectorFuncs)(selectors);
+      } else {
+        return generatedSelector(...args)
       }
+    }
+  })();
 
-      // add this selector
-      createSelectorFuncs.push(selector);
-
-      // call createSelector with the final list of args
-      return createSelector(...createSelectorFuncs);
-    },
-
-    // the list of dependencies is needed to build the dependency
-    // tree
-    dependencies
-  };
+  // attach the list of string dependencies to the
+  // selector generator
+  selectorGenerator.dependencies = values(dependencies);
+  return selectorGenerator;
 };
+export { griddleCreateSelector as createSelector };
 
 
-export const composeSelectors = (baseSelectors, composedSelectors, plugins) => {
+export const composeSelectors = (defaultSelectors, plugins) => {
 
   // STEP 1
   // ==========
   //
-  // Add all of the 'base' selectors to the list of combined selectors.
+  // Add all selectors to the list of combined selectors.
   // The actuall selector functions are wrapped in an object which is used
   // to keep track of all the data needed to properly build all the
   // selector dependency trees
-  console.log("Parsing built-in selectors");
   const combinedSelectors = new Map();
+  const allSelectors = [defaultSelectors].concat(...plugins.map(p => p.selectors));
 
-  forOwn(baseSelectors, (baseSelector, name) => {
-    const selector = {
-      name, 
-      selector: baseSelector,
-      dependencies: [],
-      rank: 0,
-      traversed: false
-    };
-    combinedSelectors.set(name, selector);
-  });
+  allSelectors.forEach((selectors) => {
+    console.log('Begin selector block');
+    forOwn(selectors, (selector, name) => {
+      if (combinedSelectors.has(name)) {
+        console.log(`  Overriding existing selector named ${name}`);
+      }
 
-  // STEP 2
-  // ==========
-  //
-  // Add all of the 'composed' selectors to the list of combined selectors.
-  // Composed selectors use the 'createSelector' function provided by reselect
-  // and depend on other selectors. These new selectors are located in a 
-  // new file named 'composedSelectors' and are now an object that looks like this:
-  //   {
-  //     creator: ({dependency1, dependency2, ...}) => return createSelector(dependency1, dependency2, (...) => (...)),
-  //     dependencies: ["dependency1", "dependency2"]
-  //   }
-  // 'creator' will return the selector when it is run with the dependency selectors
-  // 'dependencies' are the string names of the dependency selectors, these will be used to
-  // build the tree of selectors
-  forOwn(composedSelectors, (composedSelector, name) => {
-    const selector = {
-      name,
-      ...composedSelector,
-      rank: 0,
-      traversed: false
-    };
-    combinedSelectors.has(name) && console.log(`  Overriding existing selector named ${name}`);
-    combinedSelectors.set(name, selector);
-  });
-
-  // STEP 3
-  // ==========
-  //
-  // Once the built-in 'base' and 'composed' selectors are added to the list,
-  // repeat the same process for each of the plugins.
-  //
-  // Plugins can now redefine a single existing selector without having to
-  // include the full list of dependency selectors since the dependencies
-  // are now created dynamically
-  for (let i in plugins) {
-    console.log(`Parsing selectors for plugin ${i}`);
-    const plugin = plugins[i];
-    forOwn(plugin.selectors, (baseSelector, name) => {
-      const selector = {
+      combinedSelectors.set(name, {
         name,
-        selector: baseSelector,
-        dependencies: [],
+        selector,
+        dependencies: selector.dependencies || [],
         rank: 0,
         traversed: false
-      };
-
-      // console log for demonstration purposes
-      combinedSelectors.has(name) && console.log(`  Overriding existing selector named ${name} with base selector`);
-      combinedSelectors.set(name, selector);
+      });
     });
-
-    forOwn(plugin.composedSelectors, (composedSelector, name) => {
-      const selector = {
-        name,
-        ...composedSelector,
-        rank: 0,
-        traversed: false
-      };
-
-      // console log for demonstration purposes
-      combinedSelectors.has(name) && console.log(`  Overriding existing selector named ${name} with composed selector`);
-      combinedSelectors.set(name, selector);
-    });
-  }
-
+  });
 
   // RANKS
   // ==========
@@ -202,6 +230,7 @@ export const composeSelectors = (baseSelectors, composedSelectors, plugins) => {
 
         const flattenedDependencies = new Set();
         for (let dependency of node.dependencies) {
+          //if (typeof dependency === 'function') continue;
           if (!combinedSelectors.has(dependency)) {
             const err = `Selector ${node.name} has dependency ${dependency} but this is not in the list of dependencies! Did you misspell something?`;
             throw new Error(err);
@@ -260,18 +289,30 @@ export const composeSelectors = (baseSelectors, composedSelectors, plugins) => {
   //
   // Create a flat object of just the actual selector functions
   const flattenedSelectors = {};
+  //console.log({ allSelectors, combinedSelectors, ranks });
+  console.log(ranks);
   for (let rank of ranks) {
     for (let selector of rank) {
-      if (selector.creator) {
-        const childSelectors = {};
-        for (let childSelector of selector.dependencies) {
-          childSelectors[childSelector] = combinedSelectors.get(childSelector).selector;
-        }
-        selector.selector = selector.creator(childSelectors);
+      if (selector.dependencies.length && !selector.selector.generated) {
+
+        flattenedSelectors[selector.name] = selector.selector(flattenedSelectors);
+
+        //const childSelectors = { _dependencies: true };
+        //for (let childSelector of selector.dependencies) {
+        //  if (typeof childSelector === 'string') {
+        //    childSelectors[childSelector] = combinedSelectors.get(childSelector).selector;
+        //  }
+        //}
+        //flattenedSelectors[selector.name] = selector.selector(childSelectors);
       }
-      flattenedSelectors[selector.name] = selector.selector;
+      else {
+        flattenedSelectors[selector.name] = selector.selector;
+      }
     }
   }
+
+  // Work-around for direct references to composed selectors
+  //Object.assign(globalSelectors, flattenedSelectors);
 
   return flattenedSelectors;
 }

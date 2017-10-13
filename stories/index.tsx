@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { createSelector } from 'reselect';
+//import { createSelector } from 'reselect';
 import _ from 'lodash';
 import { createLogger } from 'redux-logger';
 
@@ -18,7 +18,7 @@ const { connect } = utils;
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { griddleCreateSelector } = utils.selectorUtils;
+const { createSelector } = utils.selectorUtils;
 
 const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
 
@@ -938,7 +938,7 @@ storiesOf('Plugins', module)
 
     const recordCountSelector = state => state.get("data").size;
 
-    const dataSelector = griddleCreateSelector (
+    const dataSelector = createSelector (
       "allDataSelector", 
       "pageSizeSelector", 
       "currentPageSelector", 
@@ -1005,8 +1005,14 @@ storiesOf('Plugins', module)
       }
     };
 
+    const AnotherPlugin = {
+      selectors: {
+        someSelector: (state) => null
+      }
+    }
+
   return (
-    <Griddle data={fakeData} plugins={[OverridableSelectorsPlugin]} reduxMiddleware={[createLogger()]} />
+    <Griddle data={fakeData} plugins={[OverridableSelectorsPlugin, AnotherPlugin]} reduxMiddleware={[createLogger()]} />
   );
   })
 
