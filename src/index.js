@@ -156,9 +156,17 @@ class Griddle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data, pageProperties, sortProperties } = nextProps;
+    const newState = Object.keys(nextProps).reduce((updatedState, key) => {
+      return this.props[key] !== nextProps[key] ? {
+      ...updatedState,
+      [key]: nextProps[key],
+     } : updatedState;
+    }, {});
 
-    this.store.dispatch(actions.updateState({ data, pageProperties, sortProperties }));
+    // Only update the state if something has changed.
+    if (Object.keys(newState).length > 0) {
+     this.store.dispatch(actions.updateState(newState));
+    }
   }
 
   getStoreKey = () => {
