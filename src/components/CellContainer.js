@@ -58,6 +58,9 @@ const ComposedCellContainer = OriginalComponent => compose(
     ...props,
     className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
     style: getCellStyles(props.cellProperties, props.style),
+    value: props.customComponent ?
+      <props.customComponent {...props.cellProperties.extraData} {...props} /> :
+      props.value
   })}),
 )(props =>
   <OriginalComponent

@@ -1,27 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-const Cell = (props) => {
-  const {
-    value,
-    customComponent: CustomComponent,
-    cellProperties,
-    onClick,
-    onMouseEnter,
-    onMouseLeave,
-    style,
-    className,
-  } = props;
-  return (
-    <td
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={style}
-      className={className}
-    >
-      {CustomComponent ? <CustomComponent {...props} /> : value}
-    </td>
-  );
-}
+const Cell = ({ value, onClick, onMouseEnter, onMouseLeave, style, className }) => (
+  <td
+    onClick={onClick}
+    onMouseEnter={onMouseEnter}
+    onMouseLeave={onMouseLeave}
+    style={style}
+    className={className}
+  >
+    {value}
+  </td>
+);
 
 export default Cell;
