@@ -156,12 +156,9 @@ class Griddle extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const newState = Object.keys(nextProps).reduce((updatedState, key) => {
-      return this.props[key] !== nextProps[key] ? {
-      ...updatedState,
-      [key]: nextProps[key],
-     } : updatedState;
-    }, {});
+    const newState = _.pickBy(nextProps, (value, key) => {
+      return this.props[key] !== value;
+    })
 
     // Only update the state if something has changed.
     if (Object.keys(newState).length > 0) {
