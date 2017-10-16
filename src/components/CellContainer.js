@@ -8,7 +8,7 @@ import compose from 'recompose/compose';
 import {
   customComponentSelector,
   cellValueSelector,
-  cellPropertiesSelector,
+  cellPropertiesSelectorFactory,
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
@@ -35,11 +35,9 @@ function getCellStyles(cellProperties, originalStyles) {
   return styles;
 }
 
-const ComposedCellContainer = OriginalComponent => compose(
-  getContext({
-    selectors: PropTypes.object,
-  }),
-  connect((state, props) => {
+const mapStateToProps = () => {
+  const cellPropertiesSelector = cellPropertiesSelectorFactory();
+  return (state, props) => {
     return {
       value: cellValueSelector(state, props),
       customComponent: customComponentSelector(state, props),
@@ -47,7 +45,11 @@ const ComposedCellContainer = OriginalComponent => compose(
       className: classNamesForComponentSelector(state, 'Cell'),
       style: stylesForComponentSelector(state, 'Cell'),
     };
-  }),
+  };
+}
+
+const ComposedCellContainer = OriginalComponent => compose(
+  connect(mapStateToProps),
   mapProps(props => {
     return ({
     ...props.cellProperties.extraData,
@@ -57,7 +59,7 @@ const ComposedCellContainer = OriginalComponent => compose(
     value: props.customComponent ?
       <props.customComponent {...props.cellProperties.extraData} {...props} /> :
       props.value
-  })})
+  })}),
 )(props =>
   <OriginalComponent
     {...props}

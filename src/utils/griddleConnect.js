@@ -20,11 +20,14 @@ const griddleConnect = (...connectOptions) => OriginalComponent => class extends
     storeKey: PropTypes.string,
   }
 
-  render() {
-    const newOptions = mergeConnectParametersWithOptions(connectOptions, { storeKey: this.context.storeKey })
-    const ConnectedComponent = connect(...newOptions)(OriginalComponent);
+  constructor(props, context) {
+    super(props, context);
+    const newOptions = mergeConnectParametersWithOptions(connectOptions, { storeKey: context.storeKey })
+    this.ConnectedComponent = connect(...newOptions)(OriginalComponent);
+  }
 
-    return <ConnectedComponent {...this.props}/>
+  render() {
+    return <this.ConnectedComponent {...this.props}/>
   }
 }
 

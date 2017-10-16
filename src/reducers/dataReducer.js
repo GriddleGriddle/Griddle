@@ -27,7 +27,7 @@ function isColumnVisible(state, columnId) {
     return true;
   }
 
-  // if there is no render property currently and visible is not set 
+  // if there is no render property currently and visible is not set
   if (!hasRenderProperty && currentlyVisibleProperty === undefined) {
     return false;
   }

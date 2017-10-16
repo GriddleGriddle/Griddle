@@ -1,6 +1,11 @@
 import Immutable from 'immutable';
-import { createSelector } from 'reselect';
+import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
 import _ from 'lodash';
+
+const createDeepEqualSelector = createSelectorCreator(
+  defaultMemoize,
+  _.isEqual,
+)
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
 //import { createSelector } from 'reselect';
@@ -289,8 +294,17 @@ export const rowPropertiesSelector = (state) => {
 
 /** Gets the column render properties for the specified columnId
  */
-export const cellPropertiesSelector = (state, { columnId }) => {
-  const item = state.getIn(['renderProperties', 'columnProperties', columnId]);
+export const cellPropertiesSelectorFactory = () => {
+  const immutableCellPropertiesSelector = (state, { columnId }) => {
+    const item = state.getIn(['renderProperties', 'columnProperties', columnId]);
 
-  return (item && item.toJSON()) || {};
+    return (item && item.toJSON()) || {};
+  };
+
+  return createDeepEqualSelector(
+    immutableCellPropertiesSelector,
+    item => item,
+  );
 };
+
+export const cellPropertiesSelector = cellPropertiesSelectorFactory();
