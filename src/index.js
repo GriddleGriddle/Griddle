@@ -25,38 +25,6 @@ import CorePlugin from './plugins/core';
 //  setSortProperties
 //};
 
-
-const defaultStyleConfig = {
-  icons: {
-    TableHeadingCell: {
-      sortDescendingIcon: '▼',
-      sortAscendingIcon: '▲'
-    },
-  },
-  classNames: {
-    Cell: 'griddle-cell',
-    Filter: 'griddle-filter',
-    Loading: 'griddle-loadingResults',
-    NextButton: 'griddle-next-button',
-    NoResults: 'griddle-noResults',
-    PageDropdown: 'griddle-page-select',
-    Pagination: 'griddle-pagination',
-    PreviousButton: 'griddle-previous-button',
-    Row: 'griddle-row',
-    RowDefinition: 'griddle-row-definition',
-    Settings: 'griddle-settings',
-    SettingsToggle: 'griddle-settings-toggle',
-    Table: 'griddle-table',
-    TableBody: 'griddle-table-body',
-    TableHeading: 'griddle-table-heading',
-    TableHeadingCell: 'griddle-table-heading-cell',
-    TableHeadingCellAscending: 'griddle-heading-ascending',
-    TableHeadingCellDescending: 'griddle-heading-descending',
-  },
-  styles: {
-  }
-};
-
 class Griddle extends Component {
   static childContextTypes = {
     components: PropTypes.object.isRequired,
@@ -88,27 +56,38 @@ class Griddle extends Component {
       ...userInitialState
     } = props;
 
-    this.baselinePlugin = baselinePlugin;
+    switch(typeof baselinePlugin) {
+      case 'function':
+        plugins.unshift(baselinePlugin(props));
+        break;
+      case 'object':
+        plugins.unshift(baselinePlugin);
+        break;
+    };
 
-    const rowProperties = getRowProperties(rowPropertiesComponent);
-    const columnProperties = getColumnProperties(rowPropertiesComponent);
+    this.plugins = plugins;
 
     //Combine / compose the reducers to make a single, unified reducer
     //const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
-    const reducers = buildGriddleReducer([baselinePlugin.reducer, ...plugins.map(p => p.reducer)]);
+    const reducers = buildGriddleReducer([...plugins.map(p => p.reducer)]);
 
     //Combine / Compose the components to make a single component for each component type
     //this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
-    this.components = buildGriddleComponents([baselinePlugin.components, ...plugins.map(p => p.components), userComponents]);
+    this.components = buildGriddleComponents([...plugins.map(p => p.components), userComponents]);
 
-    this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => p.settingsComponentObjects), userSettingsComponentObjects);
+    // NOTE this goes on the context which for the purposes of breaking out the 
+    // 'core' code into a plugin is somewhat of a problem as it should
+    // be associated with the core code not general griddle code.
+    this.settingsComponentObjects = Object.assign({}, ...plugins.map(p => p.settingsComponentObjects), userSettingsComponentObjects);
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...baselinePlugin.selectors});
+    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {});
 
-    const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
+    const mergedStyleConfig = _.merge({}, ...plugins.map(p => p.styleConfig), styleConfig);
 
+    // this would be good to move into the core plugin
+    // and namespace this state to the core plugin
     const pageProperties = Object.assign({}, {
         currentPage: 1,
         pageSize: 10
@@ -117,21 +96,15 @@ class Griddle extends Component {
     );
 
     //TODO: This should also look at the default and plugin initial state objects
-    const renderProperties = Object.assign({
-      rowProperties,
-      columnProperties
-    }, ...plugins.map(p => p.renderProperties), userRenderProperties);
+    const renderProperties = Object.assign(...plugins.map(p => p.renderProperties), userRenderProperties);
 
     // TODO: Make this its own method
+    // It would be nice if state was namespaced to the plugin
+    // it was associated with. For example pageProperties and 
+    // sortProperties are specific to the core plugin. We could
+    // refactor the selectors to grab this data from a different
+    // place but would this affect other users?
     const initialState = _.merge(
-      {
-        enableSettings: true,
-        textProperties: {
-          next: 'Next',
-          previous: 'Previous',
-          settingsToggle: 'Settings'
-        },
-      },
       ...plugins.map(p => p.initialState),
       userInitialState,
       {
@@ -165,7 +138,7 @@ class Griddle extends Component {
   componentWillReceiveProps(nextProps) {
     const { data, pageProperties, sortProperties } = nextProps;
 
-    this.store.dispatch(this.baselinePlugin.actions.updateState({ data, pageProperties, sortProperties }));
+    this.store.dispatch(this.plugins[0].actions.updateState({ data, pageProperties, sortProperties }));
   }
 
   getStoreKey = () => {
