@@ -4,8 +4,6 @@ import { connect } from '../utils/griddleConnect';
 import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
-import shouldUpdate from 'recompose/shouldUpdate';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 import {
   customComponentSelector,
@@ -37,7 +35,7 @@ function getCellStyles(cellProperties, originalStyles) {
   return styles;
 }
 
-const makeStateToProps = () => {
+const mapStateToProps = () => {
   const cellPropertiesSelector = cellPropertiesSelectorFactory();
   return (state, props) => {
     return {
@@ -51,7 +49,7 @@ const makeStateToProps = () => {
 }
 
 const ComposedCellContainer = OriginalComponent => compose(
-  connect(makeStateToProps),
+  connect(mapStateToProps),
   mapProps(props => {
     return ({
     ...props.cellProperties.extraData,
