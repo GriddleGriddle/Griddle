@@ -26,7 +26,7 @@ import SettingsWrapper from './SettingsWrapper';
 import SettingsWrapperContainer from './SettingsWrapperContainer';
 import Settings from './Settings';
 import SettingsContainer from './SettingsContainer';
-import { components as SettingsComponents } from '../settingsComponentObjects';
+import { components as SettingsComponents } from '../../../settingsComponentObjects';
 import NextButton from './NextButton';
 import NextButtonEnhancer from './NextButtonEnhancer';
 import NextButtonContainer from './NextButtonContainer';

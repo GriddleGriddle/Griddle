@@ -16,7 +16,7 @@ import Immutable from 'immutable';
 import {
   addColumnPropertiesWhenNoneExist,
   transformData,
-} from '../utils/dataUtils';
+} from '../../../utils/dataUtils';
 
 function isColumnVisible(state, columnId) {
   const hasRenderProperty = state.getIn(['renderProperties', 'columnProperties', columnId]);

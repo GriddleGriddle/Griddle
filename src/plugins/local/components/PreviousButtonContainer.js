@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../../../utils/griddleConnect';
 
 import { textSelector, hasPreviousSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/localSelectors';
-import { getPrevious } from '../../../actions';
+import { getPrevious } from '../../core/actions';
 
 const enhance = OriginalComponent => connect(state => ({
   text: textSelector(state, { key: 'previous' }),
