@@ -14,7 +14,7 @@ import PositionPlugin from './plugins/position';
 const plugins = {
   LegacyStylePlugin,
   LocalPlugin,
-  PositionPlugin,
+  PositionPlugin
 };
 
 const ColumnDefinition = components.ColumnDefinition;
