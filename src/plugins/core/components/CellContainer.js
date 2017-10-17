@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from '../../../utils/griddleConnect';
 import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-import {
-  customComponentSelector,
-  cellValueSelector,
-  cellPropertiesSelectorFactory,
-  classNamesForComponentSelector,
-  stylesForComponentSelector
-} from '../selectors/dataSelectors';
+// TODO: refactor this onto the context. We need to handle factories as well
+import { cellPropertiesSelectorFactory } from '../selectors/dataSelectors';
+import { connect } from '../../../utils/griddleConnect';
 import { valueOrResult } from '../../../utils/valueUtils';
 
 function hasWidthOrStyles(cellProperties) {
@@ -36,19 +31,23 @@ function getCellStyles(cellProperties, originalStyles) {
 }
 
 const mapStateToProps = () => {
+  // TODO: selector factories on the context
   const cellPropertiesSelector = cellPropertiesSelectorFactory();
   return (state, props) => {
     return {
-      value: cellValueSelector(state, props),
-      customComponent: customComponentSelector(state, props),
-      cellProperties: cellPropertiesSelector(state, props),
-      className: classNamesForComponentSelector(state, 'Cell'),
-      style: stylesForComponentSelector(state, 'Cell'),
+      value: props.selectors.cellValueSelector(state, props),
+      customComponent: props.selectors.customComponentSelector(state, props),
+      cellProperties: props.selectors.cellPropertiesSelector(state, props),
+      className: props.selectors.classNamesForComponentSelector(state, 'Cell'),
+      style: props.selectors.stylesForComponentSelector(state, 'Cell'),
     };
   };
 }
 
 const ComposedCellContainer = OriginalComponent => compose(
+  getContext({
+    selectors: PropTypes.object
+  }),
   connect(mapStateToProps),
   mapProps(props => {
     return ({

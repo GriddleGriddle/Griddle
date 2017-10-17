@@ -11,12 +11,12 @@ import settingsComponentObjects from './settingsComponentObjects';
 //import * as selectors from './selectors/dataSelectors';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
-import { getColumnProperties } from './utils/columnUtils';
-import { getRowProperties } from './utils/rowUtils';
+//import { getColumnProperties } from './utils/columnUtils';
+//import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
 import { composeSelectors } from './utils/selectorUtils';
-import * as actions from './actions';
+//import * as actions from './actions';
 
 import CorePlugin from './plugins/core';
 
@@ -33,7 +33,8 @@ class Griddle extends Component {
     events: PropTypes.object,
     selectors: PropTypes.object,
     storeKey: PropTypes.string,
-    storeListener: PropTypes.object
+    storeListener: PropTypes.object,
+    actions: PropTypes.object,
   }
 
   constructor(props) {
@@ -83,7 +84,9 @@ class Griddle extends Component {
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = composeSelectors(selectors, plugins);
+    this.selectors = composeSelectors(plugins[0].selectors, plugins);
+
+    this.actions = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.actions }), {});
 
     const mergedStyleConfig = _.merge({}, ...plugins.map(p => p.styleConfig), styleConfig);
 
@@ -164,7 +167,8 @@ class Griddle extends Component {
       events: this.events,
       selectors: this.selectors,
       storeKey: this.getStoreKey(),
-      storeListener: this.storeListener
+      storeListener: this.storeListener,
+      actions: this.actions,
     };
   }
 

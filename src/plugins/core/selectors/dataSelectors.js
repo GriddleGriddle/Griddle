@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
-import { createSelector } from '../utils/selectorUtils';
+import { createSelector } from '../../../utils/selectorUtils';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
 
 const createDeepEqualSelector = createSelectorCreator(
   defaultMemoize,
