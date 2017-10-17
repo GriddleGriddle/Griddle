@@ -1081,7 +1081,8 @@ storiesOf('Plugins', module)
       },
       selectors: {
         allDataSelector,
-        recordCountSelector
+        recordCountSelector,
+        dataSelector
       },
       composedSelectors: {
         dataSelector
