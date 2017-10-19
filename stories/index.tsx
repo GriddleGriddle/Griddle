@@ -97,16 +97,27 @@ storiesOf('Griddle main', module)
   })
   .add('with local, delayed data', () => {
     class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
+      private timeout;
+
       constructor(props) {
         super(props);
         this.state = {};
+      }
+
+      componentDidMount() {
         this.resetData();
+      }
+
+      componentWillUnmount() {
+        this.timeout && clearTimeout(this.timeout);
       }
 
       resetData = () => {
         this.setState({ data: null });
 
-        setTimeout(() => {
+        this.timeout && clearTimeout(this.timeout);
+
+        this.timeout = setTimeout(() => {
           this.setState({ data: this.props.data });
         }, 2000);
       }
