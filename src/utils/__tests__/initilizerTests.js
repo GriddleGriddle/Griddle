@@ -360,3 +360,29 @@ test('init sets context.selectors as expected given plugins', (assert) => {
     Plugin: 1,
   });
 });
+
+
+test('init sets context.listeners as expected given props (plugins, user)', (assert) => {
+  const ctx = {
+    props: {
+      plugins: [
+        { listeners: { plugin: () => 0, user: () => false } },
+        { listeners: { plugin: () => 1 } },
+      ],
+      listeners: {
+        user: () => true,
+        user2: () => true,
+      },
+    },
+  };
+  const defaults = {};
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+  assert.truthy(res);
+
+  assert.false('defaults' in ctx.listeners);
+  assert.deepEqual(ctx.listeners.plugin(), 1);
+  assert.deepEqual(ctx.listeners.user(), false); // TODO: bug that plugins overwrite user listeners?
+  assert.deepEqual(ctx.listeners.user2(), true);
+});
