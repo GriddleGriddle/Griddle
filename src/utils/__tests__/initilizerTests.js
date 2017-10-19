@@ -324,9 +324,7 @@ test('init sets context.events as expected given plugins', (assert) => {
       events: { User: true, User2: true },
     },
   };
-  const defaults = {
-    // TODO: bug that defaultEvents is not used?
-  };
+  const defaults = {};
 
   const res = init.call(ctx, defaults);
   assert.truthy(res);

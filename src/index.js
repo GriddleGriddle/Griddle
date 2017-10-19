@@ -10,16 +10,8 @@ import settingsComponentObjects from './settingsComponentObjects';
 import * as selectors from './selectors/dataSelectors';
 
 import init from './utils/initializer';
-import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
 import * as actions from './actions';
-
-const defaultEvents = {
-  ...actions,
-  onFilter: actions.setFilter,
-  setSortProperties
-};
-
 
 const defaultStyleConfig = {
   icons: {
