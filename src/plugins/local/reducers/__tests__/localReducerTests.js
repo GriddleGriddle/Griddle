@@ -2,7 +2,7 @@ import test from 'ava';
 import Immutable from 'immutable';
 
 import * as reducers from '../index';
-import constants from '../../../../constants';
+import constants from '../../../core/constants';
 
 test('it loads data', test => {
   const state = reducers.GRIDDLE_LOADED_DATA(Immutable.fromJS({ renderProperties: { } }), {

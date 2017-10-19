@@ -113,83 +113,149 @@ const griddleCreateSelector = (...args) => {
   // Otherwise, this is either a mixed or fully string dependency
   // selector. Create a selector generator.
 
-  const selectorGenerator = (() => {
-    let generatedSelector;
-    return (...args) => {
-      if (!generatedSelector) {
-        // Legacy components might call this selector directly with state
-        // so use global cache of selectors instead
-        //const dependencySelectors = selectors._dependencies ? selectors : globalSelectors;
+  //const selectorGeneratorWrapper = (() => {
 
-        const resolvedSelectors = args[0];
+  return (() => {
 
-        const createSelectorFuncs = [];
+    const createSelectorFuncs = new Map();
+    const ownSelector = selector;
+
+    const factory = (resolvedSelectors = {}) => {
+      const selectors = [];
+      if (!createSelectorFuncs.size) {
         for (const index in dofTypeMap) {
           const dofType = dofTypeMap[index];
           switch(dofType) {
             case FUNC:
-              createSelectorFuncs.push(functions[index]);
+              //createSelectorFuncs.push(functions[index]);
+              createSelectorFuncs.set(index, functions[index]);
               break;
             case DEP:
               if (resolvedSelectors.hasOwnProperty(dependencies[index])) {
-                createSelectorFuncs.push(resolvedSelectors[dependencies[index]]);
+                //createSelectorFuncs.push(resolvedSelectors[dependencies[index]]);
+                createSelectorFuncs.set(dependencies[index], resolvedSelectors[dependencies[index]]);
               } else {
                 throw new Error(`Dependency ${dependencies[index]} not found!`);
               }
               break;
           }
         }
+        createSelectorFuncs.forEach((func) => selectors.push(func));
+        selectors.push(ownSelector);
+      } else {
+        createSelectorFuncs.forEach((func, key) => {
+          if (resolvedSelectors.hasOwnProperty(key)) {
+            selectors.push(resolvedSelectors[key]);
+          } else {
+            selectors.push(func);
+          }
+        });
+        selectors.push(ownSelector);
+      }
 
-        // add this selector
-        createSelectorFuncs.push(selector);
+      return createSelector(...selectors);
+    };
+
+    const selectorGenerator = (...args) => {
+      if (!selectorGenerator.generatedSelector) {
+        const resolvedSelectors = args[0];
+
+        //const createSelectorFuncs = [];
+        //for (const index in dofTypeMap) {
+        //  const dofType = dofTypeMap[index];
+        //  switch(dofType) {
+        //    case FUNC:
+        //      createSelectorFuncs.push(functions[index]);
+        //      break;
+        //    case DEP:
+        //      if (resolvedSelectors.hasOwnProperty(dependencies[index])) {
+        //        createSelectorFuncs.push(resolvedSelectors[dependencies[index]]);
+        //      } else {
+        //        throw new Error(`Dependency ${dependencies[index]} not found!`);
+        //      }
+        //      break;
+        //  }
+        //}
+
+        //// add this selector
+        //createSelectorFuncs.push(selector);
 
         // call createSelector with the final list of args
-        generatedSelector = createSelector(...createSelectorFuncs);
-        selectorGenerator.generated = true;
-        return generatedSelector;
+        //selectorGenerator.generatedSelector = createSelector(...createSelectorFuncs);
+        selectorGenerator.generatedSelector = factory(resolvedSelectors);
+        //selectorGenerator.generated = true;
+
+        // can probably just return this, as calls to this function
+        // will now flow into just calling the generated selector function
+        return selectorGenerator;
 
         // Selector was called directly in legacy code
         //return createSelector(...createSelectorFuncs)(selectors);
       } else {
-        return generatedSelector(...args)
+        return selectorGenerator.generatedSelector(...args)
       }
     }
+    selectorGenerator.createSelectorFuncs = createSelectorFuncs;
+    selectorGenerator.ownSelector = ownSelector;
+    selectorGenerator.factory = factory;
+    selectorGenerator.generatedSelector = undefined;
+    selectorGenerator.dependencies = values(dependencies);
+    return selectorGenerator;
   })();
 
   // attach the list of string dependencies to the
   // selector generator
-  selectorGenerator.dependencies = values(dependencies);
-  return selectorGenerator;
+  //selectorGeneratorWrapper.dependencies = values(dependencies);
+  //return selectorGeneratorWrapper;
 };
 export { griddleCreateSelector as createSelector };
 
 
-export const composeSelectors = (defaultSelectors, plugins) => {
+export const composeSelectors = (plugins) => {
 
   // STEP 1
   // ==========
   //
   // Add all selectors to the list of combined selectors.
-  // The actuall selector functions are wrapped in an object which is used
+  // 
+  // Each key in combinedSelectors corresponds to
+  // an array of selectors that were encountered for that given name.
+  // A newer selector that is encountered for a given name is unshifted
+  // onto index 0 of the array such at all index 0's of each array
+  // are the most 'recently' encountered selector for that name. This allows
+  // use to keep track of all the places these selectors were declared so
+  // that when finally building the selectors we can go back to these
+  // references and set them correctly. This specifically allows for the
+  // overriding functionality to work properly with 'hard' import references
+  // to selectors.
+  //
+  // Each encountered selector function is wrapped in an object which is used
   // to keep track of all the data needed to properly build all the
   // selector dependency trees
   const combinedSelectors = new Map();
-  const allSelectors = [defaultSelectors].concat(...plugins.map(p => p.selectors));
 
-  allSelectors.forEach((selectors) => {
-    console.log('Begin selector block');
-    forOwn(selectors, (selector, name) => {
-      if (combinedSelectors.has(name)) {
+  plugins.forEach((plugin) => {
+    console.log('Begin parsing selectors for plugin');
+    forOwn(plugin.selectors, (selector, name) => {
+      if (!combinedSelectors.has(name)) {
+        console.log(`  First instance of selector ${name} encountered`);
+        combinedSelectors.set(name, [{
+          name,
+          selector,
+          dependencies: selector.dependencies || [],
+          rank: 0,
+          traversed: false
+        }]);
+      } else {
         console.log(`  Overriding existing selector named ${name}`);
+        combinedSelectors.get(name).unshift({
+          name,
+          selector,
+          dependencies: selector.dependencies || [],
+          rank: 0,
+          traversed: false
+        });
       }
-
-      combinedSelectors.set(name, {
-        name,
-        selector,
-        dependencies: selector.dependencies || [],
-        rank: 0,
-        traversed: false
-      });
     });
   });
 
@@ -251,9 +317,9 @@ export const composeSelectors = (defaultSelectors, plugins) => {
           flattenedDependencies.add(dependency);
           const childParents = new Set(parents);
           childParents.add(dependency);
-          const childsDependencies = getDependencies(combinedSelectors.get(dependency), childParents);
+          const childsDependencies = getDependencies(combinedSelectors.get(dependency)[0], childParents);
           childsDependencies.forEach((key) => flattenedDependencies.add(key))
-          const childRank = combinedSelectors.get(dependency).rank;
+          const childRank = combinedSelectors.get(dependency)[0].rank;
           childRank >= node.rank && (node.rank = childRank + 1);
         }
         node.flattenedDependencies = flattenedDependencies;
@@ -277,25 +343,38 @@ export const composeSelectors = (defaultSelectors, plugins) => {
   // STEP 4
   // ==========
   //
-  // Run getDependencies on each selector in the 'combinedSelectors' list
+  // Run getDependencies on each first selector in the 'combinedSelectors' list
   // This fills out the 'ranks' list for use in the next step
   for (let e of combinedSelectors) {
-    const [name, selector] = e;
-    getDependencies(selector, new Set([name]));
+    const [name, selectorChain] = e;
+    getDependencies(selectorChain[0], new Set([name]));
   }
 
   // STEP 5
   // ==========
   //
   // Create a flat object of just the actual selector functions
+  // This will be used as the set of selectors on context
   const flattenedSelectors = {};
   //console.log({ allSelectors, combinedSelectors, ranks });
   console.log(ranks);
   for (let rank of ranks) {
     for (let selector of rank) {
-      if (selector.dependencies.length && !selector.selector.generated) {
+      //checking if the selector is generated may not be necessary?
+      if (selector.dependencies.length && !selector.selector.generatedSelector) {
 
-        flattenedSelectors[selector.name] = selector.selector(flattenedSelectors);
+        const generatedSelector = selector.selector(flattenedSelectors);
+
+        const selectorsOfName = combinedSelectors.get(selector.name);
+
+        selectorsOfName.slice(1, selectorsOfName.length).forEach((selectorOfName) => {
+          if (selectorOfName.dependencies.length) {
+            selectorOfName.selector.createSelectorFuncs = generatedSelector.createSelectorFuncs;
+            selectorOfName.selector.generatedSelector = generatedSelector.generatedSelector;
+          }
+        });
+
+        flattenedSelectors[selector.name] = generatedSelector;
 
         //const childSelectors = { _dependencies: true };
         //for (let childSelector of selector.dependencies) {

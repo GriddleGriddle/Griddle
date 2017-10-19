@@ -84,7 +84,7 @@ class Griddle extends Component {
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = composeSelectors(plugins[0].selectors, plugins);
+    this.selectors = composeSelectors(plugins);
 
     this.actions = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.actions }), {});
 
@@ -145,6 +145,10 @@ class Griddle extends Component {
     })
 
     // Only update the state if something has changed.
+    //
+    // NOTE the update state reducer in 'core' griddle is only
+    // concerned with the data, pageProperties, and sortProperties
+    // passing in only changed props breaks the contract it is expecting
     if (Object.keys(newState).length > 0) {
      this.store.dispatch(this.plugins[0].actions.updateState(newState));
     }
