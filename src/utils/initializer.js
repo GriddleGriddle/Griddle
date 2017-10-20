@@ -13,7 +13,7 @@ module.exports = function initializer(defaults) {
     selectors,
     styleConfig: defaultStyleConfig,
     ...defaultInitialState
-  } = defaults;
+  } = defaults || {};
 
   const {
     plugins = [],

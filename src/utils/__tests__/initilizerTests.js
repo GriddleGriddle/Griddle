@@ -15,6 +15,27 @@ const expectedDefaultInitialState = {
   styleConfig: {},
 };
 
+test('init succeeds given null defaults and empty props', (assert) => {
+  const ctx = { props: {} };
+  const defaults = null;
+
+  const res = init.call(ctx, defaults);
+  assert.truthy(res);
+
+  assert.deepEqual(res.initialState, expectedDefaultInitialState);
+
+  assert.is(typeof res.reducers, 'function');
+  assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), {});
+
+  assert.deepEqual(res.reduxMiddleware, []);
+
+  assert.deepEqual(ctx.components, {});
+  assert.deepEqual(ctx.settingsComponentObjects, {});
+  assert.deepEqual(ctx.events, {});
+  assert.deepEqual(ctx.selectors, {});
+  assert.deepEqual(ctx.listeners, {});
+});
+
 test('init succeeds given empty defaults and props', (assert) => {
   const ctx = { props: {} };
   const defaults = {};

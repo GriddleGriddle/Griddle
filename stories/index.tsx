@@ -1650,6 +1650,11 @@ storiesOf('core', module)
       <Griddle core={core} />
     );
   })
+  .add('Can handle null core', () => {
+    return (
+      <Griddle core={null} />
+    );
+  })
 
 storiesOf('TypeScript', module)
   .add('GriddleComponent accepts expected types', () => {

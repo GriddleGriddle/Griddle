@@ -79,6 +79,10 @@ class Griddle extends Component {
   }
 
   render() {
+    if (!this.components.Layout) {
+      return null;
+    }
+
     return (
       <this.provider store={this.store}>
         <this.components.Layout />
