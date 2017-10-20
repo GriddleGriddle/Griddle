@@ -8,14 +8,15 @@
 export function defaultSort(data, column, sortAscending = true) {
   return data.sort(
     (original, newRecord) => {
-      original = (!!original.get(column) && original.get(column)) || "";
-      newRecord = (!!newRecord.get(column) && newRecord.get(column)) || "";
+      const columnKey = column.split('.');
+      const originalValue = (original.hasIn(columnKey) && original.getIn(columnKey)) || '';
+      const newRecordValue = (newRecord.hasIn(columnKey) && newRecord.getIn(columnKey)) || '';
 
       //TODO: This is about the most cheezy sorting check ever.
       //Make it better
-      if(original === newRecord) {
+      if(originalValue === newRecordValue) {
         return 0;
-      } else if (original > newRecord) {
+      } else if (originalValue > newRecordValue) {
         return sortAscending ? 1 : -1;
       }
       else {
