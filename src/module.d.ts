@@ -401,6 +401,7 @@ export interface GriddlePlugin extends GriddleExtensibility {
 }
 
 export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
+    core?: GriddlePlugin;
     plugins?: GriddlePlugin[];
     data?: T[];
     storeKey?: string;
@@ -441,6 +442,8 @@ export namespace utils {
 }
 
 export namespace plugins {
+    var CorePlugin : GriddlePlugin;
+
     var LegacyStylePlugin : GriddlePlugin;
 
     var LocalPlugin : GriddlePlugin;
