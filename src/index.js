@@ -4,45 +4,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import * as dataReducers from './reducers/dataReducer';
-import components from './components';
-import settingsComponentObjects from './settingsComponentObjects';
-import * as selectors from './selectors/dataSelectors';
-
+import corePlugin from './core';
 import init from './utils/initializer';
 import { StoreListener } from './utils/listenerUtils';
 import * as actions from './actions';
-
-const defaultStyleConfig = {
-  icons: {
-    TableHeadingCell: {
-      sortDescendingIcon: '▼',
-      sortAscendingIcon: '▲'
-    },
-  },
-  classNames: {
-    Cell: 'griddle-cell',
-    Filter: 'griddle-filter',
-    Loading: 'griddle-loadingResults',
-    NextButton: 'griddle-next-button',
-    NoResults: 'griddle-noResults',
-    PageDropdown: 'griddle-page-select',
-    Pagination: 'griddle-pagination',
-    PreviousButton: 'griddle-previous-button',
-    Row: 'griddle-row',
-    RowDefinition: 'griddle-row-definition',
-    Settings: 'griddle-settings',
-    SettingsToggle: 'griddle-settings-toggle',
-    Table: 'griddle-table',
-    TableBody: 'griddle-table-body',
-    TableHeading: 'griddle-table-heading',
-    TableHeadingCell: 'griddle-table-heading-cell',
-    TableHeadingCellAscending: 'griddle-heading-ascending',
-    TableHeadingCellDescending: 'griddle-heading-descending',
-  },
-  styles: {
-  }
-};
 
 class Griddle extends Component {
   static childContextTypes = {
@@ -58,27 +23,11 @@ class Griddle extends Component {
     super(props);
 
     const {
+      core = corePlugin,
       storeKey = Griddle.storeKey || 'store',
     } = props;
 
-    const { initialState, reducers, reduxMiddleware } = init.call(this, {
-      reducers: dataReducers,
-      components,
-      settingsComponentObjects,
-      selectors,
-      styleConfig: defaultStyleConfig,
-
-      pageProperties: {
-        currentPage: 1,
-        pageSize: 10
-      },
-      enableSettings: true,
-      textProperties: {
-        next: 'Next',
-        previous: 'Previous',
-        settingsToggle: 'Settings'
-      },
-    });
+    const { initialState, reducers, reduxMiddleware } = init.call(this, core);
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     this.store = createStore(

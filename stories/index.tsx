@@ -1638,6 +1638,19 @@ storiesOf('Settings', module)
     );
   })
 
+storiesOf('core', module)
+  .add('Can replace core', () => {
+    const core = {
+      components: {
+        Layout: () => <h1>Core Replaced!</h1>,
+      },
+    };
+
+    return (
+      <Griddle core={core} />
+    );
+  })
+
 storiesOf('TypeScript', module)
   .add('GriddleComponent accepts expected types', () => {
     class Custom extends React.Component<{ value }> {
