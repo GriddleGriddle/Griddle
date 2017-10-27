@@ -36,7 +36,7 @@ const EnhancedHeadingCell = OriginalComponent => compose(
     (dispatch, { events: { onSort } }) => ({
       setSortColumn: combineHandlers([
         onSort,
-        sp => dispatch(setSortColumn(sp)),
+        compose(dispatch, setSortColumn),
       ]),
     })
   ),
