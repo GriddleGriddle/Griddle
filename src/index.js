@@ -136,7 +136,7 @@ class Griddle extends Component {
       }
     );
 
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+    const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
     this.store = createStore(
       reducers,
       initialState,
