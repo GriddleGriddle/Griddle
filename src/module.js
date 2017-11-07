@@ -1,9 +1,9 @@
 import Griddle from './index';
 
-import * as actions from './actions';
-import components from './components';
-import * as constants from './constants';
-import * as selectors from './selectors/dataSelectors';
+import * as actions from './plugins/core/actions';
+import components from './plugins/core/components';
+import * as constants from './plugins/core/constants';
+import * as selectors from './plugins/core/selectors/dataSelectors';
 import settingsComponentObjects from './settingsComponentObjects';
 import utils from './utils';
 
@@ -14,7 +14,7 @@ import PositionPlugin from './plugins/position';
 const plugins = {
   LegacyStylePlugin,
   LocalPlugin,
-  PositionPlugin,
+  PositionPlugin
 };
 
 const ColumnDefinition = components.ColumnDefinition;

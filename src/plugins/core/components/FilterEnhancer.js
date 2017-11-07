@@ -4,7 +4,7 @@ import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-import { combineHandlers } from '../utils/compositionUtils';
+import { combineHandlers } from '../../../utils/compositionUtils';
 
 const EnhancedFilter = OriginalComponent => compose(
   getContext({

@@ -1,10 +1,10 @@
 import Immutable from 'immutable';
-import { createSelector } from 'reselect';
+import { createSelector } from '../../../utils/selectorUtils';
 import _ from 'lodash';
 
 import { defaultSort } from '../../../utils/sortUtils';
 import { getVisibleDataForColumns } from '../../../utils/dataUtils';
-import * as dataSelectors from '../../../selectors/dataSelectors';
+import * as dataSelectors from '../../core/selectors/dataSelectors';
 
 /** Gets the entire data set
  * @param {Immutable} state - state object
@@ -35,14 +35,14 @@ export const renderPropertiesSelector = state => (state.get('renderProperties'))
 
 export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 
-const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
+export const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
 
 /** Gets the data filtered by the current filter
  */
 export const filteredDataSelector = createSelector(
-  dataSelector,
-  filterSelector,
-  columnPropertiesSelector,
+  'dataSelector',
+  'filterSelector',
+  'columnPropertiesSelector',
   (data, filter, columnProperties) => {
     if (!filter || !data) {
       return data;
@@ -67,8 +67,8 @@ export const filteredDataSelector = createSelector(
 /** Gets the max page size
  */
 export const maxPageSelector = createSelector(
-  pageSizeSelector,
-  filteredDataSelector,
+  'pageSizeSelector',
+  'filteredDataSelector',
   (pageSize, data) => {
     const total = data ? data.size : 0;
     const calc = total / pageSize;
@@ -80,7 +80,7 @@ export const maxPageSelector = createSelector(
 )
 
 export const allColumnsSelector = createSelector(
-  dataSelector,
+  'dataSelector',
   data => (!data || data.size === 0 ? [] : data.get(0).keySeq().toJSON())
 );
 
@@ -95,8 +95,8 @@ export const visibleColumnsSelector = dataSelectors.visibleColumnsSelector;
 /** Returns whether or not this result set has more pages
  */
 export const hasNextSelector = createSelector(
-  currentPageSelector,
-  maxPageSelector,
+  'currentPageSelector',
+  'maxPageSelector',
   (currentPage, maxPage) => (currentPage < maxPage)
 );
 
@@ -108,10 +108,10 @@ export const hasPreviousSelector = state => (state.getIn(['pageProperties', 'cur
  *  if no sort method is supplied, it will use the default sort defined in griddle
  */
 export const sortedDataSelector = createSelector(
-  filteredDataSelector,
-  sortPropertiesSelector,
-  renderPropertiesSelector,
-  sortMethodSelector,
+  'filteredDataSelector',
+  'sortPropertiesSelector',
+  'renderPropertiesSelector',
+  'sortMethodSelector',
   (filteredData, sortProperties, renderProperties, sortMethod = defaultSort) => {
     if (!sortProperties) { return filteredData; }
 
@@ -128,9 +128,9 @@ export const sortedDataSelector = createSelector(
 /** Gets the current page of data
  */
 export const currentPageDataSelector = createSelector(
-  sortedDataSelector,
-  pageSizeSelector,
-  currentPageSelector,
+  'sortedDataSelector',
+  'pageSizeSelector',
+  'currentPageSelector',
   (sortedData, pageSize, currentPage) => {
     if (!sortedData) {
       return [];
@@ -145,29 +145,29 @@ export const currentPageDataSelector = createSelector(
 /** Get the visible data (and only the columns that are visible)
  */
 export const visibleDataSelector = createSelector(
-  currentPageDataSelector,
-  visibleColumnsSelector,
+  'currentPageDataSelector',
+  'visibleColumnsSelector',
   (currentPageData, visibleColumns) => getVisibleDataForColumns(currentPageData, visibleColumns)
 );
 
 /** Gets the griddleIds for the visible rows */
 export const visibleRowIdsSelector = createSelector(
-  currentPageDataSelector,
+  'currentPageDataSelector',
   currentPageData => (currentPageData ? currentPageData.map(c => c.get('griddleKey')) : new Immutable.List())
 );
 
 /** Gets the count of visible rows */
 export const visibleRowCountSelector = createSelector(
-  visibleRowIdsSelector,
+  'visibleRowIdsSelector',
   (visibleRowIds) => visibleRowIds.size
 );
 
 /** Gets the columns that are not currently visible
  */
 export const hiddenColumnsSelector = createSelector(
-  visibleColumnsSelector,
-  allColumnsSelector,
-  metaDataColumnsSelector,
+  'visibleColumnsSelector',
+  'allColumnsSelector',
+  'metaDataColumnsSelector',
   (visibleColumns, allColumns, metaDataColumns) => {
     const removeColumns = [...visibleColumns, ...metaDataColumns];
 
@@ -178,8 +178,8 @@ export const hiddenColumnsSelector = createSelector(
 /** Gets the column ids for the visible columns
 */
 export const columnIdsSelector = createSelector(
-  visibleDataSelector,
-  renderPropertiesSelector,
+  'visibleDataSelector',
+  'renderPropertiesSelector',
   (visibleData, renderProperties) => {
     if(visibleData.size > 0) {
       return Object.keys(visibleData.get(0).toJSON()).map(k =>

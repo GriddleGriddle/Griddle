@@ -283,22 +283,49 @@ export function getReducersByWordEnding(reducers, ending) {
 */
 export function wrapMethodsByWordEnding(componentArray, wordEnding, keyReplaceString = '') {
   return componentArray.reduce((previous, current) => {
-    let newObject = {};
+    let newObject = {},
+      mergedObject = previous;
 
     for(var key in current) {
       const keyWithoutEnhancer = key.replace(wordEnding, keyReplaceString);
 
       if(key.endsWith(wordEnding) && (previous.hasOwnProperty(keyWithoutEnhancer) || current.hasOwnProperty(keyWithoutEnhancer))) {
         // Determine if we are working with an HoC that wraps another HoC
-        newObject[keyWithoutEnhancer] = keyWithoutEnhancer.endsWith('Container') || keyWithoutEnhancer.endsWith('Enhancer') ?
+        if(keyWithoutEnhancer.endsWith('Container') || keyWithoutEnhancer.endsWith('Enhancer')) {
           // If we are enhancing a container or enhancer flow this stuff since it's likely an HoC
-          _.flowRight(current[key], (current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])) :
+          newObject[keyWithoutEnhancer] = _.flowRight(current[key], (current[keyWithoutEnhancer] || previous[keyWithoutEnhancer]));
+        } else {
           // Wrap the current component in the Enhancer or container
-          current[key](current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])
+          if(Array.isArray(current[key])) {
+            newObject[keyWithoutEnhancer] = current[key].reduce((previousComponent, currentComponent) => {
+                if(previousComponent !== undefined) {
+                  return currentComponent(previousComponent);
+                } else {
+                  return currentComponent(current[keyWithoutEnhancer]);
+                }
+            }, undefined);
+          } else {
+            newObject[keyWithoutEnhancer] = current[key](current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])
+          }
+          
+        }
+      }
+      if(mergedObject[key] === undefined) {
+        mergedObject[key] = current[key];
+      } else {
+        if(key.endsWith('Enhancer')) {
+          if(Array.isArray(mergedObject[key])) {
+            mergedObject[key].push(current[key]);
+          }else {
+            mergedObject[key] = [mergedObject[key], current[key]];
+          }
+        } else {
+          mergedObject[key] = current[key];
+        }
       }
     }
 
-    return _.pickBy(Object.assign(previous, current, newObject), (v, k) => (!k.endsWith(wordEnding))) ;
+    return _.pickBy(Object.assign(mergedObject, newObject), (v, k) => (!k.endsWith(wordEnding))) ;
   }, {})
 }
 

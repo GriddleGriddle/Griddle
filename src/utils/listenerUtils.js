@@ -27,7 +27,7 @@ export const StoreListener = class StoreListener {
         // if no name is provided, do nothing
         name && this.removeListener(name);
         const unsubscribe = (() => {
-            let oldState;
+            let oldState = this.store.getState();
             return this.store.subscribe(() => {
                 const newState = this.store.getState();
                 listener(oldState, newState, {...otherArgs});

@@ -5,8 +5,8 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import withHandlers from 'recompose/withHandlers';
-import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector, cellPropertiesSelector } from '../../../selectors/dataSelectors';
-import { setSortColumn } from '../../../actions';
+import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector, cellPropertiesSelector } from '../../core/selectors/dataSelectors';
+import { setSortColumn } from '../../core/actions';
 import { getSortIconProps, setSortProperties } from '../../../utils/sortUtils';
 import { valueOrResult } from '../../../utils/valueUtils';
 

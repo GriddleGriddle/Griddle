@@ -16,7 +16,7 @@ import Immutable from 'immutable';
 import {
   addColumnPropertiesWhenNoneExist,
   transformData,
-} from '../utils/dataUtils';
+} from '../../../utils/dataUtils';
 
 function isColumnVisible(state, columnId) {
   const hasRenderProperty = state.getIn(['renderProperties', 'columnProperties', columnId]);
@@ -134,9 +134,13 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
 
 export function GRIDDLE_UPDATE_STATE(state, action) {
   const { data, ...newState } = action.newState;
-  const transformedData = transformData(data, state.get('renderProperties').toJSON());
+  if (data !== undefined) {
+    const transformedData = transformData(data, state.get('renderProperties').toJSON());
 
-  return state.mergeDeep(Immutable.fromJS(newState))
-    .set('data', transformedData.data)
-    .set('lookup', transformedData.lookup);
+    return state.mergeDeep(Immutable.fromJS(newState))
+      .set('data', transformedData.data)
+      .set('lookup', transformedData.lookup);
+  } else {
+    return state.mergeDeep(Immutable.fromJS(newState));
+  }
 }

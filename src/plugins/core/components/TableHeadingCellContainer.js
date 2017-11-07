@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 
-import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
-import { getSortIconProps } from '../utils/sortUtils';
-import { valueOrResult } from '../utils/valueUtils';
+import { connect } from '../../../utils/griddleConnect';
+import { getSortIconProps } from '../../../utils/sortUtils';
+import { valueOrResult } from '../../../utils/valueUtils';
 
 const DefaultTableHeadingCellContent = ({title, icon}) => (
   <span>
@@ -22,12 +21,12 @@ const EnhancedHeadingCell = OriginalComponent => compose(
   }),
   connect(
     (state, props) => ({
-      sortProperty: sortPropertyByIdSelector(state, props),
-      customHeadingComponent: customHeadingComponentSelector(state, props),
-      cellProperties: cellPropertiesSelector(state, props),
-      className: classNamesForComponentSelector(state, 'TableHeadingCell'),
-      style: stylesForComponentSelector(state, 'TableHeadingCell'),
-      ...iconsForComponentSelector(state, 'TableHeadingCell'),
+      sortProperty: props.selectors.sortPropertyByIdSelector(state, props),
+      customHeadingComponent: props.selectors.customHeadingComponentSelector(state, props),
+      cellProperties: props.selectors.cellPropertiesSelector(state, props),
+      className: props.selectors.classNamesForComponentSelector(state, 'TableHeadingCell'),
+      style: props.selectors.stylesForComponentSelector(state, 'TableHeadingCell'),
+      ...props.selectors.iconsForComponentSelector(state, 'TableHeadingCell'),
     })
   ),
   mapProps(props => {

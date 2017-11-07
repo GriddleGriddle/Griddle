@@ -1,6 +1,6 @@
 import { maxPageSelector, currentPageSelector } from '../selectors/localSelectors';
 
-import * as dataReducers from '../../../reducers//dataReducer';
+import * as dataReducers from '../../core/reducers/dataReducer';
 
 export function GRIDDLE_INITIALIZED(state) {
   return dataReducers.GRIDDLE_INITIALIZED(state);

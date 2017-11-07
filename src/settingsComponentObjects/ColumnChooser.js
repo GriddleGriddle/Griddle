@@ -3,8 +3,8 @@ import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
-import { visibleColumnPropertiesSelector, hiddenColumnPropertiesSelector } from '../selectors/dataSelectors';
-import { toggleColumn as toggleColumnAction } from '../actions';
+import { visibleColumnPropertiesSelector, hiddenColumnPropertiesSelector } from '../plugins/core/selectors/dataSelectors';
+import { toggleColumn as toggleColumnAction } from '../plugins/core/actions';
 
 const style = {
   label: { clear: 'both' }

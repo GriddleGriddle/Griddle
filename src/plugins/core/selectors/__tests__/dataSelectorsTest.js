@@ -2,27 +2,32 @@ import test from 'ava';
 import Immutable from 'immutable';
 
 import * as selectors from '../dataSelectors';
+import { composeSelectors } from '../../../../utils/selectorUtils';
+
+test.beforeEach((t) => {
+  t.context.selectors = composeSelectors([{selectors}]);
+});
 
 test('gets data', test => {
   const state = new Immutable.Map().set('data', 'hi');
-  test.is(selectors.dataSelector(state), 'hi');
+  test.is(test.context.selectors.dataSelector(state), 'hi');
 });
 
 test('gets pageSize', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'pageSize'], 7);
-  test.is(selectors.pageSizeSelector(state), 7);
+  test.is(test.context.selectors.pageSizeSelector(state), 7);
 });
 
 /* currentPageSelector */
 test('gets current page', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 3);
-  test.is(selectors.currentPageSelector(state), 3);
+  test.is(test.context.selectors.currentPageSelector(state), 3);
 });
 
 /* recordCountSelector */
 test('gets record count', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'recordCount'], 10);
-  test.is(selectors.recordCountSelector(state), 10);
+  test.is(test.context.selectors.recordCountSelector(state), 10);
 });
 
 /* hasNextSelector */
@@ -35,7 +40,7 @@ test('hasNext gets true when there are more pages', test => {
     }
   });
 
-  test.true(selectors.hasNextSelector(state));
+  test.true(test.context.selectors.hasNextSelector(state));
 });
 
 test('hasNext gets false when there are not more pages', test => {
@@ -47,7 +52,7 @@ test('hasNext gets false when there are not more pages', test => {
     }
   });
 
-  test.false(selectors.hasNextSelector(state));
+  test.false(test.context.selectors.hasNextSelector(state));
 });
 
 /* this is just double checking that we're not showing next when on record 11-20 of 20 */
@@ -60,24 +65,24 @@ test('hasNext gets false when on the last page', test => {
     }
   });
 
-  test.false(selectors.hasNextSelector(state));
+  test.false(test.context.selectors.hasNextSelector(state));
 });
 
 /* hasPreviousSelector */
 test('has previous gets true when there are prior pages', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 2);
-  test.true(selectors.hasPreviousSelector(state));
+  test.true(test.context.selectors.hasPreviousSelector(state));
 });
 
 test.skip('has previous gets false when there are not prior pages', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 2);
-  test.true(selectors.hasPreviousSelector(state));
+  test.true(test.context.selectors.hasPreviousSelector(state));
 })
 
 /* currentPageSelector */
 test('gets current page', test => {
   const state = new Immutable.Map().setIn(['pageProperties', 'currentPage'], 1);
-  test.false(selectors.hasPreviousSelector(state));
+  test.false(test.context.selectors.hasPreviousSelector(state));
 })
 
 /* maxPageSelector */
@@ -90,36 +95,36 @@ test('gets max page', test => {
     }
   });
 
-  test.is(selectors.maxPageSelector(state), 2);
+  test.is(test.context.selectors.maxPageSelector(state), 2);
 
   //ensure that we get 2 pages when full pageSize would not be displayed on next page
   const otherState = state.setIn(['pageProperties', 'pageSize'], 11);
-  test.is(selectors.maxPageSelector(otherState), 2);
+  test.is(test.context.selectors.maxPageSelector(otherState), 2);
 
   //when pageSize === recordCount should have 1 page
   const onePageState = state.setIn(['pageProperties', 'pageSize'], 20);
-  test.is(selectors.maxPageSelector(onePageState), 1);
+  test.is(test.context.selectors.maxPageSelector(onePageState), 1);
 
   //when there are no records, there should be 0 pages
   const noDataState = state.setIn(['pageProperties', 'recordCount'], 0);
-  test.is(selectors.maxPageSelector(noDataState), 0);
+  test.is(test.context.selectors.maxPageSelector(noDataState), 0);
 });
 
 /* filterSelector */
 test('gets filter when present', test => {
   const state = new Immutable.Map().set('filter', 'some awesome filter');
-  test.is(selectors.filterSelector(state), 'some awesome filter');
+  test.is(test.context.selectors.filterSelector(state), 'some awesome filter');
 })
 
 test('gets empty string when no filter present', test => {
   const state = new Immutable.Map();
-  test.is(selectors.filterSelector(state), '');
+  test.is(test.context.selectors.filterSelector(state), '');
 });
 
 /* sortColumnsSelector */
 test('gets empty array for sortColumns when none specified', test => {
   const state = new Immutable.Map();
-  test.deepEqual(selectors.sortColumnsSelector(state), []);
+  test.deepEqual(test.context.selectors.sortColumnsSelector(state), []);
 });
 
 test('gets sort column array when specified', test => {
@@ -130,7 +135,7 @@ test('gets sort column array when specified', test => {
       { column: 'three', sortAscending: true}
     ]);
 
-  test.deepEqual(selectors.sortColumnsSelector(state), [
+  test.deepEqual(test.context.selectors.sortColumnsSelector(state), [
     { column: 'one', sortAscending: true},
     { column: 'two', sortAscending: true},
     { column: 'three', sortAscending: true}
@@ -145,18 +150,18 @@ test('allColumnsSelector: gets all columns', test => {
 
   const state = new Immutable.Map().set('data', data);
 
-  test.deepEqual(selectors.allColumnsSelector(state), ['one', 'two', 'three', 'four']);
+  test.deepEqual(test.context.selectors.allColumnsSelector(state), ['one', 'two', 'three', 'four']);
 });
 
 test('allColumnsSelector: gets empty array when no data present', test => {
   const state = new Immutable.Map();
 
-  test.deepEqual(selectors.allColumnsSelector(state), []);
+  test.deepEqual(test.context.selectors.allColumnsSelector(state), []);
 });
 
 test('allColumnsSelector: gets empty array when data is empty', test => {
   const state = new Immutable.Map().set('data', new Immutable.List());
-  test.deepEqual(selectors.allColumnsSelector(state), []);
+  test.deepEqual(test.context.selectors.allColumnsSelector(state), []);
 });
 
 test('allColumnsSelector accounts for made up columns', test => {
@@ -173,7 +178,7 @@ test('allColumnsSelector accounts for made up columns', test => {
     }
   });
 
-  test.deepEqual(selectors.allColumnsSelector(state), ['one', 'two', 'three', 'something']);
+  test.deepEqual(test.context.selectors.allColumnsSelector(state), ['one', 'two', 'three', 'something']);
 });
 
 test('iconByNameSelector gets given icon', test => {
@@ -185,7 +190,7 @@ test('iconByNameSelector gets given icon', test => {
     }
   });
 
-  test.is(selectors.iconByNameSelector(state, {name: 'one'}), 'yo');
+  test.is(test.context.selectors.iconByNameSelector(state, {name: 'one'}), 'yo');
 });
 
 test('iconByNameSelector gets undefined when icon not present in collection', test => {
@@ -197,7 +202,7 @@ test('iconByNameSelector gets undefined when icon not present in collection', te
     }
   });
 
-  test.is(selectors.iconByNameSelector(state, { name: 'two'}), undefined)
+  test.is(test.context.selectors.iconByNameSelector(state, { name: 'two'}), undefined)
 });
 
 test('classNamesForComponentSelector gets given class', test => {
@@ -209,7 +214,7 @@ test('classNamesForComponentSelector gets given class', test => {
     }
   });
 
-  test.is(selectors.classNamesForComponentSelector(state, 'one'), 'yo');
+  test.is(test.context.selectors.classNamesForComponentSelector(state, 'one'), 'yo');
 });
 
 test('classNameForComponentSelector gets undefined when icon not present in collection', test => {
@@ -221,21 +226,21 @@ test('classNameForComponentSelector gets undefined when icon not present in coll
     }
   });
 
-  test.is(selectors.classNamesForComponentSelector(state, 'two'), undefined);
+  test.is(test.context.selectors.classNamesForComponentSelector(state, 'two'), undefined);
 });
 
 test('isSettingsEnabled returns true when not set', test => {
   const state = new Immutable.fromJS({});
 
-  test.is(selectors.isSettingsEnabledSelector(state), true);
+  test.is(test.context.selectors.isSettingsEnabledSelector(state), true);
 });
 
 test('isSettingsEnabled returns the value that was set', test => {
   const enabledState = new Immutable.fromJS({ enableSettings: true });
   const disabledState = new Immutable.fromJS({ enableSettings: false });
 
-  test.is(selectors.isSettingsEnabledSelector(enabledState), true);
-  test.is(selectors.isSettingsEnabledSelector(disabledState), false);
+  test.is(test.context.selectors.isSettingsEnabledSelector(enabledState), true);
+  test.is(test.context.selectors.isSettingsEnabledSelector(disabledState), false);
 });
 
 test('gets text from state', test => {
@@ -245,7 +250,7 @@ test('gets text from state', test => {
     }
   });
 
-  test.is(selectors.textSelector(state, { key: 'one'}), 'one two three');
+  test.is(test.context.selectors.textSelector(state, { key: 'one'}), 'one two three');
 });
 
 test('gets metadata columns', test => {
@@ -261,7 +266,7 @@ test('gets metadata columns', test => {
     }
   });
 
-  test.deepEqual(selectors.metaDataColumnsSelector(state), ['two']);
+  test.deepEqual(test.context.selectors.metaDataColumnsSelector(state), ['two']);
 });
 
 test('it gets columnTitles in the correct order', test => {
@@ -277,7 +282,7 @@ test('it gets columnTitles in the correct order', test => {
     }
   });
 
-  test.deepEqual(selectors.columnTitlesSelector(state), ['Two', 'One']);
+  test.deepEqual(test.context.selectors.columnTitlesSelector(state), ['Two', 'One']);
 });
 
 [undefined, null].map(data =>
@@ -286,7 +291,7 @@ test('it gets columnTitles in the correct order', test => {
       data
     });
 
-    assert.deepEqual(selectors.visibleRowIdsSelector(state), new Immutable.List());
+    assert.deepEqual(assert.context.selectors.visibleRowIdsSelector(state), new Immutable.List());
   })
 );
 
@@ -299,7 +304,7 @@ test('visibleRowIds gets griddleKey from data', (assert) => {
     ],
   });
 
-  assert.deepEqual(selectors.visibleRowIdsSelector(state), new Immutable.List([2, 4, 6]));
+  assert.deepEqual(assert.context.selectors.visibleRowIdsSelector(state), new Immutable.List([2, 4, 6]));
 });
 
 test('rowDataSelector gets row data', (assert) => {
@@ -314,5 +319,5 @@ test('rowDataSelector gets row data', (assert) => {
     },
   });
 
-  assert.deepEqual(selectors.rowDataSelector(state, { griddleKey: 6 }), { griddleKey: 6, id: 1 });
+  assert.deepEqual(assert.context.selectors.rowDataSelector(state, { griddleKey: 6 }), { griddleKey: 6, id: 1 });
 });

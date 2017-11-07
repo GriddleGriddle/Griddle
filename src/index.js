@@ -5,55 +5,26 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import * as dataReducers from './reducers/dataReducer';
-import components from './components';
+//import * as dataReducers from './reducers/dataReducer';
+//import components from './components';
 import settingsComponentObjects from './settingsComponentObjects';
-import * as selectors from './selectors/dataSelectors';
+//import * as selectors from './selectors/dataSelectors';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
-import { getColumnProperties } from './utils/columnUtils';
-import { getRowProperties } from './utils/rowUtils';
+//import { getColumnProperties } from './utils/columnUtils';
+//import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
-import * as actions from './actions';
+import { composeSelectors } from './utils/selectorUtils';
+//import * as actions from './actions';
 
-const defaultEvents = {
-  ...actions,
-  onFilter: actions.setFilter,
-  setSortProperties
-};
+import CorePlugin from './plugins/core';
 
-
-const defaultStyleConfig = {
-  icons: {
-    TableHeadingCell: {
-      sortDescendingIcon: '▼',
-      sortAscendingIcon: '▲'
-    },
-  },
-  classNames: {
-    Cell: 'griddle-cell',
-    Filter: 'griddle-filter',
-    Loading: 'griddle-loadingResults',
-    NextButton: 'griddle-next-button',
-    NoResults: 'griddle-noResults',
-    PageDropdown: 'griddle-page-select',
-    Pagination: 'griddle-pagination',
-    PreviousButton: 'griddle-previous-button',
-    Row: 'griddle-row',
-    RowDefinition: 'griddle-row-definition',
-    Settings: 'griddle-settings',
-    SettingsToggle: 'griddle-settings-toggle',
-    Table: 'griddle-table',
-    TableBody: 'griddle-table-body',
-    TableHeading: 'griddle-table-heading',
-    TableHeadingCell: 'griddle-table-heading-cell',
-    TableHeadingCellAscending: 'griddle-heading-ascending',
-    TableHeadingCellDescending: 'griddle-heading-descending',
-  },
-  styles: {
-  }
-};
+//const defaultEvents = {
+//  ...actions,
+//  onFilter: actions.setFilter,
+//  setSortProperties
+//};
 
 class Griddle extends Component {
   static childContextTypes = {
@@ -62,13 +33,15 @@ class Griddle extends Component {
     events: PropTypes.object,
     selectors: PropTypes.object,
     storeKey: PropTypes.string,
-    storeListener: PropTypes.object
+    storeListener: PropTypes.object,
+    actions: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
 
     const {
+      baselinePlugin=CorePlugin,
       plugins=[],
       data,
       children:rowPropertiesComponent,
@@ -85,23 +58,40 @@ class Griddle extends Component {
       ...userInitialState
     } = props;
 
-    const rowProperties = getRowProperties(rowPropertiesComponent);
-    const columnProperties = getColumnProperties(rowPropertiesComponent);
+    switch(typeof baselinePlugin) {
+      case 'function':
+        plugins.unshift(baselinePlugin(props));
+        break;
+      case 'object':
+        plugins.unshift(baselinePlugin);
+        break;
+    };
+
+    this.plugins = plugins;
 
     //Combine / compose the reducers to make a single, unified reducer
-    const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
+    //const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
+    const reducers = buildGriddleReducer([...plugins.map(p => p.reducer)]);
 
     //Combine / Compose the components to make a single component for each component type
-    this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
+    //this.components = buildGriddleComponents([components, ...plugins.map(p => p.components), userComponents]);
+    this.components = buildGriddleComponents([...plugins.map(p => p.components), userComponents]);
 
-    this.settingsComponentObjects = Object.assign({}, settingsComponentObjects, ...plugins.map(p => p.settingsComponentObjects), userSettingsComponentObjects);
+    // NOTE this goes on the context which for the purposes of breaking out the 
+    // 'core' code into a plugin is somewhat of a problem as it should
+    // be associated with the core code not general griddle code.
+    this.settingsComponentObjects = Object.assign({}, ...plugins.map(p => p.settingsComponentObjects), userSettingsComponentObjects);
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+    this.selectors = composeSelectors(plugins);
 
-    const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
+    this.actions = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.actions }), {});
 
+    const mergedStyleConfig = _.merge({}, ...plugins.map(p => p.styleConfig), styleConfig);
+
+    // this would be good to move into the core plugin
+    // and namespace this state to the core plugin
     const pageProperties = Object.assign({}, {
         currentPage: 1,
         pageSize: 10
@@ -110,21 +100,15 @@ class Griddle extends Component {
     );
 
     //TODO: This should also look at the default and plugin initial state objects
-    const renderProperties = Object.assign({
-      rowProperties,
-      columnProperties
-    }, ...plugins.map(p => p.renderProperties), userRenderProperties);
+    const renderProperties = Object.assign(...plugins.map(p => p.renderProperties), userRenderProperties);
 
     // TODO: Make this its own method
+    // It would be nice if state was namespaced to the plugin
+    // it was associated with. For example pageProperties and 
+    // sortProperties are specific to the core plugin. We could
+    // refactor the selectors to grab this data from a different
+    // place but would this affect other users?
     const initialState = _.merge(
-      {
-        enableSettings: true,
-        textProperties: {
-          next: 'Next',
-          previous: 'Previous',
-          settingsToggle: 'Settings'
-        },
-      },
       ...plugins.map(p => p.initialState),
       userInitialState,
       {
@@ -161,8 +145,12 @@ class Griddle extends Component {
     })
 
     // Only update the state if something has changed.
+    //
+    // NOTE the update state reducer in 'core' griddle is only
+    // concerned with the data, pageProperties, and sortProperties
+    // passing in only changed props breaks the contract it is expecting
     if (Object.keys(newState).length > 0) {
-     this.store.dispatch(actions.updateState(newState));
+     this.store.dispatch(this.plugins[0].actions.updateState(newState));
     }
   }
 
@@ -183,7 +171,8 @@ class Griddle extends Component {
       events: this.events,
       selectors: this.selectors,
       storeKey: this.getStoreKey(),
-      storeListener: this.storeListener
+      storeListener: this.storeListener,
+      actions: this.actions,
     };
   }
 
