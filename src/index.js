@@ -8,13 +8,15 @@ import _ from 'lodash';
 import * as dataReducers from './reducers/dataReducer';
 import components from './components';
 import settingsComponentObjects from './settingsComponentObjects';
-import * as selectors from './selectors/dataSelectors';
+import * as baseSelectors from './selectors/dataSelectors';
+import * as composedSelectors from './selectors/composedSelectors';
 
 import { buildGriddleReducer, buildGriddleComponents } from './utils/compositionUtils';
 import { getColumnProperties } from './utils/columnUtils';
 import { getRowProperties } from './utils/rowUtils';
 import { setSortProperties } from './utils/sortUtils';
 import { StoreListener } from './utils/listenerUtils';
+import { composeSelectors } from './utils/selectorUtils';
 import * as actions from './actions';
 
 const defaultEvents = {
@@ -98,7 +100,7 @@ class Griddle extends Component {
 
     this.events = Object.assign({}, events, ...plugins.map(p => p.events));
 
-    this.selectors = plugins.reduce((combined, plugin) => ({ ...combined, ...plugin.selectors }), {...selectors});
+    this.selectors = composeSelectors(baseSelectors, composedSelectors, plugins);
 
     const mergedStyleConfig = _.merge({}, defaultStyleConfig, ...plugins.map(p => p.styleConfig), styleConfig);
 
