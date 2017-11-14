@@ -79,6 +79,8 @@ function testReducer(state = { count: 1}, action) {
       return { ...state, count: state.count + 1};
     case 'DECREMENT':
       return { ...state, count: state.count -1};
+    case 'SET_SEARCH_STRING':
+      return { ...state, searchString: action.searchString };
     default:
       return state;
   }
@@ -889,6 +891,43 @@ storiesOf('Griddle main', module)
           </div>
         </Provider>
       </div>
+    );
+  })
+
+  .add('with custom filter connected to another Redux store', () => {
+    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
+
+    const CustomFilterComponent = (props) => (
+      <input
+        value={props.searchString}
+        onChange={(e) => { props.setSearchString(e.target.value); }}
+      />
+    );
+
+    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
+    const CustomFilterConnectedComponent = reduxConnect(
+      state => ({
+          searchString: state.searchString,
+      }),
+      dispatch => ({
+        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
+      })
+    )(CustomFilterComponent);
+
+    const SomePage = props => (
+      <div>
+        <Griddle data={props.data} plugins={[LocalPlugin]} storeKey="griddleStore"
+          components={{ Filter: CustomFilterConnectedComponent }} />
+
+        Component outside of Griddle that's sharing state
+        <CustomFilterConnectedComponent />
+      </div>
+    );
+
+    return (
+      <Provider store={testStore}>
+        <SomePage data={fakeData} />
+      </Provider>
     );
   })
 
