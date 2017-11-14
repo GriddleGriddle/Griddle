@@ -79,6 +79,8 @@ function testReducer(state = { count: 1}, action) {
       return { ...state, count: state.count + 1};
     case 'DECREMENT':
       return { ...state, count: state.count -1};
+    case 'SET_DATA':
+      return { ...state, data: action.data };
     case 'SET_SEARCH_STRING':
       return { ...state, searchString: action.searchString };
     default:
@@ -924,9 +926,19 @@ storiesOf('Griddle main', module)
       </div>
     );
 
+    const SomePageConnected = reduxConnect(
+      state => ({
+        data: !state.searchString ? state.data :
+          state.data.filter(r =>
+            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
+      })
+    )(SomePage);
+
+    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
+
     return (
       <Provider store={testStore}>
-        <SomePage data={fakeData} />
+        <SomePageConnected />
       </Provider>
     );
   })
