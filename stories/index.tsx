@@ -916,10 +916,15 @@ storiesOf('Griddle main', module)
       })
     )(CustomFilterComponent);
 
+    const plugins = [
+      LocalPlugin,
+      {
+        components: { Filter: CustomFilterConnectedComponent },
+      },
+    ];
     const SomePage = props => (
       <div>
-        <Griddle data={props.data} plugins={[LocalPlugin]} storeKey="griddleStore"
-          components={{ Filter: CustomFilterConnectedComponent }} />
+        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
 
         Component outside of Griddle that's sharing state
         <CustomFilterConnectedComponent />
