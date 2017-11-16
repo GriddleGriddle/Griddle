@@ -7,11 +7,13 @@ import * as selectors from './selectors/dataSelectors';
 import settingsComponentObjects from './settingsComponentObjects';
 import utils from './utils';
 
+import CorePlugin from './core';
 import LegacyStylePlugin from './plugins/legacyStyle';
 import LocalPlugin from './plugins/local';
 import PositionPlugin from './plugins/position';
 
 const plugins = {
+  CorePlugin,
   LegacyStylePlugin,
   LocalPlugin,
   PositionPlugin,

@@ -11,7 +11,6 @@ import {
   removeHooksFromObject,
   isKeyGriddleHook,
   buildGriddleReducer,
-  buildGriddleReducerObject,
   getAfterHooksFromObject,
   getBeforeHooksFromObject,
   removeKeyNamePartFromObject,
@@ -326,7 +325,7 @@ test('builds griddle reducer', test => {
     }
   }
 
-  const griddleReducer = buildGriddleReducerObject([reducer1, reducer2, reducer3]);
+  const griddleReducer = buildGriddleReducer([reducer1, reducer2, reducer3]);
 
   test.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING', 'REDUCE_OTHER']);
   test.deepEqual(griddleReducer.REDUCE_THING({ number: 5}), { number: -45 });
@@ -357,6 +356,7 @@ test('builds griddle reducer with BEFORE_REDUCE and AFTER_REDUCE', (t) => {
   const griddleReducer = buildGriddleReducer([reducer1, reducer2]);
   const output = griddleReducer({number: 5}, { type: 'REDUCE_THING'});
 
+  t.deepEqual(Object.keys(griddleReducer), ['AFTER_REDUCE', 'REDUCE_THING', 'BEFORE_REDUCE']);
   t.deepEqual(output, { number: 55 });
 });
 
@@ -376,7 +376,23 @@ test('builds griddle reducer without BEFORE / AFTER if they dont exist', (t) => 
   const griddleReducer = buildGriddleReducer([reducer1, reducer2]);
   const output = griddleReducer({number: 5}, { type: 'REDUCE_THING'});
 
+  t.deepEqual(Object.keys(griddleReducer), ['REDUCE_THING']);
   t.deepEqual(output, { number: 15 });
+});
+
+test('builds griddle reducer that calls GRIDDLE_INITIALIZED for missing action type, if it exists', (assert) => {
+  const initReducer = { GRIDDLE_INITIALIZED: () => ({ init: true }) };
+  const griddleReducer = buildGriddleReducer([initReducer]);
+  const output = griddleReducer({}, { type: 'MISSING' });
+
+  assert.deepEqual(output, { init: true });
+});
+
+test('builds griddle reducer that does noop for missing action type, if GRIDDLE_INITIALIZED is also missing', (assert) => {
+  const griddleReducer = buildGriddleReducer([]);
+  const output = griddleReducer({}, { type: 'MISSING' });
+
+  assert.deepEqual(output, {});
 });
 
 test('combineAndEnhanceComponents', test => {
