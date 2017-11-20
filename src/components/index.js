@@ -39,6 +39,7 @@ import PreviousButtonEnhancer from './PreviousButtonEnhancer';
 import PreviousButtonContainer from './PreviousButtonContainer';
 import PageDropdown from './PageDropdown';
 import PageDropdownContainer from './PageDropdownContainer';
+import PageDropdownEnhancer from './PageDropdownEnhancer';
 
 const components = {
   Cell,
@@ -67,6 +68,7 @@ const components = {
   NoResultsContainer,
   PageDropdown,
   PageDropdownContainer,
+  PageDropdownEnhancer,
   Pagination,
   PaginationContainer,
   PreviousButton,
