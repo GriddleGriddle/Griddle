@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import getContext from 'recompose/getContext';
-import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
-
+import mapProps from 'recompose/mapProps';
+import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
 
 const EnhancedFilter = OriginalComponent => compose(
