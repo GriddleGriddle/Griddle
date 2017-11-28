@@ -283,10 +283,10 @@ export interface GriddleComponents {
     NextButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
     NextButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    PageDropDown?: GriddleComponent<any>;
-    PageDropDownEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PageDropDownContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PageDropDownContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PageDropdown?: GriddleComponent<any>;
+    PageDropdownEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PageDropdownContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    PageDropdownContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
     PreviousButton?: GriddleComponent<any>;
     PreviousButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;

@@ -5,14 +5,14 @@ import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
 
-const EnhancedFilter = OriginalComponent => compose(
+const enhance = OriginalComponent => compose(
   getContext({
     events: PropTypes.object
   }),
-  mapProps(({ events: { onFilter }, ...props }) => ({
+  mapProps(({ events: { onGetPage }, ...props }) => ({
     ...props,
-    setFilter: combineHandlers([onFilter, props.setFilter]),
+    setPage: combineHandlers([onGetPage, props.setPage]),
   }))
-)(props => <OriginalComponent {...props} />);
+)((props) => <OriginalComponent {...props} />);
 
-export default EnhancedFilter;
+export default enhance;
