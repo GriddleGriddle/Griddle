@@ -79,6 +79,10 @@ function testReducer(state = { count: 1}, action) {
       return { ...state, count: state.count + 1};
     case 'DECREMENT':
       return { ...state, count: state.count -1};
+    case 'SET_DATA':
+      return { ...state, data: action.data };
+    case 'SET_SEARCH_STRING':
+      return { ...state, searchString: action.searchString };
     default:
       return state;
   }
@@ -900,6 +904,58 @@ storiesOf('Griddle main', module)
           </div>
         </Provider>
       </div>
+    );
+  })
+
+  .add('with custom filter connected to another Redux store', () => {
+    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
+
+    const CustomFilterComponent = (props) => (
+      <input
+        value={props.searchString}
+        onChange={(e) => { props.setSearchString(e.target.value); }}
+      />
+    );
+
+    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
+    const CustomFilterConnectedComponent = reduxConnect(
+      state => ({
+          searchString: state.searchString,
+      }),
+      dispatch => ({
+        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
+      })
+    )(CustomFilterComponent);
+
+    const plugins = [
+      LocalPlugin,
+      {
+        components: { Filter: CustomFilterConnectedComponent },
+      },
+    ];
+    const SomePage = props => (
+      <div>
+        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+
+        Component outside of Griddle that's sharing state
+        <CustomFilterConnectedComponent />
+      </div>
+    );
+
+    const SomePageConnected = reduxConnect(
+      state => ({
+        data: !state.searchString ? state.data :
+          state.data.filter(r =>
+            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
+      })
+    )(SomePage);
+
+    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
+
+    return (
+      <Provider store={testStore}>
+        <SomePageConnected />
+      </Provider>
     );
   })
 
