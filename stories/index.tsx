@@ -918,7 +918,7 @@ storiesOf('Griddle main', module)
 
     const CustomFilterComponent = (props) => (
       <input
-        value={props.searchString}
+        value={props.searchString || ''}
         onChange={(e) => { props.setSearchString(e.target.value); }}
       />
     );
