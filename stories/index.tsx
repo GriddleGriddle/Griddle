@@ -73,7 +73,13 @@ const EnhanceWithRowData = connect((state, props) => ({
 
 const EnhancedCustomComponent = EnhanceWithRowData(MakeBlueComponent);
 
-function testReducer(state = { count: 1}, action) {
+interface TestState {
+  count: number;
+  data?: any;
+  searchString?: string;
+}
+
+function testReducer(state: TestState = { count: 1 }, action: any) {
   switch (action.type) {
     case 'INCREMENT':
       return { ...state, count: state.count + 1};
@@ -919,7 +925,7 @@ storiesOf('Griddle main', module)
 
     const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
     const CustomFilterConnectedComponent = reduxConnect(
-      state => ({
+      (state: TestState) => ({
           searchString: state.searchString,
       }),
       dispatch => ({
@@ -943,7 +949,7 @@ storiesOf('Griddle main', module)
     );
 
     const SomePageConnected = reduxConnect(
-      state => ({
+      (state: TestState) => ({
         data: !state.searchString ? state.data :
           state.data.filter(r =>
             Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
