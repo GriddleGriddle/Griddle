@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.11.0] - 2017-12-20
+- TypeScript updates
+- Filter updates
+- other enhancements
+
 ## [1.9.0] - 2017-09-15
 - Performance improvements
 - Store listeners
