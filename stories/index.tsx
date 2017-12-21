@@ -767,6 +767,14 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with Filter place-holder', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} textProperties={{filterPlaceHolder: 'My new Filter text!'}}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
   .add('with nested column data', () => {
     interface NestedData {
         id: number,

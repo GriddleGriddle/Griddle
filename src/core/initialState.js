@@ -40,6 +40,7 @@ export default {
   textProperties: {
     next: 'Next',
     previous: 'Previous',
-    settingsToggle: 'Settings'
+    settingsToggle: 'Settings',
+    filterPlaceHolder: 'Filter'
   },
 };
