@@ -10,12 +10,14 @@ import utils from './utils';
 import CorePlugin from './core';
 import LegacyStylePlugin from './plugins/legacyStyle';
 import LocalPlugin from './plugins/local';
+import LocalCustomPlugin from './plugins/localCustomPlugin';
 import PositionPlugin from './plugins/position';
 
 const plugins = {
   CorePlugin,
   LegacyStylePlugin,
   LocalPlugin,
+  LocalCustomPlugin,
   PositionPlugin,
 };
 

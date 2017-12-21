@@ -16,7 +16,7 @@ import GenericGriddle, { connect, actions, components, selectors, plugins, utils
 const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
-const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
+const { LegacyStylePlugin, LocalPlugin, PositionPlugin, LocalCustomPlugin } = plugins;
 
 import fakeData, { FakeData } from './fakeData';
 import { person, fakeData2, personClass, fakeData3 } from './fakeData2';
@@ -104,6 +104,43 @@ storiesOf('Griddle main', module)
         </RowDefinition>
       </Griddle>
     )
+  })
+  .add('Controlling external state through a callback', () => {
+
+    class Something extends React.Component<{}, any> {
+      constructor() {
+        super();
+
+        this.extTrigger = this.extTrigger.bind(this)
+
+        this.state = {
+            extVar: 0
+        };
+      }
+
+      extTrigger(){
+        console.log("EXT TRIGGER");
+        this.setState({ extVar: 1 })
+      }
+
+      render() {
+        const {
+            extVar
+        } = this.state
+
+        return (
+        <div>
+        <p>The magic number is: {extVar}</p>
+          <Griddle extTrigger={this.extTrigger} data={fakeData} plugins={[LocalPlugin, LocalCustomPlugin]}>
+            <RowDefinition>
+            </RowDefinition>
+          </Griddle>
+        </div>
+        )
+      }
+    }
+
+    return <Something />
   })
   .add('with local, delayed data', () => {
     class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
