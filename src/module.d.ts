@@ -448,6 +448,8 @@ export namespace plugins {
 
     var LocalPlugin : GriddlePlugin;
 
+    var LocalCustomPlugin : GriddlePlugin;
+
     interface PositionSettings {
         // The height of the table
         tableHeight?: number|string;
