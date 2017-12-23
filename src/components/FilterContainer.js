@@ -6,7 +6,7 @@ import { classNamesForComponentSelector, stylesForComponentSelector, textSelecto
 import { setFilter } from '../actions';
 
 const EnhancedFilter = OriginalComponent => connect((state, props) => ({
-  text: textSelector(state, { key: 'filterPlaceHolder' }),
+  placeholder: textSelector(state, { key: 'filterPlaceholder' }),
   className: classNamesForComponentSelector(state, 'Filter'),
   style: stylesForComponentSelector(state, 'Filter'),
 }), { setFilter })(props => <OriginalComponent {...props} />);

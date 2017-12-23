@@ -38,9 +38,9 @@ export default {
   },
   enableSettings: true,
   textProperties: {
+    filterPlaceholder: 'Filter',
     next: 'Next',
     previous: 'Previous',
     settingsToggle: 'Settings',
-    filterPlaceHolder: 'Filter'
   },
 };

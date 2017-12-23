@@ -390,7 +390,7 @@ interface GriddleInitialState {
       next?: string,
       previous?: string,
       settingsToggle?: string,
-      filterPlaceHolder?: string,
+      filterPlaceholder?: string,
     }
 
     [x: string]: any;

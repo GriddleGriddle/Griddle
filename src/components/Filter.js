@@ -6,7 +6,7 @@ class Filter extends Component {
     setFilter: PropTypes.func,
     style: PropTypes.object,
     className: PropTypes.string,
-    text: PropTypes.string
+    placeholder: PropTypes.string,
   }
 
   setFilter = (e) => {
@@ -18,7 +18,7 @@ class Filter extends Component {
       <input
         type="text"
         name="filter"
-        placeholder={this.props.text}
+        placeholder={this.props.placeholder}
         onChange={this.setFilter}
         style={this.props.style}
         className={this.props.className}

@@ -767,14 +767,6 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
-  .add('with Filter place-holder', () => {
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin]} textProperties={{filterPlaceHolder: 'My new Filter text!'}}>
-        <RowDefinition>
-        </RowDefinition>
-      </Griddle>
-    )
-  })
   .add('with nested column data', () => {
     interface NestedData {
         id: number,
@@ -918,58 +910,6 @@ storiesOf('Griddle main', module)
           </div>
         </Provider>
       </div>
-    );
-  })
-
-  .add('with custom filter connected to another Redux store', () => {
-    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
-
-    const CustomFilterComponent = (props) => (
-      <input
-        value={props.searchString || ''}
-        onChange={(e) => { props.setSearchString(e.target.value); }}
-      />
-    );
-
-    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
-    const CustomFilterConnectedComponent = reduxConnect(
-      (state: TestState) => ({
-          searchString: state.searchString,
-      }),
-      dispatch => ({
-        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
-      })
-    )(CustomFilterComponent);
-
-    const plugins = [
-      LocalPlugin,
-      {
-        components: { Filter: CustomFilterConnectedComponent },
-      },
-    ];
-    const SomePage = props => (
-      <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
-
-        Component outside of Griddle that's sharing state
-        <CustomFilterConnectedComponent />
-      </div>
-    );
-
-    const SomePageConnected = reduxConnect(
-      (state: TestState) => ({
-        data: !state.searchString ? state.data :
-          state.data.filter(r =>
-            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
-      })
-    )(SomePage);
-
-    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
-
-    return (
-      <Provider store={testStore}>
-        <SomePageConnected />
-      </Provider>
     );
   })
 
@@ -1261,6 +1201,66 @@ storiesOf('Bug fixes', module)
       <SomeComponent />
     );
 })
+storiesOf('Filter', module)
+  .add('with Filter place-holder', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} textProperties={{filterPlaceholder: 'My new Filter text!'}}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
+  .add('with custom filter connected to another Redux store', () => {
+    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
+
+    const CustomFilterComponent = (props) => (
+      <input
+        value={props.searchString || ''}
+        onChange={(e) => { props.setSearchString(e.target.value); }}
+      />
+    );
+
+    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
+    const CustomFilterConnectedComponent = reduxConnect(
+      (state: TestState) => ({
+          searchString: state.searchString,
+      }),
+      dispatch => ({
+        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
+      })
+    )(CustomFilterComponent);
+
+    const plugins = [
+      LocalPlugin,
+      {
+        components: { Filter: CustomFilterConnectedComponent },
+      },
+    ];
+    const SomePage = props => (
+      <div>
+        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+
+        Component outside of Griddle that's sharing state
+        <CustomFilterConnectedComponent />
+      </div>
+    );
+
+    const SomePageConnected = reduxConnect(
+      (state: TestState) => ({
+        data: !state.searchString ? state.data :
+          state.data.filter(r =>
+            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
+      })
+    )(SomePage);
+
+    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
+
+    return (
+      <Provider store={testStore}>
+        <SomePageConnected />
+      </Provider>
+    );
+  })
 
 storiesOf('Row', module)
   .add('base row', () => {
