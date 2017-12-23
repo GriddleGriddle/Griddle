@@ -211,9 +211,8 @@ test('update state merges non-data', (t) => {
       changed: -3,
       unchanged: 4,
     },
-    // This seems wrong
-    data: undefined,
-    lookup: undefined,
+    data: [],
+    lookup: {},
   });
 });
 

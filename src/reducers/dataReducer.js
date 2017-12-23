@@ -136,10 +136,15 @@ const defaultRenderProperties = Immutable.fromJS({});
 export function GRIDDLE_UPDATE_STATE(state, action) {
   const { data, ...newState } = action.newState;
 
+  var mergedState = state.mergeDeep(Immutable.fromJS(newState));
+  if (!data) {
+    return mergedState;
+  }
+
   const renderProperties = state.get('renderProperties', defaultRenderProperties).toJSON();
   const transformedData = transformData(data, renderProperties);
 
-  return state.mergeDeep(Immutable.fromJS(newState))
+  return mergedState
     .set('data', transformedData.data)
     .set('lookup', transformedData.lookup);
 }
