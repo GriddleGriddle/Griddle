@@ -105,6 +105,28 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
+  .add('with local with extra prop change', () => {
+    class Stateful extends React.Component<{}, { n: number }> {
+      constructor(props) {
+        super(props);
+        this.state = { n: 0 };
+      }
+
+      render() {
+        const { n } = this.state;
+        return (
+          <div>
+            <p>
+              Click me to change extra Griddle state:{' '}
+              <button onClick={() => this.setState(({ n }) => ({ n: n+1 }))}>{n}</button>
+            </p>
+            <Griddle n={n} data={fakeData} plugins={[LocalPlugin]} />
+          </div>
+        );
+      }
+    }
+    return <Stateful />;
+  })
   .add('with local, delayed data', () => {
     class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
       private timeout;
