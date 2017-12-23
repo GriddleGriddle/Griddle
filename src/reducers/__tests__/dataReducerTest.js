@@ -194,7 +194,6 @@ test('update state merges non-data', (t) => {
     },
     data: [],
     lookup: {},
-    renderProperties: {},
   });
   const newState = {
     changed: -1,
@@ -215,7 +214,6 @@ test('update state merges non-data', (t) => {
     // This seems wrong
     data: undefined,
     lookup: undefined,
-    renderProperties: {},
   });
 });
 
@@ -230,7 +228,6 @@ test('update state transforms data', (t) => {
       {name: "two", griddleKey: 1},
     ],
     lookup: { 0: 0, 1: 1 },
-    renderProperties: {},
   });
   const newState = {
     data: [
@@ -253,6 +250,5 @@ test('update state transforms data', (t) => {
       {name: "tre", griddleKey: 2},
     ],
     lookup: { 0: 0, 1: 1, 2: 2 },
-    renderProperties: {},
   });
 });

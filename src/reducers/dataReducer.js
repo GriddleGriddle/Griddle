@@ -132,9 +132,12 @@ export function GRIDDLE_TOGGLE_COLUMN(state, action) {
       new Immutable.Map({ id: action.columnId, visible: true }));
 }
 
+const defaultRenderProperties = Immutable.fromJS({});
 export function GRIDDLE_UPDATE_STATE(state, action) {
   const { data, ...newState } = action.newState;
-  const transformedData = transformData(data, state.get('renderProperties').toJSON());
+
+  const renderProperties = state.get('renderProperties', defaultRenderProperties).toJSON();
+  const transformedData = transformData(data, renderProperties);
 
   return state.mergeDeep(Immutable.fromJS(newState))
     .set('data', transformedData.data)
