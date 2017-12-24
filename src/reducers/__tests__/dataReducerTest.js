@@ -183,3 +183,71 @@ test('toggle column works when there is no visible property', (t) => {
 
 
 });
+
+test('update state merges non-data', (t) => {
+  const initialState = Immutable.fromJS({
+    changed: 1,
+    unchanged: 2,
+    nested: {
+      changed: 3,
+      unchanged: 4,
+    },
+    data: [],
+    lookup: {},
+  });
+  const newState = {
+    changed: -1,
+    nested: {
+      changed: -3,
+    },
+  };
+
+  const state = reducers.GRIDDLE_UPDATE_STATE(initialState, { newState });
+
+  t.deepEqual(state.toJSON(), {
+    changed: -1,
+    unchanged: 2,
+    nested: {
+      changed: -3,
+      unchanged: 4,
+    },
+    data: [],
+    lookup: {},
+  });
+});
+
+test('update state transforms data', (t) => {
+  const initialState = Immutable.fromJS({
+    unchanged: 2,
+    nested: {
+      unchanged: 4,
+    },
+    data: [
+      {name: "one", griddleKey: 0},
+      {name: "two", griddleKey: 1},
+    ],
+    lookup: { 0: 0, 1: 1 },
+  });
+  const newState = {
+    data: [
+      { name: 'uno' },
+      { name: 'dos' },
+      { name: 'tre' },
+    ]
+  };
+
+  const state = reducers.GRIDDLE_UPDATE_STATE(initialState, { newState });
+
+  t.deepEqual(state.toJSON(), {
+    unchanged: 2,
+    nested: {
+      unchanged: 4,
+    },
+    data: [
+      {name: "uno", griddleKey: 0},
+      {name: "dos", griddleKey: 1},
+      {name: "tre", griddleKey: 2},
+    ],
+    lookup: { 0: 0, 1: 1, 2: 2 },
+  });
+});

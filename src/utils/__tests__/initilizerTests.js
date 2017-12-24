@@ -60,7 +60,7 @@ test('init succeeds given empty defaults and props', (assert) => {
 test('init returns defaults given minimum props', (assert) => {
   const ctx = { props: { data: [] } };
   const defaults = {
-    reducers: { REDUCE: () => ({ reduced: true }) },
+    reducer: { REDUCE: () => ({ reduced: true }) },
     components: { Layout: () => null },
     settingsComponentObjects: { mySettings: { order: 10 } },
     selectors: { aSelector: () => null },
@@ -82,7 +82,7 @@ test('init returns defaults given minimum props', (assert) => {
   });
 
   assert.is(typeof res.reducers, 'function');
-  assert.deepEqual(Object.keys(res.reducers), Object.keys(defaults.reducers));
+  assert.deepEqual(Object.keys(res.reducers), Object.keys(defaults.reducer));
   assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), { reduced: true });
 
   assert.deepEqual(res.reduxMiddleware, []);
@@ -244,7 +244,7 @@ test('init returns composed reducer given plugins', (assert) => {
     },
   };
   const defaults = {
-    reducers: {
+    reducer: {
       DEFAULTS: () => ({ defaults: true }),
       PLUGIN: () => ({ plugin: false }),
     },

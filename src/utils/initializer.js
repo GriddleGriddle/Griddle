@@ -7,7 +7,7 @@ module.exports = function initializer(defaults) {
   if (!this) throw new Error('this missing!');
 
   const {
-    reducers: dataReducers,
+    reducer: dataReducers,
     components,
     settingsComponentObjects,
     selectors,
