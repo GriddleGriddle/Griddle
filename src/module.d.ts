@@ -315,6 +315,7 @@ export interface GriddleSortKey {
 export interface GriddleStyleElements<T> {
     Cell?: T;
     Filter?: T;
+    Layout?: T;
     Loading?: T;
     NextButton?: T;
     NoResults?: T;

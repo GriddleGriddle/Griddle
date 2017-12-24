@@ -105,7 +105,20 @@ storiesOf('Griddle main', module)
       </Griddle>
     )
   })
-  .add('with local with extra prop change', () => {
+  .add('with external prop changes', () => {
+    const NoResultsWithN = connect(
+      (state: any) => ({
+        n: state.get('n'),
+        addTen: state.get('addTen'),
+      }),
+      () => {}
+    )(({ n, addTen }) => (
+      <div>
+        <p><code>n = {n}</code></p>
+        <button onClick={addTen}>+10</button>
+      </div>
+    ));
+
     class Stateful extends React.Component<{}, { n: number }> {
       constructor(props) {
         super(props);
@@ -117,10 +130,27 @@ storiesOf('Griddle main', module)
         return (
           <div>
             <p>
-              Click me to change extra Griddle state:{' '}
+              Click to change Griddle props:{' '}
               <button onClick={() => this.setState(({ n }) => ({ n: n+1 }))}>{n}</button>
+              <button onClick={() => this.setState({ n: 0 })}>Reset</button>
             </p>
-            <Griddle n={n} data={fakeData} plugins={[LocalPlugin]} />
+            <Griddle
+              n={n}
+              addTen={() => this.setState(({ n }) => ({ n: n + 10 }))}
+              plugins={[LocalPlugin]}
+              data={fakeData.filter((d,i) => i % n === 0)}
+              components={{
+                NoResults: NoResultsWithN
+              }}
+              styleConfig={{
+                styles: {
+                  Layout: { color: n % 3 ? 'blue' : 'inherit' },
+                },
+              }}
+              textProperties={{
+                settingsToggle: `Settings (${n})`
+              }}
+              />
           </div>
         );
       }
