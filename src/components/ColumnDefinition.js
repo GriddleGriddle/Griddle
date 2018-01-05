@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class ColumnDefinition extends Component {
-  static PropTypes = {
+  static propTypes = {
     //The name of the column that this definition applies to.
     id: PropTypes.string.isRequired,
 
