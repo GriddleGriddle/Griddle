@@ -7,7 +7,7 @@ module.exports = function initializer(defaults) {
   if (!this) throw new Error('this missing!');
 
   const {
-    reducer: dataReducers,
+    reducer: defaultReducer,
     components,
     settingsComponentObjects,
     selectors,
@@ -33,7 +33,7 @@ module.exports = function initializer(defaults) {
   const columnProperties = getColumnProperties(rowPropertiesComponent);
 
   // Combine / compose the reducers to make a single, unified reducer
-  const reducers = buildGriddleReducer([dataReducers, ...plugins.map(p => p.reducer)]);
+  const reducer = buildGriddleReducer([defaultReducer, ...plugins.map(p => p.reducer)]);
 
   // Combine / Compose the components to make a single component for each component type
   this.components = buildGriddleComponents([
@@ -82,7 +82,7 @@ module.exports = function initializer(defaults) {
 
   return {
     initialState,
-    reducers,
+    reducer,
     reduxMiddleware: _.compact([
       ..._.flatten(plugins.map(p => p.reduxMiddleware)),
       ...reduxMiddleware

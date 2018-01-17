@@ -24,8 +24,8 @@ test('init succeeds given null defaults and empty props', (assert) => {
 
   assert.deepEqual(res.initialState, expectedDefaultInitialState);
 
-  assert.is(typeof res.reducers, 'function');
-  assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), {});
+  assert.is(typeof res.reducer, 'function');
+  assert.deepEqual(res.reducer({}, { type: 'REDUCE' }), {});
 
   assert.deepEqual(res.reduxMiddleware, []);
 
@@ -45,8 +45,8 @@ test('init succeeds given empty defaults and props', (assert) => {
 
   assert.deepEqual(res.initialState, expectedDefaultInitialState);
 
-  assert.is(typeof res.reducers, 'function');
-  assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), {});
+  assert.is(typeof res.reducer, 'function');
+  assert.deepEqual(res.reducer({}, { type: 'REDUCE' }), {});
 
   assert.deepEqual(res.reduxMiddleware, []);
 
@@ -81,9 +81,9 @@ test('init returns defaults given minimum props', (assert) => {
     styleConfig: defaults.styleConfig,
   });
 
-  assert.is(typeof res.reducers, 'function');
-  assert.deepEqual(Object.keys(res.reducers), Object.keys(defaults.reducer));
-  assert.deepEqual(res.reducers({}, { type: 'REDUCE' }), { reduced: true });
+  assert.is(typeof res.reducer, 'function');
+  assert.deepEqual(Object.keys(res.reducer), Object.keys(defaults.reducer));
+  assert.deepEqual(res.reducer({}, { type: 'REDUCE' }), { reduced: true });
 
   assert.deepEqual(res.reduxMiddleware, []);
 
@@ -253,10 +253,10 @@ test('init returns composed reducer given plugins', (assert) => {
   const res = init.call(ctx, defaults);
   assert.truthy(res);
 
-  assert.is(typeof res.reducers, 'function');
-  assert.deepEqual(Object.keys(res.reducers), ['DEFAULTS', 'PLUGIN']);
-  assert.deepEqual(res.reducers({}, { type: 'DEFAULTS' }), { defaults: true });
-  assert.deepEqual(res.reducers({}, { type: 'PLUGIN' }), { plugin: 1 });
+  assert.is(typeof res.reducer, 'function');
+  assert.deepEqual(Object.keys(res.reducer), ['DEFAULTS', 'PLUGIN']);
+  assert.deepEqual(res.reducer({}, { type: 'DEFAULTS' }), { defaults: true });
+  assert.deepEqual(res.reducer({}, { type: 'PLUGIN' }), { plugin: 1 });
 });
 
 test('init returns flattened/compacted reduxMiddleware given plugins', (assert) => {

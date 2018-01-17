@@ -27,11 +27,11 @@ class Griddle extends Component {
       storeKey = Griddle.storeKey || 'store',
     } = props;
 
-    const { initialState, reducers, reduxMiddleware } = init.call(this, core);
+    const { initialState, reducer, reduxMiddleware } = init.call(this, core);
 
     const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
     this.store = createStore(
-      reducers,
+      reducer,
       initialState,
       composeEnhancers(
         applyMiddleware(...reduxMiddleware)
