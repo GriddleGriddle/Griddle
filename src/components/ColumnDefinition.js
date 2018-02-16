@@ -22,10 +22,10 @@ export default class ColumnDefinition extends Component {
     title: PropTypes.string,
 
     //The component that should be rendered instead of the standard column data. This component will still be rendered inside of a TD element.
-    customComponent: PropTypes.object,
+    customComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 
     //The component that should be used instead of the normal title
-    customHeadingComponent: PropTypes.object,
+    customHeadingComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 
     //Can this column be filtered
     filterable: PropTypes.bool,
@@ -40,7 +40,7 @@ export default class ColumnDefinition extends Component {
     extraData: PropTypes.object,
 
     //The width of this column -- this is string so things like % can be specified
-    width: PropTypes.string,
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
     //The number of cells this column should extend. Default is 1.
     colSpan: PropTypes.number,
