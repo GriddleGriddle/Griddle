@@ -22,10 +22,10 @@ export default class ColumnDefinition extends Component {
     title: PropTypes.string,
 
     //The component that should be rendered instead of the standard column data. This component will still be rendered inside of a TD element.
-    customComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    customComponent: PropTypes.func,
 
     //The component that should be used instead of the normal title
-    customHeadingComponent: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+    customHeadingComponent: PropTypes.func,
 
     //Can this column be filtered
     filterable: PropTypes.bool,
