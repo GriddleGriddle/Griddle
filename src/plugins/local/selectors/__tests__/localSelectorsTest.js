@@ -249,18 +249,52 @@ test('filteredDataSelector filters data respecting filterable', test => {
         name: {
           filterable: false,
         },
+        weapon: {
+          filterable: true,
+        }
       }
     },
     filter: 'H',
     data: [
       { id: '1', name: 'luke skywalker', weapon: 'light saber' },
-      { id: '2', name: 'han solo', weapon: 'blaster' }
+      { id: '2', name: 'han solo', weapon: 'blaster' },
     ]
   });
 
   test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
     { id: '1', name: 'luke skywalker', weapon: 'light saber' }
   ]);
+});
+
+test('filteredDataSelector matches ColumnDefinition fields only', test => {
+  const state = new Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        weapon: null,
+      }
+    },
+    filter: 'H',
+    data: [
+      { id: '1', name: 'luke skywalker', weapon: 'light saber' },
+      { id: '2', name: 'han solo', weapon: 'blaster' },
+    ]
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker', weapon: 'light saber' }
+  ]);
+});
+
+test('filteredDataSelector ignores griddleKey matches', test => {
+  const state = new Immutable.fromJS({
+    filter: '1',
+    data: [
+      { griddleKey: '11', name: 'luke skywalker' },
+      { griddleKey: '12', name: 'han solo' }
+    ]
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), []);
 });
 
 test('sortedDataSelector uses default sort if no sort method specifed for column', test => {

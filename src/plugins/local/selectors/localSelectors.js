@@ -52,9 +52,13 @@ export const filteredDataSelector = createSelector(
     return data.filter(row =>
       row.keySeq()
         .some((key) => {
-          const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
-          if (filterable === false) {
+          if (key === 'griddleKey') {
             return false;
+          } else if (columnProperties) {
+            if (columnProperties.get(key) === undefined ||
+              columnProperties.getIn([key, 'filterable']) === false) {
+              return false;
+            }
           }
           const value = row.get(key);
           return value &&
