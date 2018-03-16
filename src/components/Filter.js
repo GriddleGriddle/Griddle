@@ -5,7 +5,8 @@ class Filter extends Component {
   static propTypes = {
     setFilter: PropTypes.func,
     style: PropTypes.object,
-    className: PropTypes.string
+    className: PropTypes.string,
+    placeholder: PropTypes.string,
   }
 
   setFilter = (e) => {
@@ -17,7 +18,7 @@ class Filter extends Component {
       <input
         type="text"
         name="filter"
-        placeholder="Filter"
+        placeholder={this.props.placeholder}
         onChange={this.setFilter}
         style={this.props.style}
         className={this.props.className}

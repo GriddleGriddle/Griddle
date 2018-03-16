@@ -913,110 +913,6 @@ storiesOf('Griddle main', module)
       </Griddle>
     );
   })
-
-  .add('with custom storeKey and child connected to another Redux store', () => {
-    // basically the demo redux stuff
-    const countSelector = (state) => state.count;
-
-    const CountComponent = (props) => (
-      <div>
-        <button type="button" onClick={props.increment}>+</button>
-        <input value={props.count} readOnly style={{ width: '2em', textAlign: 'center' }} />
-        <button type="button" onClick={props.decrement}>−</button>
-      </div>
-    )
-
-    // should get count from other store
-    const ConnectedComponent = reduxConnect(
-      state => ({
-        count: countSelector(state)
-      }),
-      (dispatch) => ({
-        increment: () => {
-          dispatch({
-            type: 'INCREMENT'
-          })
-        },
-        decrement: () => {
-          dispatch({
-            type: 'DECREMENT'
-          })
-        }
-      })
-    )(CountComponent);
-
-    return (
-      <div>
-        <Provider store={testStore}>
-          <div>
-            <Griddle data={fakeData} plugins={[LocalPlugin]} storeKey="griddleStore">
-              <RowDefinition>
-                <ColumnDefinition id="name" />
-                <ColumnDefinition id="state" />
-                <ColumnDefinition id="customCount" customComponent={ConnectedComponent}/>
-              </RowDefinition>
-            </Griddle>
-
-            Component outside of Griddle that's sharing state
-            <ConnectedComponent />
-          </div>
-        </Provider>
-      </div>
-    );
-  })
-
-  .add('with custom filter connected to another Redux store', () => {
-    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
-
-    const CustomFilterComponent = (props) => (
-      <input
-        value={props.searchString || ''}
-        onChange={(e) => { props.setSearchString(e.target.value); }}
-      />
-    );
-
-    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
-    const CustomFilterConnectedComponent = reduxConnect(
-      (state: TestState) => ({
-          searchString: state.searchString,
-      }),
-      dispatch => ({
-        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
-      })
-    )(CustomFilterComponent);
-
-    const plugins = [
-      LocalPlugin,
-      {
-        components: { Filter: CustomFilterConnectedComponent },
-      },
-    ];
-    const SomePage = props => (
-      <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
-
-        Component outside of Griddle that's sharing state
-        <CustomFilterConnectedComponent />
-      </div>
-    );
-
-    const SomePageConnected = reduxConnect(
-      (state: TestState) => ({
-        data: !state.searchString ? state.data :
-          state.data.filter(r =>
-            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
-      })
-    )(SomePage);
-
-    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
-
-    return (
-      <Provider store={testStore}>
-        <SomePageConnected />
-      </Provider>
-    );
-  })
-
   .add('with custom store listener (check the console!)', () => {
     const paginationListener = (prevState, nextState) => {
       const page = nextState.getIn(['pageProperties', 'currentPage']);
@@ -1304,8 +1200,217 @@ storiesOf('Bug fixes', module)
     return (
       <SomeComponent />
     );
-})
+  })
+storiesOf('Filter', module)
+  .add('with Filter place-holder', () => {
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]} textProperties={{filterPlaceholder: 'My new Filter text!'}}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
 
+storiesOf('Redux', module)
+  .add('with custom filter connected to another Redux store', () => {
+    // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
+
+    const CustomFilterComponent = (props) => (
+      <input
+        value={props.searchString || ''}
+        onChange={(e) => { props.setSearchString(e.target.value); }}
+      />
+    );
+
+    const setSearchStringActionCreator = searchString => ({ type: 'SET_SEARCH_STRING', searchString })
+    const CustomFilterConnectedComponent = reduxConnect(
+      (state: TestState) => ({
+          searchString: state.searchString,
+      }),
+      dispatch => ({
+        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
+      })
+    )(CustomFilterComponent);
+
+    const plugins = [
+      LocalPlugin,
+      {
+        components: { Filter: CustomFilterConnectedComponent },
+      },
+    ];
+    const SomePage = props => (
+      <div>
+        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+
+        Component outside of Griddle that's sharing state
+        <CustomFilterConnectedComponent />
+      </div>
+    );
+
+    const SomePageConnected = reduxConnect(
+      (state: TestState) => ({
+        data: !state.searchString ? state.data :
+          state.data.filter(r =>
+            Object.keys(r).some(k => r[k] && r[k].toString().indexOf(state.searchString) > -1)),
+      })
+    )(SomePage);
+
+    testStore.dispatch({ type: 'SET_DATA', data: fakeData });
+
+    return (
+      <Provider store={testStore}>
+        <SomePageConnected />
+      </Provider>
+    );
+  })
+  .add('custom column chooser', () => {
+    const columnChooser =
+      compose(
+        connect(
+          (state) => ({
+            columns: createSelector(
+              selectors.sortedColumnPropertiesSelector,
+              colMap => {
+                const columns = colMap.valueSeq().toJS();
+                return columns.filter(c => !c.isMetadata);
+              }
+            )(state),
+          }),
+          {
+            toggleColumn: actions.toggleColumn
+          }
+        ),
+        withHandlers({
+          onToggle: ({toggleColumn}) => event => {
+            toggleColumn(event.target.name)
+          }
+        })
+      )(({ columns, onToggle }) => {
+      return (
+        <div>
+          { Object.keys(columns).map(c =>
+            <label key={columns[c].id}>
+              <input
+                type="checkbox"
+                name={columns[c].id}
+                defaultChecked={columns[c].visible !== false}
+                onChange={onToggle}
+              />
+              {columns[c].title || columns[c].id}
+            </label>
+          )}
+        </div>
+      )});
+
+    const SimpleColumnChooserPlugin = {
+      components:{
+        SettingsComponents: {
+          columnChooser,
+        },
+      },
+    };
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }}>
+        <RowDefinition>
+          <ColumnDefinition id="name" />
+          <ColumnDefinition id="company" />
+          <ColumnDefinition id="state" />
+          <ColumnDefinition id="country" visible={false} />
+        </RowDefinition>
+      </Griddle>
+    );
+  })
+  .add('custom page size settings', () => {
+    const pageSizeSettings = ({ pageSizes }) =>
+      compose(
+        connect(
+          (state) => ({
+            pageSize: selectors.pageSizeSelector(state),
+          }),
+          {
+            setPageSize: actions.setPageSize
+          }
+        ),
+        withHandlers({
+          onChange: props => e => {
+            props.setPageSize(+e.target.value);
+          },
+        }),
+      )(({ pageSize, onChange }) => {
+      return (
+        <div>
+          <select onChange={onChange} defaultValue={pageSize}>
+            { pageSizes.map(s => <option key={s}>{s}</option>) }
+          </select>
+        </div>
+      )});
+
+    const PageSizeDropDownPlugin = (config) => ({
+      components: {
+        SettingsComponents: {
+          pageSizeSettings: pageSizeSettings(config),
+        },
+      },
+    });
+
+    const pluginConfig = {
+      pageSizes: [5, 10, 20, 50],
+    };
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
+    );
+  })
+  .add('with custom storeKey and child connected to another Redux store', () => {
+    // basically the demo redux stuff
+    const countSelector = (state) => state.count;
+
+    const CountComponent = (props) => (
+      <div>
+        <button type="button" onClick={props.increment}>+</button>
+        <input value={props.count} readOnly style={{ width: '2em', textAlign: 'center' }} />
+        <button type="button" onClick={props.decrement}>−</button>
+      </div>
+    )
+
+    // should get count from other store
+    const ConnectedComponent = reduxConnect(
+      state => ({
+        count: countSelector(state)
+      }),
+      (dispatch) => ({
+        increment: () => {
+          dispatch({
+            type: 'INCREMENT'
+          })
+        },
+        decrement: () => {
+          dispatch({
+            type: 'DECREMENT'
+          })
+        }
+      })
+    )(CountComponent);
+
+    return (
+      <div>
+        <Provider store={testStore}>
+          <div>
+            <Griddle data={fakeData} plugins={[LocalPlugin]} storeKey="griddleStore">
+              <RowDefinition>
+                <ColumnDefinition id="name" />
+                <ColumnDefinition id="state" />
+                <ColumnDefinition id="customCount" customComponent={ConnectedComponent}/>
+              </RowDefinition>
+            </Griddle>
+
+            Component outside of Griddle that's sharing state
+            <ConnectedComponent />
+          </div>
+        </Provider>
+      </div>
+    );
+  })
 storiesOf('Row', module)
   .add('base row', () => {
     const columnIds = [ 1, 2, 3 ];
@@ -1617,106 +1722,6 @@ storiesOf('Settings', module)
     };
     return (
       <Griddle data={fakeData} plugins={[LocalPlugin]} settingsComponentObjects={settingsComponentObjects} />
-    );
-  })
-
-  .add('custom column chooser', () => {
-    const columnChooser =
-      compose(
-        connect(
-          (state) => ({
-            columns: createSelector(
-              selectors.sortedColumnPropertiesSelector,
-              colMap => {
-                const columns = colMap.valueSeq().toJS();
-                return columns.filter(c => !c.isMetadata);
-              }
-            )(state),
-          }),
-          {
-            toggleColumn: actions.toggleColumn
-          }
-        ),
-        withHandlers({
-          onToggle: ({toggleColumn}) => event => {
-            toggleColumn(event.target.name)
-          }
-        })
-      )(({ columns, onToggle }) => {
-      return (
-        <div>
-          { Object.keys(columns).map(c =>
-            <label key={columns[c].id}>
-              <input
-                type="checkbox"
-                name={columns[c].id}
-                defaultChecked={columns[c].visible !== false}
-                onChange={onToggle}
-              />
-              {columns[c].title || columns[c].id}
-            </label>
-          )}
-        </div>
-      )});
-
-    const SimpleColumnChooserPlugin = {
-      components:{
-        SettingsComponents: {
-          columnChooser,
-        },
-      },
-    };
-
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,SimpleColumnChooserPlugin]} settingsComponentObjects={{ pageSizeSettings: null }}>
-        <RowDefinition>
-          <ColumnDefinition id="name" />
-          <ColumnDefinition id="company" />
-          <ColumnDefinition id="state" />
-          <ColumnDefinition id="country" visible={false} />
-        </RowDefinition>
-      </Griddle>
-    );
-  })
-
-  .add('custom page size settings', () => {
-    const pageSizeSettings = ({ pageSizes }) =>
-      compose(
-        connect(
-          (state) => ({
-            pageSize: selectors.pageSizeSelector(state),
-          }),
-          {
-            setPageSize: actions.setPageSize
-          }
-        ),
-        withHandlers({
-          onChange: props => e => {
-            props.setPageSize(+e.target.value);
-          },
-        }),
-      )(({ pageSize, onChange }) => {
-      return (
-        <div>
-          <select onChange={onChange} defaultValue={pageSize}>
-            { pageSizes.map(s => <option key={s}>{s}</option>) }
-          </select>
-        </div>
-      )});
-
-    const PageSizeDropDownPlugin = (config) => ({
-      components: {
-        SettingsComponents: {
-          pageSizeSettings: pageSizeSettings(config),
-        },
-      },
-    });
-
-    const pluginConfig = {
-      pageSizes: [5, 10, 20, 50],
-    };
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin,PageSizeDropDownPlugin(pluginConfig)]} settingsComponentObjects={{ columnChooser: null }} />
     );
   })
 
