@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project _now_ adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.12.0] - 2018-03-16
+- Additional propTypes fixes
+- Fix for filter matching invisible properties (thanks @mbland)
+- Add ability to change placeholder text (thanks @miguelsaldivar)
+
 ## [1.11.2] - 2018-02-15
 - Fixes for propTypes typo
 
