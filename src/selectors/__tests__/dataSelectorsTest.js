@@ -280,6 +280,21 @@ test('it gets columnTitles in the correct order', test => {
   test.deepEqual(selectors.columnTitlesSelector(state), ['Two', 'One']);
 });
 
+test('it gets many columnTitles in the correct order', test => {
+  const state = new Immutable.fromJS({
+    data: [
+            { '00-00': '0', '01-01': '1', '02-02': '2', '03-03': '3', '04-04': '4',
+              '05-05': '5', '06-06': '6', '07-07': '7', '08-08': '8', '09-09': '9' }
+    ],
+    renderProperties: {}
+  });
+
+  test.deepEqual(selectors.columnTitlesSelector(state), [
+    '00-00', '01-01', '02-02', '03-03', '04-04',
+    '05-05', '06-06', '07-07', '08-08', '09-09',
+  ]);
+});
+
 [undefined, null].map(data =>
   test(`visibleRowIds is empty if data is ${data}`, (assert) => {
     const state = new Immutable.fromJS({
