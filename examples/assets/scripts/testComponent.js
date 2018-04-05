@@ -2,7 +2,7 @@
 
 //This whole file is pretty junky... just an example
 
-var BoldFormatter = React.createClass({
+var BoldFormatter = createReactClass({
     render: function(){
         return <strong>{this.props.data}</strong>
     }
@@ -13,7 +13,7 @@ var externalData = fakeData.slice(0, 53);
 //This whole thing is throw-away code.
 //It's basically to show that you can wrap up griddle
 //and give external data to it from another source (api / localstorage / etc)
-var ExternalComponent = React.createClass({
+var ExternalComponent = createReactClass({
 
     getInitialState: function(){
       var initial = { "results": [],
@@ -116,7 +116,7 @@ var ExternalComponent = React.createClass({
 });
 
 
-var TestComponent = React.createClass({
+var TestComponent = createReactClass({
     getDefaultProps: function() {
         return{
             "simple": true,
@@ -145,14 +145,14 @@ var TestComponent = React.createClass({
     }
 });
 
-var CustomNoDataComponent = React.createClass({
+var CustomNoDataComponent = createReactClass({
     render: function() {
         return (
         <div>This is a custom component showing that there is no data to be displayed.</div>);
     }
 });
 
-var OtherComponent = React.createClass({
+var OtherComponent = createReactClass({
     getDefaultProps: function(){
         return { "data": {} };
     },
@@ -170,7 +170,7 @@ var OtherComponent = React.createClass({
     }
 });
 
-var OtherPager = React.createClass({
+var OtherPager = createReactClass({
     getDefaultProps: function(){
         return{
             "maxPage": 0,

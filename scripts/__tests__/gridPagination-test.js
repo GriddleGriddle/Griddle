@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var GridPagination = require('../gridPagination.jsx');
 var TestUtils = require('react-addons-test-utils');
 

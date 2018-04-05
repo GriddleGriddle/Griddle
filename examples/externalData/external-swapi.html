@@ -3,7 +3,7 @@
 <script type="text/javascript" src="scripts/swapi.min.js"></script>
 
 <script type="text/jsx">
-var Loading = React.createClass({
+var Loading = createReactClass({
   getDefaultProps: function(){
     return {
       loadingText: "Loading"
@@ -14,7 +14,7 @@ var Loading = React.createClass({
   }
 });
 
-var ExternalSwapiComponent = React.createClass({
+var ExternalSwapiComponent = createReactClass({
     getInitialState: function(){
       var initial = { "results": [],
           "currentPage": 0,

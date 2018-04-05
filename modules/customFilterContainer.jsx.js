@@ -1,13 +1,12 @@
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-"use strict";
+'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var CustomFilterContainer = React.createClass({
-  displayName: "CustomFilterContainer",
-
+var CustomFilterContainer = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       "placeholderText": ""
@@ -18,7 +17,7 @@ var CustomFilterContainer = React.createClass({
 
     if (typeof that.props.customFilterComponent !== 'function') {
       console.log("Couldn't find valid template.");
-      return React.createElement("div", null);
+      return React.createElement('div', null);
     }
 
     return React.createElement(that.props.customFilterComponent, {

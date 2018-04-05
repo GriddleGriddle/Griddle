@@ -199,7 +199,7 @@ var someData =  [
 We want the **name** column to be a link to `/speakers/state/name` (where state and name are pulled in from the data). We can define a customComponent to be rendered as follows:
 
 ```
-var LinkComponent = React.createClass({
+var LinkComponent = createReactClass({
   render: function(){
     url ="speakers/" + this.props.rowData.state + "/" + this.props.data;
     return <a href={url}>{this.props.data}</a>
@@ -210,7 +210,7 @@ var LinkComponent = React.createClass({
 Additionally, we want the city and state column headers to be highlighted a specific color and have a filter by column input. We can define a custom header component as:
 
 ```
-var HeaderComponent = React.createClass({
+var HeaderComponent = createReactClass({
   textOnClick: function(e) {
     e.stopPropagation();
   },
@@ -373,7 +373,7 @@ Sometimes you may want to display grid data in a format other than a grid but st
 We are going to render our grid as a series of cards, keeping the pagination and filtering from Griddle in tact. Assume we are using the same data in the custom column example. We will need to create a custom component as follows:
 
 ```
-var OtherComponent = React.createClass({
+var OtherComponent = createReactClass({
   getDefaultProps: function(){
     return { "data": {} };
   },
@@ -423,7 +423,7 @@ In some cases, it may be ideal to use Griddle but display a global format other 
 As stated above we are going to render a visualization of temperature data rather than a chart. To start off we need to create a visualization component that uses a data property to obtain its values (the following example uses the awesome [chartist library](http://gionkunz.github.io/chartist-js/) and [accompanying react component](https://fraserxu.me/react-chartist/)):
 
 ```
-var TestLineChart = React.createClass({
+var TestLineChart = createReactClass({
   render: function(){
     var simpleLineChartData = {
       labels: _.keys(this.props.data[0]),
@@ -463,7 +463,7 @@ This example shows how to make a custom filter component with a custom filter fu
     });
   };
 
-  var customFilterComponent = React.createClass({
+  var customFilterComponent = createReactClass({
     getDefaultProps: function() {
       return {
         "query": ""
@@ -522,7 +522,7 @@ If you want to customize the paging component, just set the property 'useCustomP
 #####Example#####
 
 ```javascript
-var OtherPager = React.createClass({
+var OtherPager = createReactClass({
     getDefaultProps: function(){
         return{
             "maxPage": 0,
@@ -624,7 +624,7 @@ Outside of the NoData message, Griddle can take a `customNoDataComponent` that w
 #####Example:#####
 
 ```
-var NoDataComponent = React.createClass({
+var NoDataComponent = createReactClass({
     render: function(){
       return (<div>
           <h1>No data is available</h1>

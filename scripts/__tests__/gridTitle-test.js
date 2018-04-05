@@ -1,4 +1,5 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var GridTitle = require('../gridTitle.jsx');
 var TestUtils = require('react-addons-test-utils');
 var ColumnProperties = require('../columnProperties.js');

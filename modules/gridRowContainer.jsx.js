@@ -4,12 +4,11 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ColumnProperties = require('./columnProperties.js');
 var pick = require('lodash/pick');
 
-var GridRowContainer = React.createClass({
-  displayName: 'GridRowContainer',
-
+var GridRowContainer = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       "useGriddleStyles": true,

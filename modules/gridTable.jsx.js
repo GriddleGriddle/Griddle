@@ -4,14 +4,13 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
 var RowProperties = require('./rowProperties.js');
 
-var GridTable = React.createClass({
-  displayName: 'GridTable',
-
+var GridTable = createReactClass({
   getDefaultProps: function getDefaultProps() {
     return {
       "data": [],

@@ -10,6 +10,7 @@ npm install griddle-react --save
 From there, require React and Griddle in your modules and you should be all set!
 ```
 var React = require('react');
+var createReactClass = require('create-react-class');
 var Griddle = require('griddle-react');
 ```
 Please take a look at a basic [gulp example](https://github.com/ryanlanciaux/griddle-gulp-test) or a [webpack example](https://github.com/ryanlanciaux/griddle-webpack-test) for more information.

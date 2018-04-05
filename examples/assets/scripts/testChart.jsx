@@ -8,9 +8,10 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ChartistGraph = require('react-chartist'); 
 
-var TestChart = React.createClass({
+var TestChart = createReactClass({
 	getInitialProps: function(){
 
 	},

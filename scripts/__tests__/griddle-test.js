@@ -1,10 +1,11 @@
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ReactDOM = require('react-dom');
 var Griddle = require('../griddle.jsx');
 var TestUtils = require('react-addons-test-utils');
 var assign = require('lodash/assign');
 
-var SomeCustomComponent = React.createClass({
+var SomeCustomComponent = createReactClass({
   render: function(){
     return <h1>Test</h1>
   }
@@ -16,7 +17,7 @@ describe('Griddle', function() {
   var grid;
   var multipleSelectOptions;
 
-  var CustomGridComponent = React.createClass({
+  var CustomGridComponent = createReactClass({
     getInitialProps: function(){
       return {
         data: []
@@ -632,7 +633,7 @@ describe('Griddle', function() {
   });
 
   it('should display a warning if useCustomGridComponent and useCustomRowComponent are both true', function(){
-    var mock = React.createClass({ render: function(){ return <h1>mock</h1>}});
+    var mock = createReactClass({ render: function(){ return <h1>mock</h1>}});
     var grid2 = TestUtils.renderIntoDocument(<Griddle results={fakeData}
       useCustomGridComponent={true} customGridComponent={mock}
       useCustomRowComponent={true} customRowComponent={mock} />)

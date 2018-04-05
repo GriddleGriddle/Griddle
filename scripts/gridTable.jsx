@@ -2,12 +2,13 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
 var RowProperties = require('./rowProperties.js');
 
-var GridTable = React.createClass({
+var GridTable = createReactClass({
   getDefaultProps: function(){
     return{
       "data": [],

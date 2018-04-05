@@ -2,8 +2,9 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
+var createReactClass = require('create-react-class');
 
-var CustomFilterContainer = React.createClass({
+var CustomFilterContainer = createReactClass({
   getDefaultProps: function(){
     return {
       "placeholderText": ""

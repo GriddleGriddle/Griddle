@@ -14,20 +14,17 @@ var _extends = Object.assign || function (target) {
 };
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var ColumnProperties = require('./columnProperties.js');
 var assign = require('lodash/assign');
 
-var DefaultHeaderComponent = React.createClass({
-    displayName: 'DefaultHeaderComponent',
-
+var DefaultHeaderComponent = createReactClass({
     render: function render() {
         return React.createElement('span', null, this.props.displayName);
     }
 });
 
-var GridTitle = React.createClass({
-    displayName: 'GridTitle',
-
+var GridTitle = createReactClass({
     getDefaultProps: function getDefaultProps() {
         return {
             "columnSettings": null,
