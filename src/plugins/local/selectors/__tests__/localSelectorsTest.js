@@ -226,6 +226,32 @@ test('filteredDataSelector returns all data when no filter present', test => {
     state.get('data').toJSON());
 });
 
+test('filteredDataSelector returns all data when filter is null', test => {
+  const state = new Immutable.fromJS({
+    filter: null,
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(),
+    state.get('data').toJSON());
+});
+
+test('filteredDataSelector returns all data when filter is empty string', test => {
+  const state = new Immutable.fromJS({
+    filter: '',
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(),
+    state.get('data').toJSON());
+});
+
 test('filteredDataSelector filters data when filter string present', test => {
   const state = new Immutable.fromJS({
     filter: 'luke',
@@ -254,6 +280,22 @@ test('filteredDataSelector filters data when filter function present', test => {
   test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
     { id: '1', name: 'luke skywalker' },
   ]);
+});
+
+test('filteredDataSelector returns all data when filter object has null or empty string', test => {
+  const state = new Immutable.fromJS({
+    filter: {
+      id: null,
+      name: '',
+    },
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(),
+    state.get('data').toJSON());
 });
 
 test('filteredDataSelector filters data when filter object present', test => {
@@ -302,8 +344,7 @@ test('filteredDataSelector filters data when filter object with filter function'
   ]);
 });
 
-
-test('filteredDataSelector filters data respecting filterable', test => {
+test('filteredDataSelector filter by string respects filterable', test => {
   const state = new Immutable.fromJS({
     renderProperties: {
       columnProperties: {
@@ -316,6 +357,37 @@ test('filteredDataSelector filters data respecting filterable', test => {
       },
     },
     filter: 'H',
+    data: [
+      { id: '1', name: 'luke skywalker', weapon: 'light saber' },
+      { id: '2', name: 'han solo', weapon: 'blaster' },
+    ],
+  });
+
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker', weapon: 'light saber' },
+  ]);
+});
+
+test('filteredDataSelector filter by object respects filterable', test => {
+  const state = new Immutable.fromJS({
+    renderProperties: {
+      columnProperties: {
+        id: {
+          filterable: false,
+        },
+        name: {
+          filterable: false,
+        },
+        weapon: {
+          filterable: true,
+        }
+      },
+    },
+    filter: {
+      id: () => false,
+      name: 'z',
+      weapon: 'g',
+    },
     data: [
       { id: '1', name: 'luke skywalker', weapon: 'light saber' },
       { id: '2', name: 'han solo', weapon: 'blaster' },

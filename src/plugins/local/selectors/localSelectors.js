@@ -38,6 +38,10 @@ export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
 
 const substringSearch = (value, filter) => {
+  if (!filter) {
+    return true;
+  }
+
   const filterToLower = filter.toLowerCase();
   return value && value.toString().toLowerCase().indexOf(filterToLower) > -1;
 };
@@ -54,29 +58,24 @@ const textFilterRowSearch = (columnProperties, filter) => (row) => {
 };
 
 const objectFilterRowSearch = (columnProperties, filter) => (row) =>  {
-  let found;
-  row.keySeq().some((key) => {
+  return row.keySeq().every((key) => {
     const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
     if (filterable === false) {
-      return false;
+      return true;
     }
-    const keyFilter = filter[key];
+    const keyFilter = filter.get(key);
     switch (typeof (keyFilter)) {
       case 'string':
-        if (found || found === undefined) {
-          found = substringSearch(row.get(key), keyFilter);
-        }
+        return substringSearch(row.get(key), keyFilter);
         break;
       case 'function':
-        if (found === undefined) {
-          found = keyFilter(row.get(key));
-        }
+        return keyFilter(row.get(key));
         break;
       default:
+        return true;
         break;
     }
   });
-  return found === undefined ? false : found;
 };
 
 /** Gets the data filtered by the current filter
