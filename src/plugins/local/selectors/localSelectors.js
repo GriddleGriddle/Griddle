@@ -57,7 +57,7 @@ const textFilterRowSearch = (columnProperties, filter) => (row) => {
     });
 };
 
-const objectFilterRowSearch = (columnProperties, filter) => (row) =>  {
+const objectFilterRowSearch = (columnProperties, filter) => (row, i, data) => {
   return row.keySeq().every((key) => {
     const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
     if (filterable === false) {
@@ -69,7 +69,7 @@ const objectFilterRowSearch = (columnProperties, filter) => (row) =>  {
         return substringSearch(row.get(key), keyFilter);
         break;
       case 'function':
-        return keyFilter(row.get(key));
+        return keyFilter(row.get(key), i, data);
         break;
       default:
         return true;
@@ -95,7 +95,7 @@ export const filteredDataSelector = createSelector(
       case 'object':
         return data.filter(objectFilterRowSearch(columnProperties, filter));
       case 'function':
-        return data.filter(row => filter(row));
+        return data.filter(filter);
       default:
         return data;
     }

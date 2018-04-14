@@ -268,10 +268,12 @@ test('filteredDataSelector filters data when filter string present', test => {
 
 test('filteredDataSelector filters data when filter function present', test => {
   const state = new Immutable.fromJS({
-    filter: function (row) {
-      return row.get("name") === 'luke skywalker';
+    filter: function (row, i, data) {
+      test.deepEqual(data, state.get('data'));
+      return row.get("name") === 'luke skywalker' && i % 2;
     },
     data: [
+      { id: '0', name: 'luke skywalker' },
       { id: '1', name: 'luke skywalker' },
       { id: '2', name: 'han solo' },
     ],
@@ -329,11 +331,13 @@ test('filteredDataSelector filters data with multiple filters', test => {
 test('filteredDataSelector filters data when filter object with filter function', test => {
   const state = Immutable.fromJS({
     filter: {
-      name: function (rowName) {
-        return rowName.length === 14
+      name: function (rowName, i, data) {
+        test.deepEqual(data, state.get('data'));
+        return rowName.length === 14 && i % 2;
       },
     },
     data: [
+      { id: '0', name: 'luke skywalker' },
       { id: '1', name: 'luke skywalker' },
       { id: '2', name: 'han solo' },
     ],
