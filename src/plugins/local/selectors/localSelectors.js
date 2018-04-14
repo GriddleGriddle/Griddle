@@ -46,11 +46,23 @@ const substringSearch = (value, filter) => {
   return value && value.toString().toLowerCase().indexOf(filterToLower) > -1;
 };
 
+const filterable = (columnProperties, key) => {
+  if (key === 'griddleKey') {
+    return false;
+  }
+  if (columnProperties) {
+    if (columnProperties.get(key) === undefined ||
+      columnProperties.getIn([key, 'filterable']) === false) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const textFilterRowSearch = (columnProperties, filter) => (row) => {
   return row.keySeq()
     .some((key) => {
-      const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
-      if (filterable === false) {
+      if (!filterable(columnProperties, key)) {
         return false;
       }
       return substringSearch(row.get(key), filter);
@@ -59,8 +71,7 @@ const textFilterRowSearch = (columnProperties, filter) => (row) => {
 
 const objectFilterRowSearch = (columnProperties, filter) => (row, i, data) => {
   return row.keySeq().every((key) => {
-    const filterable = columnProperties && columnProperties.getIn([key, 'filterable']);
-    if (filterable === false) {
+    if (!filterable(columnProperties, key)) {
       return true;
     }
     const keyFilter = filter.get(key);
