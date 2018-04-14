@@ -257,12 +257,12 @@ test('filteredDataSelector filters data when filter function present', test => {
 });
 
 test('filteredDataSelector filters data when filter object present', test => {
-  const state = Immutable.Map({
+  const state = Immutable.fromJS({
     filter: { name: 'luke' },
-    data: Immutable.List.of(
-      Immutable.Map({ id: '1', name: 'luke skywalker' }),
-      Immutable.Map({ id: '2', name: 'han solo' }),
-    ),
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
   });
   test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
     { id: '1', name: 'luke skywalker' },
@@ -270,31 +270,31 @@ test('filteredDataSelector filters data when filter object present', test => {
 });
 
 test('filteredDataSelector filters data with multiple filters', test => {
-  const state = Immutable.Map({
+  const state = Immutable.fromJS({
     filter: { id: '1', name: 'luke' },
-    data: Immutable.List.of(
-      Immutable.Map({ id: '1', name: 'luke skywalker' }),
-      Immutable.Map({ id: '1', name: 'han solo' }),
-      Immutable.Map({ id: '3', name: 'luke skywalker' }),
-      Immutable.Map({ id: '2', name: 'han solo' })
-    )
-  })
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '1', name: 'han solo' },
+      { id: '3', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
+  });
   test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
     { id: '1', name: 'luke skywalker' },
   ]);
 });
 
 test('filteredDataSelector filters data when filter object with filter function', test => {
-  const state = Immutable.Map({
+  const state = Immutable.fromJS({
     filter: {
       name: function (rowName) {
         return rowName.length === 14
       },
     },
-    data: Immutable.List.of(
-      Immutable.Map({ id: '1', name: 'luke skywalker' }),
-      Immutable.Map({ id: '2', name: 'han solo' }),
-    ),
+    data: [
+      { id: '1', name: 'luke skywalker' },
+      { id: '2', name: 'han solo' },
+    ],
   });
 
   test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
