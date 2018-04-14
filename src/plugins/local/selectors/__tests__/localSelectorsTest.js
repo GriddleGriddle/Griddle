@@ -269,6 +269,21 @@ test('filteredDataSelector filters data when filter object present', test => {
   ]);
 });
 
+test('filteredDataSelector filters data with multiple filters', test => {
+  const state = Immutable.Map({
+    filter: { id: '1', name: 'luke' },
+    data: Immutable.List.of(
+      Immutable.Map({ id: '1', name: 'luke skywalker' }),
+      Immutable.Map({ id: '1', name: 'han solo' }),
+      Immutable.Map({ id: '3', name: 'luke skywalker' }),
+      Immutable.Map({ id: '2', name: 'han solo' })
+    )
+  })
+  test.deepEqual(selectors.filteredDataSelector(state).toJSON(), [
+    { id: '1', name: 'luke skywalker' },
+  ]);
+});
+
 test('filteredDataSelector filters data when filter object with filter function', test => {
   const state = Immutable.Map({
     filter: {
