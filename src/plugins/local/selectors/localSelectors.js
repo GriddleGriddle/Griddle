@@ -37,6 +37,58 @@ export const metaDataColumnsSelector = dataSelectors.metaDataColumnsSelector;
 
 const columnPropertiesSelector = state => state.getIn(['renderProperties', 'columnProperties']);
 
+const substringSearch = (value, filter) => {
+  if (!filter) {
+    return true;
+  }
+
+  const filterToLower = filter.toLowerCase();
+  return value && value.toString().toLowerCase().indexOf(filterToLower) > -1;
+};
+
+const filterable = (columnProperties, key) => {
+  if (key === 'griddleKey') {
+    return false;
+  }
+  if (columnProperties) {
+    if (columnProperties.get(key) === undefined ||
+      columnProperties.getIn([key, 'filterable']) === false) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const textFilterRowSearch = (columnProperties, filter) => (row) => {
+  return row.keySeq()
+    .some((key) => {
+      if (!filterable(columnProperties, key)) {
+        return false;
+      }
+      return substringSearch(row.get(key), filter);
+    });
+};
+
+const objectFilterRowSearch = (columnProperties, filter) => (row, i, data) => {
+  return row.keySeq().every((key) => {
+    if (!filterable(columnProperties, key)) {
+      return true;
+    }
+    const keyFilter = filter.get(key);
+    switch (typeof (keyFilter)) {
+      case 'string':
+        return substringSearch(row.get(key), keyFilter);
+        break;
+      case 'function':
+        return keyFilter(row.get(key), i, data);
+        break;
+      default:
+        return true;
+        break;
+    }
+  });
+};
+
 /** Gets the data filtered by the current filter
  */
 export const filteredDataSelector = createSelector(
@@ -48,22 +100,16 @@ export const filteredDataSelector = createSelector(
       return data;
     }
 
-    const filterToLower = filter.toLowerCase();
-    return data.filter(row =>
-      row.keySeq()
-        .some((key) => {
-          if (key === 'griddleKey') {
-            return false;
-          } else if (columnProperties) {
-            if (columnProperties.get(key) === undefined ||
-              columnProperties.getIn([key, 'filterable']) === false) {
-              return false;
-            }
-          }
-          const value = row.get(key);
-          return value &&
-            value.toString().toLowerCase().indexOf(filterToLower) > -1;
-        }));
+    switch (typeof (filter)) {
+      case 'string':
+        return data.filter(textFilterRowSearch(columnProperties, filter));
+      case 'object':
+        return data.filter(objectFilterRowSearch(columnProperties, filter));
+      case 'function':
+        return data.filter(filter);
+      default:
+        return data;
+    }
   }
 );
 
@@ -185,7 +231,7 @@ export const columnIdsSelector = createSelector(
   visibleDataSelector,
   renderPropertiesSelector,
   (visibleData, renderProperties) => {
-    if(visibleData.size > 0) {
+    if (visibleData.size > 0) {
       return Object.keys(visibleData.get(0).toJSON()).map(k =>
         renderProperties.getIn(['columnProperties', k, 'id']) || k
       )

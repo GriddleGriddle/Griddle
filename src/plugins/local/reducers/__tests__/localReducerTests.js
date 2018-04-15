@@ -40,12 +40,46 @@ test('sets page size', test => {
   test.is(state.getIn(['pageProperties', 'pageSize']), 11);
 });
 
-test('sets filter', test => {
+test('sets filter null', test => {
   const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
-    filter: 'onetwothree',
+    filter: null,
   });
 
-  test.is(state.get('filter'), 'onetwothree');
+  test.is(state.get('filter'), null);
+  test.is(state.getIn(['pageProperties', 'currentPage']), 1)
+});
+
+test('sets filter string', test => {
+  const filter = 'onetwothree';
+  const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
+    filter
+  });
+
+  test.is(state.get('filter'), filter);
+  test.is(state.getIn(['pageProperties', 'currentPage']), 1)
+});
+
+test('sets filter function', test => {
+  const filter = (v, i) => i % 2;
+  const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
+    filter,
+  });
+
+  test.is(state.get('filter'), filter);
+  test.is(state.getIn(['pageProperties', 'currentPage']), 1)
+});
+
+test('sets filter object', test => {
+  const filter = {
+    id: (v, i) => i % 2,
+    name: 'ben',
+  };
+  const state = reducers.GRIDDLE_SET_FILTER(new Immutable.Map(), {
+    filter,
+  });
+
+  test.not(state.get('filter'), filter);
+  test.deepEqual(state.get('filter').toJS(), filter);
   test.is(state.getIn(['pageProperties', 'currentPage']), 1)
 });
 

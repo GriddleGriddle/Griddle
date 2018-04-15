@@ -1210,6 +1210,37 @@ storiesOf('Filter', module)
       </Griddle>
     )
   })
+  .add('with Custom Filter for the column "name"', () => {
+    class CustomFilter extends components.Filter {
+      public setFilter = (e: any) => {
+        this.props.setFilter({
+          name: e.target.value,
+        });
+      }
+      public render() {
+        return (
+          <label>
+            {'Name: '}
+            <input
+            type='text'
+            name='filter'
+            onChange={this.setFilter}
+            style={this.props.style}
+            className={this.props.className}
+            />
+          </label>
+        );
+      }
+    }
+
+    return (
+      <Griddle data={fakeData} plugins={[LocalPlugin]}
+              components={{Filter: CustomFilter}}>
+        <RowDefinition>
+        </RowDefinition>
+      </Griddle>
+    )
+  })
 
 storiesOf('Redux', module)
   .add('with custom filter connected to another Redux store', () => {

@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import { maxPageSelector, currentPageSelector } from '../selectors/localSelectors';
 
 import * as dataReducers from '../../../reducers//dataReducer';
@@ -63,7 +64,7 @@ export function GRIDDLE_PREVIOUS_PAGE(state, action) {
  */
 export function GRIDDLE_SET_FILTER(state, action) {
   return state
-    .set('filter', action.filter)
+    .set('filter', action.filter && Immutable.fromJS(action.filter))
     .setIn(['pageProperties', 'currentPage'], 1);
 };
 
