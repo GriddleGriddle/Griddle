@@ -1213,10 +1213,9 @@ storiesOf('Filter', module)
   .add('with Custom Filter for the column "name"', () => {
     class CustomFilter extends React.Component<{setFilter: (e: any) => any, style: any, className: any}, {}> {
       public setFilter = (e: any) => {
-        console.log(e.target.value);
-        const filterAsMap = new Map();
-        filterAsMap.set('name', e.target.value);
-        this.props.setFilter(filterAsMap);
+        this.props.setFilter({
+          name: e.target.value,
+        });
       }
       public render() {
         return (
