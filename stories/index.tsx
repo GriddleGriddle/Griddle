@@ -1219,13 +1219,16 @@ storiesOf('Filter', module)
       }
       public render() {
         return (
-          <input
-          type='text'
-          name='filter'
-          onChange={this.setFilter}
-          style={this.props.style}
-          className={this.props.className}
-          />
+          <label>
+            {'Name: '}
+            <input
+            type='text'
+            name='filter'
+            onChange={this.setFilter}
+            style={this.props.style}
+            className={this.props.className}
+            />
+          </label>
         );
       }
     }
