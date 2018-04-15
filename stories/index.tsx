@@ -1211,7 +1211,7 @@ storiesOf('Filter', module)
     )
   })
   .add('with Custom Filter for the column "name"', () => {
-    class CustomFilter extends React.Component<{setFilter: (e: any) => any, style: any, className: any}, {}> {
+    class CustomFilter extends components.Filter {
       public setFilter = (e: any) => {
         this.props.setFilter({
           name: e.target.value,

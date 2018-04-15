@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Immutable from 'immutable';
 import { connect as originalConnect } from 'react-redux';
 import { ActionCreator, Middleware } from 'redux';
 
@@ -203,6 +204,18 @@ const SettingsContainer: (OriginalComponent: any) => any;
 
 const SettingsComponents: PropertyBag<GriddleComponent<any>>;
 
+export interface FilterProps {
+    setFilter?: (filter: GriddleFilter) => void;
+    placeholder?: string;
+    className?: string;
+    style?: React.CSSProperties;
+
+    [x: string]: any;
+}
+
+class Filter extends React.Component<FilterProps, any> {
+}
+
 } // namespace components
 
 export interface GriddleComponents {
@@ -216,10 +229,10 @@ export interface GriddleComponents {
     StyleContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
     StyleContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    Filter?: GriddleComponent<any>;
-    FilterEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    FilterContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    FilterContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+    Filter?: GriddleComponent<components.FilterProps>;
+    FilterEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
+    FilterContainer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
+    FilterContainerEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
 
     SettingsWrapper?: GriddleComponent<components.SettingsWrapperProps>;
     SettingsWrapperEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
@@ -294,12 +307,15 @@ export interface GriddleComponents {
     PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
+export type RowFilter = (row: any, index: number, data: Immutable.List<any>) => boolean;
+export type GriddleFilter = string | RowFilter | PropertyBag<string | RowFilter>;
+
 export interface GriddleActions extends PropertyBag<ActionCreator<any> | undefined> {
     onSort?: (sortProperties: any) => void;
     onNext?: () => void;
     onPrevious?: () => void;
     onGetPage?: (pageNumber: number) => void;
-    setFilter?: (filterText: string) => void;
+    setFilter?: (filter: GriddleFilter) => void;
 }
 
 export interface GriddleEvents extends GriddleActions {
