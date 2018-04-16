@@ -4,15 +4,17 @@ import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import getContext from 'recompose/getContext';
-
-import { sortPropertyByIdSelector, iconsForComponentSelector, classNamesForComponentSelector, stylesForComponentSelector, customHeadingComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
-import { getSortIconProps } from '../utils/sortUtils';
+import withHandlers from 'recompose/withHandlers';
+import { sortPropertyByIdSelector, iconsForComponentSelector, customHeadingComponentSelector, stylesForComponentSelector, classNamesForComponentSelector, cellPropertiesSelector } from '../selectors/dataSelectors';
+import { setSortColumn } from '../actions';
+import { combineHandlers } from '../utils/compositionUtils';
+import { getSortIconProps, setSortProperties } from '../utils/sortUtils';
 import { valueOrResult } from '../utils/valueUtils';
 
-const DefaultTableHeadingCellContent = ({title, icon}) => (
+const DefaultTableHeadingCellContent = ({title, icon, iconClassName}) => (
   <span>
     { title }
-    { icon && <span>{icon}</span> }
+    { icon && <span className={iconClassName}>{icon}</span> }
   </span>
 )
 
@@ -26,10 +28,23 @@ const EnhancedHeadingCell = OriginalComponent => compose(
       customHeadingComponent: customHeadingComponentSelector(state, props),
       cellProperties: cellPropertiesSelector(state, props),
       className: classNamesForComponentSelector(state, 'TableHeadingCell'),
+      sortAscendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellAscending'),
+      sortDescendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellDescending'),
       style: stylesForComponentSelector(state, 'TableHeadingCell'),
       ...iconsForComponentSelector(state, 'TableHeadingCell'),
+    }),
+    (dispatch, { events: { onSort } }) => ({
+      setSortColumn: combineHandlers([
+        onSort,
+        compose(dispatch, setSortColumn),
+      ]),
     })
   ),
+  withHandlers(props => ({
+    onClick: props.cellProperties.sortable === false ? (() => () => {}) :
+      props.events.setSortProperties || setSortProperties,
+  })),
+  //TODO: use with props on change or something more performant here
   mapProps(props => {
     const iconProps = getSortIconProps(props);
     const title = props.customHeadingComponent ?

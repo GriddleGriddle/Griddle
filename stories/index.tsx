@@ -1810,7 +1810,7 @@ storiesOf('TypeScript', module)
   .add('GriddleComponent accepts expected types', () => {
     class Custom extends React.Component<{ value }> {
       render() {
-        return this.props.value;
+        return <strong>{this.props.value}</strong>;
       }
     }
 
