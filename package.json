@@ -49,9 +49,13 @@
     "webpack-dev-server": "1.12.1"
   },
   "scripts": {
+    "grunt": "grunt",
     "test": "karma start --browsers PhantomJS",
     "test-single": "karma start --singleRun true --browsers PhantomJS",
-    "grunt": "grunt"
+    "postpublish": "git push --tags",
+    "prepare": "grunt build",
+    "preversion": "npm test",
+    "ship-it": "npm publish --tag version0"
   },
   "repository": {
     "type": "git",
