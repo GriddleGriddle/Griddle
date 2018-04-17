@@ -1,7 +1,7 @@
 var React = require('react');
 var createReactClass = require('create-react-class');
 var GridPagination = require('../gridPagination.jsx');
-var TestUtils = require('react-addons-test-utils');
+var TestUtils = require('react-dom/test-utils');
 
 describe('GridPagination', function(){
 	it('calls change filter when clicked', function(){
