@@ -2,7 +2,7 @@ var React = require('react');
 var createReactClass = require('create-react-class');
 var ReactDOM = require('react-dom');
 var Griddle = require('../griddle.jsx');
-var TestUtils = require('react-addons-test-utils');
+var TestUtils = require('react-dom/test-utils');
 var assign = require('lodash/assign');
 
 var SomeCustomComponent = createReactClass({
@@ -352,7 +352,7 @@ describe('Griddle', function() {
 
   it('sets sort direction correctly', function(){
     expect(grid.state.sortColumn).toBeFalsy();
-      console.log(grid.state.sortColumn);
+    // console.log(grid.state.sortColumn);
 
     grid.changeSort("address.state");
     expect(grid.state.sortColumn).toEqual("address.state");
