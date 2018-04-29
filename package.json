@@ -1,6 +1,6 @@
 {
   "name": "griddle-react",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "A fast and flexible grid component for React",
   "keywords": [
     "react-component",
@@ -24,7 +24,10 @@
     "build-ts": "cp src/module.d.ts dist/module/",
     "build-umd": "webpack --config webpack.config.js",
     "build-modules": "cross-env BABEL_ENV=build babel src --out-dir dist/module ",
-    "ship-it": "npm run build && npm publish --tag next"
+    "postpublish": "git push --tags",
+    "prepare": "npm run build",
+    "preversion": "npm test",
+    "ship-it": "npm publish --tag next"
   },
   "peerDependencies": {
     "react": ">=15"
