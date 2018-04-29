@@ -21,6 +21,7 @@ const DefaultTableHeadingCellContent = ({title, icon, iconClassName}) => (
 const EnhancedHeadingCell = OriginalComponent => compose(
   getContext({
     events: PropTypes.object,
+    selectors: PropTypes.object,
   }),
   connect(
     (state, props) => ({
