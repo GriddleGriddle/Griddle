@@ -13,5 +13,5 @@ export default {
   PreviousButtonContainer,
   PageDropdownContainer,
   TableContainer,
-  TableHeadingCellContainer,
+  TableHeadingCellContainer, // TODO: Obsolete; remove
 };
