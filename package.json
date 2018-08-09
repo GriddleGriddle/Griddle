@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@kadira/storybook": "^2.5.2",
-    "@types/prop-types": "^15.5.4",
+    "@types/prop-types": "15.5.3",
     "@types/react": "^15.0.34",
     "@types/react-redux": "^5.0.14",
     "@types/recompose": "^0.26.4",
