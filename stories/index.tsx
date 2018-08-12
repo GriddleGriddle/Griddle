@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as PropTypes from 'prop-types';
 import { module, storiesOf, action, linkTo } from '@kadira/storybook';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -13,7 +13,7 @@ import { createSelector } from 'reselect';
 import _ from 'lodash';
 
 import GenericGriddle, { connect, actions, components, selectors, plugins, utils, ColumnDefinition, RowDefinition, GriddleProps } from '../src/module';
-const { Cell, Row, Table, TableContainer, TableBody, TableHeading, TableHeadingCell } = components;
+const { Cell, Row, Table, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
 const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
@@ -1625,60 +1625,6 @@ storiesOf('Table', module)
         TableHeading={tableHeading}
         TableBody={tableBody}
       />
-    );
-  })
-
-storiesOf('TableContainer', module)
-  .add('base', () => {
-    const tableHeading = (props) => (
-      <thead>
-        <tr>
-          <th>One</th>
-          <th>Two</th>
-          <th>Three</th>
-        </tr>
-      </thead>
-    );
-
-    const tableBody = (props) => (
-      <tbody>
-        <tr>
-          <td>uno</td>
-          <td>dos</td>
-          <td>tres</td>
-        </tr>
-      </tbody>
-    );
-
-    class BaseWithContext extends React.Component<any> {
-      static childContextTypes = {
-        components: PropTypes.object.isRequired
-      }
-
-      getChildContext() {
-        return {
-          components: {
-            TableBody: tableBody,
-            TableHeading: tableHeading
-          }
-        };
-      }
-
-      render() {
-        return (
-          <div>
-            {this.props.children}
-          </div>
-        );
-      }
-    }
-
-    const TableComposed = TableContainer(Table);
-
-    return (
-      <BaseWithContext>
-        <TableComposed />
-      </BaseWithContext>
     );
   })
 
