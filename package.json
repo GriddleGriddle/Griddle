@@ -63,7 +63,7 @@
     "react-dom": "^15.3.2",
     "rimraf": "^2.6.0",
     "ts-loader": "^2.0.2",
-    "typescript": "~2.5",
+    "typescript": "^2.8.0",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-fail-plugin": "^1.0.6"
