@@ -977,7 +977,7 @@ var Griddle = createReactClass({
         gridClassName += this.shouldUseCustomRowComponent() ? " griddle-custom" : "";
 
         return (
-            <div className={gridClassName}>
+            <div className={gridClassName} id={this.props.uniqueIdentifier}>
                 {topSection}
                 {columnSelector}
                 <div className="griddle-container" style={this.props.useGriddleStyles&&!this.props.isSubGriddle? { border: "1px solid #DDD"} : null }>
