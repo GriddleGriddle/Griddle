@@ -23,14 +23,14 @@ export function getColumnProperties(rowProperties, allColumns = []) {
   // Working against an array of columnProperties
   if (Array.isArray(children)) {
     // build one object that contains all of the column properties keyed by id
-      _.reduce(_.flatten(children),(previous, current, i) => {
-        if (current) {
-          previous[current.props.id] = { order: offset + i, ...current.props };
-        }
-        return previous;
-      }, columnProperties);
-      
-    // Working against a lone, columnProperties object
+    _.reduce(_.flatten(children),(previous, current, i) => {
+      if (current) {
+        previous[current.props.id] = { order: offset + i, ...current.props };
+      }
+      return previous;
+    }, columnProperties);
+    
+  // Working against a lone, columnProperties object
   } else if (children && children.props) {
     columnProperties[children.props.id] = { order: offset, ...children.props };
   }
