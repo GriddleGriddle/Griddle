@@ -265,6 +265,21 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add("with filterable set by array of <ColumnDefinition />", () => {
+    const ids = ["name", "city", "state"];
+    return (
+      <div>
+        <small>Name is not filterable</small>
+        <Griddle data={fakeData} plugins={[LocalPlugin]}>
+          <RowDefinition>
+            {ids.map(id => (
+              <ColumnDefinition id={id} filterable />
+            ))}
+          </RowDefinition>
+        </Griddle>
+      </div>
+    );
+  })
   .add('with local and sort set', () => {
     const sortProperties = [
       { id: 'name', sortAscending: true }
