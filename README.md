@@ -1,6 +1,8 @@
 Griddle
 =======
 
+[Needs more maintainers - Please see this issue](https://github.com/GriddleGriddle/Griddle/issues/848)
+
 An ultra customizable datagrid component for React
 ----------
 
