@@ -1,6 +1,14 @@
 import fakeData from './fakeData';
 
-export function person({ id, name, city, state, country, company, favoriteNumber }) {
+export function person({
+  id,
+  name,
+  city,
+  state,
+  country,
+  company,
+  favoriteNumber
+}) {
   const personObject = {};
 
   personObject.id = id;
@@ -26,5 +34,5 @@ export class personClass {
   }
 }
 
-export const fakeData2 = fakeData.map( (x) => new person (x));
-export const fakeData3 = fakeData.map( (x) => new personClass (x));
+export const fakeData2 = fakeData.map(x => new person(x));
+export const fakeData3 = fakeData.map(x => new personClass(x));

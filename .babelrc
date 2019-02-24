@@ -1,16 +1,13 @@
 {
   "env": {
     "development": {
-      "presets": ["es2015", "stage-0", "react"]
+      "presets": ["@babel/preset-env", "@babel/preset-react"],
+      "plugins": ["@babel/plugin-proposal-class-properties"]
     },
     "build": {
-      "plugins": ["lodash"],
-      "presets": ["es2015", "stage-0", "react"],
-      "ignore": [
-        "**/__tests__/*.js",
-        "**/fake-*"
-      ]
+      "plugins": ["lodash", "@babel/plugin-proposal-class-properties"],
+      "presets": ["@babel/preset-env", "@babel/preset-react"],
+      "ignore": ["**/__tests__/*.js", "**/fake-*"]
     }
-
   }
 }

@@ -1,4 +1,10 @@
-import { createStore, combineReducers, bindActionCreators, applyMiddleware, compose } from 'redux';
+import {
+  createStore,
+  combineReducers,
+  bindActionCreators,
+  applyMiddleware,
+  compose
+} from 'redux';
 import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -18,43 +24,44 @@ class Griddle extends Component {
     selectors: PropTypes.object,
     storeKey: PropTypes.string,
     storeListener: PropTypes.object
-  }
+  };
 
   constructor(props) {
     super(props);
 
-    const {
-      core = corePlugin,
-      storeKey = Griddle.storeKey || 'store',
-    } = props;
+    const { core = corePlugin, storeKey = Griddle.storeKey || 'store' } = props;
 
     const { initialState, reducer, reduxMiddleware } = init.call(this, core);
 
-    const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
+    const composeEnhancers =
+      (typeof window !== 'undefined' &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+      compose;
     this.store = createStore(
       reducer,
       initialState,
-      composeEnhancers(
-        applyMiddleware(...reduxMiddleware)
-      )
+      composeEnhancers(applyMiddleware(...reduxMiddleware))
     );
 
     this.provider = createProvider(storeKey);
 
     this.storeListener = new StoreListener(this.store);
     forIn(this.listeners, (listener, name) => {
-      this.storeListener.addListener(listener, name, {events: this.events, selectors: this.selectors});
+      this.storeListener.addListener(listener, name, {
+        events: this.events,
+        selectors: this.selectors
+      });
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const newState = pickBy(nextProps, (value, key) => {
       return this.props[key] !== value;
-    })
+    });
 
     // Only update the state if something has changed.
     if (Object.keys(newState).length > 0) {
-     this.store.dispatch(actions.updateState(newState));
+      this.store.dispatch(actions.updateState(newState));
     }
   }
 
@@ -66,7 +73,7 @@ class Griddle extends Component {
 
   getStoreKey = () => {
     return this.props.storeKey || Griddle.storeKey || 'store';
-  }
+  };
 
   getChildContext() {
     return {
@@ -88,8 +95,7 @@ class Griddle extends Component {
       <this.provider store={this.store}>
         <this.components.Layout />
       </this.provider>
-    )
-
+    );
   }
 }
 
