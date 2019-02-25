@@ -17,7 +17,9 @@ test('renders with correct value', (t) => {
 test('onClick works', (t) => {
   let clicked = false;
 
-  const onClick = () => { clicked = true; };
+  const onClick = () => {
+    clicked = true;
+  };
   const wrapper = shallow(<Cell onClick={onClick} />);
   wrapper.simulate('click');
 
@@ -27,7 +29,9 @@ test('onClick works', (t) => {
 test('onMouseEnter works', (t) => {
   let over = false;
 
-  const onMouseEnter = () => { over = true; };
+  const onMouseEnter = () => {
+    over = true;
+  };
   const wrapper = shallow(<Cell onMouseEnter={onMouseEnter} />);
   wrapper.simulate('mouseEnter');
 
@@ -37,7 +41,7 @@ test('onMouseEnter works', (t) => {
 test('onMouseLeave works', (t) => {
   let leave = false;
 
-  const onMouseLeave = () => leave = true;
+  const onMouseLeave = () => (leave = true);
   const wrapper = shallow(<Cell onMouseLeave={onMouseLeave} />);
   wrapper.simulate('mouseLeave');
 
@@ -48,5 +52,3 @@ test('class name gets applied', (t) => {
   const wrapper = shallow(<Cell className="test" />);
   t.true(wrapper.matchesElement(<td className="test" />));
 });
-
-
