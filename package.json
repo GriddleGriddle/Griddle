@@ -38,6 +38,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "@storybook/addon-info": "^4.1.13",
     "@storybook/react": "^4.1.13",
     "@types/jest": "^24.0.6",
@@ -53,6 +54,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "cross-env": "^5.2.0",
     "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.9.1",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
@@ -102,9 +104,9 @@
   },
   "ava": {
     "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
+      "@babel/register",
+      "./test/helpers/setupTest.js"
+    ]
   },
   "author": "Ryan Lanciaux & Joel Lanciaux",
   "license": "MIT"

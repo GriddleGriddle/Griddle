@@ -10,16 +10,16 @@ import PageDropdown from '../PageDropdown';
 test('renders with style', (t) => {
   const style = { backgroundColor: '#EDEDED' };
   const wrapper = shallow(<PageDropdown style={style} />);
-
-  t.is(wrapper.node.type, 'select');
-  t.is(wrapper.node.props.style, style);
+  const node = wrapper.getElements()[0];
+  t.is(node.type, 'select');
+  t.is(node.props.style, style);
 });
 
 test('renders with className', (t) => {
   const wrapper = shallow(<PageDropdown className="className" />);
-
-  t.is(wrapper.node.type, 'select');
-  t.is(wrapper.node.props.className, 'className');
+  const node = wrapper.getElements()[0];
+  t.is(node.type, 'select');
+  t.is(node.props.className, 'className');
 });
 
 test('renders with option element at page 0 if no pages provided', (t) => {
@@ -39,14 +39,18 @@ test('renders at selected page', (t) => {
   // using mount because attempting to get selectedIndex later on
   const wrapper = mount(<PageDropdown currentPage={3} maxPages={10} />);
 
-  const select = wrapper.find('select').node;
-  t.is(select.selectedIndex, 2);
+  const select = wrapper.find('select');
+  t.is(select.props().value, 3);
 });
 
 test('fires set page event', (t) => {
   let changed = false;
-  const onChange = () => { changed = true; };
-  const wrapper = mount(<PageDropdown currentPage={0} maxPages={10} setPage={onChange} />);
+  const onChange = () => {
+    changed = true;
+  };
+  const wrapper = mount(
+    <PageDropdown currentPage={0} maxPages={10} setPage={onChange} />
+  );
   wrapper.simulate('change', { target: { value: 3 } });
   t.true(changed);
 });

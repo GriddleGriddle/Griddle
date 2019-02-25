@@ -10,10 +10,12 @@ test('renders', (t) => {
 });
 
 test('renders with style', (t) => {
-  const style = { backgroundColor: "#EDEDED" };
+  const style = { backgroundColor: '#EDEDED' };
   const wrapper = shallow(<Filter style={style} />);
 
-  t.true(wrapper.matchesElement(<input style={{ backgroundColor: "#EDEDED" }} />));
+  t.true(
+    wrapper.matchesElement(<input style={{ backgroundColor: '#EDEDED' }} />)
+  );
 });
 
 test('renders with className', (t) => {
@@ -24,12 +26,10 @@ test('renders with className', (t) => {
 
 test('calls setFilter on change', (t) => {
   let calledSetFilter = false;
-  const setFilter = (e) => calledSetFilter = true;
+  const setFilter = (e) => (calledSetFilter = true);
   const wrapper = shallow(<Filter setFilter={setFilter} />);
 
-  wrapper.simulate('change',
-    { target: { value: 'abc' } }
-  );
+  wrapper.simulate('change', { target: { value: 'abc' } });
 
   t.true(calledSetFilter);
 });

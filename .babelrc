@@ -8,6 +8,11 @@
       "plugins": ["lodash", "@babel/plugin-proposal-class-properties"],
       "presets": ["@babel/preset-env", "@babel/preset-react"],
       "ignore": ["**/__tests__/*.js", "**/fake-*"]
+    },
+    "test": {
+      "presets": ["@babel/preset-env", "@babel/preset-react"],
+      "plugins": ["@babel/plugin-proposal-class-properties"],
+      "only": ["./**/*.js", "node_modules/jest-runtime"]
     }
   }
 }
