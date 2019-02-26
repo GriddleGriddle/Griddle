@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "target": "es5",
+    "lib": ["es5", "es6", "es7", "es2017", "dom"],
     "allowJs": true,
     "jsx": "preserve",
     "noImplicitAny": false,
@@ -12,9 +10,9 @@
     "strictNullChecks": false,
     "types": [],
     "noEmit": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
   },
-  "files": [
-    "stories/index.tsx"
-  ]
+  "files": ["stories/index.tsx"],
+  "exclude": ["node_modules"]
 }
