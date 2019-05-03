@@ -684,6 +684,24 @@ storiesOf('Griddle main', module)
       </div>
     )
   })
+  .add('with many-column data', () => {
+    type Griddle = new () => GenericGriddle<any>;
+    const Griddle = GenericGriddle as Griddle;
+    return (
+      <div>
+        <small>
+          Default columns should be in order.
+        </small>
+        <Griddle
+          data={[
+            { '00-00': '0', '01-01': '1', '02-02': '2', '03-03': '3', '04-04': '4',
+              '05-05': '5', '06-06': '6', '07-07': '7', '08-08': '8', '09-09': '9', '10-10': '10' }
+          ]}
+          plugins={[plugins.LocalPlugin]}
+        />
+      </div>
+    );
+  })
   .add('with many columns', () => {
     return (
       <div>
