@@ -16,13 +16,12 @@ const plugins = {
   CorePlugin,
   LegacyStylePlugin,
   LocalPlugin,
-  PositionPlugin,
+  PositionPlugin
 };
 
-const ColumnDefinition = components.ColumnDefinition;
-const RowDefinition = components.RowDefinition;
+const { ColumnDefinition, RowDefinition } = components;
 
-const connect = utils.connect;
+const { connect } = utils;
 
 export default Griddle;
 export {
@@ -35,5 +34,5 @@ export {
   plugins,
   ColumnDefinition,
   RowDefinition,
-  connect,
+  connect
 };

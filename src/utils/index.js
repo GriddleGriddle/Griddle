@@ -11,5 +11,5 @@ export default {
   dataUtils,
   rowUtils,
   sortUtils,
-  connect,
+  connect
 };

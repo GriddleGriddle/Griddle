@@ -1,39 +1,36 @@
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-var webpack = require('webpack');
-const failPlugin = require('webpack-fail-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   devtool: 'source-map',
   entry: './src/module.js',
   output: {
-    path: __dirname + '/dist/umd/',
+    path: path.join(__dirname, '/dist/umd/'),
     filename: 'griddle.js',
     publicPath: '/build/',
     library: 'Griddle',
     libraryTarget: 'umd'
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: [
-          '/node_modules/',
-          '/stories/',
-          '/storybook-static/',
-        ],
-        cacheDirectory: true,
-        query: {
-          plugins: ['lodash'],
-          presets: ['es2015', 'stage-0', 'react']
-        }
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader?cacheDirectory',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        },
+        exclude: ['/node_modules/', '/stories/', '/storybook-static/']
       }
     ]
   },
   plugins: [
-    failPlugin,
-    new LodashModuleReplacementPlugin,
-    new webpack.optimize.OccurrenceOrderPlugin,
-    new webpack.optimize.UglifyJsPlugin
+    new LodashModuleReplacementPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new UglifyJsPlugin()
   ],
   externals: [
     {
@@ -44,5 +41,5 @@ module.exports = {
         amd: 'react'
       }
     }
-  ],
+  ]
 };
