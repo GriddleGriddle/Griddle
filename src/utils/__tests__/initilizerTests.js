@@ -1,5 +1,5 @@
 import test from 'ava';
-import _ from 'lodash';
+import range from 'lodash.range';
 
 import init from '../initializer';
 
@@ -260,7 +260,7 @@ test('init returns composed reducer given plugins', (assert) => {
 });
 
 test('init returns flattened/compacted reduxMiddleware given plugins', (assert) => {
-  const mw = _.range(0, 4).map(i => () => i);
+  const mw = range(0, 4).map(i => () => i);
   const ctx = {
     props: {
       plugins: [

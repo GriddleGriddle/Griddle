@@ -1,4 +1,10 @@
-import _ from 'lodash';
+import pickBy from 'lodash.pickby';
+import assignIn from 'lodash.assignin';
+import pick from 'lodash.pick';
+import flattenDeep from 'lodash.flattendeep';
+import uniq from 'lodash.uniq';
+import flow from 'lodash.flow';
+import flowRight from 'lodash.flowright';
 
 /** Extends an array rather than known list of objects */
 //TODO: Look at using object.assign
@@ -10,7 +16,7 @@ export function extendArray(objects) {
   objects.unshift({});
 
   //Buid the combined object
-  let combinedObject = _.extend.apply(this, objects);
+  let combinedObject = assignIn.apply(this, objects);
 
   //TODO: why are we doing this? is it necessary
   objects.shift();
@@ -54,7 +60,7 @@ export function getPropertiesByEnding(ending, object) {
 export function getObjectWherePropertyEndsWith(ending, object) {
   const keys = getPropertiesByEnding(ending, object);
 
-  return _.pick(object, keys);
+  return pick(object, keys);
 }
 
 /** Creates a new reducer by taking the output of the first reducer as state to the second
@@ -84,7 +90,7 @@ export function composeReducers(reducers) {
  * @param {Object <array>} objects - An array of objects
  */
 export function getKeysForObjects(objects) {
-  return _.uniq(_.flattenDeep(objects.map(o => Object.keys(o))));
+  return uniq(flattenDeep(objects.map(o => Object.keys(o))));
 }
 
 /** Determines if a given key is a Griddle hook reducer
@@ -99,7 +105,7 @@ export function isKeyGriddleHook(key) {
  * @param {Object} reducerObject - The reducer object to remove hooks from
  */
 export function removeHooksFromObject(reducerObject) {
-  return _.pickBy(reducerObject, (value, key) => {
+  return pickBy(reducerObject, (value, key) => {
     if (isKeyGriddleHook(key)) {
       return false;
     }
@@ -124,14 +130,14 @@ export function removeKeyNamePartFromObject(reducerObject, keyString) {
  */
 export function getBeforeHooksFromObject(reducerObject) {
   return removeKeyNamePartFromObject(
-    _.pickBy(reducerObject, (value, key) => key.endsWith('BEFORE')), '_BEFORE');
+    pickBy(reducerObject, (value, key) => key.endsWith('BEFORE')), '_BEFORE');
 }
 
 /** Gets an object that consists of only the BEFORE_REDUCE hooks.
  * @param {Object} reducerObject - the reducer to get the BEFORE_REDUCE hooks from
  */
 export function getBeforeReduceHooksFromObject(reducerObject) {
-  return _.pickBy(reducerObject, (value, key) => key === 'BEFORE_REDUCE')
+  return pickBy(reducerObject, (value, key) => key === 'BEFORE_REDUCE')
 }
 
 
@@ -140,14 +146,14 @@ export function getBeforeReduceHooksFromObject(reducerObject) {
  */
 export function getAfterHooksFromObject(reducerObject) {
   return removeKeyNamePartFromObject(
-    _.pickBy(reducerObject, (value, key) => key.endsWith('AFTER')), '_AFTER');
+    pickBy(reducerObject, (value, key) => key.endsWith('AFTER')), '_AFTER');
 }
 
 /** Gets an object that conists of only the AFTER_REDUCE hooks.
  * @param {Object} reducerObject - the reducer to get the AFTER_REDUCE hooks from
  */
 export function getAfterReduceHooksFromObject(reducerObject) {
-  return _.pickBy(reducerObject, (value, key) => key === 'AFTER_REDUCE');
+  return pickBy(reducerObject, (value, key) => key === 'AFTER_REDUCE');
 }
 
 /** Combines the given reducer objects left to right
@@ -232,7 +238,7 @@ export function callReducerWithBeforeAfterPipe(reducerObject, state, action) {
 
   const partialCall = (partialAction => partialState => call(partialState, partialAction))(action);
 
-  const method = _.flow([before, partialCall, after]);
+  const method = flow([before, partialCall, after]);
 
   return method(state);
 }
@@ -295,13 +301,13 @@ export function wrapMethodsByWordEnding(componentArray, wordEnding, keyReplaceSt
         // Determine if we are working with an HoC that wraps another HoC
         newObject[keyWithoutEnhancer] = keyWithoutEnhancer.endsWith('Container') || keyWithoutEnhancer.endsWith('Enhancer') ?
           // If we are enhancing a container or enhancer flow this stuff since it's likely an HoC
-          _.flowRight(current[key], (current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])) :
+          flowRight(current[key], (current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])) :
           // Wrap the current component in the Enhancer or container
           current[key](current[keyWithoutEnhancer] || previous[keyWithoutEnhancer])
       }
     }
 
-    return _.pickBy(Object.assign(previous, current, newObject), (v, k) => (!k.endsWith(wordEnding))) ;
+    return pickBy(Object.assign(previous, current, newObject), (v, k) => (!k.endsWith(wordEnding))) ;
   }, {})
 }
 

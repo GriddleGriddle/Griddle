@@ -10,7 +10,6 @@ import withState from 'recompose/withState';
 import { Provider, connect as reduxConnect } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
-import _ from 'lodash';
 
 import GenericGriddle, {
   connect,
