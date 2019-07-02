@@ -1,4 +1,7 @@
-import _ from 'lodash';
+import pickBy from 'lodash.pickby';
+import merge from 'lodash.merge';
+import compact from 'lodash.compact';
+import flatten from 'lodash.flatten';
 import { buildGriddleReducer, buildGriddleComponents } from './compositionUtils';
 import { getColumnProperties } from './columnUtils';
 import { getRowProperties } from './rowUtils';
@@ -53,7 +56,7 @@ module.exports = function initializer(defaults) {
     (combined, plugin) => ({ ...combined, ...plugin.selectors }),
     { ...selectors });
 
-  const styleConfig = _.merge(
+  const styleConfig = merge(
     { ...defaultStyleConfig },
     ...plugins.map(p => p.styleConfig),
     userStyleConfig);
@@ -66,7 +69,7 @@ module.exports = function initializer(defaults) {
   }, ...plugins.map(p => p.renderProperties), userRenderProperties);
 
   // TODO: Make this its own method
-  const initialState = _.merge(
+  const initialState = merge(
     defaultInitialState,
     ...plugins.map(p => p.initialState),
     userInitialState,
@@ -77,14 +80,14 @@ module.exports = function initializer(defaults) {
     }
   );
 
-  const sanitizedListeners = _.pickBy(listeners, value => typeof value === 'function');
-  this.listeners = plugins.reduce((combined, plugin) => ({ ...combined, ..._.pickBy(plugin.listeners, value => typeof value === 'function') }), sanitizedListeners);
+  const sanitizedListeners = pickBy(listeners, value => typeof value === 'function');
+  this.listeners = plugins.reduce((combined, plugin) => ({ ...combined, ...pickBy(plugin.listeners, value => typeof value === 'function') }), sanitizedListeners);
 
   return {
     initialState,
     reducer,
-    reduxMiddleware: _.compact([
-      ..._.flatten(plugins.map(p => p.reduxMiddleware)),
+    reduxMiddleware: compact([
+      ...flatten(plugins.map(p => p.reduxMiddleware)),
       ...reduxMiddleware
     ]),
   };

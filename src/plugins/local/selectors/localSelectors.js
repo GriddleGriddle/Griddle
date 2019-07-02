@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
-import _ from 'lodash';
+import isFinite from 'lodash.isfinite';
 
 import { defaultSort } from '../../../utils/sortUtils';
 import { getVisibleDataForColumns } from '../../../utils/dataUtils';
@@ -125,7 +125,7 @@ export const maxPageSelector = createSelector(
 
     const result = calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
 
-    return _.isFinite(result) ? result : 1;
+    return isFinite(result) ? result : 1;
   }
 )
 

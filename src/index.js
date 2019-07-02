@@ -2,7 +2,8 @@ import { createStore, combineReducers, bindActionCreators, applyMiddleware, comp
 import { createProvider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import forIn from 'lodash.forin';
+import pickBy from 'lodash.pickby';
 
 import corePlugin from './core';
 import init from './utils/initializer';
@@ -41,13 +42,13 @@ class Griddle extends Component {
     this.provider = createProvider(storeKey);
 
     this.storeListener = new StoreListener(this.store);
-    _.forIn(this.listeners, (listener, name) => {
+    forIn(this.listeners, (listener, name) => {
       this.storeListener.addListener(listener, name, {events: this.events, selectors: this.selectors});
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const newState = _.pickBy(nextProps, (value, key) => {
+    const newState = pickBy(nextProps, (value, key) => {
       return this.props[key] !== value;
     })
 
