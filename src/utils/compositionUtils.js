@@ -5,6 +5,7 @@ import flattenDeep from 'lodash.flattendeep';
 import uniq from 'lodash.uniq';
 import flow from 'lodash.flow';
 import flowRight from 'lodash.flowright';
+import isString from 'lodash.isstring';
 
 /** Extends an array rather than known list of objects */
 //TODO: Look at using object.assign
@@ -192,7 +193,7 @@ function buildGriddleReducerObject(reducerObjects) {
   if (reducerObjects.length > 0) {
     // remove the hooks and extend the object
     for(const key in reducerObjects) {
-      const reducer = reducerObjects[key];
+      const reducer = pickBy(reducerObjects[key], (value, key) => isString(key));
       reducerMethodsWithoutHooks.push(removeHooksFromObject(reducer));
       beforeHooks.push(getBeforeHooksFromObject(reducer));
       afterHooks.push(getAfterHooksFromObject(reducer));

@@ -90,6 +90,7 @@
     "lodash.forin": "^4.4.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isfinite": "^3.3.2",
+    "lodash.isstring": "^4.0.1",
     "lodash.merge": "^4.6.1",
     "lodash.pick": "^4.4.0",
     "lodash.pickby": "^4.6.0",
