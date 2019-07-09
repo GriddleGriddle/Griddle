@@ -1,7 +1,7 @@
-import merge from 'lodash/merge';
-import pickBy from 'lodash/pickBy';
-import compact from 'lodash/compact';
-import flatten from 'lodash/flatten';
+import merge from 'lodash.merge';
+import pickBy from 'lodash.pickby';
+import compact from 'lodash.compact';
+import flatten from 'lodash.flatten';
 import {
   buildGriddleReducer,
   buildGriddleComponents

@@ -1,10 +1,12 @@
 import Immutable from 'immutable';
 import { createSelector, createSelectorCreator, defaultMemoize } from 'reselect';
-import _ from 'lodash';
+import isEqual from 'lodash.isequal';
+import isFinite from 'lodash.isfinite';
+import union from 'lodash.union';
 
 const createDeepEqualSelector = createSelectorCreator(
   defaultMemoize,
-  _.isEqual,
+  isEqual,
 )
 
 import MAX_SAFE_INTEGER from 'max-safe-integer'
@@ -43,7 +45,7 @@ export const maxPageSelector = createSelector(
 
     const result =  calc > Math.floor(calc) ? Math.floor(calc) + 1 : Math.floor(calc);
 
-    return _.isFinite(result) ? result : 1;
+    return isFinite(result) ? result : 1;
   }
 );
 
@@ -76,7 +78,7 @@ export const allColumnsSelector = createSelector(
       Object.keys(renderProperties.get('columnProperties').toJSON()) :
       [];
 
-    return _.union(dataColumns, columnPropertyColumns);
+    return union(dataColumns, columnPropertyColumns);
   }
 );
 
