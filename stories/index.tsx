@@ -127,7 +127,7 @@ storiesOf('Griddle main', module)
         n: state.get('n'),
         addTen: state.get('addTen')
       }),
-      () => {}
+      () => { }
     )(({ n, addTen }) => (
       <div>
         <p>
@@ -181,7 +181,7 @@ storiesOf('Griddle main', module)
     class DeferredGriddle extends React.Component<
       GriddleProps<FakeData>,
       { data?: FakeData[] }
-    > {
+      > {
       private timeout;
 
       constructor(props) {
@@ -361,7 +361,7 @@ storiesOf('Griddle main', module)
         setSortProperties: sortProperties => {
           const { columnId } = sortProperties;
           if (columnsWithSortDisabled.findIndex(c => c === columnId) >= 0) {
-            return () => {};
+            return () => { };
           }
 
           return setSortProperties(sortProperties);
@@ -1406,7 +1406,7 @@ storiesOf('Redux', module)
     ];
     const SomePage = props => (
       <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+        <Griddle data={props.data} plugins={plugins} />
         Component outside of Griddle that's sharing state
         <CustomFilterConnectedComponent />
       </div>
@@ -1416,10 +1416,10 @@ storiesOf('Redux', module)
       data: !state.searchString
         ? state.data
         : state.data.filter(r =>
-            Object.keys(r).some(
-              k => r[k] && r[k].toString().indexOf(state.searchString) > -1
-            )
+          Object.keys(r).some(
+            k => r[k] && r[k].toString().indexOf(state.searchString) > -1
           )
+        )
     }))(SomePage);
 
     testStore.dispatch({ type: 'SET_DATA', data: fakeData });
@@ -1540,7 +1540,7 @@ storiesOf('Redux', module)
     );
   })
   .add(
-    'with custom storeKey and child connected to another Redux store',
+    'with child connected to another Redux store',
     () => {
       // basically the demo redux stuff
       const countSelector = state => state.count;
@@ -1587,7 +1587,6 @@ storiesOf('Redux', module)
               <Griddle
                 data={fakeData}
                 plugins={[LocalPlugin]}
-                storeKey="griddleStore"
               >
                 <RowDefinition>
                   <ColumnDefinition id="name" />
