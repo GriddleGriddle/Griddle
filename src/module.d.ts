@@ -4,14 +4,14 @@ import { connect as originalConnect } from 'react-redux';
 import { ActionCreator, Middleware } from 'redux';
 
 interface PropertyBag<T> {
-    [propName: string]: T;
+  [propName: string]: T;
 }
 
 type GriddleComponent<T> = React.ComponentClass<T> | React.StatelessComponent<T>;
 
 export namespace components {
 
-export interface RowDefinitionProps {
+  export interface RowDefinitionProps {
     //The column value that should be used as the key for the row
     //if this is not set it will make one up (not efficient)
     rowKey?: string;
@@ -25,12 +25,12 @@ export interface RowDefinitionProps {
 
     // Allow custom plugin props
     [x: string]: any,
-}
+  }
 
-export class RowDefinition extends React.Component<RowDefinitionProps, any> {
-}
+  export class RowDefinition extends React.Component<RowDefinitionProps, any> {
+  }
 
-export interface ColumnDefinitionProps {
+  export interface ColumnDefinitionProps {
     //The name of the column that this definition applies to.
     id: string,
 
@@ -73,7 +73,7 @@ export interface ColumnDefinitionProps {
     extraData?: any,
 
     //The width of this column -- this is string so things like % can be specified
-    width?: number|string,
+    width?: number | string,
 
     // TODO: Unused?
     //The number of cells this column should extend. Default is 1.
@@ -87,12 +87,12 @@ export interface ColumnDefinitionProps {
 
     // Allow custom plugin props
     [x: string]: any,
-}
+  }
 
-export class ColumnDefinition extends React.Component<ColumnDefinitionProps, any> {
-}
+  export class ColumnDefinition extends React.Component<ColumnDefinitionProps, any> {
+  }
 
-export interface CellProps {
+  export interface CellProps {
     griddleKey?: number;
     columnId?: string;
     value?: any;
@@ -101,12 +101,12 @@ export interface CellProps {
     onMouseLeave?: React.MouseEventHandler<Element>;
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class Cell extends React.Component<CellProps, any> {
-}
+  class Cell extends React.Component<CellProps, any> {
+  }
 
-export interface RowProps {
+  export interface RowProps {
     Cell?: any;
     griddleKey?: string;
     columnIds?: number[];
@@ -115,41 +115,41 @@ export interface RowProps {
     onMouseLeave?: React.MouseEventHandler<Element>;
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class Row extends React.Component<RowProps, any> {
-}
+  class Row extends React.Component<RowProps, any> {
+  }
 
-export interface TableProps {
+  export interface TableProps {
     visibleRows?: number,
     TableHeading?: any,
     TableBody?: any,
     NoResults?: any,
-}
+  }
 
-class Table extends React.Component<TableProps, any> {
-}
+  class Table extends React.Component<TableProps, any> {
+  }
 
-export interface TableBodyProps {
+  export interface TableBodyProps {
     rowIds?: number[];
     Row?: any;
     style?: React.CSSProperties;
     className?: string;
-}
+  }
 
-class TableBody extends React.Component<TableBodyProps, any> {
-}
+  class TableBody extends React.Component<TableBodyProps, any> {
+  }
 
-export interface TableHeadingProps {
+  export interface TableHeadingProps {
     columnIds?: number[];
     columnTitles?: string[];
     TableHeadingCell: any;
-}
+  }
 
-class TableHeading extends React.Component<TableHeadingProps, any> {
-}
+  class TableHeading extends React.Component<TableHeadingProps, any> {
+  }
 
-export interface TableHeadingCellProps {
+  export interface TableHeadingCellProps {
     title?: string;
     columnId?: number;
     onClick?: React.MouseEventHandler<Element>;
@@ -158,213 +158,213 @@ export interface TableHeadingCellProps {
     icon?: any;
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class TableHeadingCell extends React.Component<TableHeadingCellProps, any> {
-}
+  class TableHeadingCell extends React.Component<TableHeadingCellProps, any> {
+  }
 
-const TableContainer: (OriginalComponent: any) => any;
+  const TableContainer: (OriginalComponent: any) => any;
 
-export interface SettingsWrapperProps {
+  export interface SettingsWrapperProps {
     SettingsToggle?: GriddleComponent<SettingsToggleProps>;
     Settings?: GriddleComponent<SettingsProps>;
     isEnabled?: boolean;
     isVisible?: boolean;
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class SettingsWrapper extends React.Component<SettingsWrapperProps, any> {
-}
+  class SettingsWrapper extends React.Component<SettingsWrapperProps, any> {
+  }
 
-const SettingsWrapperContainer: (OriginalComponent: any) => any;
+  const SettingsWrapperContainer: (OriginalComponent: any) => any;
 
-export interface SettingsToggleProps {
+  export interface SettingsToggleProps {
     onClick?: React.MouseEventHandler<Element>;
     text?: any;
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class SettingsToggle extends React.Component<SettingsToggleProps, any> {
-}
+  class SettingsToggle extends React.Component<SettingsToggleProps, any> {
+  }
 
-const SettingsToggleContainer: (OriginalComponent: any) => any;
+  const SettingsToggleContainer: (OriginalComponent: any) => any;
 
-export interface SettingsProps {
+  export interface SettingsProps {
     settingsComponents?: GriddleComponent<any>[];
     className?: string;
     style?: React.CSSProperties;
-}
+  }
 
-class Settings extends React.Component<SettingsProps, any> {
-}
+  class Settings extends React.Component<SettingsProps, any> {
+  }
 
-const SettingsContainer: (OriginalComponent: any) => any;
+  const SettingsContainer: (OriginalComponent: any) => any;
 
-const SettingsComponents: PropertyBag<GriddleComponent<any>>;
+  const SettingsComponents: PropertyBag<GriddleComponent<any>>;
 
-export interface FilterProps {
+  export interface FilterProps {
     setFilter?: (filter: GriddleFilter) => void;
     placeholder?: string;
     className?: string;
     style?: React.CSSProperties;
 
     [x: string]: any;
-}
+  }
 
-class Filter extends React.Component<FilterProps, any> {
-}
+  class Filter extends React.Component<FilterProps, any> {
+  }
 
 } // namespace components
 
 export interface GriddleComponents {
-    Layout?: GriddleComponent<any>;
-    LayoutEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    LayoutContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    LayoutContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  Layout?: GriddleComponent<any>;
+  LayoutEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  LayoutContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  LayoutContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    Style?: GriddleComponent<any>;
-    StyleEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    StyleContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    StyleContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  Style?: GriddleComponent<any>;
+  StyleEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  StyleContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  StyleContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    Filter?: GriddleComponent<components.FilterProps>;
-    FilterEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
-    FilterContainer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
-    FilterContainerEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
+  Filter?: GriddleComponent<components.FilterProps>;
+  FilterEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
+  FilterContainer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
+  FilterContainerEnhancer?: (OriginalComponent: GriddleComponent<components.FilterProps>) => GriddleComponent<components.FilterProps>;
 
-    SettingsWrapper?: GriddleComponent<components.SettingsWrapperProps>;
-    SettingsWrapperEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
-    SettingsWrapperContainer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
-    SettingsWrapperContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+  SettingsWrapper?: GriddleComponent<components.SettingsWrapperProps>;
+  SettingsWrapperEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+  SettingsWrapperContainer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
+  SettingsWrapperContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsWrapperProps>) => GriddleComponent<components.SettingsWrapperProps>;
 
-    SettingsToggle?: GriddleComponent<components.SettingsToggleProps>;
-    SettingsToggleEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
-    SettingsToggleContainer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
-    SettingsToggleContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+  SettingsToggle?: GriddleComponent<components.SettingsToggleProps>;
+  SettingsToggleEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+  SettingsToggleContainer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
+  SettingsToggleContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsToggleProps>) => GriddleComponent<components.SettingsToggleProps>;
 
-    Settings?: GriddleComponent<components.SettingsProps>;
-    SettingsEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
-    SettingsContainer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
-    SettingsContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+  Settings?: GriddleComponent<components.SettingsProps>;
+  SettingsEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+  SettingsContainer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
+  SettingsContainerEnhancer?: (OriginalComponent: GriddleComponent<components.SettingsProps>) => GriddleComponent<components.SettingsProps>;
 
-    SettingsComponents?: PropertyBag<GriddleComponent<any>>;
+  SettingsComponents?: PropertyBag<GriddleComponent<any>>;
 
-    Table?: GriddleComponent<components.TableProps>;
-    TableEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
-    TableContainer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
-    TableContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+  Table?: GriddleComponent<components.TableProps>;
+  TableEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+  TableContainer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
+  TableContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableProps>) => GriddleComponent<components.TableProps>;
 
-    TableHeading?: GriddleComponent<components.TableHeadingProps>;
-    TableHeadingEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
-    TableHeadingContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
-    TableHeadingContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+  TableHeading?: GriddleComponent<components.TableHeadingProps>;
+  TableHeadingEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+  TableHeadingContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
+  TableHeadingContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingProps>) => GriddleComponent<components.TableHeadingProps>;
 
-    TableHeadingCell?: GriddleComponent<components.TableHeadingCellProps>;
-    TableHeadingCellEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
-    TableHeadingCellContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
-    TableHeadingCellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+  TableHeadingCell?: GriddleComponent<components.TableHeadingCellProps>;
+  TableHeadingCellEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+  TableHeadingCellContainer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
+  TableHeadingCellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableHeadingCellProps>) => GriddleComponent<components.TableHeadingCellProps>;
 
-    TableBody?: GriddleComponent<components.TableBodyProps>;
-    TableBodyEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
-    TableBodyContainer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
-    TableBodyContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+  TableBody?: GriddleComponent<components.TableBodyProps>;
+  TableBodyEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+  TableBodyContainer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
+  TableBodyContainerEnhancer?: (OriginalComponent: GriddleComponent<components.TableBodyProps>) => GriddleComponent<components.TableBodyProps>;
 
-    Row?: GriddleComponent<components.RowProps>;
-    RowEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
-    RowContainer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
-    RowContainerEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+  Row?: GriddleComponent<components.RowProps>;
+  RowEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+  RowContainer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
+  RowContainerEnhancer?: (OriginalComponent: GriddleComponent<components.RowProps>) => GriddleComponent<components.RowProps>;
 
-    Cell?: GriddleComponent<components.CellProps>;
-    CellEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
-    CellContainer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
-    CellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+  Cell?: GriddleComponent<components.CellProps>;
+  CellEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+  CellContainer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
+  CellContainerEnhancer?: (OriginalComponent: GriddleComponent<components.CellProps>) => GriddleComponent<components.CellProps>;
 
-    NoResults?: GriddleComponent<any>;
-    NoResultsEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    NoResultsContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    NoResultsContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NoResults?: GriddleComponent<any>;
+  NoResultsEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NoResultsContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NoResultsContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    Pagination?: GriddleComponent<any>;
-    PaginationEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PaginationContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PaginationContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  Pagination?: GriddleComponent<any>;
+  PaginationEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PaginationContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PaginationContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    NextButton?: GriddleComponent<any>;
-    NextButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    NextButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    NextButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NextButton?: GriddleComponent<any>;
+  NextButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NextButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  NextButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    PageDropdown?: GriddleComponent<any>;
-    PageDropdownEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PageDropdownContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PageDropdownContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PageDropdown?: GriddleComponent<any>;
+  PageDropdownEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PageDropdownContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PageDropdownContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 
-    PreviousButton?: GriddleComponent<any>;
-    PreviousButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PreviousButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
-    PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PreviousButton?: GriddleComponent<any>;
+  PreviousButtonEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PreviousButtonContainer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
+  PreviousButtonContainerEnhancer?: (OriginalComponent: GriddleComponent<any>) => GriddleComponent<any>;
 }
 
 export type RowFilter = (row: any, index: number, data: Immutable.List<any>) => boolean;
 export type GriddleFilter = string | RowFilter | PropertyBag<string | RowFilter>;
 
 export interface GriddleActions extends PropertyBag<ActionCreator<any> | undefined> {
-    onSort?: (sortProperties: any) => void;
-    onNext?: () => void;
-    onPrevious?: () => void;
-    onGetPage?: (pageNumber: number) => void;
-    setFilter?: (filter: GriddleFilter) => void;
+  onSort?: (sortProperties: any) => void;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  onGetPage?: (pageNumber: number) => void;
+  setFilter?: (filter: GriddleFilter) => void;
 }
 
 export interface GriddleEvents extends GriddleActions {
-    onFilter?: (filterText: string) => void;
-    setSortProperties?: (sortProperties: utils.SortProperties) => () => void;
+  onFilter?: (filterText: string) => void;
+  setSortProperties?: (sortProperties: utils.SortProperties) => () => void;
 }
 
 export interface GriddleSortKey {
-    id: string;
-    sortAscending: boolean;
+  id: string;
+  sortAscending: boolean;
 }
 
 export interface GriddleStyleElements<T> {
-    Cell?: T;
-    Filter?: T;
-    Layout?: T;
-    Loading?: T;
-    NextButton?: T;
-    NoResults?: T;
-    PageDropdown?: T;
-    Pagination?: T;
-    PreviousButton?: T;
-    Row?: T;
-    RowDefinition?: T;
-    Settings?: T;
-    SettingsToggle?: T;
-    Table?: T;
-    TableBody?: T;
-    TableHeading?: T;
-    TableHeadingCell?: T;
-    TableHeadingCellAscending?: T;
-    TableHeadingCellDescending?: T;
+  Cell?: T;
+  Filter?: T;
+  Layout?: T;
+  Loading?: T;
+  NextButton?: T;
+  NoResults?: T;
+  PageDropdown?: T;
+  Pagination?: T;
+  PreviousButton?: T;
+  Row?: T;
+  RowDefinition?: T;
+  Settings?: T;
+  SettingsToggle?: T;
+  Table?: T;
+  TableBody?: T;
+  TableHeading?: T;
+  TableHeadingCell?: T;
+  TableHeadingCellAscending?: T;
+  TableHeadingCellDescending?: T;
 }
 
 export interface GriddleStyleIcons {
-    sortAscendingIcon?: any;
-    sortDescendingIcon?: any;
+  sortAscendingIcon?: any;
+  sortDescendingIcon?: any;
 }
 
 export interface GriddleStyleConfig {
-    classNames?: GriddleStyleElements<string>;
-    icons?: GriddleStyleElements<GriddleStyleIcons>;
-    styles?: GriddleStyleElements<React.CSSProperties>;
+  classNames?: GriddleStyleElements<string>;
+  icons?: GriddleStyleElements<GriddleStyleIcons>;
+  styles?: GriddleStyleElements<React.CSSProperties>;
 }
 
 export interface GriddlePageProperties {
-    currentPage?: number;
-    pageSize?: number;
-    recordCount?: number;
+  currentPage?: number;
+  pageSize?: number;
+  recordCount?: number;
 }
 
 interface RowRenderProperties extends components.RowDefinitionProps {
@@ -374,8 +374,8 @@ interface ColumnRenderProperties extends components.ColumnDefinitionProps {
 }
 
 export interface GriddleRenderProperties {
-    rowProperties?: RowRenderProperties;
-    columnProperties?: PropertyBag<ColumnRenderProperties>;
+  rowProperties?: RowRenderProperties;
+  columnProperties?: PropertyBag<ColumnRenderProperties>;
 }
 
 type Reducer = (state: any, action?: any) => void;
@@ -383,50 +383,48 @@ type Selector = (state: any, props?: any) => any;
 type Listener = (prevState: any, nextState: any, otherArgs?: any) => any;
 
 interface SettingsComponentObject {
-    order: number;
-    component?: GriddleComponent<any>;
+  order: number;
+  component?: GriddleComponent<any>;
 }
 
 interface GriddleExtensibility {
-    components?: GriddleComponents,
-    events?: GriddleEvents;
-    reducer?: PropertyBag<Reducer>,
-    renderProperties?: GriddleRenderProperties;
-    selectors?: PropertyBag<Selector>,
-    settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
-    styleConfig?: GriddleStyleConfig,
-    listeners?: PropertyBag<Listener>,
+  components?: GriddleComponents,
+  events?: GriddleEvents;
+  reducer?: PropertyBag<Reducer>,
+  renderProperties?: GriddleRenderProperties;
+  selectors?: PropertyBag<Selector>,
+  settingsComponentObjects?: PropertyBag<SettingsComponentObject>,
+  styleConfig?: GriddleStyleConfig,
+  listeners?: PropertyBag<Listener>,
 }
 
 interface GriddleInitialState {
-    enableSettings?: boolean;
-    pageProperties?: GriddlePageProperties;
-    sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
-    sortProperties?: GriddleSortKey[];
-    textProperties?: {
-      next?: string,
-      previous?: string,
-      settingsToggle?: string,
-      filterPlaceholder?: string,
-    }
+  enableSettings?: boolean;
+  pageProperties?: GriddlePageProperties;
+  sortMethod?: (data: any[], column: string, sortAscending?: boolean) => number;
+  sortProperties?: GriddleSortKey[];
+  textProperties?: {
+    next?: string,
+    previous?: string,
+    settingsToggle?: string,
+    filterPlaceholder?: string,
+  }
 
-    [x: string]: any;
+  [x: string]: any;
 }
 
 export interface GriddlePlugin extends GriddleExtensibility {
-    initialState?: GriddleInitialState;
-    reduxMiddleware?: Middleware[];
+  initialState?: GriddleInitialState;
+  reduxMiddleware?: Middleware[];
 }
 
 export interface GriddleProps<T> extends GriddlePlugin, GriddleInitialState {
-    core?: GriddlePlugin;
-    plugins?: GriddlePlugin[];
-    data?: T[];
-    storeKey?: string;
+  core?: GriddlePlugin;
+  plugins?: GriddlePlugin[];
+  data?: T[];
 }
 
 declare class Griddle<T> extends React.Component<GriddleProps<T>, any> {
-  static storeKey: string;
 }
 
 export const actions: GriddleActions;
@@ -437,61 +435,61 @@ export const selectors: PropertyBag<Selector>;
 
 export const settingsComponentObjects: PropertyBag<SettingsComponentObject>;
 
-export const connect : typeof originalConnect;
+export const connect: typeof originalConnect;
 
 export namespace utils {
-    const columnUtils: PropertyBag<Function>;
-    const compositionUtils: PropertyBag<Function>;
-    const dataUtils: PropertyBag<Function>;
-    const rowUtils: PropertyBag<Function>;
+  const columnUtils: PropertyBag<Function>;
+  const compositionUtils: PropertyBag<Function>;
+  const dataUtils: PropertyBag<Function>;
+  const rowUtils: PropertyBag<Function>;
 
-    const connect : typeof originalConnect;
+  const connect: typeof originalConnect;
 
-    interface SortProperties{
-      setSortColumn(sortProperties: ((key : GriddleSortKey) => void)) : void;
-      sortProperty: GriddleSortKey;
-      columnId: string;
-    }
+  interface SortProperties {
+    setSortColumn(sortProperties: ((key: GriddleSortKey) => void)): void;
+    sortProperty: GriddleSortKey;
+    columnId: string;
+  }
 
-    namespace sortUtils {
-      function defaultSort(data: any[], column: string, sortAscending?: boolean) : number;
-      function setSortProperties(sortProperties: SortProperties) : () => void;
-    }
+  namespace sortUtils {
+    function defaultSort(data: any[], column: string, sortAscending?: boolean): number;
+    function setSortProperties(sortProperties: SortProperties): () => void;
+  }
 }
 
 export namespace plugins {
-    var CorePlugin : GriddlePlugin;
+  var CorePlugin: GriddlePlugin;
 
-    var LegacyStylePlugin : GriddlePlugin;
+  var LegacyStylePlugin: GriddlePlugin;
 
-    var LocalPlugin : GriddlePlugin;
+  var LocalPlugin: GriddlePlugin;
 
-    interface PositionSettings {
-        // The height of the table
-        tableHeight?: number|string;
+  interface PositionSettings {
+    // The height of the table
+    tableHeight?: number | string;
 
-        // The width of the table
-        tableWidth?: number|string;
+    // The width of the table
+    tableWidth?: number | string;
 
-        // The minimum row height
-        rowHeight?: number|string;
+    // The minimum row height
+    rowHeight?: number | string;
 
-        // TODO: Unused?
-        // The minimum column width
-        defaultColumnWidth?: number|string;
+    // TODO: Unused?
+    // The minimum column width
+    defaultColumnWidth?: number | string;
 
-        // TODO: Unused?
-        // Whether or not the header should be fixed
-        fixedHeader?: boolean;
+    // TODO: Unused?
+    // Whether or not the header should be fixed
+    fixedHeader?: boolean;
 
-        // TODO: Unused?
-        // Disable pointer events while scrolling to improve performance
-        disablePointerEvents?: boolean;
-    }
-    var PositionPlugin : (settings: PositionSettings) => GriddlePlugin;
+    // TODO: Unused?
+    // Disable pointer events while scrolling to improve performance
+    disablePointerEvents?: boolean;
+  }
+  var PositionPlugin: (settings: PositionSettings) => GriddlePlugin;
 }
 
-export const ColumnDefinition : typeof components.ColumnDefinition;
-export const RowDefinition : typeof components.RowDefinition;
+export const ColumnDefinition: typeof components.ColumnDefinition;
+export const RowDefinition: typeof components.RowDefinition;
 
 export default Griddle;
