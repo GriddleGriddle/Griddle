@@ -914,6 +914,29 @@ storiesOf('Griddle main', module)
       </Griddle>
     );
   })
+  .add('with virtual scrolling and tall rows', () => {
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        name: 'asdasd asdasd asdasd '.repeat(4 + 3 * Math.random()),
+        age: 18 + Math.floor(Math.random() * 70),
+        active: 'false',
+        action: 'action',
+        address: 'asdasd asdasd asdasd '.repeat(6 + 2 * Math.random()),
+      });
+    }
+    return (
+      <Griddle data={data} plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}>
+        <RowDefinition>
+          <ColumnDefinition id="name" width={400} filterable />
+          <ColumnDefinition id="age" />
+          <ColumnDefinition id="active" />
+          <ColumnDefinition id="action" />
+          <ColumnDefinition id="address" width={400} filterable />
+        </RowDefinition>
+      </Griddle>
+    )
+  })
   .add('set fakeData to constructed Objects', () => {
     type Griddle = new () => GenericGriddle<person>;
     const Griddle = (GenericGriddle as unknown) as Griddle;
