@@ -57,6 +57,7 @@ return (
           <input
             type="checkbox"
             name={hiddenColumns[v].id}
+            id={hiddenColumns[v].id}
             onChange={onToggle}
             defaultChecked={false}
           />
