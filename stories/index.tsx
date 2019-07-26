@@ -848,13 +848,13 @@ storiesOf('Griddle main', module)
           margin: '10px 0 10px 0'
         }}
       >
-        <h1>{rowData.name}</h1>
+        <h1>{rowData['name']}</h1>
         <ul>
           <li>
-            <strong>State</strong>: {rowData.state}
+            <strong>State</strong>: {rowData['state']}
           </li>
           <li>
-            <strong>Company</strong>: {rowData.company}
+            <strong>Company</strong>: {rowData['company']}
           </li>
         </ul>
       </div>
@@ -1406,7 +1406,7 @@ storiesOf('Redux', module)
     ];
     const SomePage = props => (
       <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+        <Griddle data={props.data} plugins={plugins} />
         Component outside of Griddle that's sharing state
         <CustomFilterConnectedComponent />
       </div>
@@ -1587,7 +1587,6 @@ storiesOf('Redux', module)
               <Griddle
                 data={fakeData}
                 plugins={[LocalPlugin]}
-                storeKey="griddleStore"
               >
                 <RowDefinition>
                   <ColumnDefinition id="name" />
