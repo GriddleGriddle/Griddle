@@ -22,13 +22,17 @@ export const mergeConnectParametersWithOptions = (
   ];
 };
 
-const griddleConnect = (...connectOptions) => (OriginalComponent) =>
+const griddleConnect = (...connectOptions) => OriginalComponent =>
   class extends React.Component {
-    static contextTypes = {};
+    static contextTypes = {
+      storeKey: PropTypes.string
+    };
 
     constructor(props, context) {
       super(props, context);
-      const newOptions = mergeConnectParametersWithOptions(connectOptions, {});
+      const newOptions = mergeConnectParametersWithOptions(connectOptions, {
+        storeKey: context.storeKey
+      });
       this.ConnectedComponent = connect(...newOptions)(OriginalComponent);
     }
 
