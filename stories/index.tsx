@@ -848,13 +848,13 @@ storiesOf('Griddle main', module)
           margin: '10px 0 10px 0'
         }}
       >
-        <h1>{rowData.name}</h1>
+        <h1>{rowData["name"]}</h1>
         <ul>
           <li>
-            <strong>State</strong>: {rowData.state}
+            <strong>State</strong>: {rowData["state"]}
           </li>
           <li>
-            <strong>Company</strong>: {rowData.company}
+            <strong>Company</strong>: {rowData["company"]}
           </li>
         </ul>
       </div>
@@ -1406,7 +1406,7 @@ storiesOf('Redux', module)
     ];
     const SomePage = props => (
       <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+        <Griddle data={props.data} plugins={plugins} />
         Component outside of Griddle that's sharing state
         <CustomFilterConnectedComponent />
       </div>
@@ -1539,73 +1539,72 @@ storiesOf('Redux', module)
       />
     );
   })
-  .add(
-    'with custom storeKey and child connected to another Redux store',
-    () => {
-      // basically the demo redux stuff
-      const countSelector = state => state.count;
+  // .add(
+  //   'with custom storeKey and child connected to another Redux store',
+  //   () => {
+  //     // basically the demo redux stuff
+  //     const countSelector = state => state.count;
 
-      const CountComponent = props => (
-        <div>
-          <button type="button" onClick={props.increment}>
-            +
-          </button>
-          <input
-            value={props.count}
-            readOnly
-            style={{ width: '2em', textAlign: 'center' }}
-          />
-          <button type="button" onClick={props.decrement}>
-            −
-          </button>
-        </div>
-      );
+  //     const CountComponent = props => (
+  //       <div>
+  //         <button type="button" onClick={props.increment}>
+  //           +
+  //         </button>
+  //         <input
+  //           value={props.count}
+  //           readOnly
+  //           style={{ width: '2em', textAlign: 'center' }}
+  //         />
+  //         <button type="button" onClick={props.decrement}>
+  //           −
+  //         </button>
+  //       </div>
+  //     );
 
-      // should get count from other store
-      const ConnectedComponent = reduxConnect(
-        state => ({
-          count: countSelector(state)
-        }),
-        dispatch => ({
-          increment: () => {
-            dispatch({
-              type: 'INCREMENT'
-            });
-          },
-          decrement: () => {
-            dispatch({
-              type: 'DECREMENT'
-            });
-          }
-        })
-      )(CountComponent);
+  //     // should get count from other store
+  //     const ConnectedComponent = reduxConnect(
+  //       state => ({
+  //         count: countSelector(state)
+  //       }),
+  //       dispatch => ({
+  //         increment: () => {
+  //           dispatch({
+  //             type: 'INCREMENT'
+  //           });
+  //         },
+  //         decrement: () => {
+  //           dispatch({
+  //             type: 'DECREMENT'
+  //           });
+  //         }
+  //       })
+  //     )(CountComponent);
 
-      return (
-        <div>
-          <Provider store={testStore}>
-            <div>
-              <Griddle
-                data={fakeData}
-                plugins={[LocalPlugin]}
-                storeKey="griddleStore"
-              >
-                <RowDefinition>
-                  <ColumnDefinition id="name" />
-                  <ColumnDefinition id="state" />
-                  <ColumnDefinition
-                    id="customCount"
-                    customComponent={ConnectedComponent}
-                  />
-                </RowDefinition>
-              </Griddle>
-              Component outside of Griddle that's sharing state
-              <ConnectedComponent />
-            </div>
-          </Provider>
-        </div>
-      );
-    }
-  );
+  //     return (
+  //       <div>
+  //         <Provider store={testStore}>
+  //           <div>
+  //             <Griddle
+  //               data={fakeData}
+  //               plugins={[LocalPlugin]}
+  //             >
+  //               <RowDefinition>
+  //                 <ColumnDefinition id="name" />
+  //                 <ColumnDefinition id="state" />
+  //                 <ColumnDefinition
+  //                   id="customCount"
+  //                   customComponent={ConnectedComponent}
+  //                 />
+  //               </RowDefinition>
+  //             </Griddle>
+  //             Component outside of Griddle that's sharing state
+  //             <ConnectedComponent />
+  //           </div>
+  //         </Provider>
+  //       </div>
+  //     );
+  //   }
+  // );
 storiesOf('Row', module)
   .add('base row', () => {
     const columnIds = [1, 2, 3];

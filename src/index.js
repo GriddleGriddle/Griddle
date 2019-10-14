@@ -1,11 +1,5 @@
-import {
-  createStore,
-  combineReducers,
-  bindActionCreators,
-  applyMiddleware,
-  compose
-} from 'redux';
-import { createProvider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import forIn from 'lodash.forin';
@@ -22,14 +16,13 @@ class Griddle extends Component {
     settingsComponentObjects: PropTypes.object,
     events: PropTypes.object,
     selectors: PropTypes.object,
-    storeKey: PropTypes.string,
     storeListener: PropTypes.object
   };
 
   constructor(props) {
     super(props);
 
-    const { core = corePlugin, storeKey = Griddle.storeKey || 'store' } = props;
+    const { core = corePlugin } = props;
 
     const { initialState, reducer, reduxMiddleware } = init.call(this, core);
 
@@ -42,8 +35,6 @@ class Griddle extends Component {
       initialState,
       composeEnhancers(applyMiddleware(...reduxMiddleware))
     );
-
-    this.provider = createProvider(storeKey);
 
     this.storeListener = new StoreListener(this.store);
     forIn(this.listeners, (listener, name) => {
@@ -71,17 +62,12 @@ class Griddle extends Component {
     return false;
   }
 
-  getStoreKey = () => {
-    return this.props.storeKey || Griddle.storeKey || 'store';
-  };
-
   getChildContext() {
     return {
       components: this.components,
       settingsComponentObjects: this.settingsComponentObjects,
       events: this.events,
       selectors: this.selectors,
-      storeKey: this.getStoreKey(),
       storeListener: this.storeListener
     };
   }
@@ -92,13 +78,11 @@ class Griddle extends Component {
     }
 
     return (
-      <this.provider store={this.store}>
+      <Provider store={this.store}>
         <this.components.Layout />
-      </this.provider>
+      </Provider>
     );
   }
 }
-
-Griddle.storeKey = 'store';
 
 export default Griddle;
