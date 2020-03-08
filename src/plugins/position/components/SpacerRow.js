@@ -1,53 +1,51 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../../../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
-import withHandlers from 'recompose/withHandlers';
+import GriddleContext from '../../../context/GriddleContext';
 
 const spacerRow = compose(
-  getContext({
-    selectors: PropTypes.object,
-  }),
   connect((state, props) => {
-    const { topSpacerSelector, bottomSpacerSelector } = props.selectors;
+    const griddleContext = useContext(GriddleContext);
+    const { topSpacerSelector, bottomSpacerSelector } = griddleContext.selectors;
     const { placement } = props;
 
     return {
-      spacerHeight: placement === 'top' ? topSpacerSelector(state, props) : bottomSpacerSelector(state, props),
+      spacerHeight:
+        placement === 'top' ? topSpacerSelector(state, props) : bottomSpacerSelector(state, props)
     };
   }),
-  mapProps(props => ({
+  mapProps((props) => ({
     placement: props.placement,
-    spacerHeight: props.spacerHeight,
+    spacerHeight: props.spacerHeight
   }))
-)(class extends Component {
-  static propTypes = {
-    placement: PropTypes.string,
-    spacerHeight: PropTypes.number,
-  }
-  static defaultProps = {
-    placement: 'top'
-  }
-
-  // shouldComponentUpdate(nextProps) {
-  //   const { currentPosition: oldPosition, placement: oldPlacement } = this.props;
-  //   const { currentPosition, placement } = nextProps;
-  //
-  //   return oldPosition !== currentPosition || oldPlacement !== placement;
-  // }
-
-  render() {
-    const { placement, spacerHeight } = this.props;
-    let spacerRowStyle = {
-      height: `${spacerHeight}px`,
+)(
+  class extends Component {
+    static propTypes = {
+      placement: PropTypes.string,
+      spacerHeight: PropTypes.number
+    };
+    static defaultProps = {
+      placement: 'top'
     };
 
-    return (
-      <tr key={placement + '-' + spacerHeight} style={spacerRowStyle}></tr>
-    );
+    // shouldComponentUpdate(nextProps) {
+    //   const { currentPosition: oldPosition, placement: oldPlacement } = this.props;
+    //   const { currentPosition, placement } = nextProps;
+    //
+    //   return oldPosition !== currentPosition || oldPlacement !== placement;
+    // }
+
+    render() {
+      const { placement, spacerHeight } = this.props;
+      let spacerRowStyle = {
+        height: `${spacerHeight}px`
+      };
+
+      return <tr key={placement + '-' + spacerHeight} style={spacerRowStyle}></tr>;
+    }
   }
-});
+);
 
 export default spacerRow;

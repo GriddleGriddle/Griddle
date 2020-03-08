@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
+import GriddleContext from '../context/GriddleContext';
 
-const enhance = OriginalComponent => compose(
-  getContext({
-    events: PropTypes.object
-  }),
-  mapProps(({ events: { onNext }, ...props }) => ({
-    ...props,
-    onClick: combineHandlers([onNext, props.onClick]),
-  }))
-)((props) => <OriginalComponent {...props} />);
+const enhance = (OriginalComponent) =>
+  mapProps((props) => {
+    const griddleContext = useContext(GriddleContext);
+    const { onNext } = griddleContext.events;
+    return {
+      ...props,
+      onClick: combineHandlers([onNext, props.onClick])
+    };
+  })((props) => <OriginalComponent {...props} />);
 
 export default enhance;

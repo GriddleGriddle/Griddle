@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 import { combineHandlers } from '../utils/compositionUtils';
+import GriddleContext from '../context/GriddleContext';
 
-const EnhancedFilter = OriginalComponent => compose(
-  getContext({
-    events: PropTypes.object
-  }),
-  mapProps(({ events: { onFilter }, ...props }) => ({
-    ...props,
-    setFilter: combineHandlers([onFilter, props.setFilter]),
-  }))
-)(props => <OriginalComponent {...props} />);
+const EnhancedFilter = (OriginalComponent) =>
+  mapProps((props) => {
+    const griddleContext = useContext(GriddleContext);
+    const { onFilter } = griddleContext.events;
+    return {
+      ...props,
+      setFilter: combineHandlers([onFilter, props.setFilter])
+    };
+  })((props) => <OriginalComponent {...props} />);
 
 export default EnhancedFilter;

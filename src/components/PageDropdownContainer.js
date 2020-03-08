@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
-import { currentPageSelector, maxPageSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  currentPageSelector,
+  maxPageSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
 
-const enhance = (
-  connect((state, props) => ({
-    maxPages: maxPageSelector(state, props),
-    currentPage: currentPageSelector(state, props),
-    className: classNamesForComponentSelector(state, 'PageDropdown'),
-    style: stylesForComponentSelector(state, 'PageDropdown'),
-  }))
-);
+const enhance = connect((state, props) => ({
+  maxPages: maxPageSelector(state, props),
+  currentPage: currentPageSelector(state, props),
+  className: classNamesForComponentSelector(state, 'PageDropdown'),
+  style: stylesForComponentSelector(state, 'PageDropdown')
+}));
 
 export default enhance;

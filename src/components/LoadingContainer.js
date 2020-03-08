@@ -1,29 +1,27 @@
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
+import GriddleContext from '../context/GriddleContext';
 
 const LoadingContainer = compose(
-  getContext({
-    components: PropTypes.object,
-  }),
-  connect(
-    state => ({
-      className: classNamesForComponentSelector(state, 'Loading'),
-      style: stylesForComponentSelector(state, 'Loading'),
-    })
-  ),
+  connect((state) => ({
+    className: classNamesForComponentSelector(state, 'Loading'),
+    style: stylesForComponentSelector(state, 'Loading')
+  })),
   mapProps((props) => {
-    const { components, ...otherProps } = props;
+    const griddleContext = useContext(GriddleContext);
     return {
-      Loading: components.Loading,
-      ...otherProps
+      Loading: griddleContext.components.Loading,
+      ...props
     };
   })
 );
 
 export default LoadingContainer;
-

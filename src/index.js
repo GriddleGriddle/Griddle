@@ -9,6 +9,7 @@ import corePlugin from './core';
 import init from './utils/initializer';
 import { StoreListener } from './utils/listenerUtils';
 import * as actions from './actions';
+import GriddleContext from './context/GriddleContext';
 
 class Griddle extends Component {
   static childContextTypes = {
@@ -27,9 +28,7 @@ class Griddle extends Component {
     const { initialState, reducer, reduxMiddleware } = init.call(this, core);
 
     const composeEnhancers =
-      (typeof window !== 'undefined' &&
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-      compose;
+      (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
     this.store = createStore(
       reducer,
       initialState,
@@ -73,14 +72,22 @@ class Griddle extends Component {
   }
 
   render() {
-    if (!this.components.Layout) {
-      return null;
-    }
-
     return (
-      <Provider store={this.store}>
-        <this.components.Layout />
-      </Provider>
+      <GriddleContext.Provider
+        value={{
+          components: this.components,
+          settingsComponentObjects: this.settingsComponentObjects,
+          events: this.events,
+          selectors: this.selectors,
+          storeListener: this.storeListener
+        }}
+      >
+        {this.components.Layout ? (
+          <Provider store={this.store}>
+            <this.components.Layout />
+          </Provider>
+        ) : null}
+      </GriddleContext.Provider>
     );
   }
 }

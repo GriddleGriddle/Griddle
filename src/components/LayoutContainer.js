@@ -1,35 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import getContext from 'recompose/getContext';
 import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
+import GriddleContext from '../context/GriddleContext';
 
-const EnhancedLayout = OriginalComponent => compose(
-  getContext({
-    components: PropTypes.object,
-  }),
-  connect(
-    (state, props) => ({
+const EnhancedLayout = (OriginalComponent) =>
+  compose(
+    connect((state, props) => ({
       className: classNamesForComponentSelector(state, 'Layout'),
-      style: stylesForComponentSelector(state, 'Layout'),
+      style: stylesForComponentSelector(state, 'Layout')
+    })),
+    mapProps((props) => {
+      const griddleContext = useContext(GriddleContext);
+      return {
+        Table: griddleContext.components.Table,
+        Pagination: griddleContext.components.Pagination,
+        Filter: griddleContext.components.Filter,
+        SettingsWrapper: griddleContext.components.SettingsWrapper,
+        Style: griddleContext.components.Style,
+        className: props.className,
+        style: props.style
+      };
     })
-  ),
-  mapProps( props => ({
-    Table: props.components.Table,
-    Pagination: props.components.Pagination,
-    Filter: props.components.Filter,
-    SettingsWrapper: props.components.SettingsWrapper,
-    Style: props.components.Style,
-    className: props.className,
-    style: props.style,
-  })),
-)(props => (
-  <OriginalComponent
-    {...props}
-  />
-));
+  )((props) => <OriginalComponent {...props} />);
 
 export default EnhancedLayout;
