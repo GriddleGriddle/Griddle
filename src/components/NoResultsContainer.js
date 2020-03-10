@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 
 import {
   classNamesForComponentSelector,
@@ -11,18 +9,18 @@ import {
 import GriddleContext from '../context/GriddleContext';
 
 const NoResultsContainer = (OriginalComponent) =>
-  compose(
-    connect((state) => ({
+  connect((state) =>
+    ({
       className: classNamesForComponentSelector(state, 'NoResults'),
       style: stylesForComponentSelector(state, 'NoResults')
-    })),
-    mapProps((props) => {
+    }((props) => {
       const griddleContext = React.useContext(GriddleContext);
-      return {
+      const noResultProps = {
         NoResults: griddleContext.components.NoResults,
         ...props
       };
-    })
-  )((props) => <OriginalComponent {...props} />);
+      return <OriginalComponent {...noResultProps} />;
+    }))
+  );
 
 export default NoResultsContainer;

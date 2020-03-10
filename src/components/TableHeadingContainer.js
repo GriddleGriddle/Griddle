@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 
 import {
   columnTitlesSelector,
@@ -13,20 +11,18 @@ import {
 import GriddleContext from '../context/GriddleContext';
 
 const ComposedContainerComponent = (OriginalComponent) =>
-  compose(
-    connect((state, props) => ({
-      columnTitles: columnTitlesSelector(state),
-      columnIds: columnIdsSelector(state),
-      className: classNamesForComponentSelector(state, 'TableHeading'),
-      style: stylesForComponentSelector(state, 'TableHeading')
-    })),
-    mapProps((props) => {
-      const griddleContext = useContext(GriddleContext);
-      return {
-        TableHeadingCell: griddleContext.components.TableHeadingCell,
-        ...props
-      };
-    })
-  )((props) => <OriginalComponent {...props} />);
+  connect((state, props) => ({
+    columnTitles: columnTitlesSelector(state),
+    columnIds: columnIdsSelector(state),
+    className: classNamesForComponentSelector(state, 'TableHeading'),
+    style: stylesForComponentSelector(state, 'TableHeading')
+  }))((props) => {
+    const griddleContext = useContext(GriddleContext);
+    const tableHeadingProps = {
+      TableHeadingCell: griddleContext.components.TableHeadingCell,
+      ...props
+    };
+    return <OriginalComponent {...tableHeadingProps} />;
+  });
 
 export default ComposedContainerComponent;

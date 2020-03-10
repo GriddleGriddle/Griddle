@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 
 import {
   classNamesForComponentSelector,
@@ -28,22 +26,20 @@ function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents
 }
 
 const EnhancedSettings = (OriginalComponent) =>
-  compose(
-    connect((state, props) => ({
-      className: classNamesForComponentSelector(state, 'Settings'),
-      style: stylesForComponentSelector(state, 'Settings')
-    })),
-    mapProps((props) => {
-      const griddleContext = useContext(GriddleContext);
-      const { components, settingsComponentObjects } = griddleContext;
-      return {
-        settingsComponents: getSettingsComponentsArrayFromObject(
-          settingsComponentObjects,
-          components.SettingsComponents
-        ),
-        ...props
-      };
-    })
-  )((props) => <OriginalComponent {...props} />);
+  connect((state, props) => ({
+    className: classNamesForComponentSelector(state, 'Settings'),
+    style: stylesForComponentSelector(state, 'Settings')
+  }))((props) => {
+    const griddleContext = useContext(GriddleContext);
+    const { components, settingsComponentObjects } = griddleContext;
+    const settingsProps = {
+      settingsComponents: getSettingsComponentsArrayFromObject(
+        settingsComponentObjects,
+        components.SettingsComponents
+      ),
+      ...props
+    };
+    return <OriginalComponent {...settingsProps} />;
+  });
 
 export default EnhancedSettings;

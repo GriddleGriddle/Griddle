@@ -1361,16 +1361,18 @@ storiesOf('Redux', module)
     );
   })
   .add('custom column chooser', () => {
-    const columnChooser = connect(
-      (state) => ({
-        columns: createSelector(selectors.sortedColumnPropertiesSelector, (colMap) => {
-          const columns = colMap.valueSeq().toJS();
-          return columns.filter((c) => !c.isMetadata);
-        })(state)
-      }),
-      {
-        toggleColumn: actions.toggleColumn
-      }
+    const columnChooser = compose(
+      connect(
+        (state) => ({
+          columns: createSelector(selectors.sortedColumnPropertiesSelector, (colMap) => {
+            const columns = colMap.valueSeq().toJS();
+            return columns.filter((c) => !c.isMetadata);
+          })(state)
+        }),
+        {
+          toggleColumn: actions.toggleColumn
+        }
+      )
     )(({ columns, toggleColumn }) => {
       const onToggle = (event) => {
         toggleColumn(event.target.name);
@@ -1417,13 +1419,15 @@ storiesOf('Redux', module)
   })
   .add('custom page size settings', () => {
     const pageSizeSettings = ({ pageSizes }) =>
-      connect(
-        (state) => ({
-          pageSize: selectors.pageSizeSelector(state)
-        }),
-        {
-          setPageSize: actions.setPageSize
-        }
+      compose(
+        connect(
+          (state) => ({
+            pageSize: selectors.pageSizeSelector(state)
+          }),
+          {
+            setPageSize: actions.setPageSize
+          }
+        )
       )(({ pageSize, setPageSize }) => {
         const onChange = (e) => {
           setPageSize(+e.target.value);

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import mapProps from 'recompose/mapProps';
-import compose from 'recompose/compose';
 
 import {
   customComponentSelector,
@@ -50,21 +48,19 @@ const mapStateToProps = () => {
 };
 
 const ComposedCellContainer = (OriginalComponent) =>
-  compose(
-    connect(mapStateToProps),
-    mapProps((props) => {
-      return {
-        ...props.cellProperties.extraData,
-        ...props,
-        className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
-        style: getCellStyles(props.cellProperties, props.style),
-        value: props.customComponent ? (
-          <props.customComponent {...props.cellProperties.extraData} {...props} />
-        ) : (
-          props.value
-        )
-      };
-    })
-  )((props) => <OriginalComponent {...props} />);
+  connect(mapStateToProps)((props) => {
+    const cellContainerProps = {
+      ...props.cellProperties.extraData,
+      ...props,
+      className: valueOrResult(props.cellProperties.cssClassName, props) || props.className,
+      style: getCellStyles(props.cellProperties, props.style),
+      value: props.customComponent ? (
+        <props.customComponent {...props.cellProperties.extraData} {...props} />
+      ) : (
+        props.value
+      )
+    };
+    return <OriginalComponent {...cellContainerProps} />;
+  });
 
 export default ComposedCellContainer;
