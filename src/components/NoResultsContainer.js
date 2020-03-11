@@ -6,21 +6,17 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
-import GriddleContext from '../context/GriddleContext';
 
 const NoResultsContainer = (OriginalComponent) =>
-  connect((state) =>
-    ({
-      className: classNamesForComponentSelector(state, 'NoResults'),
-      style: stylesForComponentSelector(state, 'NoResults')
-    }((props) => {
-      const griddleContext = React.useContext(GriddleContext);
-      const noResultProps = {
-        NoResults: griddleContext.components.NoResults,
-        ...props
-      };
-      return <OriginalComponent {...noResultProps} />;
-    }))
-  );
+  connect((state) => ({
+    className: classNamesForComponentSelector(state, 'NoResults'),
+    style: stylesForComponentSelector(state, 'NoResults')
+  }))((props) => {
+    const noResultsProps = {
+      NoResults: props.context.components.NoResults,
+      ...props
+    };
+    return <OriginalComponent {...noResultsProps} />;
+  });
 
 export default NoResultsContainer;

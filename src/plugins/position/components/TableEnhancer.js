@@ -1,19 +1,17 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../../../utils/griddleConnect';
 
 import { setScrollPosition } from '../actions';
-import GriddleContext from '../../../context/GriddleContext';
 
 const Table = (OriginalComponent) =>
   connect(
     (state, props) => {
-      const griddleContext = useContext(GriddleContext);
       const {
         tableHeightSelector,
         tableWidthSelector,
         rowHeightSelector
-      } = griddleContext.selectors;
+      } = props.context.selectors;
       return {
         TableHeight: tableHeightSelector(state),
         TableWidth: tableWidthSelector(state),

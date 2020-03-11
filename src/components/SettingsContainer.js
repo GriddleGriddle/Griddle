@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
 
@@ -6,7 +6,6 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
-import GriddleContext from '../context/GriddleContext';
 
 function getSettingsComponentsArrayFromObject(settingsObject, settingsComponents) {
   //TODO: determine if we need to make this faster
@@ -30,8 +29,7 @@ const EnhancedSettings = (OriginalComponent) =>
     className: classNamesForComponentSelector(state, 'Settings'),
     style: stylesForComponentSelector(state, 'Settings')
   }))((props) => {
-    const griddleContext = useContext(GriddleContext);
-    const { components, settingsComponentObjects } = griddleContext;
+    const { components, settingsComponentObjects } = props.context;
     const settingsProps = {
       settingsComponents: getSettingsComponentsArrayFromObject(
         settingsComponentObjects,

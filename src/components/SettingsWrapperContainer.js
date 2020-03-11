@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
 
@@ -8,7 +8,6 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
-import GriddleContext from '../context/GriddleContext';
 
 const EnhancedSettingsWrapper = (OriginalComponent) =>
   connect((state, props) => ({
@@ -17,11 +16,10 @@ const EnhancedSettingsWrapper = (OriginalComponent) =>
     className: classNamesForComponentSelector(state, 'SettingsWrapper'),
     style: stylesForComponentSelector(state, 'SettingsWrapper')
   }))((props) => {
-    const griddleContext = useContext(GriddleContext);
     const settingsProps = {
       ...props,
-      Settings: griddleContext.components.Settings,
-      SettingsToggle: griddleContext.components.SettingsToggle
+      Settings: props.context.components.Settings,
+      SettingsToggle: props.context.components.SettingsToggle
     };
     return <OriginalComponent {...settingsProps} />;
   });

@@ -1639,9 +1639,8 @@ storiesOf('Table', module)
           style: selectors.stylesForComponentSelector(state, 'NoResults')
         })),
         mapProps((props) => {
-          const griddleContext = React.useContext(GriddleContext);
           return {
-            NoResults: griddleContext.components.NoResults,
+            NoResults: props.context.components.NoResults,
             ...props
           };
         })

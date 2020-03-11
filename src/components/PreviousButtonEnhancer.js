@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { combineHandlers } from '../utils/compositionUtils';
-import GriddleContext from '../context/GriddleContext';
 
 const enhance = (OriginalComponent) => (props) => {
-  const griddleContext = useContext(GriddleContext);
-  const { onPrevious } = griddleContext.events;
+  const { onPrevious } = props.context.events;
   const previousBtnProps = {
     ...props,
     onClick: combineHandlers([onPrevious, props.onClick])

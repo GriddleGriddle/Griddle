@@ -12,14 +12,6 @@ import * as actions from './actions';
 import GriddleContext from './context/GriddleContext';
 
 class Griddle extends Component {
-  static childContextTypes = {
-    components: PropTypes.object.isRequired,
-    settingsComponentObjects: PropTypes.object,
-    events: PropTypes.object,
-    selectors: PropTypes.object,
-    storeListener: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
 
@@ -59,16 +51,6 @@ class Griddle extends Component {
     // As relevant property updates are captured in `componentWillReceiveProps`.
     // return false to prevent the the entire root node from being deleted.
     return false;
-  }
-
-  getChildContext() {
-    return {
-      components: this.components,
-      settingsComponentObjects: this.settingsComponentObjects,
-      events: this.events,
-      selectors: this.selectors,
-      storeListener: this.storeListener
-    };
   }
 
   render() {

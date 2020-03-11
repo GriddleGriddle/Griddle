@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../../../utils/griddleConnect';
-import GriddleContext from '../../../context/GriddleContext';
 
 const spacerRow = connect((state, props) => {
-  const griddleContext = useContext(GriddleContext);
-  const { topSpacerSelector, bottomSpacerSelector } = griddleContext.selectors;
+  const { topSpacerSelector, bottomSpacerSelector } = props.context.selectors;
   const { placement } = props;
 
   return {

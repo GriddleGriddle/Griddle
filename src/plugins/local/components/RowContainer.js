@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../../../utils/griddleConnect';
 
@@ -10,7 +10,6 @@ import {
   stylesForComponentSelector
 } from '../selectors/localSelectors';
 import { valueOrResult } from '../../../utils/valueUtils';
-import GriddleContext from '../../../context/GriddleContext';
 
 const ComposedRowContainer = (OriginalComponent) =>
   connect((state, props) => ({
@@ -20,12 +19,11 @@ const ComposedRowContainer = (OriginalComponent) =>
     className: classNamesForComponentSelector(state, 'Row'),
     style: stylesForComponentSelector(state, 'Row')
   }))((props) => {
-    const griddleContext = useContext(GriddleContext);
-    const { rowProperties, className, ...otherProps } = props;
+    const { rowProperties, className, context, ...otherProps } = props;
     const rowContainerProps = {
-      Cell: griddleContext.components.Cell,
-      className: valueOrResult(rowProperties.cssClassName, props) || props.className,
-      ...otherProps
+      ...otherProps,
+      Cell: context.components.Cell,
+      className: valueOrResult(rowProperties.cssClassName, props) || props.className
     };
     return (
       <OriginalComponent

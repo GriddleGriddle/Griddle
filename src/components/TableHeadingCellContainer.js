@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 import withHandlers from 'recompose/withHandlers';
 import {
   sortPropertyByIdSelector,
@@ -27,10 +26,6 @@ const DefaultTableHeadingCellContent = ({ title, icon, iconClassName }) => (
 
 const EnhancedHeadingCell = (OriginalComponent) =>
   compose(
-    getContext({
-      events: PropTypes.object,
-      selectors: PropTypes.object
-    }),
     connect(
       (state, props) => ({
         sortProperty: sortPropertyByIdSelector(state, props),
@@ -45,7 +40,14 @@ const EnhancedHeadingCell = (OriginalComponent) =>
         style: stylesForComponentSelector(state, 'TableHeadingCell'),
         ...iconsForComponentSelector(state, 'TableHeadingCell')
       }),
-      (dispatch, { events: { onSort } }) => ({
+      (
+        dispatch,
+        {
+          context: {
+            events: { onSort }
+          }
+        }
+      ) => ({
         setSortColumn: combineHandlers([onSort, compose(dispatch, setSortColumn)])
       })
     ),
@@ -54,7 +56,7 @@ const EnhancedHeadingCell = (OriginalComponent) =>
         onClick:
           props.cellProperties.sortable === false
             ? () => () => {}
-            : props.events.setSortProperties || setSortProperties
+            : props.context.events.setSortProperties || setSortProperties
       };
     }),
     // TODO: use with props on change or something more performant here

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
 
@@ -7,7 +7,6 @@ import {
   classNamesForComponentSelector,
   stylesForComponentSelector
 } from '../selectors/dataSelectors';
-import GriddleContext from '../context/GriddleContext';
 
 const ComposedTableBodyContainer = (OriginalComponent) =>
   connect((state, props) => ({
@@ -15,10 +14,9 @@ const ComposedTableBodyContainer = (OriginalComponent) =>
     className: classNamesForComponentSelector(state, 'TableBody'),
     style: stylesForComponentSelector(state, 'TableBody')
   }))((props) => {
-    const griddleContext = useContext(GriddleContext);
     const tbodyProps = {
       ...props,
-      Row: griddleContext.components.Row
+      Row: props.context.components.Row
     };
     return (
       <OriginalComponent
