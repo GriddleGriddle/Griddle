@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 import { Provider, connect as reduxConnect } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
@@ -1361,33 +1359,31 @@ storiesOf('Redux', module)
     );
   })
   .add('custom column chooser', () => {
-    const columnChooser = compose(
-      connect(
-        (state) => ({
-          columns: createSelector(selectors.sortedColumnPropertiesSelector, (colMap) => {
-            const columns = colMap.valueSeq().toJS();
-            return columns.filter((c) => !c.isMetadata);
-          })(state)
-        }),
-        {
-          toggleColumn: actions.toggleColumn
-        }
-      )
-    )(({ columns, toggleColumn }) => {
+    const columnChooser = connect(
+      (state) => ({
+        columns: createSelector(selectors.sortedColumnPropertiesSelector, (colMap) => {
+          const columns = colMap.valueSeq().toJS();
+          return columns.filter((c) => !c.isMetadata);
+        })(state)
+      }),
+      {
+        toggleColumn: actions.toggleColumn
+      }
+    )((props: { columns: any; toggleColumn: (colName: string) => {} }) => {
       const onToggle = (event) => {
-        toggleColumn(event.target.name);
+        props.toggleColumn(event.target.name);
       };
       return (
         <div>
-          {Object.keys(columns).map((c) => (
-            <label key={columns[c].id}>
+          {Object.keys(props.columns).map((c) => (
+            <label key={props.columns[c]['id']}>
               <input
                 type="checkbox"
-                name={columns[c].id}
-                defaultChecked={columns[c].visible !== false}
+                name={props.columns[c]['id']}
+                defaultChecked={props.columns[c]['visible'] !== false}
                 onChange={onToggle}
               />
-              {columns[c].title || columns[c].id}
+              {props.columns[c]['title'] || props.columns[c]['id']}
             </label>
           ))}
         </div>
@@ -1419,22 +1415,20 @@ storiesOf('Redux', module)
   })
   .add('custom page size settings', () => {
     const pageSizeSettings = ({ pageSizes }) =>
-      compose(
-        connect(
-          (state) => ({
-            pageSize: selectors.pageSizeSelector(state)
-          }),
-          {
-            setPageSize: actions.setPageSize
-          }
-        )
-      )(({ pageSize, setPageSize }) => {
+      connect(
+        (state) => ({
+          pageSize: selectors.pageSizeSelector(state)
+        }),
+        {
+          setPageSize: actions.setPageSize
+        }
+      )((props: { pageSize: number; setPageSize: (pg: number) => {} }) => {
         const onChange = (e) => {
-          setPageSize(+e.target.value);
+          props.setPageSize(+e.target.value);
         };
         return (
           <div>
-            <select onChange={onChange} defaultValue={pageSize}>
+            <select onChange={onChange} defaultValue={props.pageSize}>
               {pageSizes.map((s) => (
                 <option key={s}>{s}</option>
               ))}
@@ -1633,18 +1627,17 @@ storiesOf('Table', module)
           {visibleRows ? TableBody && <TableBody /> : NoResults && <NoResults />}
         </table>
       ),
-      NoResultsContainer: compose(
+      NoResultsContainer: (OriginalComponent) =>
         connect((state) => ({
           columnIds: selectors.columnIdsSelector(state),
           style: selectors.stylesForComponentSelector(state, 'NoResults')
-        })),
-        mapProps((props) => {
-          return {
+        }))((props: any) => {
+          const noResProps = {
             NoResults: props.context.components.NoResults,
             ...props
           };
-        })
-      ),
+          return <OriginalComponent {...noResProps} />;
+        }),
       NoResults: ({ columnIds, style }) => (
         <tr style={style}>
           <td colSpan={columnIds.length}>Nothing!</td>

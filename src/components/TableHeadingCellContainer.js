@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import withHandlers from 'recompose/withHandlers';
+import { compose } from 'redux';
 import {
   sortPropertyByIdSelector,
   iconsForComponentSelector,
@@ -25,68 +23,58 @@ const DefaultTableHeadingCellContent = ({ title, icon, iconClassName }) => (
 );
 
 const EnhancedHeadingCell = (OriginalComponent) =>
-  compose(
-    connect(
-      (state, props) => ({
-        sortProperty: sortPropertyByIdSelector(state, props),
-        customHeadingComponent: customHeadingComponentSelector(state, props),
-        cellProperties: cellPropertiesSelector(state, props),
-        className: classNamesForComponentSelector(state, 'TableHeadingCell'),
-        sortAscendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellAscending'),
-        sortDescendingClassName: classNamesForComponentSelector(
-          state,
-          'TableHeadingCellDescending'
-        ),
-        style: stylesForComponentSelector(state, 'TableHeadingCell'),
-        ...iconsForComponentSelector(state, 'TableHeadingCell')
-      }),
-      (
-        dispatch,
-        {
-          context: {
-            events: { onSort }
-          }
-        }
-      ) => ({
-        setSortColumn: combineHandlers([onSort, compose(dispatch, setSortColumn)])
-      })
-    ),
-    withHandlers((props) => {
-      return {
-        onClick:
-          props.cellProperties.sortable === false
-            ? () => () => {}
-            : props.context.events.setSortProperties || setSortProperties
-      };
+  connect(
+    (state, props) => ({
+      sortProperty: sortPropertyByIdSelector(state, props),
+      customHeadingComponent: customHeadingComponentSelector(state, props),
+      cellProperties: cellPropertiesSelector(state, props),
+      className: classNamesForComponentSelector(state, 'TableHeadingCell'),
+      sortAscendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellAscending'),
+      sortDescendingClassName: classNamesForComponentSelector(state, 'TableHeadingCellDescending'),
+      style: stylesForComponentSelector(state, 'TableHeadingCell'),
+      ...iconsForComponentSelector(state, 'TableHeadingCell')
     }),
-    // TODO: use with props on change or something more performant here
-    mapProps((props) => {
-      const iconProps = getSortIconProps(props);
-      const title = props.customHeadingComponent ? (
-        <props.customHeadingComponent
-          {...props.cellProperties.extraData}
-          {...props}
-          {...iconProps}
-        />
-      ) : (
-        <DefaultTableHeadingCellContent title={props.title} {...iconProps} />
-      );
-      const className =
-        valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
-      const style = {
-        ...(props.cellProperties.sortable === false || { cursor: 'pointer' }),
-        ...props.style
-      };
-
-      return {
-        ...props.cellProperties.extraData,
-        ...props,
-        ...iconProps,
-        title,
-        style,
-        className
-      };
+    (
+      dispatch,
+      {
+        context: {
+          events: { onSort }
+        }
+      }
+    ) => ({
+      setSortColumn: combineHandlers([onSort, compose(dispatch, setSortColumn)])
     })
-  )((props) => <OriginalComponent {...props} />);
+  )((props) => {
+    const iconProps = getSortIconProps(props);
+    const title = props.customHeadingComponent ? (
+      <props.customHeadingComponent {...props.cellProperties.extraData} {...props} {...iconProps} />
+    ) : (
+      <DefaultTableHeadingCellContent title={props.title} {...iconProps} />
+    );
+    const className =
+      valueOrResult(props.cellProperties.headerCssClassName, props) || props.className;
+    const style = {
+      ...(props.cellProperties.sortable === false || { cursor: 'pointer' }),
+      ...props.style
+    };
+    let { setSortProperties: setSortPropertiesEvent } = props.context.events;
+    if (setSortPropertiesEvent) {
+      setSortPropertiesEvent = setSortPropertiesEvent.apply(this, [props]);
+    }
+    const onClick =
+      props.cellProperties.sortable === false
+        ? () => () => {}
+        : setSortPropertiesEvent || setSortProperties.apply(this, [props]);
+    const cellProps = {
+      ...props.cellProperties.extraData,
+      ...props,
+      ...iconProps,
+      title,
+      style,
+      className,
+      onClick
+    };
+    return <OriginalComponent {...cellProps} />;
+  });
 
 export default EnhancedHeadingCell;
