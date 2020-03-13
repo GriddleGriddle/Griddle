@@ -801,17 +801,11 @@ storiesOf('Griddle main', module)
 
     // HoC for overriding Table component to just render the default TableBody component
     // We could use this entirely if we wanted and connect and map over visible rows but
-    // Using this + tableBody to take advantange of code that Griddle LocalPlugin already has
-    const CustomTableComponent = (OriginalComponent) =>
-      class CustomTableComponent extends React.Component<{}> {
-        static contextTypes = {
-          components: PropTypes.object
-        };
-
-        render() {
-          return <this.context.components.TableBody />;
-        }
-      };
+    // Using this + tableBody to take advantage of code that Griddle LocalPlugin already has
+    const CustomTableComponent = () => (props) => {
+      const griddleContext = React.useContext(GriddleContext);
+      return <griddleContext.components.TableBody />;
+    };
 
     const CustomTableBody = ({ rowIds, Row, style, className }) => (
       <div style={style} className={className}>
