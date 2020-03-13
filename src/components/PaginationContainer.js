@@ -1,31 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 
-import { classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
 
-const EnhancedPaginationContainer = OriginalComponent => compose(
-  getContext({
-    components: PropTypes.object,
-  }),
-  connect(
-    (state, props) => ({
-      className: classNamesForComponentSelector(state, 'Pagination'),
-      style: stylesForComponentSelector(state, 'Pagination'),
-    })
-  ),
-  mapProps((props) => {
-    const { components, ...otherProps } = props;
-    return {
-      Next: components.NextButton,
-      Previous: components.PreviousButton,
-      PageDropdown: components.PageDropdown,
-      ...otherProps
+const EnhancedPaginationContainer = (OriginalComponent) =>
+  connect((state, props) => ({
+    className: classNamesForComponentSelector(state, 'Pagination'),
+    style: stylesForComponentSelector(state, 'Pagination')
+  }))((props) => {
+    const paginationProps = {
+      ...props,
+      Next: props.context.components.NextButton,
+      Previous: props.context.components.PreviousButton,
+      PageDropdown: props.context.components.PageDropdown
     };
-  })
-)((props) => <OriginalComponent {...props} />);
+    return <OriginalComponent {...paginationProps} />;
+  });
 
 export default EnhancedPaginationContainer;

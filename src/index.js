@@ -1,11 +1,5 @@
-import {
-  createStore,
-  combineReducers,
-  bindActionCreators,
-  applyMiddleware,
-  compose
-} from 'redux';
-import { createProvider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import forIn from 'lodash.forin';
@@ -15,35 +9,23 @@ import corePlugin from './core';
 import init from './utils/initializer';
 import { StoreListener } from './utils/listenerUtils';
 import * as actions from './actions';
+import GriddleContext from './context/GriddleContext';
 
 class Griddle extends Component {
-  static childContextTypes = {
-    components: PropTypes.object.isRequired,
-    settingsComponentObjects: PropTypes.object,
-    events: PropTypes.object,
-    selectors: PropTypes.object,
-    storeKey: PropTypes.string,
-    storeListener: PropTypes.object
-  };
-
   constructor(props) {
     super(props);
 
-    const { core = corePlugin, storeKey = Griddle.storeKey || 'store' } = props;
+    const { core = corePlugin } = props;
 
     const { initialState, reducer, reduxMiddleware } = init.call(this, core);
 
     const composeEnhancers =
-      (typeof window !== 'undefined' &&
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-      compose;
+      (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
     this.store = createStore(
       reducer,
       initialState,
       composeEnhancers(applyMiddleware(...reduxMiddleware))
     );
-
-    this.provider = createProvider(storeKey);
 
     this.storeListener = new StoreListener(this.store);
     forIn(this.listeners, (listener, name) => {
@@ -71,34 +53,25 @@ class Griddle extends Component {
     return false;
   }
 
-  getStoreKey = () => {
-    return this.props.storeKey || Griddle.storeKey || 'store';
-  };
-
-  getChildContext() {
-    return {
-      components: this.components,
-      settingsComponentObjects: this.settingsComponentObjects,
-      events: this.events,
-      selectors: this.selectors,
-      storeKey: this.getStoreKey(),
-      storeListener: this.storeListener
-    };
-  }
-
   render() {
-    if (!this.components.Layout) {
-      return null;
-    }
-
     return (
-      <this.provider store={this.store}>
-        <this.components.Layout />
-      </this.provider>
+      <GriddleContext.Provider
+        value={{
+          components: this.components,
+          settingsComponentObjects: this.settingsComponentObjects,
+          events: this.events,
+          selectors: this.selectors,
+          storeListener: this.storeListener
+        }}
+      >
+        {this.components.Layout ? (
+          <Provider store={this.store}>
+            <this.components.Layout />
+          </Provider>
+        ) : null}
+      </GriddleContext.Provider>
     );
   }
 }
-
-Griddle.storeKey = 'store';
 
 export default Griddle;

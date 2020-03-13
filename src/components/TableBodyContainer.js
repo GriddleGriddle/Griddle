@@ -1,36 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 
-import { visibleRowIdsSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  visibleRowIdsSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
 
-const ComposedTableBodyContainer = OriginalComponent => compose(
-  getContext({
-    components: PropTypes.object,
-    selectors: PropTypes.object,
-  }),
+const ComposedTableBodyContainer = (OriginalComponent) =>
   connect((state, props) => ({
     visibleRowIds: visibleRowIdsSelector(state),
     className: classNamesForComponentSelector(state, 'TableBody'),
-    style: stylesForComponentSelector(state, 'TableBody'),
-  })),
-  mapProps(props => {
-    const { components, ...otherProps } = props;
-    return {
-      Row:  props.components.Row,
-      ...otherProps,
+    style: stylesForComponentSelector(state, 'TableBody')
+  }))((props) => {
+    const tbodyProps = {
+      ...props,
+      Row: props.context.components.Row
     };
-  }),
-)(({Row, visibleRowIds, style, className}) => (
-  <OriginalComponent
-    rowIds={visibleRowIds}
-    Row={Row}
-    style={style}
-    className={className}
-  />
-));
+    return (
+      <OriginalComponent
+        rowIds={tbodyProps.visibleRowIds}
+        Row={tbodyProps.Row}
+        style={tbodyProps.style}
+        className={tbodyProps.className}
+      />
+    );
+  });
 
 export default ComposedTableBodyContainer;

@@ -1,15 +1,10 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
-import withContext from 'recompose/withContext';
-import withHandlers from 'recompose/withHandlers';
-import withState from 'recompose/withState';
 import { Provider, connect as reduxConnect } from 'react-redux';
 import { createStore } from 'redux';
 import { createSelector } from 'reselect';
+import GriddleContext from '../src/context/GriddleContext';
 
 import GenericGriddle, {
   connect,
@@ -22,14 +17,7 @@ import GenericGriddle, {
   RowDefinition,
   GriddleProps
 } from '../src/module';
-const {
-  Cell,
-  Row,
-  Table,
-  TableBody,
-  TableHeading,
-  TableHeadingCell
-} = components;
+const { Cell, Row, Table, TableBody, TableHeading, TableHeadingCell } = components;
 const { SettingsWrapper, SettingsToggle, Settings } = components;
 
 const { LegacyStylePlugin, LocalPlugin, PositionPlugin } = plugins;
@@ -66,20 +54,18 @@ function getRandomFakeData() {
   const start = getRandomIntInclusive(0, fakeData.length - 10);
   return fakeData.slice(start, start + 10);
 }
-const GreenLeftSortIconComponent = props => (
+const GreenLeftSortIconComponent = (props) => (
   <span style={{ color: '#00ff00' }}>
     {props.icon && <span className={props.iconClassName}>{props.icon}</span>}
     {props.title}
   </span>
 );
 
-const MakeBlueComponent = props => (
+const MakeBlueComponent = (props) => (
   <div style={{ backgroundColor: '#0000FF' }}>
     {props.value}
     {props.rowData && (
-      <small style={{ marginLeft: 5, opacity: 0.5 }}>
-        {props.rowData.company}
-      </small>
+      <small style={{ marginLeft: 5, opacity: 0.5 }}>{props.rowData.company}</small>
     )}
   </div>
 );
@@ -149,9 +135,7 @@ storiesOf('Griddle main', module)
           <div>
             <p>
               Click to change Griddle props:{' '}
-              <button onClick={() => this.setState(({ n }) => ({ n: n + 1 }))}>
-                {n}
-              </button>
+              <button onClick={() => this.setState(({ n }) => ({ n: n + 1 }))}>{n}</button>
               <button onClick={() => this.setState({ n: 0 })}>Reset</button>
             </p>
             <Griddle
@@ -178,10 +162,7 @@ storiesOf('Griddle main', module)
     return <Stateful />;
   })
   .add('with local, delayed data', () => {
-    class DeferredGriddle extends React.Component<
-      GriddleProps<FakeData>,
-      { data?: FakeData[] }
-    > {
+    class DeferredGriddle extends React.Component<GriddleProps<FakeData>, { data?: FakeData[] }> {
       private timeout;
 
       constructor(props) {
@@ -221,18 +202,16 @@ storiesOf('Griddle main', module)
     return <DeferredGriddle data={fakeData} plugins={[LocalPlugin]} />;
   })
   .add('with local and legacy (v0) styles', () => {
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin, LegacyStylePlugin]} />
-    );
+    return <Griddle data={fakeData} plugins={[LocalPlugin, LegacyStylePlugin]} />;
   })
   .add('with local and events', () => {
     // don't do things this way - fine for example storybook
     const events = {
-      onFilter: filter => console.log('onFilter', filter),
-      onSort: sortProperties => console.log('onSort', sortProperties),
+      onFilter: (filter) => console.log('onFilter', filter),
+      onSort: (sortProperties) => console.log('onSort', sortProperties),
       onNext: () => console.log('onNext'),
       onPrevious: () => console.log('onPrevious'),
-      onGetPage: pageNumber => console.log('onGetPage', pageNumber)
+      onGetPage: (pageNumber) => console.log('onGetPage', pageNumber)
     };
 
     return (
@@ -247,19 +226,15 @@ storiesOf('Griddle main', module)
         data={fakeData}
         plugins={[LocalPlugin]}
         components={{
-          RowEnhancer: OriginalComponent => props => (
+          RowEnhancer: (OriginalComponent) => (props) => (
             <OriginalComponent
               {...props}
               onClick={() => console.log(`Click Row ${props.griddleKey}`)}
-              onMouseEnter={() =>
-                console.log(`MouseEnter Row ${props.griddleKey}`)
-              }
-              onMouseLeave={() =>
-                console.log(`MouseLeave Row ${props.griddleKey}`)
-              }
+              onMouseEnter={() => console.log(`MouseEnter Row ${props.griddleKey}`)}
+              onMouseLeave={() => console.log(`MouseLeave Row ${props.griddleKey}`)}
             />
           ),
-          CellEnhancer: OriginalComponent => props => (
+          CellEnhancer: (OriginalComponent) => (props) => (
             <OriginalComponent
               {...props}
               onClick={() => console.log(`Click ${props.value}`)}
@@ -294,11 +269,7 @@ storiesOf('Griddle main', module)
     const sortProperties = [{ id: 'name', sortAscending: true }];
 
     return (
-      <Griddle
-        data={fakeData}
-        plugins={[LocalPlugin]}
-        sortProperties={sortProperties}
-      >
+      <Griddle data={fakeData} plugins={[LocalPlugin]} sortProperties={sortProperties}>
         <RowDefinition />
       </Griddle>
     );
@@ -308,11 +279,7 @@ storiesOf('Griddle main', module)
     return (
       <div>
         <small>Sorts all columns by second character</small>
-        <Griddle
-          data={fakeData}
-          plugins={[LocalPlugin]}
-          sortMethod={sortBySecondCharacter}
-        >
+        <Griddle data={fakeData} plugins={[LocalPlugin]} sortMethod={sortBySecondCharacter}>
           <RowDefinition>
             <ColumnDefinition id="name" order={2} />
             <ColumnDefinition id="state" order={1} />
@@ -327,12 +294,7 @@ storiesOf('Griddle main', module)
         <small>Sorts name by second character</small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
-            <ColumnDefinition
-              id="name"
-              order={2}
-              title="NAME"
-              sortMethod={sortBySecondCharacter}
-            />
+            <ColumnDefinition id="name" order={2} title="NAME" sortMethod={sortBySecondCharacter} />
             <ColumnDefinition id="state" order={1} />
           </RowDefinition>
         </Griddle>
@@ -342,9 +304,7 @@ storiesOf('Griddle main', module)
   .add('with sortable set to true/false', () => {
     return (
       <div>
-        <small>
-          Using ColumnDefinition sortable (false on name, true on state).
-        </small>
+        <small>Using ColumnDefinition sortable (false on name, true on state).</small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
             <ColumnDefinition id="name" order={2} sortable={false} />
@@ -358,9 +318,9 @@ storiesOf('Griddle main', module)
     const { setSortProperties } = utils.sortUtils;
     const disableSortPlugin = (...columnsWithSortDisabled) => ({
       events: {
-        setSortProperties: sortProperties => {
+        setSortProperties: (sortProperties) => {
           const { columnId } = sortProperties;
-          if (columnsWithSortDisabled.findIndex(c => c === columnId) >= 0) {
+          if (columnsWithSortDisabled.findIndex((c) => c === columnId) >= 0) {
             return () => {};
           }
 
@@ -372,10 +332,7 @@ storiesOf('Griddle main', module)
     return (
       <div>
         <small>Using custom plugin to disable sort</small>
-        <Griddle
-          data={fakeData}
-          plugins={[LocalPlugin, disableSortPlugin('name')]}
-        >
+        <Griddle data={fakeData} plugins={[LocalPlugin, disableSortPlugin('name')]}>
           <RowDefinition>
             <ColumnDefinition id="name" order={2} />
             <ColumnDefinition id="state" order={1} />
@@ -401,8 +358,8 @@ storiesOf('Griddle main', module)
       <div>
         <style type="text/css">{css}</style>
         <small>
-          Sets dynamic (name - click to sort) and static (state) class names on
-          header and body cells
+          Sets dynamic (name - click to sort) and static (state) class names on header and body
+          cells
         </small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
@@ -469,12 +426,7 @@ storiesOf('Griddle main', module)
         <small>Everything in the name column should be blue</small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
-            <ColumnDefinition
-              id="name"
-              order={2}
-              customComponent={MakeBlueComponent}
-              width={800}
-            />
+            <ColumnDefinition id="name" order={2} customComponent={MakeBlueComponent} width={800} />
             <ColumnDefinition id="state" order={1} width={100} />
           </RowDefinition>
         </Griddle>
@@ -485,16 +437,11 @@ storiesOf('Griddle main', module)
     return (
       <div>
         <small>
-          Everything in the name column should be blue and we should now see the
-          company name also
+          Everything in the name column should be blue and we should now see the company name also
         </small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
-            <ColumnDefinition
-              id="name"
-              order={2}
-              customComponent={EnhancedCustomComponent}
-            />
+            <ColumnDefinition id="name" order={2} customComponent={EnhancedCustomComponent} />
             <ColumnDefinition id="state" order={1} />
           </RowDefinition>
         </Griddle>
@@ -512,12 +459,12 @@ storiesOf('Griddle main', module)
         };
       }
 
-      onFilter = filter => {
+      onFilter = (filter) => {
         console.log('onFilter', filter);
         this.setState({ data: getRandomFakeData() });
       };
 
-      onSort = sortProperties => {
+      onSort = (sortProperties) => {
         console.log('onSort', sortProperties);
         this.setState({
           data: getRandomFakeData(),
@@ -540,7 +487,7 @@ storiesOf('Griddle main', module)
         this.setState({ data: getRandomFakeData() });
       };
 
-      onGetPage = pageNumber => {
+      onGetPage = (pageNumber) => {
         console.log('onGetPage', pageNumber);
         this.setState({ data: getRandomFakeData() });
       };
@@ -573,11 +520,7 @@ storiesOf('Griddle main', module)
             pageProperties={pageProperties}
           >
             <RowDefinition>
-              <ColumnDefinition
-                id="name"
-                width={500}
-                style={{ color: '#FAB' }}
-              />
+              <ColumnDefinition id="name" width={500} style={{ color: '#FAB' }} />
               <ColumnDefinition id="state" />
             </RowDefinition>
           </Griddle>
@@ -619,14 +562,10 @@ storiesOf('Griddle main', module)
     return (
       <div>
         <small>
-          <em>extra</em> from <code>custom(Heading)Component</code>;{' '}
-          <strong>extra</strong> from <code>(TableHeading)Cell</code>
+          <em>extra</em> from <code>custom(Heading)Component</code>; <strong>extra</strong> from{' '}
+          <code>(TableHeading)Cell</code>
         </small>
-        <Griddle
-          data={fakeData}
-          plugins={[LocalPlugin]}
-          components={components}
-        >
+        <Griddle data={fakeData} plugins={[LocalPlugin]} components={components}>
           <RowDefinition rowKey="name">
             <ColumnDefinition
               id="name"
@@ -650,7 +589,7 @@ storiesOf('Griddle main', module)
       };
 
       componentWillReceiveProps() {
-        this.setState(state => ({
+        this.setState((state) => ({
           timesRendered: state.timesRendered + 1
         }));
       }
@@ -683,7 +622,7 @@ storiesOf('Griddle main', module)
       }
 
       updateDataWithProgress(data, progressValue) {
-        return data.map(item => ({
+        return data.map((item) => ({
           ...item,
           progress: progressValue
         }));
@@ -691,7 +630,7 @@ storiesOf('Griddle main', module)
 
       componentDidMount() {
         interval = setInterval(() => {
-          this.setState(state => {
+          this.setState((state) => {
             const newProgressValue = state.progressValue + 1;
             return {
               data: this.updateDataWithProgress(state.data, newProgressValue),
@@ -711,8 +650,8 @@ storiesOf('Griddle main', module)
         return (
           <div>
             <small>
-              <em>extra</em> from <code>custom(Heading)Component</code>;{' '}
-              <strong>extra</strong> from <code>(TableHeading)Cell</code>
+              <em>extra</em> from <code>custom(Heading)Component</code>; <strong>extra</strong> from{' '}
+              <code>(TableHeading)Cell</code>
             </small>
             <Griddle data={data} plugins={[LocalPlugin]}>
               <RowDefinition rowKey="name">
@@ -767,8 +706,8 @@ storiesOf('Griddle main', module)
           .griddle-heading-descending:before { content: '↓'; }
         `}</style>
         <small>
-          Name should have a green heading component -- sort icon should show up
-          on the left of the title
+          Name should have a green heading component -- sort icon should show up on the left of the
+          title
         </small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
@@ -787,8 +726,8 @@ storiesOf('Griddle main', module)
     return (
       <div>
         <small>
-          State should be first, name should be last, and the rest should be in
-          order. Default order increments from 1000.
+          State should be first, name should be last, and the rest should be in order. Default order
+          increments from 1000.
         </small>
         <Griddle data={fakeData} plugins={[LocalPlugin]}>
           <RowDefinition>
@@ -820,7 +759,7 @@ storiesOf('Griddle main', module)
     );
   })
   .add('with override row component', () => {
-    const NewRow = props => (
+    const NewRow = (props) => (
       <tr>
         <td>hi</td>
       </tr>
@@ -848,13 +787,13 @@ storiesOf('Griddle main', module)
           margin: '10px 0 10px 0'
         }}
       >
-        <h1>{rowData.name}</h1>
+        <h1>{rowData['name']}</h1>
         <ul>
           <li>
-            <strong>State</strong>: {rowData.state}
+            <strong>State</strong>: {rowData['state']}
           </li>
           <li>
-            <strong>Company</strong>: {rowData.company}
+            <strong>Company</strong>: {rowData['company']}
           </li>
         </ul>
       </div>
@@ -862,21 +801,15 @@ storiesOf('Griddle main', module)
 
     // HoC for overriding Table component to just render the default TableBody component
     // We could use this entirely if we wanted and connect and map over visible rows but
-    // Using this + tableBody to take advantange of code that Griddle LocalPlugin already has
-    const CustomTableComponent = OriginalComponent =>
-      class CustomTableComponent extends React.Component<{}> {
-        static contextTypes = {
-          components: PropTypes.object
-        };
-
-        render() {
-          return <this.context.components.TableBody />;
-        }
-      };
+    // Using this + tableBody to take advantage of code that Griddle LocalPlugin already has
+    const CustomTableComponent = () => (props) => {
+      const griddleContext = React.useContext(GriddleContext);
+      return <griddleContext.components.TableBody />;
+    };
 
     const CustomTableBody = ({ rowIds, Row, style, className }) => (
       <div style={style} className={className}>
-        {rowIds && rowIds.map(r => <Row key={r} griddleKey={r} />)}
+        {rowIds && rowIds.map((r) => <Row key={r} griddleKey={r} />)}
       </div>
     );
 
@@ -891,17 +824,14 @@ storiesOf('Griddle main', module)
           Row: CustomRowComponent,
           TableContainer: CustomTableComponent,
           TableBody: CustomTableBody,
-          SettingsToggle: props => null
+          SettingsToggle: (props) => null
         }}
       />
     );
   })
   .add('with virtual scrolling', () => {
     return (
-      <Griddle
-        data={fakeData}
-        plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}
-      >
+      <Griddle data={fakeData} plugins={[LocalPlugin, PositionPlugin({ tableHeight: 300 })]}>
         <RowDefinition>
           <ColumnDefinition
             id="name"
@@ -1093,9 +1023,7 @@ storiesOf('Plugins', module).add('styleConfig', () => {
 
   return (
     <div>
-      <small>
-        Uses styles from plugin unless overridden (filter should be black).
-      </small>
+      <small>Uses styles from plugin unless overridden (filter should be black).</small>
       <Griddle
         data={fakeData}
         plugins={[LocalPlugin, stylePlugin]}
@@ -1209,7 +1137,7 @@ storiesOf('Bug fixes', module)
     );
   })
   .add('Delete row', () => {
-    const enhanceWithOnClick = onClick =>
+    const enhanceWithOnClick = (onClick) =>
       class ComputeThing extends React.Component<any, any> {
         static propTypes = {
           rowData: PropTypes.object.isRequired
@@ -1302,8 +1230,8 @@ storiesOf('Bug fixes', module)
         this.Component = EnhanceWithRowData(enhanceWithOnClick(this.onRemove));
       }
 
-      onRemove = rowId => {
-        const newData = this.state.data.filter(x => x.id !== rowId);
+      onRemove = (rowId) => {
+        const newData = this.state.data.filter((x) => x.id !== rowId);
         this.setState({ data: newData });
       };
 
@@ -1362,11 +1290,7 @@ storiesOf('Filter', module)
     }
 
     return (
-      <Griddle
-        data={fakeData}
-        plugins={[LocalPlugin]}
-        components={{ Filter: CustomFilter }}
-      >
+      <Griddle data={fakeData} plugins={[LocalPlugin]} components={{ Filter: CustomFilter }}>
         <RowDefinition />
       </Griddle>
     );
@@ -1376,16 +1300,16 @@ storiesOf('Redux', module)
   .add('with custom filter connected to another Redux store', () => {
     // https://stackoverflow.com/questions/47229902/griddle-v1-9-inputbox-in-customfiltercomponent-lose-focus
 
-    const CustomFilterComponent = props => (
+    const CustomFilterComponent = (props) => (
       <input
         value={props.searchString || ''}
-        onChange={e => {
+        onChange={(e) => {
           props.setSearchString(e.target.value);
         }}
       />
     );
 
-    const setSearchStringActionCreator = searchString => ({
+    const setSearchStringActionCreator = (searchString) => ({
       type: 'SET_SEARCH_STRING',
       searchString
     });
@@ -1393,8 +1317,8 @@ storiesOf('Redux', module)
       (state: TestState) => ({
         searchString: state.searchString
       }),
-      dispatch => ({
-        setSearchString: e => dispatch(setSearchStringActionCreator(e))
+      (dispatch) => ({
+        setSearchString: (e) => dispatch(setSearchStringActionCreator(e))
       })
     )(CustomFilterComponent);
 
@@ -1404,9 +1328,9 @@ storiesOf('Redux', module)
         components: { Filter: CustomFilterConnectedComponent }
       }
     ];
-    const SomePage = props => (
+    const SomePage = (props) => (
       <div>
-        <Griddle data={props.data} plugins={plugins} storeKey="griddleStore" />
+        <Griddle data={props.data} plugins={plugins} />
         Component outside of Griddle that's sharing state
         <CustomFilterConnectedComponent />
       </div>
@@ -1415,54 +1339,55 @@ storiesOf('Redux', module)
     const SomePageConnected = reduxConnect((state: TestState) => ({
       data: !state.searchString
         ? state.data
-        : state.data.filter(r =>
-            Object.keys(r).some(
-              k => r[k] && r[k].toString().indexOf(state.searchString) > -1
-            )
+        : state.data.filter((r) =>
+            Object.keys(r).some((k) => r[k] && r[k].toString().indexOf(state.searchString) > -1)
           )
     }))(SomePage);
 
     testStore.dispatch({ type: 'SET_DATA', data: fakeData });
 
     return (
-      <Provider store={testStore}>
-        <SomePageConnected />
-      </Provider>
+      <GriddleContext.Provider
+        value={{
+          components: {},
+          settingsComponentObjects: {},
+          events: {},
+          selectors: {},
+          storeListener: {}
+        }}
+      >
+        <Provider store={testStore}>
+          <SomePageConnected />
+        </Provider>
+      </GriddleContext.Provider>
     );
   })
   .add('custom column chooser', () => {
-    const columnChooser = compose(
-      connect(
-        state => ({
-          columns: createSelector(
-            selectors.sortedColumnPropertiesSelector,
-            colMap => {
-              const columns = colMap.valueSeq().toJS();
-              return columns.filter(c => !c.isMetadata);
-            }
-          )(state)
-        }),
-        {
-          toggleColumn: actions.toggleColumn
-        }
-      ),
-      withHandlers({
-        onToggle: ({ toggleColumn }) => event => {
-          toggleColumn(event.target.name);
-        }
-      })
-    )(({ columns, onToggle }) => {
+    const columnChooser = connect(
+      (state) => ({
+        columns: createSelector(selectors.sortedColumnPropertiesSelector, (colMap) => {
+          const columns = colMap.valueSeq().toJS();
+          return columns.filter((c) => !c.isMetadata);
+        })(state)
+      }),
+      {
+        toggleColumn: actions.toggleColumn
+      }
+    )((props: { columns: any; toggleColumn: (colName: string) => {} }) => {
+      const onToggle = (event) => {
+        props.toggleColumn(event.target.name);
+      };
       return (
         <div>
-          {Object.keys(columns).map(c => (
-            <label key={columns[c].id}>
+          {Object.keys(props.columns).map((c) => (
+            <label key={props.columns[c]['id']}>
               <input
                 type="checkbox"
-                name={columns[c].id}
-                defaultChecked={columns[c].visible !== false}
+                name={props.columns[c]['id']}
+                defaultChecked={props.columns[c]['visible'] !== false}
                 onChange={onToggle}
               />
-              {columns[c].title || columns[c].id}
+              {props.columns[c]['title'] || props.columns[c]['id']}
             </label>
           ))}
         </div>
@@ -1494,25 +1419,21 @@ storiesOf('Redux', module)
   })
   .add('custom page size settings', () => {
     const pageSizeSettings = ({ pageSizes }) =>
-      compose(
-        connect(
-          state => ({
-            pageSize: selectors.pageSizeSelector(state)
-          }),
-          {
-            setPageSize: actions.setPageSize
-          }
-        ),
-        withHandlers({
-          onChange: props => e => {
-            props.setPageSize(+e.target.value);
-          }
-        })
-      )(({ pageSize, onChange }) => {
+      connect(
+        (state) => ({
+          pageSize: selectors.pageSizeSelector(state)
+        }),
+        {
+          setPageSize: actions.setPageSize
+        }
+      )((props: { pageSize: number; setPageSize: (pg: number) => {} }) => {
+        const onChange = (e) => {
+          props.setPageSize(+e.target.value);
+        };
         return (
           <div>
-            <select onChange={onChange} defaultValue={pageSize}>
-              {pageSizes.map(s => (
+            <select onChange={onChange} defaultValue={props.pageSize}>
+              {pageSizes.map((s) => (
                 <option key={s}>{s}</option>
               ))}
             </select>
@@ -1520,7 +1441,7 @@ storiesOf('Redux', module)
         );
       });
 
-    const PageSizeDropDownPlugin = config => ({
+    const PageSizeDropDownPlugin = (config) => ({
       components: {
         SettingsComponents: {
           pageSizeSettings: pageSizeSettings(config)
@@ -1539,73 +1460,67 @@ storiesOf('Redux', module)
       />
     );
   })
-  .add(
-    'with custom storeKey and child connected to another Redux store',
-    () => {
-      // basically the demo redux stuff
-      const countSelector = state => state.count;
+  .add('with custom storeKey and child connected to another Redux store', () => {
+    // basically the demo redux stuff
+    const countSelector = (state) => state.count;
 
-      const CountComponent = props => (
-        <div>
-          <button type="button" onClick={props.increment}>
-            +
-          </button>
-          <input
-            value={props.count}
-            readOnly
-            style={{ width: '2em', textAlign: 'center' }}
-          />
-          <button type="button" onClick={props.decrement}>
-            −
-          </button>
-        </div>
-      );
+    const CountComponent = (props) => (
+      <div>
+        <button type="button" onClick={props.increment}>
+          +
+        </button>
+        <input value={props.count} readOnly style={{ width: '2em', textAlign: 'center' }} />
+        <button type="button" onClick={props.decrement}>
+          −
+        </button>
+      </div>
+    );
 
-      // should get count from other store
-      const ConnectedComponent = reduxConnect(
-        state => ({
-          count: countSelector(state)
-        }),
-        dispatch => ({
-          increment: () => {
-            dispatch({
-              type: 'INCREMENT'
-            });
-          },
-          decrement: () => {
-            dispatch({
-              type: 'DECREMENT'
-            });
-          }
-        })
-      )(CountComponent);
+    // should get count from other store
+    const ConnectedComponent = reduxConnect(
+      (state) => ({
+        count: countSelector(state)
+      }),
+      (dispatch) => ({
+        increment: () => {
+          dispatch({
+            type: 'INCREMENT'
+          });
+        },
+        decrement: () => {
+          dispatch({
+            type: 'DECREMENT'
+          });
+        }
+      })
+    )(CountComponent);
 
-      return (
-        <div>
-          <Provider store={testStore}>
-            <div>
-              <Griddle
-                data={fakeData}
-                plugins={[LocalPlugin]}
-                storeKey="griddleStore"
-              >
-                <RowDefinition>
-                  <ColumnDefinition id="name" />
-                  <ColumnDefinition id="state" />
-                  <ColumnDefinition
-                    id="customCount"
-                    customComponent={ConnectedComponent}
-                  />
-                </RowDefinition>
-              </Griddle>
-              Component outside of Griddle that's sharing state
-              <ConnectedComponent />
-            </div>
-          </Provider>
-        </div>
-      );
-    }
-  );
+    return (
+      <GriddleContext.Provider
+        value={{
+          components: {},
+          settingsComponentObjects: {},
+          events: {},
+          selectors: {},
+          storeListener: {}
+        }}
+      >
+        <Provider store={testStore}>
+          <div>
+            <Griddle data={fakeData} plugins={[LocalPlugin]}>
+              <RowDefinition>
+                <ColumnDefinition id="name" />
+                <ColumnDefinition id="state" />
+                <ColumnDefinition id="customCount" customComponent={ConnectedComponent} />
+              </RowDefinition>
+            </Griddle>
+            Component outside of Griddle that's sharing state
+            <ConnectedComponent />
+          </div>
+        </Provider>
+      </GriddleContext.Provider>
+    );
+  });
 storiesOf('Row', module)
   .add('base row', () => {
     const columnIds = [1, 2, 3];
@@ -1613,10 +1528,7 @@ storiesOf('Row', module)
     return (
       <table>
         <tbody>
-          <Row
-            Cell={({ columnId }) => <td>Cell {columnId}</td>}
-            columnIds={columnIds}
-          />
+          <Row Cell={({ columnId }) => <td>Cell {columnId}</td>} columnIds={columnIds} />
         </tbody>
       </table>
     );
@@ -1624,9 +1536,7 @@ storiesOf('Row', module)
   .add('with local plugin container', () => {
     const testPlugin = {
       components: {
-        Cell: ({ griddleKey, columnId }) => (
-          <td>{`${griddleKey} ${columnId}`}</td>
-        )
+        Cell: ({ griddleKey, columnId }) => <td>{`${griddleKey} ${columnId}`}</td>
       }
     };
 
@@ -1659,13 +1569,13 @@ storiesOf('TableBody', module)
   .add('with local container', () => {
     const junkPlugin = {
       components: {
-        Row: props => (
+        Row: (props) => (
           <tr>
             <td>{props.griddleKey}</td>
           </tr>
         ),
         // override local row container
-        RowContainer: original => props => original(props)
+        RowContainer: (original) => (props) => original(props)
       }
     };
 
@@ -1701,17 +1611,14 @@ storiesOf('TableHeading', module).add('base table heading', () => {
 
   return (
     <table>
-      <TableHeading
-        columnTitles={columnTitles}
-        TableHeadingCell={TableHeadingCell}
-      />
+      <TableHeading columnTitles={columnTitles} TableHeadingCell={TableHeadingCell} />
     </table>
   );
 });
 
 storiesOf('Table', module)
   .add('base table', () => {
-    const noResults = props => <p>Nothing!</p>;
+    const noResults = (props) => <p>Nothing!</p>;
 
     return <Table NoResults={noResults} />;
   })
@@ -1721,24 +1628,20 @@ storiesOf('Table', module)
       Table: ({ TableHeading, TableBody, NoResults, style, visibleRows }) => (
         <table style={style}>
           <TableHeading />
-          {visibleRows
-            ? TableBody && <TableBody />
-            : NoResults && <NoResults />}
+          {visibleRows ? TableBody && <TableBody /> : NoResults && <NoResults />}
         </table>
       ),
-      NoResultsContainer: compose(
-        getContext({
-          components: PropTypes.object
-        }),
-        connect(state => ({
+      NoResultsContainer: (OriginalComponent) =>
+        connect((state) => ({
           columnIds: selectors.columnIdsSelector(state),
           style: selectors.stylesForComponentSelector(state, 'NoResults')
-        })),
-        mapProps(props => ({
-          NoResults: props.components.NoResults,
-          ...props
-        }))
-      ),
+        }))((props: any) => {
+          const noResProps = {
+            NoResults: props.context.components.NoResults,
+            ...props
+          };
+          return <OriginalComponent {...noResProps} />;
+        }),
       NoResults: ({ columnIds, style }) => (
         <tr style={style}>
           <td colSpan={columnIds.length}>Nothing!</td>
@@ -1768,7 +1671,7 @@ storiesOf('Table', module)
   })
 
   .add('base table with visibleRows', () => {
-    const tableHeading = props => (
+    const tableHeading = (props) => (
       <thead>
         <tr>
           <th>One</th>
@@ -1778,7 +1681,7 @@ storiesOf('Table', module)
       </thead>
     );
 
-    const tableBody = props => (
+    const tableBody = (props) => (
       <tbody>
         <tr>
           <td>uno</td>
@@ -1788,13 +1691,7 @@ storiesOf('Table', module)
       </tbody>
     );
 
-    return (
-      <Table
-        visibleRows={1}
-        TableHeading={tableHeading}
-        TableBody={tableBody}
-      />
-    );
+    return <Table visibleRows={1} TableHeading={tableHeading} TableBody={tableBody} />;
   });
 
 storiesOf('SettingsWrapper', module)
@@ -1802,14 +1699,12 @@ storiesOf('SettingsWrapper', module)
     return <SettingsWrapper />;
   })
   .add('base enabled not visible', () => {
-    const toggle = props => <div>Toggle!</div>;
+    const toggle = (props) => <div>Toggle!</div>;
     return <SettingsWrapper isEnabled={true} SettingsToggle={toggle} />;
   })
   .add('base enabled and visible', () => {
-    const settings = props => <div>Settings!</div>;
-    return (
-      <SettingsWrapper isEnabled={true} isVisible={true} Settings={settings} />
-    );
+    const settings = (props) => <div>Settings!</div>;
+    return <SettingsWrapper isEnabled={true} isVisible={true} Settings={settings} />;
   });
 
 storiesOf('SettingsToggle', module).add('base', () => {
@@ -1819,15 +1714,11 @@ storiesOf('SettingsToggle', module).add('base', () => {
 
 storiesOf('Settings', module)
   .add('base', () => {
-    const components = [1, 2, 3].map((n, i) => props => (
-      <div>Settings {n}</div>
-    ));
+    const components = [1, 2, 3].map((n, i) => (props) => <div>Settings {n}</div>);
     return <Settings settingsComponents={components} />;
   })
   .add('disable settings', () => {
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin]} enableSettings={false} />
-    );
+    return <Griddle data={fakeData} plugins={[LocalPlugin]} enableSettings={false} />;
   })
   .add('change settings toggle button text', () => {
     return (
@@ -1916,25 +1807,19 @@ storiesOf('core', module)
     return <Griddle core={null} />;
   });
 
-storiesOf('TypeScript', module).add(
-  'GriddleComponent accepts expected types',
-  () => {
-    class Custom extends React.Component<{ value }> {
-      render() {
-        return <strong>{this.props.value}</strong>;
-      }
+storiesOf('TypeScript', module).add('GriddleComponent accepts expected types', () => {
+  class Custom extends React.Component<{ value }> {
+    render() {
+      return <strong>{this.props.value}</strong>;
     }
-
-    return (
-      <Griddle data={fakeData} plugins={[LocalPlugin]}>
-        <RowDefinition>
-          <ColumnDefinition
-            id="name"
-            customComponent={({ value }) => <em>{value}</em>}
-          />
-          <ColumnDefinition id="state" customComponent={Custom} />
-        </RowDefinition>
-      </Griddle>
-    );
   }
-);
+
+  return (
+    <Griddle data={fakeData} plugins={[LocalPlugin]}>
+      <RowDefinition>
+        <ColumnDefinition id="name" customComponent={({ value }) => <em>{value}</em>} />
+        <ColumnDefinition id="state" customComponent={Custom} />
+      </RowDefinition>
+    </Griddle>
+  );
+});

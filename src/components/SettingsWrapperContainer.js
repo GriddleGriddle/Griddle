@@ -1,28 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from '../utils/griddleConnect';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import getContext from 'recompose/getContext';
 
-import { isSettingsEnabledSelector, isSettingsVisibleSelector, classNamesForComponentSelector, stylesForComponentSelector } from '../selectors/dataSelectors';
+import {
+  isSettingsEnabledSelector,
+  isSettingsVisibleSelector,
+  classNamesForComponentSelector,
+  stylesForComponentSelector
+} from '../selectors/dataSelectors';
 
-const EnhancedSettingsWrapper = OriginalComponent => compose(
-  getContext({
-    components: PropTypes.object,
-  }),
-  mapProps(props => ({
-    Settings: props.components.Settings,
-    SettingsToggle: props.components.SettingsToggle
-  })),
+const EnhancedSettingsWrapper = (OriginalComponent) =>
   connect((state, props) => ({
     isEnabled: isSettingsEnabledSelector(state),
     isVisible: isSettingsVisibleSelector(state),
     className: classNamesForComponentSelector(state, 'SettingsWrapper'),
-    style: stylesForComponentSelector(state, 'SettingsWrapper'),
-  }))
-)(props => (
-  <OriginalComponent {...props} />
-));
+    style: stylesForComponentSelector(state, 'SettingsWrapper')
+  }))((props) => {
+    const settingsProps = {
+      ...props,
+      Settings: props.context.components.Settings,
+      SettingsToggle: props.context.components.SettingsToggle
+    };
+    return <OriginalComponent {...settingsProps} />;
+  });
 
 export default EnhancedSettingsWrapper;
