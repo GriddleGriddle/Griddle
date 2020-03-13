@@ -1353,9 +1353,19 @@ storiesOf('Redux', module)
     testStore.dispatch({ type: 'SET_DATA', data: fakeData });
 
     return (
-      <Provider store={testStore}>
-        <SomePageConnected />
-      </Provider>
+      <GriddleContext.Provider
+        value={{
+          components: {},
+          settingsComponentObjects: {},
+          events: {},
+          selectors: {},
+          storeListener: {}
+        }}
+      >
+        <Provider store={testStore}>
+          <SomePageConnected />
+        </Provider>
+      </GriddleContext.Provider>
     );
   })
   .add('custom column chooser', () => {
