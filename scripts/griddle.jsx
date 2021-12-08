@@ -394,11 +394,6 @@ var Griddle = createReactClass({
         this.setState(state);
     },
     componentWillReceiveProps: function(nextProps) {
-        // Check if results props changed
-        if (nextProps.results !== this.props.results) {
-          this.setFilter(this.state.filter, nextProps.results);
-        }
-        
         this.setMaxPage(nextProps.results);
         if (nextProps.resultsPerPage !== this.props.resultsPerPage) {
             this.setPageSize(nextProps.resultsPerPage);
